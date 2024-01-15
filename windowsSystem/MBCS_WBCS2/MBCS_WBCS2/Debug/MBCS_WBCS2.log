@@ -1,0 +1,10 @@
+﻿  MBCS_WBCS2.cpp
+C:\Users\user\Desktop\mint\windowSystem\MBCS_WBCS2\MBCS_WBCS2\MBCS_WBCS2.cpp(1,1): warning C4005: 'UNICODE': 매크로 재정의
+  C:\Users\user\Desktop\mint\windowSystem\MBCS_WBCS2\MBCS_WBCS2\MBCS_WBCS2.cpp(1,1):
+  이전에 명령줄에서 선언된 'UNICODE'
+  
+C:\Users\user\Desktop\mint\windowSystem\MBCS_WBCS2\MBCS_WBCS2\MBCS_WBCS2.cpp(2,1): warning C4005: '_UNICODE': 매크로 재정의
+  C:\Users\user\Desktop\mint\windowSystem\MBCS_WBCS2\MBCS_WBCS2\MBCS_WBCS2.cpp(2,1):
+  이전에 명령줄에서 선언된 '_UNICODE'
+  
+  MBCS_WBCS2.vcxproj -> C:\Users\user\Desktop\mint\windowSystem\MBCS_WBCS2\Debug\MBCS_WBCS2.exe

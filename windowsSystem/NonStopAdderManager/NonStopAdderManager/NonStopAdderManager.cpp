@@ -1,0 +1,60 @@
+﻿// NonStopAdderManager.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
+//
+
+#include <stdio.h>
+#include <tchar.h>
+#include <Windows.h>
+
+int _tmain(int argc, TCHAR *argv[])
+{
+	STARTUPINFO si1 = { 0, };
+	STARTUPINFO si2 = { 0, };
+
+	PROCESS_INFORMATION pi1;
+	PROCESS_INFORMATION pi2;
+
+	DWORD return_val1;
+	DWORD return_val2;
+
+	BOOL state = SetCurrentDirectory(_T("C:\\Users\\user\\Desktop\\procademy_project\\procademy\\windowsSystem\\PartAdder\\x64\\Debug"));
+
+	TCHAR command1[] = _T("PartAdder.exe 1 5");
+	TCHAR command2[] = _T("PartAdder.exe 6 10");
+
+	DWORD sum = 0;
+
+	si1.cb = sizeof(si1);
+	si2.cb = sizeof(si2);
+	CreateProcess(NULL, command1, NULL, NULL, TRUE, 0, NULL, NULL, &si1, &pi1);
+	CreateProcess(NULL, command1, NULL, NULL, TRUE, 0, NULL, NULL, &si2, &pi2);
+	
+	CloseHandle(pi1.hThread);
+	CloseHandle(pi2.hThread);
+
+	GetExitCodeProcess(pi1.hProcess, &return_val1);
+	GetExitCodeProcess(pi1.hProcess, &return_val2);
+
+	if (return_val1 == -1 || return_val2 == -1)
+		return -1;
+
+	sum += return_val1;
+	sum += return_val2;
+
+	_tprintf(_T("total : %d \n"), sum);
+
+	CloseHandle(pi1.hProcess);
+	CloseHandle(pi2.hProcess);
+
+	return 0;
+}
+
+// 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
+// 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
+
+// 시작을 위한 팁: 
+//   1. [솔루션 탐색기] 창을 사용하여 파일을 추가/관리합니다.
+//   2. [팀 탐색기] 창을 사용하여 소스 제어에 연결합니다.
+//   3. [출력] 창을 사용하여 빌드 출력 및 기타 메시지를 확인합니다.
+//   4. [오류 목록] 창을 사용하여 오류를 봅니다.
+//   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다.
+//   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.

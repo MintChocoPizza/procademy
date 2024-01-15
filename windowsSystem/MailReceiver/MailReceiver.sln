@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MailReceiver", "MailReceiver\MailReceiver.vcxproj", "{A3C128BC-23B2-45FD-AB7A-D1BBB025D5D0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3C128BC-23B2-45FD-AB7A-D1BBB025D5D0}.Debug|x64.ActiveCfg = Debug|x64
+		{A3C128BC-23B2-45FD-AB7A-D1BBB025D5D0}.Debug|x64.Build.0 = Debug|x64
+		{A3C128BC-23B2-45FD-AB7A-D1BBB025D5D0}.Debug|x86.ActiveCfg = Debug|Win32
+		{A3C128BC-23B2-45FD-AB7A-D1BBB025D5D0}.Debug|x86.Build.0 = Debug|Win32
+		{A3C128BC-23B2-45FD-AB7A-D1BBB025D5D0}.Release|x64.ActiveCfg = Release|x64
+		{A3C128BC-23B2-45FD-AB7A-D1BBB025D5D0}.Release|x64.Build.0 = Release|x64
+		{A3C128BC-23B2-45FD-AB7A-D1BBB025D5D0}.Release|x86.ActiveCfg = Release|Win32
+		{A3C128BC-23B2-45FD-AB7A-D1BBB025D5D0}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DFCAB220-E91F-43BF-89AB-585A1686415C}
+	EndGlobalSection
+EndGlobal

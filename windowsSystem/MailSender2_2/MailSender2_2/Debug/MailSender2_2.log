@@ -1,0 +1,4 @@
+﻿  MailSender2_2.cpp
+C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\MailSender2_2\MailSender2_2\MailSender2_2.cpp(27,25): warning C4477: 'fwscanf_s' : 서식 문자열 '%d'에 'int *' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'HANDLE *'입니다.
+C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\MailSender2_2\MailSender2_2\MailSender2_2.cpp(29,13): warning C4477: 'wprintf_s' : 서식 문자열 '%d'에 'int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'HANDLE'입니다.
+  MailSender2_2.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\MailSender2_2\Debug\MailSender2_2.exe

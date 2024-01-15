@@ -1,0 +1,9 @@
+﻿  DuplicateHandle.cpp
+C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\DuplicateHandle\DuplicateHandle\DuplicateHandle.cpp(18,16): warning C4002: 함수 같은 매크로 호출 '_T'에 대해 인수가 너무 많습니다.
+C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\DuplicateHandle\DuplicateHandle\DuplicateHandle.cpp(18,16): warning C4473: 'wprintf_s': 서식 문자열에 대한 인수가 충분하게 전달되지 않았습니다.
+  C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\DuplicateHandle\DuplicateHandle\DuplicateHandle.cpp(18,16):
+  자리 표시자 및 해당 매개 변수에는 variadic 인수가 1개 필요하지만 0개가 제공되었습니다.
+  C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\DuplicateHandle\DuplicateHandle\DuplicateHandle.cpp(18,16):
+  누락된 variadic 인수 1이(가) 서식 문자열 '%s'에 필요합니다.
+  
+  DuplicateHandle.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\DuplicateHandle\Debug\DuplicateHandle.exe

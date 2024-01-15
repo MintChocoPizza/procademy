@@ -1,0 +1,10 @@
+﻿  PolymorphicType1.cpp
+C:\Users\user\Desktop\mint\windowSystem\PolymorphicType1\PolymorphicType1\PolymorphicType1.cpp(15,37): warning C4311: '형식 캐스트': 'INT *'에서 'UINT'(으)로 포인터가 잘립니다.
+C:\Users\user\Desktop\mint\windowSystem\PolymorphicType1\PolymorphicType1\PolymorphicType1.cpp(15,37): warning C4302: '형식 캐스트': 'INT *'에서 'UINT'(으)로 잘립니다.
+C:\Users\user\Desktop\mint\windowSystem\PolymorphicType1\PolymorphicType1\PolymorphicType1.cpp(15,50): warning C4311: '형식 캐스트': 'INT *'에서 'UINT'(으)로 포인터가 잘립니다.
+C:\Users\user\Desktop\mint\windowSystem\PolymorphicType1\PolymorphicType1\PolymorphicType1.cpp(15,50): warning C4302: '형식 캐스트': 'INT *'에서 'UINT'(으)로 잘립니다.
+C:\Users\user\Desktop\mint\windowSystem\PolymorphicType1\PolymorphicType1\PolymorphicType1.cpp(16,47): warning C4311: '형식 캐스트': 'INT *'에서 'UINT'(으)로 포인터가 잘립니다.
+C:\Users\user\Desktop\mint\windowSystem\PolymorphicType1\PolymorphicType1\PolymorphicType1.cpp(16,47): warning C4302: '형식 캐스트': 'INT *'에서 'UINT'(으)로 잘립니다.
+C:\Users\user\Desktop\mint\windowSystem\PolymorphicType1\PolymorphicType1\PolymorphicType1.cpp(16,60): warning C4311: '형식 캐스트': 'INT *'에서 'UINT'(으)로 포인터가 잘립니다.
+C:\Users\user\Desktop\mint\windowSystem\PolymorphicType1\PolymorphicType1\PolymorphicType1.cpp(16,60): warning C4302: '형식 캐스트': 'INT *'에서 'UINT'(으)로 잘립니다.
+  PolymorphicType1.vcxproj -> C:\Users\user\Desktop\mint\windowSystem\PolymorphicType1\x64\Debug\PolymorphicType1.exe
