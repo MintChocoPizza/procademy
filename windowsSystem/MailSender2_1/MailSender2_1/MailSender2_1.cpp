@@ -31,7 +31,7 @@ int _tmain(int argc, TCHAR* argv[])
 
 	// FILE* file = _tfopen(_T("InheritableHandle.txt"), _T("wt"));
 	FILE* fileStream;
-	errno_t err = _tfopen_s(&fileStream, _T("InheritableHandle.txt"), _T("wt"));
+	errno_t err = _tfopen_s(&fileStream, _T("InheritableHandle.txt"), _T("wb"));
 	if (err == 0)
 	{
 		printf("The file 'InheritableHandle.txt' was opened\n");
@@ -47,8 +47,9 @@ int _tmain(int argc, TCHAR* argv[])
 	PROCESS_INFORMATION pi;
 	si.cb = sizeof(si);
 
-	TCHAR command[] = _T("MailSender2_2.exe");
+	// SetCurrentDirectory(_T("C:\\Users\\User\\Desktop\\procademy_project\\procademy\\windowsSystem\\MailSender2_2\\x64\\Debug"));
 
+	TCHAR command[] = _T("MailSender2_2.exe");
 	CreateProcess(NULL, command, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
 
 	while (1)

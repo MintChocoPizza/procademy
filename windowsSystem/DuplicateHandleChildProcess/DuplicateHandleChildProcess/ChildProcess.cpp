@@ -7,7 +7,7 @@
 
 int _tmain(int argc, TCHAR *argv[])
 {
-    HANDLE hParent = (HANDLE)_ttoi(argv[1]);
+    HANDLE hParent = (HANDLE)_ttoll(argv[1]);
     DWORD isSuccess = WaitForSingleObject(hParent, INFINITE);
 
     _tprintf(_T("[Child Process] \n"));

@@ -10,7 +10,7 @@ int _tmain(int argc, TCHAR *argv[])
     HANDLE hProcess;
     TCHAR cmdString[1024];
 
-    SetCurrentDirectory(_T("C:\\Users\\user\\Desktop\\procademy_project\\procademy\\windowsSystem\\DuplicateHandleChildProcess\\Debug"));
+    SetCurrentDirectory(_T("C:\\Users\\user\\Desktop\\procademy_project\\procademy\\windowsSystem\\DuplicateHandleChildProcess\\x64\\Debug"));
 
     DuplicateHandle(GetCurrentProcess(), GetCurrentProcess(), GetCurrentProcess(), &hProcess, 0, TRUE, DUPLICATE_SAME_ACCESS);
 
