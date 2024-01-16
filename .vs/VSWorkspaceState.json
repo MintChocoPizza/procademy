@@ -1,11 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\procade_homeWork"
   ],
-<<<<<<< HEAD
-  "SelectedNode": "\\CommandPrmpt_Two.sln",
-=======
-  "SelectedNode": "\\DuplicateHandle.sln",
->>>>>>> 10d8c47c237d84258dc303479438f3252da045ac
+  "SelectedNode": "\\procade_homeWork\\makeStrFunc",
   "PreviewInSolutionExplorer": false
 }
