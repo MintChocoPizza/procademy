@@ -1,0 +1,8 @@
+﻿  testTest.cpp
+C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\testTest\testTest\testTest.cpp(17,14): warning C4477: 'printf_s' : 서식 문자열 '%d'에 'int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'size_t'입니다.
+  C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\testTest\testTest\testTest.cpp(17,14):
+  서식 문자열에서 '%zd'을(를) 사용하는 것이 좋습니다.
+  
+C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\testTest\testTest\testTest.cpp(24,17): warning C4309: '=': 상수 값이 잘립니다.
+C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\testTest\testTest\testTest.cpp(29,17): warning C4309: '=': 상수 값이 잘립니다.
+  testTest.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\windowsSystem\testTest\x64\Debug\testTest.exe
