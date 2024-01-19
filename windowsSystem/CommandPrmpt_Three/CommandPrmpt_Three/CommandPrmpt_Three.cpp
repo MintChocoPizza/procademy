@@ -18,7 +18,7 @@ TCHAR seps[] = _T(" ,\t\n");
 TCHAR* next_token = nullptr;
 
 int CmdReadTokenize(void);
-int CmdProcessing(void);
+int CmdProcessing(int);
 TCHAR* StrLower(TCHAR*);
 
 int _tmain(int argc, TCHAR* argv[])
@@ -91,25 +91,38 @@ int CmdProcessing(int tokenNum)
         if (tokenNum > 1) // start echo test good 와 같은 입력을 처리하기 위하여
         {
             for (int i = 1; i < tokenNum; i++)
-                _stprintf(optString, _T("%s %s"), optString, cmdTokenList[i]); // optString 에 cmdTokenList[i] 문자를 "%s %s" 형식으로 채워서 저장
+                _stprintf_s(optString, _T("%s %s"), optString, cmdTokenList[i]); // optString 에 cmdTokenList[i] 문자를 "%s %s" 형식으로 채워서 저장
 
-            _stprintf(cmdStringWithOptions, _T("%s %s"), _T("CmdProject.exe"), optString);
+            _stprintf_s(cmdStringWithOptions, _T("%s %s"), _T("CmdProject.exe"), optString);
         }
         else
         {
             // start만 입력되는 경우
-            _stprintf(cmdStringWithOptions, _T("%s %s"), _T("CmdProject.exe"), opt)
+            _stprintf_s(cmdStringWithOptions, _T("%s %s"), _T("CmdProject.exe"));
+            isRun = CreateProcess(NULL, cmdStringWithOptions, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+
+            CloseHandle(pi.hProcess);
+            CloseHandle(pi.hThread);
         }
     }
-    else if (!_tcscmp(cmdTokenList[0], _T("추가 되는 명령어 2")))
+    else if (!_tcscmp(cmdTokenList[0], _T("echo")))
     {
+        TCHAR command[] = _T("echo message: %s \n");
+        for (int i = 1; i < tokenNum; ++i)
+            _stprintf_s(command, optString, cmdTokenList[i]);
     }
     else
     {
-        STARTUPINFO si = { 0, };
-        PROCESS_INFORMATION pi;
-        si.cb = sizeof(si);
-        BOOL isRun = CreateProcess(NULL, cmdTokenList[0], NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi);
+        _tcscpy_s(cmdStringWithOptions, cmdTokenList[0]);
+
+        for (int i = 1; i < tokenNum; i++)
+            _stprintf_s(cmdStringWithOptions, _T("%s %s"), cmdStringWithOptions, cmdTokenList[i]);
+
+        isRun = CreateProcess(NULL, cmdStringWithOptions, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi);
+
+        CloseHandle(pi.hThread);
+        CloseHandle(pi.hProcess);
+
         if (isRun == FALSE)
             _tprintf(ERROR_CMD, cmdTokenList[0]);
     }

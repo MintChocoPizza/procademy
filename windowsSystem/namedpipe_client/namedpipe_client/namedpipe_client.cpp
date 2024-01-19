@@ -25,8 +25,34 @@ int _tmain(int argc, TCHAR *argv[])
 			NULL
 		);
 
+		if (hPipe != INVALID_HANDLE_VALUE)
+			break;
 
+		if (GetLastError() != ERROR_PIPE_BUSY)
+		{
+			_tprintf_s(_T("Could not open pipe \n"));
+			return 0;
+		}
+
+		if (!WaitNamedPipe(pipeName, 20000))
+		{
+			_tprintf_s(_T("Could not open pipe \n"));
+			return 0;
+		}
 	}
+	
+	DWORD pipeMode = PIPE_READMODE_MESSAGE | PIPE_WAIT;		// 메시지 기반으로 모드 변경
+	BOOL isSuccess = SetNamedPipeHandleState(hPipe, &pipeMode, NULL, NULL);
+
+	if (!isSuccess)
+	{
+		_tprintf_s(_T("SetNamedPipeHandleState failed"));
+		return 0;
+	}
+
+	LPCTSTR ileNmae = _T("news.txt");
+	// TCHAR fileName[] = _T("news.txt");
+	DWORD bytesWritten = 0;
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
@@ -39,3 +65,4 @@ int _tmain(int argc, TCHAR *argv[])
 //   4. [오류 목록] 창을 사용하여 오류를 봅니다.
 //   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다.
 //   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.
+
