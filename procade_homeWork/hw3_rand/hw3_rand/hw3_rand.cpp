@@ -2,18 +2,30 @@
 //
 
 #include <stdio.h>
-#include <random>
+#include <stdlib.h>
 
-int Rand()
+#pragma warning(disable: 4996)
+
+unsigned int seed;
+
+int rand_r(unsigned int *seed)
 {
-	return 0;
+	*seed = *seed * 0x343fd + 0x269EC3;
+
+	return (*seed >> 0x10) & 0x7FFF;
 }
 
 int main()
 {
+	// 동적라이브러리로 연결되어 어셈블리를 확인할 수 없음
 	int a = rand();
-	printf_s("%d \n", a);
+	printf("%d \n", a);
 
+	seed = 1;
+
+	int b = rand_r(&seed);
+	printf("%d \n", b);
+	
 	return 0;
 }
 

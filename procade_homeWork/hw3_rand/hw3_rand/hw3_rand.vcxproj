@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{50234912-d83c-4184-912c-01234be5ae67}</ProjectGuid>
+    <ProjectGuid>{8569808a-9047-47d8-ac8b-6d02a8583453}</ProjectGuid>
     <RootNamespace>hw3rand</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
