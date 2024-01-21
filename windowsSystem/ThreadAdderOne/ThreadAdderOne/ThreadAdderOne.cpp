@@ -5,17 +5,57 @@
 #include <tchar.h>
 #include <Windows.h>
 
-DWORD WINAPI ThreadProc(LPVOID lpParam)
+DWORD WINAPI ThreadProc(LPVOID lpParam) // 주소를 포인터(void *)로 받는다.
 {
-    DWORD* nPtr = (DWORD*)lpParam;
+    DWORD* nPtr = (DWORD*)lpParam; // void * 를 적절한 포인터로 변환한다. / void* 는 포인터 연산이 불가능 하기에 사용하려면 번환 후 사용해야 한다. 
 
-    DWORD numOne = *nPtr;
-    DWORD numTwo = *(nPtr + 1);
+    DWORD numOne = *nPtr;           // 시작 주소가 가리키는 값을 DWORD 만큼 읽는다.  
+    DWORD numTwo = *(nPtr + 1);     // 시작 주소 + 1(DWORD) 가 가리키는 값을 DWORD 만큼 읽는다. 
+
+    DWORD total = 0;
+    for (DWORD i = numOne; i <= numTwo; i++)
+    {
+        total += i;
+    }
+
+    return total;
 }
 
-int main()
+int _tmain(int argc, TCHAR * argv[])
 {
-    std::cout << "Hello World!\n";
+    DWORD dwThreadID[3];
+    HANDLE hThread[3];
+
+    DWORD paramThread[] = { 1,3,4,7,8,10 };
+    DWORD total = 0;
+    DWORD result = 0;
+
+    hThread[0] = CreateThread(NULL, 0, ThreadProc, (LPVOID)(&paramThread[0]), 0, &dwThreadID[0]); // paramThread[0]의 주소값을 전달한다.
+    hThread[1] = CreateThread(NULL, 0, ThreadProc, (LPVOID)(&paramThread[2]), 0, &dwThreadID[1]); // paramThread[2]의 주소값을 전달한다.
+    hThread[2] = CreateThread(NULL, 0, ThreadProc, (LPVOID)(&paramThread[4]), 0, &dwThreadID[2]); // paramThread[4]의 주소값을 전달한다.
+
+    if (hThread[0] == NULL || hThread[1] == NULL || hThread[2] == NULL)
+    {
+        _tprintf_s(_T("Thread creation fault! \n"));
+        return -1;
+    }
+
+    WaitForMultipleObjects(3, hThread, TRUE, INFINITE);
+
+    GetExitCodeThread(hThread[0], &result); // 쓰레드의 종료코드를 얻기 위해 사용되는 함수
+    total += result;
+    GetExitCodeThread(hThread[1], &result); // 쓰레드의 종료코드를 얻기 위해 사용되는 함수
+    total += result;
+    GetExitCodeThread(hThread[2], &result); // 쓰레드의 종료코드를 얻기 위해 사용되는 함수
+    total += result;
+
+    _tprintf_s(_T("total (1~10): %d \n"), total);
+
+    CloseHandle(hThread[0]);
+    CloseHandle(hThread[1]);
+    CloseHandle(hThread[2]);
+    
+    return 0;
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
