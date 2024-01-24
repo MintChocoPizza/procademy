@@ -44,7 +44,7 @@ void ProcessBaseCriticalSection()
 
 int _tmain(int argc, TCHAR *argv[])
 {
-#if 0
+#if 1
 	hMutex = CreateMutex(NULL, FALSE, _T("NamedMutex"));	// named mutex
 #else 
 	hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, _T("NamedMutex"));
