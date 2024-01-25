@@ -220,6 +220,11 @@ int CmdProcessing(int tokenNum)
 
             CloseHandle(hFile);
         }
+        else
+        {
+            isRun = CreateProcess(NULL, cmdTokenList[0], NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+            WaitForSingleObject(pi.hProcess, INFINITE);
+        }
     }
     else
     {
