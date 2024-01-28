@@ -57,8 +57,10 @@ int CommToClient(HANDLE hPipe)
         return -1;
     }
 
-    FILE* filePtr = _tfopen(fileName, _T("r"));
-    if (filePtr == NULL)
+    // FILE* filePtr = _tfopen(fileName, _T("r"));
+    FILE* filePtr;
+    errno_t err = _tfopen_s(&filePtr, fileName, _T("r"));
+    if (err == NULL)
     {
         _tprintf_s(_T("File open fault! \n"));
         return -1;

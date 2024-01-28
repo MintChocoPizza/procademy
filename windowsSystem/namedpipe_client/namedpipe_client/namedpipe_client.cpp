@@ -11,7 +11,7 @@ int _tmain(int argc, TCHAR *argv[])
 {
 	HANDLE hPipe;
 	TCHAR readDataBuf[BUF_SIZE + 1];
-	TCHAR pipeName[] = _T("\\\\.\\pipe\\simple_pipe"); // 변경점
+	TCHAR pipeName[] = _T("\\\\.\\pipe\\ simple_pipe"); // 변경점
 
 	while (1)
 	{
@@ -50,9 +50,42 @@ int _tmain(int argc, TCHAR *argv[])
 		return 0;
 	}
 
-	LPCTSTR ileNmae = _T("news.txt");
+	LPCTSTR fileName = _T("news.txt");
 	// TCHAR fileName[] = _T("news.txt");
 	DWORD bytesWritten = 0;
+
+	isSuccess = WriteFile(
+		hPipe,					// 서버 파이프와 연결된 핸들
+		fileName,				// 전송할 메시지
+		(_tcslen(fileName)+1) * sizeof(TCHAR),	// 메시지 길이
+		&bytesWritten,			// 전송된 바이트 수
+		NULL
+		);
+	if (!isSuccess)
+	{
+		_tprintf_s(_T("WriteFile failed"));
+		return 0;
+	}
+
+	DWORD bytesRead = 0;
+	while (1)	
+	{
+		isSuccess = ReadFile(
+			hPipe,					// 서버 파이프와 연결된 핸들
+			readDataBuf,			// 데이터 수신할 버퍼
+			BUF_SIZE * sizeof(TCHAR),	// 버퍼 사이즈
+			& bytesRead,				// 수신한 바이트 수
+			NULL
+		);
+		if (!isSuccess && GetLastError() != ERROR_MORE_DATA)
+			break;
+
+		readDataBuf[bytesRead] = 0;
+		_tprintf_s(_T("%s \n"), readDataBuf);
+	}
+
+	CloseHandle(hPipe);
+	return 0;
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴

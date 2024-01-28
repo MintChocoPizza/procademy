@@ -10,37 +10,60 @@ int CommToClient(HANDLE);
 
 int _tmain(int argc, TCHAR *argv[])
 {
-	TCHAR pipeName[] = _T("\\\\.\\pipe\\ simple_pipe");
-	HANDLE hPipe;
+	//TCHAR pipeName[] = _T("\\\\.\\pipe\\ simple_pipe");
+	//HANDLE hPipe;
 
-	while (1)
+	//while (1)
+	//{
+	//	hPipe = CreateNamedPipe(
+	//		pipeName,
+	//		PIPE_ACCESS_DUPLEX,
+	//		PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
+	//		PIPE_UNLIMITED_INSTANCES,
+	//		BUF_SIZE,
+	//		BUF_SIZE,
+	//		20000,
+	//		NULL
+	//	);
+
+	//	if (hPipe == INVALID_HANDLE_VALUE)
+	//	{
+	//		_tprintf(_T("CreatePipe failed"));
+	//		return -1;
+	//	}
+
+	//	BOOL isSuccess = 0;
+	//	isSuccess = ConnectNamedPipe(hPipe, NULL) ? TRUE : (GetLastError() == ERROR_PIPE_CONNECTED);
+
+	//	if (isSuccess)
+	//		CommToClient(hPipe);
+	//	else
+	//		CloseHandle(hPipe);
+
+	//}
+
+	// 임시 test
+
+	//TCHAR fileName[] = _T("news.txt");
+	//HANDLE hFile = CreateFile(fileName, GENERIC_WRITE, FILE_SHARE_WRITE, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	//DWORD num = 0;
+
+	FILE* filePtr;
+	errno_t err = _tfopen_s(&filePtr, _T("news.txt"), _T("r"));
+	if (err == NULL)
 	{
-		hPipe = CreateNamedPipe(
-			pipeName,
-			PIPE_ACCESS_DUPLEX,
-			PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
-			PIPE_UNLIMITED_INSTANCES,
-			BUF_SIZE,
-			BUF_SIZE,
-			20000,
-			NULL
-		);
-
-		if (hPipe == INVALID_HANDLE_VALUE)
-		{
-			_tprintf(_T("CreatePipe failed"));
-			return -1;
-		}
-
-		BOOL isSuccess = 0;
-		isSuccess = ConnectNamedPipe(hPipe, NULL) ? TRUE : (GetLastError() == ERROR_PIPE_CONNECTED);
-
-		if (isSuccess)
-			CommToClient(hPipe);
-		else
-			CloseHandle(hPipe);
-
+		_tprintf(_T("File open fault! \n"));
+		return -1;
 	}
+	TCHAR dataBuf[BUF_SIZE];
+	DWORD bytesWritten = 0;
+	DWORD bytesRead = 0;
+	while (!feof(filePtr))
+	{
+		//bytesRead = fread(dataBuf, 1, 1024, filePtr);
+		fwrite(dataBuf, sizeof(TCHAR), sizeof(dataBuf), stdout);
+	}
+
 
 	return 1;
 }
@@ -63,9 +86,9 @@ int CommToClient(HANDLE hPipe)
 	// FILE* filePtr = _tfopen(fileName, _T("r"));
 	FILE* filePtr;
 	errno_t err = _tfopen_s(&filePtr, fileName, _T("r"));
-	if (filePtr == NULL)
+	if (err == NULL)
 	{
-		_tprintf(_T("File poen fault! \n"));
+		_tprintf(_T("File open fault! \n"));
 		return -1;
 	}
 
