@@ -6,7 +6,8 @@
 #include <conio.h>
 
 // map char문자열 이지만 범위는 (0~8 * 0~17)
-char Map[9][18] = {
+char Map[9][18];		// 카피할 저장 장소
+char MapOrign[9][18] = { // 원본 데이터
 	{' ','O','O',' ',' ',' ',' ',' ','O','O','O',' ',' ',' ',' ',' ','O','O'},		// 7
 	{' ','O','O','O','O','O','O','O','O','O','O','O','O',' ',' ','O','O','O'},		// 15
 	{'O','O','O','O','O',' ',' ','O','O','O','O','O','O','O','O','O','O','O'},		// 16
@@ -17,6 +18,7 @@ char Map[9][18] = {
 	{' ','O',' ',' ','O',' ','O','O','O','O','O','O','O','O',' ',' ',' ',' '},		// 10
 	{' ',' ',' ',' ',' ',' ','O','O','O','O','O','O',' ',' ',' ',' ',' ',' '},		// 6
 };
+
 
 bool Buffer[9][19];
 
@@ -64,35 +66,42 @@ void recursive_function(int _y, int _x)
 
 		recursive_function(ny, nx);
 	}
-
 	// 잘 모르겠네
 	// 흠...
 }
 
 int main()
 {
-	memset(Buffer, false, sizeof(Buffer));
-
-
 	//시간 측정 시작
 	LARGE_INTEGER timer, start, end;
 	float DeltaTime;
 	QueryPerformanceFrequency(&timer);
-
-	// 출력부
 	QueryPerformanceCounter(&start);
-	system("cls");
-	for (int y = 0; y < 9; y++)
-	{
-		for (int x = 0; x < 18; x++)
-		{
-			printf_s("%c ", Map[y][x]);
-		}
-		printf_s("\n");
-	}
-	Sleep(50);
 
-	recursive_function(0, 1);
+	for (int i = 0; i < 10; i++)
+	{
+		memcpy(Map, MapOrign, sizeof(MapOrign));
+		memset(Buffer, false, sizeof(Buffer));
+		num = 0;
+		// 출력부
+		system("cls");
+		for (int y = 0; y < 9; y++)
+		{
+			for (int x = 0; x < 18; x++)
+			{
+				printf_s("%c ", Map[y][x]);
+			}
+			printf_s("\n");
+		}
+		Sleep(50);
+		recursive_function(0, 1);
+	}
+
+
+
+
+
+	// 시간 측정 종료
 	QueryPerformanceCounter(&end);
 
 	printf_s("걸린 시간: %lf \n", (end.QuadPart - start.QuadPart) / (float)timer.QuadPart);

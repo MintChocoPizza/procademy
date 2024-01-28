@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <Windows.h>
 
-char Map[9][18] = {
+char Map[9][18];		// 카피할 저장 장소
+char MapOrign[9][18] = { // 원본 데이터
 	{' ','O','O',' ',' ',' ',' ',' ','O','O','O',' ',' ',' ',' ',' ','O','O'},		// 7
 	{' ','O','O','O','O','O','O','O','O','O','O','O','O',' ',' ','O','O','O'},		// 15
 	{'O','O','O','O','O',' ',' ','O','O','O','O','O','O','O','O','O','O','O'},		// 16
@@ -69,44 +70,20 @@ bool empty()
 
 int main()
 {
-	memset(Buffer, 0, sizeof(Buffer));
-
 	//시간 측정 시작
 	LARGE_INTEGER timer, start, end;
 	float DeltaTime;
 	QueryPerformanceFrequency(&timer);
+	QueryPerformanceCounter(&start);
 
 	// 출력부
-	QueryPerformanceCounter(&start);
-	system("cls");
-	for (int y = 0; y < 9; y++)
+	for(int aaa=0; aaa<10; aaa++)
 	{
-		for (int x = 0; x < 18; x++)
-		{
-			printf_s("%c ", Map[y][x]);
-		}
-		printf_s("\n");
-	}
-	printf_s("\n 실행횟수: %d \n", num);
-	Sleep(50);
+		// 초기화
+		memcpy(Map, MapOrign, sizeof(MapOrign));
+		memset(Buffer, false, sizeof(Buffer));
+		num = 0;
 
-
-	// 처음 시작 위치 지정
-	push(0, 1);
-	while (empty() != true)
-	{
-		int y;
-		int x;		
-		pop(&y, &x);
-
-		if (Buffer[y][x] == true)	// 방문한 적이 있다면 나간다.
-			continue;
-
-		num++;
-		Map[y][x] = '.';
-		Buffer[y][x] = true;
-
-		// 출력부
 		system("cls");
 		for (int y = 0; y < 9; y++)
 		{
@@ -119,24 +96,54 @@ int main()
 		printf_s("\n 실행횟수: %d \n", num);
 		Sleep(50);
 
-		// 상하좌우 방문 
-		for (int i = 0; i < 4; i++)
+
+		// 처음 시작 위치 지정
+		push(0, 1);
+		while (empty() != true)
 		{
-			int ny = y + dy[i];
-			int nx = x + dx[i];
+			int y;
+			int x;
+			pop(&y, &x);
 
-
-			// 범위를 벗어나면 넘어감
-			if (ny < 0 || nx < 0 || 8 < ny || 18 < nx)
-				continue;
-			// 방문한 적 있다면 넘어간다?
-			if (Buffer[ny][nx] == true)
-				continue;
-			// '0' 이 아니라면 넘어감 
-			if (Map[ny][nx] != 'O')
+			if (Buffer[y][x] == true)	// 방문한 적이 있다면 나간다.
 				continue;
 
-			push(ny, nx);
+			num++;
+			Map[y][x] = '.';
+			Buffer[y][x] = true;
+
+			// 출력부
+			system("cls");
+			for (int y = 0; y < 9; y++)
+			{
+				for (int x = 0; x < 18; x++)
+				{
+					printf_s("%c ", Map[y][x]);
+				}
+				printf_s("\n");
+			}
+			printf_s("\n 실행횟수: %d \n", num);
+			Sleep(50);
+
+			// 상하좌우 방문 
+			for (int i = 0; i < 4; i++)
+			{
+				int ny = y + dy[i];
+				int nx = x + dx[i];
+
+
+				// 범위를 벗어나면 넘어감
+				if (ny < 0 || nx < 0 || 8 < ny || 18 < nx)
+					continue;
+				// 방문한 적 있다면 넘어간다?
+				if (Buffer[ny][nx] == true)
+					continue;
+				// '0' 이 아니라면 넘어감 
+				if (Map[ny][nx] != 'O')
+					continue;
+
+				push(ny, nx);
+			}
 		}
 	}
 	QueryPerformanceCounter(&end);
