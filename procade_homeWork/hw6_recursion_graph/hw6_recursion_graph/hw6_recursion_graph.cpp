@@ -30,6 +30,8 @@ int num = 0;
 
 void recursive_function(int _y, int _x)
 {
+	if (Buffer[_y][_x] == true)	// 방문한적이 있다면 그냥 나감
+		return;
 	Buffer[_y][_x] = true;
 	Map[_y][_x] = '.';
 	num++;
@@ -52,12 +54,12 @@ void recursive_function(int _y, int _x)
 	{
 		int ny = _y + dy[i];
 		int nx = _x + dx[i];
-
+		
 		if (ny < 0 || nx < 0 || 8 < ny || 18 < nx)		// 범위를 벗어나면 넘어감
 			continue;
 		if (Buffer[ny][nx] == true)					// 방문한 적이 있으면 넘어감
 			continue;
-		if (Map[ny][nx] == ' ')						// 다음 위치가 ' '이라면 넘어감
+		if (Map[ny][nx] != 'O')						// 다음 위치가 'O'이 아니라면 넘어감
 			continue;
 
 		recursive_function(ny, nx);
@@ -71,7 +73,14 @@ int main()
 {
 	memset(Buffer, false, sizeof(Buffer));
 
+
+	//시간 측정 시작
+	LARGE_INTEGER timer, start, end;
+	float DeltaTime;
+	QueryPerformanceFrequency(&timer);
+
 	// 출력부
+	QueryPerformanceCounter(&start);
 	system("cls");
 	for (int y = 0; y < 9; y++)
 	{
@@ -84,6 +93,9 @@ int main()
 	Sleep(50);
 
 	recursive_function(0, 1);
+	QueryPerformanceCounter(&end);
+
+	printf_s("걸린 시간: %lf \n", (end.QuadPart - start.QuadPart) / (float)timer.QuadPart);
 
 	return 0;
 }

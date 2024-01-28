@@ -71,7 +71,13 @@ int main()
 {
 	memset(Buffer, 0, sizeof(Buffer));
 
+	//시간 측정 시작
+	LARGE_INTEGER timer, start, end;
+	float DeltaTime;
+	QueryPerformanceFrequency(&timer);
+
 	// 출력부
+	QueryPerformanceCounter(&start);
 	system("cls");
 	for (int y = 0; y < 9; y++)
 	{
@@ -84,35 +90,21 @@ int main()
 	printf_s("\n 실행횟수: %d \n", num);
 	Sleep(50);
 
+
+	// 처음 시작 위치 지정
 	push(0, 1);
 	while (empty() != true)
 	{
 		int y;
-		int x;
+		int x;		
 		pop(&y, &x);
+
+		if (Buffer[y][x] == true)	// 방문한 적이 있다면 나간다.
+			continue;
+
 		num++;
 		Map[y][x] = '.';
-
-		// 상하좌우 방문 
-		for (int i = 0; i < 4; i++)
-		{
-			int ny = y + dy[i];
-			int nx = x + dx[i];
-
-			// 방문한 적 있다면 넘어간다?
-			if (Buffer[y][x] == true)
-				continue;
-
-			// 범위를 벗어나면 넘어감
-			if (ny < 0 || nx < 0 || 9 <= ny || 18 <= nx)
-				continue;
-			
-			// '0' 이 아니라면 넘어감 
-			if (Map[ny][nx] != 'O')
-				continue;
-
-			push(ny, nx);
-		}
+		Buffer[y][x] = true;
 
 		// 출력부
 		system("cls");
@@ -126,9 +118,30 @@ int main()
 		}
 		printf_s("\n 실행횟수: %d \n", num);
 		Sleep(50);
-	}
-	
 
+		// 상하좌우 방문 
+		for (int i = 0; i < 4; i++)
+		{
+			int ny = y + dy[i];
+			int nx = x + dx[i];
+
+
+			// 범위를 벗어나면 넘어감
+			if (ny < 0 || nx < 0 || 8 < ny || 18 < nx)
+				continue;
+			// 방문한 적 있다면 넘어간다?
+			if (Buffer[ny][nx] == true)
+				continue;
+			// '0' 이 아니라면 넘어감 
+			if (Map[ny][nx] != 'O')
+				continue;
+
+			push(ny, nx);
+		}
+	}
+	QueryPerformanceCounter(&end);
+
+	printf_s("걸린 시간: %lf \n", (end.QuadPart - start.QuadPart) / (float)timer.QuadPart);
 	return 0;
 }
 
