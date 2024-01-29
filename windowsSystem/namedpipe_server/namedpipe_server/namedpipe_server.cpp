@@ -49,7 +49,7 @@ int _tmain(int argc, TCHAR * argv[])
 int CommToClient(HANDLE hPipe)
 {
     TCHAR fileName[MAX_PATH];
-    TCHAR dataBuf[BUF_SIZE];
+    DWORD dataBuf[BUF_SIZE];
 
     BOOL isSuccess;
     DWORD fileNameSize;
