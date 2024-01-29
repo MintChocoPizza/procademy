@@ -13,14 +13,14 @@ TCHAR string[100];
 HANDLE hEvent;
 
 int _tmain(int argc, TCHAR * argv[])
-{	
+{
 	HANDLE hThread[2];
 	DWORD dwThreadID[2];
 
 	hEvent = CreateEvent(		// event object 생성
 		NULL,		// 상속불가
 		TRUE,		// manual-reset mode로 생성
-		FALSE,		// non-signald 상태로 생성
+		FALSE,	        	// non-signald 상태로 생성
 		NULL		// 이름없는 event
 	);
 
