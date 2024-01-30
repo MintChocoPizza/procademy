@@ -56,6 +56,8 @@ int _tmain(int argc, TCHAR *argv[])
         TCHAR fileName[] = _T("news.txt");
         DWORD bytesWritten = 0;
         
+
+        // 뻑남
         isSuccess = WriteFile(
             hPipe,               // 서버 파이프와 연결된 핸들
             fileName,           // 전송할 메시지
@@ -77,13 +79,14 @@ int _tmain(int argc, TCHAR *argv[])
                 hPipe,                      // 서버 파이프와 연결된 핸들
                 readDataBuf,                // 데이터 수신할 버퍼
                 BUF_SIZE * sizeof(TCHAR),    // 버퍼 사이즈
+                //BUF_SIZE,
                 &bytesRead ,                 // 수신한 바이트 수
                 NULL
             );
 
             if (!isSuccess && GetLastError() != ERROR_MORE_DATA)
                 break;
-
+            bytesRead /= sizeof(TCHAR);
             readDataBuf[bytesRead] = '\0';
             _tprintf_s(_T("%s \n"), readDataBuf);
             // printf_s("%s \n", readDataBuf);

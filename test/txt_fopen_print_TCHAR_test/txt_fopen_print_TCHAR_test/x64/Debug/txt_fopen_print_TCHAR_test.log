@@ -1,0 +1,4 @@
+﻿  txt_fopen_print_TCHAR_test.cpp
+C:\Users\User\Desktop\procademy_project\procademy\test\txt_fopen_print_TCHAR_test\txt_fopen_print_TCHAR_test\txt_fopen_print_TCHAR_test.cpp(28,26): warning C4267: '=': 'size_t'에서 'DWORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\User\Desktop\procademy_project\procademy\test\txt_fopen_print_TCHAR_test\txt_fopen_print_TCHAR_test\txt_fopen_print_TCHAR_test.cpp(40,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  txt_fopen_print_TCHAR_test.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\test\txt_fopen_print_TCHAR_test\x64\Debug\txt_fopen_print_TCHAR_test.exe

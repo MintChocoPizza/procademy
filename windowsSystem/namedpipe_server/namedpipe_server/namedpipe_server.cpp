@@ -68,7 +68,7 @@ int CommToClient(HANDLE hPipe)
     }
 
     FILE* filePtr;
-    errno_t err = _tfopen_s(&filePtr, fileName, _T("rt,ccs=UTF-8"));
+    errno_t err = _tfopen_s(&filePtr, fileName, _T("r, ccs=UTF-8"));
     if (err != NULL)
     {
         _tprintf_s(_T("File open fault! \n"));

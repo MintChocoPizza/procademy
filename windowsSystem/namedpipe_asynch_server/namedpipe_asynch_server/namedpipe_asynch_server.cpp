@@ -10,7 +10,7 @@ int CommToClient(HANDLE);
 
 int _tmain(int argc, TCHAR* argv[])
 {
-    TCHAR name[] = _T("\\\\.\\pipe\\simple_pipe");
+    TCHAR name[] = _T("\\\\.\\pipe\\ simple_pipe");
     LPTSTR pipeName = name;
 
     HANDLE hPipe;
@@ -47,8 +47,9 @@ int CommToClient(HANDLE hPipe)
     BOOL isSuccess;
     DWORD fileNameSize;
 
-    isSuccess = ReadFile(
-        hPipe, fileName, MAX_PATH * sizeof(TCHAR),
+    isSuccess = ReadFile(hPipe, fileName, 
+        // MAX_PATH * sizeof(TCHAR),
+        MAX_PATH,
         &fileNameSize, NULL);
 
     if (!isSuccess || fileNameSize == 0)
@@ -59,8 +60,10 @@ int CommToClient(HANDLE hPipe)
 
     // FILE* filePtr = _tfopen(fileName, _T("r"));
     FILE* filePtr;
-    errno_t err = _tfopen_s(&filePtr, fileName, _T("r"));
-    if (err == NULL)
+
+    // UTF-8로 읽기
+    errno_t err = _tfopen_s(&filePtr, fileName, _T("r, ccs=UTF-8"));
+    if (err != NULL)
     {
         _tprintf_s(_T("File open fault! \n"));
         return -1;
@@ -81,7 +84,10 @@ int CommToClient(HANDLE hPipe)
     {
         bytesRead = fread(dataBuf, 1, BUF_SIZE, filePtr);
         bytesWrite = bytesRead;
-        isSuccess = WriteFile(hPipe, dataBuf, bytesWrite, &bytesWritten, &overlappedInst);
+        isSuccess = WriteFile(hPipe, dataBuf, bytesWrite, &bytesWritten, 
+            //&overlappedInst
+            NULL
+        );
         
         if (!isSuccess && GetLastError() != ERROR_IO_PENDING)
         {
