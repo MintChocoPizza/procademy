@@ -49,7 +49,7 @@ int _tmain(int argc, TCHAR * argv[])
 int CommToClient(HANDLE hPipe)
 {
     TCHAR fileName[MAX_PATH];
-    DWORD dataBuf[BUF_SIZE];
+    TCHAR dataBuf[BUF_SIZE];
 
     BOOL isSuccess;
     DWORD fileNameSize;
@@ -68,7 +68,7 @@ int CommToClient(HANDLE hPipe)
     }
 
     FILE* filePtr;
-    errno_t err = _tfopen_s(&filePtr, fileName, _T("r"));
+    errno_t err = _tfopen_s(&filePtr, fileName, _T("rt,ccs=UTF-8"));
     if (err != NULL)
     {
         _tprintf_s(_T("File open fault! \n"));

@@ -10,7 +10,7 @@
 int _tmain(int argc, TCHAR *argv[])
 {
     HANDLE hPipe;
-    char readDataBuf[BUF_SIZE + 1];
+    TCHAR readDataBuf[BUF_SIZE + 1];
     TCHAR pipeName[] = _T("\\\\.\\pipe\\ simple_pipe");
 
     while (1)
@@ -85,8 +85,8 @@ int _tmain(int argc, TCHAR *argv[])
                 break;
 
             readDataBuf[bytesRead] = '\0';
-            // _tprintf_s(_T("%s \n"), readDataBuf);
-            printf_s("%s \n", readDataBuf);
+            _tprintf_s(_T("%s \n"), readDataBuf);
+            // printf_s("%s \n", readDataBuf);
         }
 
         CloseHandle(hPipe);
