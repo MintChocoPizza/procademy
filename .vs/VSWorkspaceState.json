@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\test",
+    "\\test\\txt_fopen_print_TCHAR_test",
+    "\\test\\txt_fopen_print_TCHAR_test\\txt_fopen_print_TCHAR_test"
   ],
-  "SelectedNode": "\\namedpipe_server.sln",
+  "SelectedNode": "\\test\\txt_fopen_print_TCHAR_test\\txt_fopen_print_TCHAR_test\\txt_fopen_print_TCHAR_test.cpp",
   "PreviewInSolutionExplorer": false
 }

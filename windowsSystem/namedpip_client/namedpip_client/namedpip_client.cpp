@@ -52,8 +52,8 @@ int _tmain(int argc, TCHAR *argv[])
             _tprintf_s(_T("SetNamedPipeHandleState failed"));
             return 0;
         }
-
-        TCHAR fileName[] = _T("news.txt");
+        TCHAR fileName[] = _T("news1.txt");
+        //TCHAR fileName[] = _T("news2.txt");
         DWORD bytesWritten = 0;
         
 
