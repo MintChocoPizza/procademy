@@ -1,0 +1,3 @@
+﻿  hw8_encoding_decoding.cpp
+C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw8_encoding_decoding\hw8_encoding_decoding\hw8_encoding_decoding.cpp(57,25): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  hw8_encoding_decoding.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw8_encoding_decoding\x64\Debug\hw8_encoding_decoding.exe

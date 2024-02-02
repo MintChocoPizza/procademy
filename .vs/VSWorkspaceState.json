@@ -5,6 +5,10 @@
     "\\test\\txt_fopen_print_TCHAR_test",
     "\\test\\txt_fopen_print_TCHAR_test\\txt_fopen_print_TCHAR_test"
   ],
+<<<<<<< Updated upstream
   "SelectedNode": "\\test\\txt_fopen_print_TCHAR_test\\txt_fopen_print_TCHAR_test\\txt_fopen_print_TCHAR_test.cpp",
+=======
+  "SelectedNode": "\\hw8_encoding_decoding.sln",
+>>>>>>> Stashed changes
   "PreviewInSolutionExplorer": false
 }
