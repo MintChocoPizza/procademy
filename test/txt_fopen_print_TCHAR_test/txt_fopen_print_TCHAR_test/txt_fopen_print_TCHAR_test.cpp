@@ -10,6 +10,7 @@
 int _tmain(int argc, TCHAR *argv[])
 {
     FILE* file;
+    FILE* file1;
     errno_t err = _tfopen_s(&file, _T("test.txt"), _T("r, ccs=UTF-8"));
     if (err != NULL)
     {
@@ -17,20 +18,42 @@ int _tmain(int argc, TCHAR *argv[])
         return -1;
     }
 
+    errno_t err1 = _tfopen_s(&file1, _T("test1.txt"), _T("r"));
+    if (err1 != NULL)
+    {
+        _tprintf_s(_T("File open fault! \n"));
+        return -1;
+    }
+
     TCHAR dataBuf[BUF_SIZE];
     DWORD bytesRead = 0;
+    TCHAR dataBuf1[BUF_SIZE];
+    DWORD bytesRead1 = 0;
 
     DWORD count = 0;
     DWORD arr[100];
+    DWORD count1 = 0;
+    DWORD arr1[100];
 
+
+    // file
     while (!feof(file))
     {
-        bytesRead = fread(dataBuf, sizeof(TCHAR), BUF_SIZE, file);
+        // bytesRead -> 2인자 크기만큼 몇번 읽은 값
+        bytesRead = fread(
+            dataBuf,
+            //sizeof(TCHAR),      // sizeof(TCHAR) -> 2byte -> bytesRead: 81
+            1,                  // 1            -> 1byte -> bytesRead: 162
+                                // 2배의 값을 보여주는 것을 알 수 있다.
+            BUF_SIZE, 
+            file
+        );
 
         arr[count] = bytesRead;
         count++;
 
-        dataBuf[bytesRead] = '\0';
+        //dataBuf[bytesRead] = '\0';
+        dataBuf[bytesRead/sizeof(TCHAR)] = '\0';    // 문자열의 끝마침을 2배만큼 나눠서 찍어줘야 한다.
 
         _tprintf_s(_T("%s"), dataBuf);
     }
@@ -42,7 +65,41 @@ int _tmain(int argc, TCHAR *argv[])
         _tprintf_s(_T("read byte: %d \n"), arr[i]);
         sum += arr[i];
     }
-    _tprintf_s(_T("sum byte: %d"), sum);
+    _tprintf_s(_T("sum byte: %d \n\n\n"), sum);
+
+    
+
+
+
+    // file1
+    while (!feof(file1))
+    {
+        bytesRead1 = fread(
+            dataBuf1,   // 1byte char 형식으로 읽어서 2byte TCHAR 배열에 저장한다. -> 읽을 때 값 사라짐
+            1,
+            BUF_SIZE,
+            file1);
+
+        arr1[count1] = bytesRead1;
+        count1++;
+
+        // dataBuf1[bytesRead1] = '\0';             // '\0'를 찍어야 하는데 원래는 1byte 단위로 읽은 문자열이라 
+                                                    // bytesRead1 만큼 이동해도 상관 없는데
+                                                    // dataBuf1은 TCHAR(2byte)라서 2배만큼의 뒤에 찍히게 된다.
+        dataBuf1[bytesRead1/sizeof(TCHAR)] = '\0';  // 이래나 저래나 이렇게 작성하면 코드가 복잡해진다.
+
+        // _tprintf_s(_T("%s"), dataBuf1);
+        printf_s("%s", dataBuf1);
+    }
+    _tprintf_s(_T("\n"));
+
+    DWORD sum1 = 0;
+    for (int i = 0; i < count1; ++i)
+    {
+        _tprintf_s(_T("read byte: %d \n"), arr1[i]);
+        sum1 += arr1[i];
+    }
+    _tprintf_s(_T("sum byte: %d"), sum1);
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
