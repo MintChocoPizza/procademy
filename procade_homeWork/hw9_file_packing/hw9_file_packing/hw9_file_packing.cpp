@@ -1,27 +1,81 @@
 ﻿// hw9_file_packing.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
 
+#include <_stdio.h>
 #include <stdio.h>
 #include <Windows.h>
+
+#define MAX_FILE_COUNT 10
 
 #pragma pack(push, 1)
 struct st_PACKING_HEADER
 {
-    WORD bfType;            // OP /oreopizza
-    DWORD bfFileNumber;     // 패킹 되어있는 파일의 수
+    WORD wType;            // OP /oreopizza
+    DWORD dwFileNumber;     // 패킹 되어있는 파일의 수
+    // 이 구조체의 사이즈가 필요한가?
+
 };
 #pragma pop()
 
 #pragma pack(push, 1)
 struct st_PACKING_INFOHEADER
 {
-    
+    char cFileName[64];
+    DWORD dwFileSize;
 };
 #pragma pack(pop)
 
+bool packing(char *_cFileName[64], int _iFileCount)
+{
+    st_PACKING_HEADER stPackingHeader;
+    st_PACKING_INFOHEADER stPackingInfoHeader;
+
+    stPackingHeader.wType = "OP";
+    stPackingHeader.dwFileNumber = _iFileCount;
+
+    FILE *pFile;
+    errno_t;
+}
+
 int main()
 {
-    
+    int num;
+    int iFileCount;
+    char cFileName[MAX_FILE_COUNT][64];
+
+    while(1)
+    {
+        system("cls");
+        printf_s("1: 패킹하기 \n");
+        printf_s("2: 패킹풀기 \n");
+
+        scanf_s("%d", &num);
+
+        switch(num)
+        {
+            case 1:
+                printf_s("패킹 할 파일 개수를 입력해주세요: ");
+                scanf_s("%d", &iFileCount);
+
+                for(int i=1; i<=iFileCount; ++i)
+                {
+                    printf_s("%d 번 파일 이름: ", i);
+                    scanf_s("%d", cFileName[i]);
+                }
+                if(!packing(cFileName, iFileCount))
+                {
+                    printf_s("패킹에 실패했습니다. \n");
+                }
+
+                break;
+            case 2:
+                break;
+            default:
+                break;
+        }
+
+
+    }
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
