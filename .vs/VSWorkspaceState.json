@@ -2,9 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\shootingGame_Project",
-    "\\project\\shootingGame_Project\\shootingGame_Project"
+    "\\project\\shootingGame_Sample",
+    "\\test",
+    "\\test\\Console_Curser_test",
+    "\\test\\Console_Curser_test\\Console_Curser_test"
   ],
-  "SelectedNode": "\\project\\shootingGame_Project\\shootingGame_Project\\main.cpp",
+  "SelectedNode": "\\project\\shootingGame_Sample\\shootingGame_Sample.sln",
   "PreviewInSolutionExplorer": false
 }
