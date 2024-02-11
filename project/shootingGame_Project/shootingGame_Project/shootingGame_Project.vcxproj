@@ -27,6 +27,12 @@
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Console.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="GameInfo" />
+    <None Include="MaxStage" />
+    <None Include="StageInfo" />
+    <None Include="Title" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

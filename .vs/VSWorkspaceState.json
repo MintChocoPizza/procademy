@@ -2,10 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\shootingGame_Sample",
-    "\\test",
-    "\\test\\Console_Curser_test",
-    "\\test\\Console_Curser_test\\Console_Curser_test"
+    "\\project\\shootingGame_project\\shootingGame_project",
+    "\\project\\shootingGame_Sample"
   ],
   "SelectedNode": "\\project\\shootingGame_Sample\\shootingGame_Sample.sln",
   "PreviewInSolutionExplorer": false

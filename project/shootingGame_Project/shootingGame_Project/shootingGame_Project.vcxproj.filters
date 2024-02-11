@@ -33,4 +33,18 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Title">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="GameInfo">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="MaxStage">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="StageInfo">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
 </Project>
