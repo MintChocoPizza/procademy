@@ -3,6 +3,10 @@
 
 #include "Console.h"
 #include "Buffer.h"
+#include "Player.h"
+#include "Enemy.h"
+
+#define FPS 60
 
 enum SCENE
 {
@@ -21,28 +25,16 @@ typedef enum
 	RESULT_TRUE = 1
 } RESULT;
 
-
-
-//---------------------------------------------------------------------------------
-// 플레이어 구조체 선언 
-// 
-// 플레이어 인스턴스 선언. (1인용 이니 하나만 하자)
-// 
-//---------------------------------------------------------------------------------
-struct st_PLAYER
-{
-	int iHP;				// 플레이어 HP
-
-
-	int iX;					// 플레이어 좌표
-	int iY;					//
-
-
-	int iVisible;			// 플레이어 생존 여부.
-} g_stPlayer;
-
 int g_Scene;
-int g_Stage = 3;
+int g_Stage = 1;
+
+int iIsOut = 0;
+
+LARGE_INTEGER g_Timer;
+LARGE_INTEGER g_Start;
+LARGE_INTEGER g_End;
+float g_ElapsedTime;
+
 
 //---------------------------------------------------------------------------------
 // 게임 시작 시 처음 Title 화면을 보여준다.
@@ -52,7 +44,7 @@ void SceneTitle(void);
 
 
 //---------------------------------------------------------------------------------
-// 스테이지 클리어를 확인한다.
+// 모든 스테이지 클리어를 확인한다.
 // 
 //---------------------------------------------------------------------------------
 RESULT IsGameClear(void);
@@ -63,24 +55,25 @@ RESULT IsGameClear(void);
 // 현재 스테이지에 맞는 맵 정보를 불러온다.
 // 
 //---------------------------------------------------------------------------------
-RESULT GameLoading(void);
-
-
-
-
+bool GameLoading(void);
 
 
 //---------------------------------------------------------------------------------
-// 키보드 입력을 받아서 플레이어를 처리한다.
-// 
-// 게임중 ESC를 누를 경우 false리턴. (종료 처리)
+// 게임 시작 전체 데이터 초기화
+//---------------------------------------------------------------------------------
+void Initial(void);
+
+//---------------------------------------------------------------------------------
+// 게임 클리어
 // 
 //---------------------------------------------------------------------------------
-bool KeyProcess(void);
+void GameClear();
 
-
-
-
+//---------------------------------------------------------------------------------
+// 게임 오버
+// 
+//---------------------------------------------------------------------------------
+void GameOver();
 
 
 
@@ -108,18 +101,30 @@ bool KeyProcess(void);
 
 int main()
 {
+	int iWaiting = 0;
+
 	//-----------------------------------------------
 	// 정확한 시간을 위해 타임 인터벌을 변경한다.
 	//-----------------------------------------------
 	timeBeginPeriod(1);
 	cs_Initial();
 
+
 	//-----------------------------------------------
+	// 다양한 요소의 속도 조절을 위한 타이머 세팅
 	// 
 	//-----------------------------------------------
+	QueryPerformanceFrequency(&g_Timer);
+	QueryPerformanceCounter(&g_Start);
+	QueryPerformanceCounter(&g_End);
+
 	
 	while (1)
 	{
+		QueryPerformanceCounter(&g_End);
+		g_ElapsedTime = (float)(g_End.QuadPart - g_Start.QuadPart) / g_Timer.QuadPart;
+		g_Start = g_End;
+
 		switch (g_Scene)
 		{
 		case TITLE:
@@ -140,17 +145,22 @@ int main()
 		}
 		case LOAD:
 		{
-			int isClear = IsGameClear();
+			RESULT isClear = IsGameClear();
 			switch (isClear)
 			{
-			case 1:
+			case RESULT_TRUE:
 				g_Scene = CLEAR;
 				break;
-			case 0:
-				GameLoading();
-				g_Scene = GAME;
+			case RESULT_FALSE:
+			{
+				Initial();
+				if (GameLoading())
+					g_Scene = GAME;
+				else
+					g_Scene = GAME_ERROR;
 				break;
-			case -1:
+			}
+			case FILE_ERROR:
 				g_Scene = GAME_ERROR;
 				break;
 			}
@@ -158,13 +168,54 @@ int main()
 		}
 		case GAME:
 		{
-			return 0;
+			
 
 			// 키보드 입력
+			if (!play_KeyProcess())
+			{
+				g_Scene = OVER;
+				break;
+			}
 			
 
 
 			// 로직부
+			buff_Buffer_Clear();
+
+
+			enmy_CoolTime();
+			play_Bullet_CoolTime();
+
+			play_Move_Bullet();
+			enmy_Move_Enemy();
+			enmy_Shoot_Bullet();
+			enmy_Move_Bullet();
+
+
+
+			enmy_Bullet_Hit_Player();
+			play_Bullet_Hit_Enemy();
+			if (play_Is_End())
+			{
+				g_Scene = OVER;
+				break;
+			}
+			if (enmy_Is_Win())
+			{
+				g_Scene = LOAD;
+				g_Stage++;
+				break;
+			}
+
+
+			enmy_Draw_Enemy();
+			enmy_Draw_Enemy_Bullet();
+			play_Draw_Player();
+			play_Draw_Bullet();
+
+
+
+
 
 
 
@@ -174,17 +225,32 @@ int main()
 			break;
 		}
 		case CLEAR:
+		{
+			GameClear();
+
 			break;
-		case OVER:
-			break;
-		case GAME_ERROR:
-			printf_s("게임이 비정상적으로 종료되었습니다.  \n");
-			return -1;
 		}
+		case OVER:
+		{
+			GameOver();
+
+			break;
+		}
+		case GAME_ERROR:
+		{
+			printf_s("게임이 비정상적으로 종료되었습니다.  \n");
+			iIsOut = true;
+		}
+		}
+
+		if (iIsOut == true)
+			break;
+
+		Sleep(1000/FPS);
 	}
 
 
-
+	
 
 
 
@@ -295,7 +361,7 @@ void SceneTitle(void)
 
 
 //----------------------------------------
-// 스테이지 클리어를 확인한다.
+// 모든 스테이지 클리어를 확인한다.
 // 
 //----------------------------------------
 RESULT IsGameClear(void)
@@ -314,7 +380,7 @@ RESULT IsGameClear(void)
 
 	fscanf_s(pFile, "%d", &iMaxStage);
 
-	if (g_Stage < iMaxStage)
+	if (g_Stage <= iMaxStage)
 	{
 		return RESULT_FALSE;
 	}
@@ -327,13 +393,14 @@ RESULT IsGameClear(void)
 // 현재 스테이지에 맞는 맵 정보를 불러온다.
 // 
 //----------------------------------------
-RESULT GameLoading(void)
+bool GameLoading(void)
 {
 	FILE* pFile;
 	errno_t err;
-	long lFileSize;
 
-	char* pStageInfoMemory;
+	char* pFileMemory;
+	char* pTemp;
+	long lFileSize;
 	int iCnt;
 	char cStageName[50];
 
@@ -342,93 +409,121 @@ RESULT GameLoading(void)
 	{
 		system("cls");
 		printf_s("스테이지 목록 불러오기 실패 \n");
-		return FILE_ERROR;
+		return false;
 	}
 	fseek(pFile, 0, SEEK_END);
 	lFileSize = ftell(pFile);
 	fseek(pFile, 0, SEEK_SET);
 
-	// stageInfo 파일 전체 메모리에 저장
-	pStageInfoMemory = (char*)malloc(lFileSize);
-	if (pStageInfoMemory == NULL)
+	pFileMemory = (char*)malloc(lFileSize);
+	if (pFileMemory == NULL)
 	{
 		system("cls");
 		printf_s("메모리 할당 실패 \n");
-		return FILE_ERROR;
+		return false;
 	}
 
+	fread_s(pFileMemory, lFileSize, 1, lFileSize, pFile);
+	fclose(pFile);
+
+	pTemp = pFileMemory;
 	for (iCnt = 0; iCnt < g_Stage; ++iCnt)
 	{
-		fgets(cStageName, sizeof(cStageName), pFile);
+		// fgets(cStageName, sizeof(cStageName), pFile);
+		pFileMemory = pTemp;
+		while (*pTemp != 0x0A)
+			++pTemp;
+
+		*pTemp = '\0';
+		++pTemp;
 	}
 
 
-	fclose(pFile);
-	free(pStageInfoMemory);
+	if (!enmy_Is_Get_Info(pFileMemory))
+	{
+		system("cls");
+		printf_s("적 정보 불러오기 실패 \n");
+		free(pFileMemory);
+		return false;
+	}
 
+
+	// free(pFileMemory);
+	return true;
 }
 
 
 
 
 
-//----------------------------------------
-// 키보드 입력을 받아서 플레이어를 처리한다.
-// 
-// 게임중 ESC를 누를 경우 false리턴. (종료 처리)
-// 
-//----------------------------------------
-bool KeyProcess(void)
+
+
+
+//---------------------------------------------------------------------------------
+// 게임 시작 전체 데이터 초기화
+//---------------------------------------------------------------------------------
+void Initial(void)
 {
-	// 왼쪽 이동 A.
-	if (GetAsyncKeyState('A'))
+	play_Initial_Player();
+	enmy_Initial();
+}
+
+
+
+
+void GameClear()
+{
+	int iCnt;
+	char cGameClear[] = "게임 클리어";
+	char cGuide[] = "끝내려면 ESC를 누르세요";
+
+	if (!play_KeyProcess())
 	{
-		g_stPlayer.iX -= 1;
-	}
-	// 오른쪽 이동 D.
-	if (GetAsyncKeyState('D'))
-	{
-		g_stPlayer.iX += 1;
-	}
-	// 위쪽 이동 W.
-	if (GetAsyncKeyState('W') & 0x8001)
-	{
-		g_stPlayer.iY--;
-	}
-	// 아래쪽 이동 S.
-	if (GetAsyncKeyState('S') & 0x8001)
-	{
-		g_stPlayer.iY++;
+		iIsOut = true;
 	}
 
-	//-------------------------------------------------------------
-	// 플레이어 이동 반경 제한.
-	// 게임 화면에서 플레이어가 이동 가능한 구역을 제한한다.
-	//-------------------------------------------------------------
+	buff_Buffer_Clear();
+	buff_Sprite_Background("Title");
 
-	g_stPlayer.iX = max(g_stPlayer.iX, 0);
-	g_stPlayer.iX = min(g_stPlayer.iX, 79);
-	g_stPlayer.iY = max(g_stPlayer.iY, 0);
-	g_stPlayer.iY = min(g_stPlayer.iY, 23);
-
-
-
-
-
-
-
-	// 스페이스바 키. (미사일 키)
-	if (GetAsyncKeyState(VK_SPACE))
+	for (iCnt = 0; iCnt < sizeof(cGameClear) - 1; ++iCnt)
 	{
-
+		buff_Sprite_Draw((dfSCREEN_HEIGHT / 2 + 2), (dfSCREEN_WIDTH / 2) - (sizeof(cGameClear) / 2 - 1) + iCnt, cGameClear[iCnt]);
+	}
+	for (iCnt = 0; iCnt < sizeof(cGuide) - 1; ++iCnt)
+	{
+		buff_Sprite_Draw((dfSCREEN_HEIGHT / 2 + 4), (dfSCREEN_WIDTH / 2) - (sizeof(cGuide) / 2 - 1) + iCnt, cGuide[iCnt]);
 	}
 
-	// ESC 키. (종료)
-	if (GetAsyncKeyState(VK_ESCAPE) & 0x8001)
+
+	buff_Buffer_Flip();
+}
+
+
+
+
+void GameOver()
+{
+	int iCnt;
+	char cGameOver[] = "게임 오버";
+	char cGuide[] = "끝내려면 ESC를 누르세요";
+
+	if (!play_KeyProcess())
 	{
-		// 종료 방법
-		return false;
+		iIsOut = true;
 	}
 
-	return true;
+	buff_Buffer_Clear();
+	buff_Sprite_Background("Title");
+
+	for (iCnt = 0; iCnt < sizeof(cGameOver) - 1; ++iCnt)
+	{
+		buff_Sprite_Draw((dfSCREEN_HEIGHT / 2 + 2), (dfSCREEN_WIDTH / 2) - (sizeof(cGameOver) / 2 - 1) + iCnt, cGameOver[iCnt]);
+	}
+	for (iCnt = 0; iCnt < sizeof(cGuide) - 1; ++iCnt)
+	{
+		buff_Sprite_Draw((dfSCREEN_HEIGHT / 2 + 4), (dfSCREEN_WIDTH / 2) - (sizeof(cGuide) / 2 - 1) + iCnt, cGuide[iCnt]);
+	}
+
+
+	buff_Buffer_Flip();
 }

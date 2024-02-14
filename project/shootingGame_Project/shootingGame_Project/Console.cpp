@@ -36,6 +36,7 @@ HANDLE hConsole;
 void cs_Initial(void)
 {
 	CONSOLE_CURSOR_INFO stConsoleCursor;
+	char cCommand[28];
 	
 	//-----------------------------------------------------
 	// 화면의 커서를 안보이게끔 설정한다.
@@ -50,6 +51,16 @@ void cs_Initial(void)
 	//-----------------------------------------------------
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorInfo(hConsole, &stConsoleCursor);
+
+
+	//-----------------------------------------------------
+	// 콘솔화면 크기를 설정한다.
+	//col = 가로, lines = 세로
+	// 
+	//-----------------------------------------------------
+	
+	sprintf_s(cCommand, "mode con:cols=%d lines=%d", dfSCREEN_WIDTH, dfSCREEN_HEIGHT);
+	system(cCommand);
 }
 
 
