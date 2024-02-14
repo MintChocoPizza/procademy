@@ -1,3 +1,0 @@
-2
-# 3 3 10 moving1.txt bullet1.txt
-# 3 3 70 moving1.txt bullet1.txt

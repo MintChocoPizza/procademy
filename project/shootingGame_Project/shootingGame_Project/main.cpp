@@ -108,6 +108,12 @@ int main()
 	//-----------------------------------------------
 	timeBeginPeriod(1);
 	cs_Initial();
+	
+
+	//-----------------------------------------------
+	// 게임 정보를 불러오기 위하여 디렉토리 변경
+	//-----------------------------------------------  
+	SetCurrentDirectory(L"C:\\Users\\user\\Desktop\\procademy_project\\procademy\\project\\shootingGame_Project\\shootingGame_Project\\GameFile");
 
 
 	//-----------------------------------------------
@@ -124,6 +130,10 @@ int main()
 		QueryPerformanceCounter(&g_End);
 		g_ElapsedTime = (float)(g_End.QuadPart - g_Start.QuadPart) / g_Timer.QuadPart;
 		g_Start = g_End;
+
+		// while문 탈출 구문
+		if (iIsOut == true)
+			break;
 
 		switch (g_Scene)
 		{
@@ -153,6 +163,10 @@ int main()
 				break;
 			case RESULT_FALSE:
 			{
+				//---------------------------------------------------------
+				// 게임을 클리어하지 못했다면 다음 스테이지를 로딩한다.
+				// 
+				//---------------------------------------------------------
 				Initial();
 				if (GameLoading())
 					g_Scene = GAME;
@@ -240,11 +254,8 @@ int main()
 		{
 			printf_s("게임이 비정상적으로 종료되었습니다.  \n");
 			iIsOut = true;
-		}
-
-
-		if (iIsOut == true)
 			break;
+		}
 
 		Sleep(1000 / FPS);
 		}
