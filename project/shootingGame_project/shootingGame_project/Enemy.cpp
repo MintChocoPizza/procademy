@@ -28,6 +28,8 @@ void enmy_Initial(void)
 
 //---------------------------------------------------------------------------------
 // 적 정보를 불러온다.
+// 이 함수의 하는 일이 너무 많음
+// 하지만 자세히 보면 파일을 열어서 정보를 꺼내오는 작업만 있음
 // 
 //---------------------------------------------------------------------------------
 bool enmy_Is_Get_Info(char* cEnemyInfo)
@@ -37,6 +39,7 @@ bool enmy_Is_Get_Info(char* cEnemyInfo)
 	errno_t err;
 	long lFileSize;
 	char* pFileMemory;
+	char* pEraserMemory;
 	char* pTemp;
 
 	int iCnt;
@@ -75,6 +78,7 @@ bool enmy_Is_Get_Info(char* cEnemyInfo)
 
 	// 데이터 메모리에 저장
 	pFileMemory = (char*)malloc(lFileSize);
+	pEraserMemory = pFileMemory;
 	if (pFileMemory == NULL)
 		return false;
 	fread_s(pFileMemory, lFileSize, 1, lFileSize, pFile);
@@ -97,7 +101,7 @@ bool enmy_Is_Get_Info(char* cEnemyInfo)
 	// 
 	// 헤더: 적 유닛의 수
 	// 
-	// 적skin		HP		y좌표			x좌표			움직임.txt
+	// 적skin		HP		y좌표			x좌표			움직임.txt		총알.txt
 	//---------------------------------------------------------------------------------
 	for (iCnt = 0; iCnt < g_iEnemyCount; ++iCnt)
 	{
@@ -187,7 +191,7 @@ bool enmy_Is_Get_Info(char* cEnemyInfo)
 
 	}
 
-	// free(pFileMemory);
+	free(pEraserMemory);
 	return true;
 }
 
@@ -206,7 +210,7 @@ bool enmy_Is_Get_Moving_Info(char* pMovingFileText, int* iMovingPatternCnt, floa
 
 	long lFileSize;
 	char* pFileMemory;
-	char* pFreeMemory;
+	char* pEraserMemory;
 	char* pTemp;
 
 	int iCnt;
@@ -236,7 +240,7 @@ bool enmy_Is_Get_Moving_Info(char* pMovingFileText, int* iMovingPatternCnt, floa
 	// 
 	// 이동에 대한 쿨타임		움직임 속도			y상대좌표			x상대좌표
 	//---------------------------------------------------------------------------------
-	pFreeMemory = pFileMemory;
+	pEraserMemory = pFileMemory;
 	pTemp = pFileMemory;
 
 	// 움직임 갯수
@@ -286,7 +290,7 @@ bool enmy_Is_Get_Moving_Info(char* pMovingFileText, int* iMovingPatternCnt, floa
 	}
 
 
-	// free(pFreeMemory);
+	free(pEraserMemory);
 
 	return true;
 }
@@ -303,6 +307,7 @@ bool enmy_Is_Get_Bullet_Info(char* pBulletFileText, int* iShotOne, char* cBullet
 	FILE* pFile;
 	errno_t err;
 	char* pFileMemory;
+	char* pEraserMemory;
 	long lFileSize;
 	char* pTemp;
 	int iCnt;
@@ -332,6 +337,7 @@ bool enmy_Is_Get_Bullet_Info(char* pBulletFileText, int* iShotOne, char* cBullet
 	// 
 	// 총알 모양		데미지			y상대좌표			x상대좌표			총알 쿨타임				총알 속도
 	//---------------------------------------------------------------------------------
+	pEraserMemory = pFileMemory;
 	pTemp = pFileMemory;
 
 	// 총알 갯수
@@ -392,7 +398,7 @@ bool enmy_Is_Get_Bullet_Info(char* pBulletFileText, int* iShotOne, char* cBullet
 		fBulletSpeed[iCnt] = atof(pFileMemory);
 	}
 
-	// free(pFileMemory);
+	free(pEraserMemory);
 	return true;
 }
 

@@ -2,12 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\shootingGame_project",
-    "\\project\\shootingGame_project\\shootingGame_project"
+    "\\project\\shootingGame_Project",
+    "\\project\\shootingGame_Project\\shootingGame_Project"
   ],
-<<<<<<< Updated upstream
-  "SelectedNode": "\\project\\shootingGame_project\\shootingGame_project\\main.cpp",
-=======
->>>>>>> Stashed changes
+  "SelectedNode": "\\project\\shootingGame_Project\\shootingGame_Project\\main.cpp",
   "PreviewInSolutionExplorer": false
 }

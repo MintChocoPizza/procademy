@@ -168,7 +168,7 @@ int main()
 		}
 		case GAME:
 		{
-			
+
 
 			// 키보드 입력
 			if (!play_KeyProcess())
@@ -176,7 +176,7 @@ int main()
 				g_Scene = OVER;
 				break;
 			}
-			
+
 
 
 			// 로직부
@@ -241,12 +241,13 @@ int main()
 			printf_s("게임이 비정상적으로 종료되었습니다.  \n");
 			iIsOut = true;
 		}
-		}
+
 
 		if (iIsOut == true)
 			break;
 
-		Sleep(1000/FPS);
+		Sleep(1000 / FPS);
+		}
 	}
 
 
@@ -399,6 +400,7 @@ bool GameLoading(void)
 	errno_t err;
 
 	char* pFileMemory;
+	char* pEraserMemory;
 	char* pTemp;
 	long lFileSize;
 	int iCnt;
@@ -416,6 +418,7 @@ bool GameLoading(void)
 	fseek(pFile, 0, SEEK_SET);
 
 	pFileMemory = (char*)malloc(lFileSize);
+	pEraserMemory = pFileMemory;
 	if (pFileMemory == NULL)
 	{
 		system("cls");
@@ -448,7 +451,7 @@ bool GameLoading(void)
 	}
 
 
-	// free(pFileMemory);
+	free(pEraserMemory);
 	return true;
 }
 

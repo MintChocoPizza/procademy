@@ -19,7 +19,7 @@ HANDLE hConsole;
 //		cs_MoveCursor(0, 0);	// 커서를 0, 0 위치로
 //		printf("abcde");		// 0, 0 위치에 글씨를 찍음
 //		cs_MoveCursor(20, 10);	// 커서를 20, 10 위치로
-//		printf("abcde");		// 0, 0 위치에 글씨를 찍음
+//		printf("abcde");		// 20, 10 위치에 글씨를 찍음
 //
 //		// 화면을 지울 때
 //		cs_ClearScreen();
