@@ -14,7 +14,7 @@ DWORD Real_Current_Time;
 
 int logic = 0;
 int rander = 0;
-int load = 10;
+int load = 1;
 
 
 void Input(void);
@@ -30,10 +30,10 @@ void Skip(void);
 int main()
 {
     timeBeginPeriod(1);
-  
-    //QueryPerformanceCounter(&Start);
+
     Virtual_Time = GetTickCount();
     One_Seconde_Timer = Virtual_Time; 
+
     while (1)
     {
         // 키보드 입력
@@ -45,8 +45,8 @@ int main()
         // 프레임 스킵 
         // 랜더링
 
-            Rander();
-            Skip();
+        Rander();
+        Skip();
     }
 
     timeEndPeriod(1);
@@ -75,39 +75,13 @@ void Rander(void)
 }
 void Skip(void)
 {
-    //bool ret = true;
     Real_Current_Time = GetTickCount();
 
-
-    //------------------------------------------------------------------------
-    // 목표 프레임: 50FPS
-    // 1초에 50번의 while문
-    // 
-    // while문 한번에 20ms
-    // 
-    // =====>> while문 한번에 랜더링 + 로직이 돌아야 한다. 
-    // ====>> 만약 1FPS를 초과 했다면 랜더링을 포기하고 로직을 돌린다. 
-    // 
-    // 현재 측정한 시간에서 가상의 시간을 뺌
-    // - 딱 맞으면 0
-    // - 가상 시간이 빠르게 끝났으면 20ms보다 작아야 한다. 
-    // 
-    //------------------------------------------------------------------------
-    if (Real_Current_Time - Virtual_Time < 20)       // 남은 시간동안 Sleep()
+    if (Real_Current_Time - Virtual_Time < 20)
     {
-
-        Sleep(20 - (Real_Current_Time - Virtual_Time));
-        printf_s("슬립실행 %d \n", 20 - (Real_Current_Time - Virtual_Time));
-
-        //ret = true;
+        Sleep()
     }
-    else if(Real_Current_Time - Virtual_Time > 20)
-    {
-        //ret = false;       // 20(1프레임) 이상 차이가 난다면 랜더링을 포기하고 로직을 돌린다.
-    }
-    printf_s(" %d - %d   ================= %d ======================= \n\n", Real_Current_Time, Virtual_Time, Real_Current_Time - Virtual_Time);
-
-    Virtual_Time += 20;
+    
 
     
 
