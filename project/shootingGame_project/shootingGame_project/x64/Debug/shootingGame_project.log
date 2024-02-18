@@ -1,4 +1,6 @@
-﻿  main.cpp
-C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_Project\shootingGame_project\main.cpp(135,17): warning C4805: '==': 연산에 'int' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_Project\shootingGame_project\main.cpp(414,7): warning C4101: 'cStageName' :참조되지 않은 지역 변수입니다.
-  shootingGame_project.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_Project\x64\Debug\shootingGame_project.exe
+﻿  Enemy.cpp
+C:\Users\User\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_project\Enemy.cpp(390,31): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_project\Enemy.cpp(398,28): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_project\Enemy.cpp(557,66): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_project\Enemy.cpp(557,40): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  shootingGame_project.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\project\shootingGame_project\x64\Debug\shootingGame_project.exe

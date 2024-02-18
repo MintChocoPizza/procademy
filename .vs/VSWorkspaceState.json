@@ -1,10 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\test",
-    "\\test\\FPS_tttest",
-    "\\test\\FPS_tttest\\FPS_tttest"
+    "\\project",
+    "\\project\\shootingGame_project\\shootingGame_project",
+    "\\project\\shootingGame_Project_FPS",
+    "\\project\\shootingGame_Project_FPS\\shootingGame_Project_FPS"
   ],
-  "SelectedNode": "\\test\\FPS_tttest\\FPS_tttest\\FPS_tttest.cpp",
+  "SelectedNode": "\\project\\shootingGame_Project_FPS\\shootingGame_Project_FPS\\Enemy.cpp",
   "PreviewInSolutionExplorer": false
 }

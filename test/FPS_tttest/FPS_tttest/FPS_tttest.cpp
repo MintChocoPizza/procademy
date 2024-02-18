@@ -1,109 +1,299 @@
-﻿// FPS_tttest.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
-//
-
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <Windows.h>
 #include <time.h>
 
-#pragma comment (lib, "winmm.lib")
+#pragma comment(lib, "winmm.lib")
 
-DWORD One_Seconde_Timer;
-DWORD Virtual_Time;
-DWORD Real_Current_Time;
-
+DWORD v_Time;
+DWORD c_Time;
+DWORD s_Time;
 
 int logic = 0;
 int rander = 0;
-int load = 1;
+int load = 0;
+
+// version_1
+//int main()
+//{
+//	timeBeginPeriod(1);
+//	srand(clock());
+//	v_Time = GetTickCount();
+//	s_Time = v_Time;
+//	while (1)
+//	{
+//
+//		logic++;
+//
+//		c_Time = GetTickCount();
+//
+//		Sleep(20);
+//
+//		if (c_Time - s_Time >= 1000)
+//		{
+//			printf_s("로직: %d \n", logic);
+//			s_Time += 1000;
+//			logic = 0;
+//		}
+//	}
+//	timeEndPeriod(1);
+//	return 0;
+//}
+
+// version_2
+//int main()
+//{
+//	timeBeginPeriod(1);
+//	srand(clock());
+//	v_Time = GetTickCount();
+//	s_Time = v_Time;
+//	while (1)
+//	{
+//
+//		logic++;
+//
+//		c_Time = GetTickCount();
+//
+//		v_Time += 20;
+//		Sleep(v_Time - c_Time);
+//
+//		if (c_Time - s_Time >= 1000)
+//		{
+//			printf_s("로직: %d \n", logic);
+//			s_Time += 1000;
+//			logic = 0;
+//		}
+//	}
+//	timeEndPeriod(1);
+//	return 0;
+//}
 
 
-void Input(void);
+// version_3 => 이건 음수가 나옴
+//int main()
+//{
+//	timeBeginPeriod(1);
+//	v_Time = GetTickCount();
+//	s_Time = v_Time;
+//	while (1)
+//	{
+//
+//		logic++;
+//
+//		c_Time = GetTickCount();
+//
+//		printf("    %d \n", c_Time - v_Time);
+//		if(1)
+//		{
+//			v_Time += 20;
+//			Sleep(v_Time - c_Time);
+//		}
+//
+//		if (c_Time - s_Time >= 1000)
+//		{
+//			printf_s("로직: %d \n", logic);
+//			s_Time += 1000;
+//			logic = 0;
+//		}
+//	}
+//	timeEndPeriod(1);
+//	return 0;
+//}
+
+// version_4  -> 음수가 안나옴
+//int main()
+//{
+//	timeBeginPeriod(1);
+//	v_Time = timeGetTime();
+//	s_Time = v_Time;
+//	while (1)
+//	{
+//
+//		logic++;
+//
+//		c_Time = timeGetTime();
+//
+//		printf("    %d \n", c_Time - v_Time);
+//		if(1)
+//		{
+//			v_Time += 20;
+//			Sleep(v_Time - c_Time);
+//		}
+//
+//		if (c_Time - s_Time >= 1000)
+//		{
+//			printf_s("로직: %d \n", logic);
+//			s_Time += 1000;
+//			logic = 0;
+//		}
+//	}
+//	timeEndPeriod(1);
+//	return 0;
+//}
+
+// version_5  -> 다행히 돌아감
+//int main()
+//{
+//	timeBeginPeriod(1);
+//	v_Time = timeGetTime();
+//	s_Time = v_Time;
+//	while (1)
+//	{
+//
+//		logic++;
+//
+//		c_Time = timeGetTime();
+//
+//		if (c_Time - v_Time < 20)
+//		{
+//			v_Time += 20;
+//			Sleep(v_Time - c_Time);
+//		}
+//
+//		if (c_Time - s_Time >= 1000)
+//		{
+//			printf_s("로직: %d \n", logic);
+//			s_Time += 1000;
+//			logic = 0;
+//		}
+//	}
+//	timeEndPeriod(1);
+//	return 0;
+//}
+
+
+// version_6 -> 가끔 음수가 튀어나옴
+//LARGE_INTEGER timer;
+//LARGE_INTEGER l_v_Time;
+//LARGE_INTEGER l_s_Time;
+//LARGE_INTEGER l_c_Time;
+//
+//int main()
+//{
+//	timeBeginPeriod(1);
+//	QueryPerformanceFrequency(&timer);
+//	// v_Time = timeGetTime();
+//	QueryPerformanceCounter(&l_v_Time);
+//	// s_Time = v_Time;
+//	l_s_Time = l_v_Time;
+//	while (1)
+//	{
+//
+//		logic++;
+//
+//		// c_Time = timeGetTime();
+//		QueryPerformanceCounter(&l_c_Time);
+//
+//		// printf("    %d \n", c_Time - v_Time);
+//		printf("    %f \n", (((double)l_c_Time.QuadPart - l_v_Time.QuadPart) / (double)timer.QuadPart) * 1000);
+//		if(1)
+//		{
+//			// v_Time += 20;
+//			l_v_Time.QuadPart += 20000;
+//			// Sleep(v_Time - c_Time);
+//			Sleep(    (unsigned long)(((double)(l_v_Time.QuadPart-l_c_Time.QuadPart) / (double)timer.QuadPart) * 1000)         );
+//		}
+//
+//		// if (c_Time - s_Time >= 1000)
+//		if(            ((double)(l_v_Time.QuadPart-l_s_Time.QuadPart) / (double)timer.QuadPart)*1000 >= 1000         )
+//		{
+//			printf_s("로직: %d \n", logic);
+//			// s_Time += 1000;
+//			l_s_Time.QuadPart += timer.QuadPart;
+//			logic = 0;
+//		}
+//	}
+//	timeEndPeriod(1);
+//	return 0;
+//}
+
+
+
+void KeyBoardInput(void);
 void Logic(void);
 void Rander(void);
-void Skip(void);
+bool Skip(void);
 
-//--------------------------------------------------------------
-// 50fps -> 1초에 50번 
-// 
-// while문 한번 실행하는데 1000/50 => 20ms
-//--------------------------------------------------------------
 int main()
 {
-    timeBeginPeriod(1);
+	timeBeginPeriod(1);
+	srand(timeGetTime());
 
-    Virtual_Time = GetTickCount();
-    One_Seconde_Timer = Virtual_Time; 
 
-    while (1)
-    {
-        // 키보드 입력
-        Input();
 
-        // 로직 
-        Logic();
+	v_Time = timeGetTime();
+	s_Time = v_Time;
 
-        // 프레임 스킵 
-        // 랜더링
 
-        Rander();
-        Skip();
-    }
+	while (1)
+	{
+		KeyBoardInput();
 
-    timeEndPeriod(1);
-    return 0;
+		Logic();
+
+
+		if (Skip())
+			Rander();
+
+	}
+	timeEndPeriod(1);
+	return 0;
 }
-
-void Input(void)
-{
-    if (GetAsyncKeyState(VK_SPACE) & 0x8001)
-    {
-        load += 1;
-    }
-}
-
 
 void Logic(void)
 {
-    Sleep(load + rand() % 5);
-    logic++;
+	Sleep(rand() % 10 + load);
+	logic++;
 }
 void Rander(void)
 {
-    Sleep(load + rand() % 10);
-    rander++;
-    
+	Sleep(rand() % 15 + load);
+	rander++;
 }
-void Skip(void)
+bool Skip(void)
 {
-    Real_Current_Time = GetTickCount();
+	int ret = true;
+	c_Time = timeGetTime();
 
-    if (Real_Current_Time - Virtual_Time < 20)
-    {
-        Sleep()
-    }
-    
+	// 로직이 빨리 끝나서 프레임을 맞추려고 기다리는 상황
+	if (c_Time - v_Time < 20)
+	{
 
-    
+		v_Time += 20;
+		Sleep(v_Time - c_Time);
+		ret = true;
+	}
+	// 랜더 + 로직이 1프레임(20ms)를 완전히 넘어가는 상황
+	// else if (c_Time - v_Time > 20)
+	// = 을 뺀 경우 로직의 실행이 더 많이 하는 경우가 발생한다.
+	else if (c_Time - v_Time >= 20)
+	{
+
+		v_Time += 20;
+		ret = false;
+	}
 
 
-    // 1초가 지났다면 로직과 랜더링을 확인한다.
-    if (Real_Current_Time - One_Seconde_Timer >= 1000 )
-    {
-        One_Seconde_Timer += 1000;
-        printf_s("로직: %d - 랜더: %d \n", logic, rander);
-        rander = 0;
-        logic = 0;
-    }
-    // return ret;
+
+
+	// 1초 후 출력
+	if (c_Time - s_Time >= 1000)
+	{
+		printf_s("로직: %d  -  랜더: %d \n", logic, rander);
+		s_Time += 1000;
+		logic = 0;
+		rander = 0;
+	}
+
+	return ret;
 }
 
-// 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
-// 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
+void KeyBoardInput(void)
+{
+	if (GetAsyncKeyState(VK_SPACE) & 0x8001)
+		load++;
 
-// 시작을 위한 팁: 
-//   1. [솔루션 탐색기] 창을 사용하여 파일을 추가/관리합니다.
-//   2. [팀 탐색기] 창을 사용하여 소스 제어에 연결합니다.
-//   3. [출력] 창을 사용하여 빌드 출력 및 기타 메시지를 확인합니다.
-//   4. [오류 목록] 창을 사용하여 오류를 봅니다.
-//   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다.
-//   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.
+	if (GetAsyncKeyState('A') & 0x8001)
+		load--;
+	if (GetAsyncKeyState('S') & 0x8001)
+		Sleep(10000);
+}
