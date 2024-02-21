@@ -1,11 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\project",
-    "\\project\\shootingGame_project\\shootingGame_project",
-    "\\project\\shootingGame_Project_FPS",
-    "\\project\\shootingGame_Project_FPS\\shootingGame_Project_FPS"
+    "\\class",
+    "\\class\\class",
+    "\\class\\class\\class"
   ],
-  "SelectedNode": "\\project\\shootingGame_Project_FPS\\shootingGame_Project_FPS\\Enemy.cpp",
+  "SelectedNode": "\\class\\class\\class\\class.cpp",
   "PreviewInSolutionExplorer": false
 }
