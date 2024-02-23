@@ -3,7 +3,9 @@
     "",
     "\\class",
     "\\class\\class",
-    "\\class\\class\\class"
+    "\\class\\class\\class",
+    "\\test\\Defaul_constructor_test",
+    "\\test\\Defaul_constructor_test\\Defaul_constructor_test"
   ],
   "SelectedNode": "\\class\\class\\class\\class.cpp",
   "PreviewInSolutionExplorer": false
