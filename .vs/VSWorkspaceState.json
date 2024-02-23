@@ -1,12 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\class",
-    "\\class\\class",
-    "\\class\\class\\class",
-    "\\test\\Defaul_constructor_test",
-    "\\test\\Defaul_constructor_test\\Defaul_constructor_test"
+    "\\procade_homeWork",
+    "\\procade_homeWork\\hw10_new_Overloding",
+    "\\procade_homeWork\\hw10_new_Overloding\\hw10_new_Overloding"
   ],
-  "SelectedNode": "\\class\\class\\class\\class.cpp",
+  "SelectedNode": "\\procade_homeWork\\hw10_new_Overloding\\hw10_new_Overloding\\hw10_new_Overloding.cpp",
   "PreviewInSolutionExplorer": false
 }
