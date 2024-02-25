@@ -3,9 +3,58 @@
 
 #include <iostream>
 
+#include <iostream>
+#include <map>
+#include <string>
+
+#include "MyNew.h"
+
+//void* operator new(size_t sz, char* filename, int line);
+//
+//#define  new    new(__FILE__, __LINE__)
+
+class Test
+{
+protected:
+    int a;
+    int b;
+    int c;
+public:
+    Test()
+    {
+        a = 0;
+        b = 0;
+        c = 0;
+        std::cout << "Test에서 메모리 할당 \n";
+    }
+    ~Test()
+    {
+        a = 0;
+        b = 0;
+        c = 0;
+        std::cout << "Test에서 메모리 해제 \n";
+    }
+};
+
+
+
 int main()
 {
-    std::cout << "Hello World!\n";
+    // 정수 배열 동적 할당
+    int* arr = new int[10];
+    // 정수 동적 할당
+    int* a = new int;
+    // 클래스 동적 할당
+    Test* cTest = new Test;
+    // 클래스 배열 동적 할당
+    Test* cTestArr = new Test[10];
+
+
+    // 메모리 해제
+
+
+
+    return 0;
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴

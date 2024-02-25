@@ -1,0 +1,4 @@
+LEAK [00000237F6EAE650] [        40] C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.c, : 44 
+LEAK [00000237F6EAF290] [         4] C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.c. : 46 
+LEAK [00000237F6EAC690] [        12] C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.c0 : 48 
+LEAK [00000237F6EA6150] [       128] C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.c2 : 50 
