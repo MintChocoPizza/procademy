@@ -194,12 +194,28 @@ public:
 	void deleteAllocInfo(stALLOCINFO* ptr)
 	{
 		// 1. 뒤 노드가 앞 노드를 가르키게 한다.
-		ptr->pPreviousNode->pNextNode = ptr->pNextNode;
+		// 1-1. 제일 앞 노드라면 건너뛴다. 
+		if(ptr != pHead)
+			ptr->pPreviousNode->pNextNode = ptr->pNextNode;
 		// 2.  앞 노드가 뒤 노드를 가르키게 한다. 
-		ptr->pNextNode->pPreviousNode = ptr->pPreviousNode;
+		// 2-1. 제일 뒤 노드라면 건너뛴다.
+		if(ptr != pTail)
+			ptr->pNextNode->pPreviousNode = ptr->pPreviousNode;
 		free(ptr);
 	}
+
 }cMyNew;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -223,7 +239,7 @@ void* operator new(size_t size, const char* file, int line)
 	//void* ptr = cMyNew.operator new(size);
 
 	// 동적 할당 정보를 저장한다.
-	bool check = cMyNew.setAllocInfo(ptr, size, file, line, true);
+	bool check = cMyNew.setAllocInfo(ptr, size, file, line, false);
 
 	// 메모리가 제대로 할당 되었는지 예외 체크
 	if (ptr == NULL || check == NULL)
@@ -239,7 +255,7 @@ void* operator new[](size_t size, const char* file, int line)
 	// void* ptr = cMyNew.operator new(size);
 
 	// 동적 할당 정보를 저장한다.
-	bool check = cMyNew.setAllocInfo(ptr, size, file, line, false);
+	bool check = cMyNew.setAllocInfo(ptr, size, file, line, true);
 
 	// 메모리가 제대로 할당 되었는지 예외 체크
 	if (ptr == NULL || check == NULL)
@@ -248,6 +264,10 @@ void* operator new[](size_t size, const char* file, int line)
 	// 할당된 메모리 주소 반환
 	return ptr;
 }
+
+
+
+
 //------------------------------------------------------------------------
 // delete 연산자 오버로딩 함수
 // 
@@ -286,8 +306,33 @@ void operator delete(void* ptr)
 }
 void operator delete[](void* ptr)
 {
-	// 기본 delete 연산자로 메모리 해제
-	free(ptr);
+		// list에서 해당 주소가 있는지 찾아본다.
+		stALLOCINFO* dataPtr = cMyNew.findAndAllocInfo(ptr);
+
+
+		// 배열 delete를 했어야 하는 경우
+		if (dataPtr != NULL && dataPtr->arr == false)
+		{
+			cMyNew.saveFile("ARRAY", ptr, dataPtr);
+			return;
+		}
+
+		if (dataPtr != NULL)
+		{
+			// list에서 주소의 데이터를 삭제한다.
+			cMyNew.deleteAllocInfo(dataPtr);
+
+			// 기본 delete 연산자로 메모리 해제
+			free(ptr);
+			return;
+		}
+
+		// 만약 dataPtr이 NULL이면 잘못된 주소를 해지하려 한다면 파일에 NoAlloc를 작성한다.
+		if (dataPtr == NULL)
+		{
+			cMyNew.saveFile("NOALLOC", ptr, NULL);
+			return;
+		}
 }
 
 

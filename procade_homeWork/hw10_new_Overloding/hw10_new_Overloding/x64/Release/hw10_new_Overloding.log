@@ -1,15 +1,19 @@
 ﻿  hw10_new_Overloding.cpp
-C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(48,19): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\MyNew.h(219,7):
+C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(47,19): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
+  C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\MyNew.h(235,7):
   'operator new' 선언을 참조하십시오.
   
-C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(50,22): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\MyNew.h(235,7):
+C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(51,22): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
+  C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\MyNew.h(251,7):
+  'operator new[]' 선언을 참조하십시오.
+  
+C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(65,26): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
+  C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\MyNew.h(251,7):
   'operator new[]' 선언을 참조하십시오.
   
   코드를 생성하고 있습니다.
-  1 of 29 functions ( 3.4%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  2 of 33 functions ( 6.1%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   hw10_new_Overloding.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\x64\Release\hw10_new_Overloding.exe
