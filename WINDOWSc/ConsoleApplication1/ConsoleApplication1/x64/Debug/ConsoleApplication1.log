@@ -1,1 +1,9 @@
-﻿  ConsoleApplication1.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\WINDOWSc\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.Analysis.props(24,5): warning MSB4211: "MsvcAnalysisPluginPath" 속성에 처음으로 값이 설정되고 있지만 이미 "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CodeAnalysis.Extensions.props(33,5)"에서 사용되었습니다.
+  ConsoleApplication1.cpp
+C:\Users\user\Desktop\procademy_project\procademy\WINDOWSc\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(16,14): warning C4477: 'wprintf' : 서식 문자열 '%x'에 'unsigned int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'HMODULE'입니다.
+C:\Users\user\Desktop\procademy_project\procademy\WINDOWSc\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(16,14): warning C4313: 'wprintf': 서식 문자열의 '%x'이(가) HMODULE' 형식의 인수 1과(와) 충돌합니다.
+C:\Users\user\Desktop\procademy_project\procademy\WINDOWSc\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(20,14): warning C4477: 'wprintf' : 서식 문자열 '%x'에 'unsigned int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'HINSTANCE'입니다.
+C:\Users\user\Desktop\procademy_project\procademy\WINDOWSc\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(20,14): warning C4313: 'wprintf': 서식 문자열의 '%x'이(가) HINSTANCE' 형식의 인수 1과(와) 충돌합니다.
+C:\Users\user\Desktop\procademy_project\procademy\WINDOWSc\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(26,14): warning C4477: 'wprintf' : 서식 문자열 '%x'에 'unsigned int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'HMODULE'입니다.
+C:\Users\user\Desktop\procademy_project\procademy\WINDOWSc\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.cpp(26,14): warning C4313: 'wprintf': 서식 문자열의 '%x'이(가) HMODULE' 형식의 인수 1과(와) 충돌합니다.
+  ConsoleApplication1.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\WINDOWSc\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe

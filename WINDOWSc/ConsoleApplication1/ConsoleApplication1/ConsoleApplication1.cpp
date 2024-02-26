@@ -1,21 +1,36 @@
 ﻿// ConsoleApplication1.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
 
+#include <iostream>
+#include <stdio.h>
 #include <tchar.h>
-#include <strsafe.h>
-#include <stdlib.h>
-#include <Windows.h>
+#include "../../source/CommonFiles/CmnHdr.h"
 
-int WINAPI main()
+extern "C" const IMAGE_DOS_HEADER __ImageBase;
+
+void DumpModule()
 {
-	TCHAR szBefore[5] = { _T('B'),_T('B'), _T('B'), _T('B'), '\0' };
-	TCHAR szBuffer[10] = { _T('-'),_T('-'), _T('-'), _T('-'), _T('-'), _T('-'), _T('-'), _T('-'), _T('-'), '\0' };
-	TCHAR szAfter[5] = { _T('A'),_T('A'), _T('A'), _T('A'), '\0' };
-	BYTE a;
-	errno_t result = _tcscpy_s(szBuffer, _countof(szBuffer), _T("0123456789"));
+    // 수행 중인 애플리케이션의 시작 주소을 가져온다. 
+    // 수행 중인 코드가 DLL 내에 있는 경우 다른 값이 얻어질 수 있다. 
+    HMODULE hModule = GetModuleHandle(NULL);
+    _tprintf(_T("with getModuleHandle(NULL) = 0x%x\r\n"), hModule);
 
-	GetDlgItem()
-	return 0;
+    // 현재 모듀의 시작 주소 (hModule/ hInstance)를 얻기 위해 
+    // 가상변수인 __ImageBase를 사용한다.
+    _tprintf(_T("with __ImageBase = 0x%x\r\n"), (HINSTANCE)&__ImageBase);
+
+    // 현재 수행중인 DumpModule의 주소를 GetModuleHandleEx에 매개 변수로 
+    // 전달하여 현재 수행 중인 모듈의 시작 주소 (hModule/ hInstance)를 얻어온다.
+    hModule = NULL;
+    GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, (PCTSTR)DumpModule, &hModule);
+    _tprintf(_T("with GetModuleHandleEx = 0x%x\r\n"), hModule);
+}
+
+int _tmain(int argc, TCHAR * argv[])
+{
+    DumpModule();
+
+    return 0;
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
