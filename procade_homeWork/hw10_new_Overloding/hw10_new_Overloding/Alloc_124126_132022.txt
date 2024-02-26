@@ -1,0 +1,7 @@
+NOALLOC [000001968F42F174] 
+NOALLOC [000001968F42B2B8] 
+LEAK [000001968F42B3A0] [        40] C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.c) : 41 
+LEAK [000001968F42F1B0] [         4] C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.c, : 44 
+LEAK [000001968F42B3D0] [        32] C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.c3 : 51 
+LEAK [000001968F42F170] [         4] C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.c; : 59 
+LEAK [000001968F42B2B0] [        32] C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cA : 65 

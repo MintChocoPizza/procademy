@@ -25,8 +25,11 @@ private:
 public:
 	cMYNEW()
 	{
-		pHead = NULL;
-		pTail = NULL;
+		pHead = (stALLOCINFO*)malloc(sizeof(stALLOCINFO));
+		pTail = (stALLOCINFO*)malloc(sizeof(stALLOCINFO));
+
+		pHead->pNextNode = pTail;
+		pTail->pPreviousNode = pHead;
 	}
 	~cMYNEW()
 	{
@@ -34,12 +37,11 @@ public:
 		// 파일에 저장한다. 
 		// 
 		//------------------------------------------------------------------------
-		stALLOCINFO* pCur = pHead;
-		while (pCur != NULL)
+		stALLOCINFO* pCur;
+
+		for (pCur = pHead->pNextNode; pCur != pTail; pCur = pCur->pNextNode)
 		{
 			saveFile("LEAK", pCur->ptr, pCur);
-
-			pCur = pCur->pNextNode;
 		}
 	}
 
@@ -154,53 +156,45 @@ public:
 		stNewData->arr = arr;
 
 		//------------------------------------------------------------------------
-		// linked list에 newData를 연결한다.
+		// linked list pTail의 앞에 newData를 연결한다.
 		// 
 		//------------------------------------------------------------------------
-		if (pHead == NULL)	// 첫번째 노드 삽입
-		{
-			pHead = stNewData;
-			pTail = stNewData;
-		}
-		else				
-		{
-			// 1. stNewData의 뒤에 pTail이 가르키는 노드를 연결한다.
-			stNewData->pPreviousNode = pTail;
-			// 2. pTail의 앞에 stNewData를 연결한다.
-			pTail->pNextNode = stNewData;
-			// 3.pTail이 stNewData를 가르킨다.
-			pTail = stNewData;
-		}
+		// 1. newData와 Tail의 앞 노드를 연결한다.
+		stNewData->pPreviousNode = pTail->pPreviousNode;
+		// 2. Tail의 앞 노드와 newData를 연결한다. 
+		pTail->pPreviousNode->pNextNode = stNewData;
+		// 3. newData와 Tail을 연결한다. 
+		stNewData->pNextNode = pTail;
+		// 4. Tail을 newData와 연결한다. 
+		pTail->pPreviousNode = stNewData;
 
 		return true;
 	}
 
 	stALLOCINFO* findAndAllocInfo(void* ptr)
 	{
-		stALLOCINFO* stCurrentNode = pHead;
-		while (stCurrentNode != NULL)
-		{
-			if ((*stCurrentNode).ptr == ptr)
-			{
-				break;
-			}
+		stALLOCINFO* stCurrentNode;
 
-			stCurrentNode = stCurrentNode->pNextNode;
+		for (stCurrentNode = pHead->pNextNode; stCurrentNode != pTail; stCurrentNode = stCurrentNode->pNextNode)
+		{
+			if (stCurrentNode->ptr == ptr)
+				return stCurrentNode;
 		}
 
-		return stCurrentNode;
+
+		return NULL;
 	}
 
 	void deleteAllocInfo(stALLOCINFO* ptr)
 	{
-		// 1. 뒤 노드가 앞 노드를 가르키게 한다.
-		// 1-1. 제일 앞 노드라면 건너뛴다. 
-		if(ptr != pHead)
-			ptr->pPreviousNode->pNextNode = ptr->pNextNode;
-		// 2.  앞 노드가 뒤 노드를 가르키게 한다. 
-		// 2-1. 제일 뒤 노드라면 건너뛴다.
-		if(ptr != pTail)
-			ptr->pNextNode->pPreviousNode = ptr->pPreviousNode;
+		stALLOCINFO* pNextNode = ptr->pNextNode;
+		stALLOCINFO* pPreviousNode = ptr->pPreviousNode;
+
+
+		pNextNode->pPreviousNode = pPreviousNode;
+		pPreviousNode->pNextNode = pNextNode;
+
+
 		free(ptr);
 	}
 
@@ -307,7 +301,7 @@ void operator delete(void* ptr)
 void operator delete[](void* ptr)
 {
 		// list에서 해당 주소가 있는지 찾아본다.
-		stALLOCINFO* dataPtr = cMyNew.findAndAllocInfo(ptr);
+		stALLOCINFO* dataPtr = cMyNew.findAndAllocInfo((stALLOCINFO*)ptr);
 
 
 		// 배열 delete를 했어야 하는 경우
