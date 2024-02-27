@@ -1,0 +1,3 @@
+﻿  Profiling.cpp
+C:\Users\User\Desktop\procademy_project\procademy\project\Profiling\Profiling\Profiling.cpp(83,6): warning C4101: 'iCntTwo' :참조되지 않은 지역 변수입니다.
+  Profiling.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\project\Profiling\x64\Debug\Profiling.exe
