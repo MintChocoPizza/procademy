@@ -1,12 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\class",
     "\\class\\class",
     "\\class\\class\\class",
-    "\\windowsSystem\\namedpip_client",
-    "\\windowsSystem\\namedpip_client\\namedpip_client"
+    "\\procade_homeWork",
+    "\\procade_homeWork\\hw10_new_Overloding",
+    "\\procade_homeWork\\hw10_new_Overloding\\hw10_new_Overloding"
   ],
-  "SelectedNode": "\\class\\class\\class\\class.cpp",
+  "SelectedNode": "\\procade_homeWork\\hw10_new_Overloding\\hw10_new_Overloding\\MyNew.h",
   "PreviewInSolutionExplorer": false
 }

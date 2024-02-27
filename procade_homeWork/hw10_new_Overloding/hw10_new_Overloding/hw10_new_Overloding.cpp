@@ -2,8 +2,6 @@
 //
 
 #include <iostream>
-
-#include <iostream>
 #include <map>
 #include <string>
 
@@ -37,42 +35,7 @@ public:
 
 int main()
 {
-    // 정수 배열 동적 할당
-    int* arr = new int[10];
-
-    // 정수 동적 할당
-    int* a = new int;
-
-    // 클래스 동적 할당
-    Test* cTest = new Test;
-    delete cTest;
-
-    // 클래스 배열 동적 할당
-    Test* cTestArr = new Test[2];
-
-
-
-
-
-
-    // 잘못된 메모리 해제
-    int* missArr = new int;
-    delete (missArr+1);
-
-    // 배열 메모리를 그냥 해제
-    // 실제 할당 시작 주소는 소멸자 크기를 더한 값  
-    // -> 어짜피 주소를 해지할 수 없음
-    Test* cMissTestArr = new Test[2];
-    delete cMissTestArr;
-
-    // 일반 메모리를 배열 해제
-    // 프로그램이 안끝남....
-    // 
-    //Test* cMissTest = new Test;
-    //delete[]cMissTest;
-
-
-
+   
 
     return 0;
 }

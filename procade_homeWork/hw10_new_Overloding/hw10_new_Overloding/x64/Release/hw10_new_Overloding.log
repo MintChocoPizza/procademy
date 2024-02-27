@@ -1,19 +1,11 @@
 ﻿  hw10_new_Overloding.cpp
-C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(47,19): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\MyNew.h(229,7):
-  'operator new' 선언을 참조하십시오.
-  
-C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(51,22): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\MyNew.h(245,7):
-  'operator new[]' 선언을 참조하십시오.
-  
-C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(65,26): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\MyNew.h(245,7):
+C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(38,19): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
+  C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\MyNew.h(109,7):
   'operator new[]' 선언을 참조하십시오.
   
   코드를 생성하고 있습니다.
-  3 of 33 functions ( 9.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
+  7 of 32 functions (21.9%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
-  hw10_new_Overloding.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\x64\Release\hw10_new_Overloding.exe
+  hw10_new_Overloding.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\x64\Release\hw10_new_Overloding.exe
