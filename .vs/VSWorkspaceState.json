@@ -1,10 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\project",
-    "\\project\\Profiling",
-    "\\project\\Profiling\\Profiling"
+    "\\class",
+    "\\class\\class",
+    "\\class\\class\\class"
   ],
-  "SelectedNode": "\\project\\Profiling\\Profiling\\Profiling.h",
+  "SelectedNode": "\\class\\class\\class\\class.cpp",
   "PreviewInSolutionExplorer": false
 }
