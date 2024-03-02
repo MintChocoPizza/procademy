@@ -1,10 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\class",
-    "\\class\\class",
-    "\\class\\class\\class"
+    "\\project\\Profiling",
+    "\\project\\Profiling\\Profiling",
+    "\\test",
+    "\\test\\QueryPerformanceCounter_Test"
   ],
-  "SelectedNode": "\\class\\class\\class\\class.cpp",
+  "SelectedNode": "\\test\\QueryPerformanceCounter_Test\\QueryPerformanceCounter_Test.sln",
   "PreviewInSolutionExplorer": false
 }
