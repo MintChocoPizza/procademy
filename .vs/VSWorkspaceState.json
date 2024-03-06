@@ -1,11 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\project\\Profiling",
-    "\\project\\Profiling\\Profiling",
     "\\test",
     "\\test\\QueryPerformanceCounter_Test"
   ],
-  "SelectedNode": "\\test\\QueryPerformanceCounter_Test\\QueryPerformanceCounter_Test.sln",
   "PreviewInSolutionExplorer": false
 }
