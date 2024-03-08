@@ -1,64 +1,85 @@
 #ifndef __CLIST_H__
 #define __CLIST_H__
 
-template<typename T>
-
+//////////////////////////////////////////////////////////////////////////////////////////
+// 템플릿 클래스의 경우 정의부와 선언부를 분리할 수 없다. 
+// 
+// 하나의 파일에 작성해야 함
+// 
+//////////////////////////////////////////////////////////////////////////////////////////
+template <typename T>
 class CList
 {
-public: 
-    struct Node 
-    {
-        T _data;
-        Node *_Prev;
-        Node *_Next;
-    };
+public:
+	struct Node
+	{
+		T _data;
+		Node* _Prev;
+		Node* _Next;
+	};
 
-    class iterator 
-    {
-    private:
-        Node *_node;
-    public:
-        iterator(Node *node = nullptr)
-        {
-            // 
-        }
+	class iterator
+	{
+	private:
+		Node* _node;
+	public:
 
-        iterator operator ++(int)
-        {
-
-        }
-        iterator& operator ++()
-        {
-            return *this;
-        }
-        iterator operator --(int)
-        {
-
-        }
-        iterator& operator --()
-        {
-            return *this;
-        }
-
-        T& operator *()
-        {
-
-        }
-        bool operator ==(const iterator& other)
-        {
-        }
-        bool operator !=(const iterator& other)
-        {
-        }
-    };
+	};
+private:
+	int _size = 0;
+	Node _head;
+	Node _tail;
 
 public:
-    CList();
-    ~CList();
-
-
-
+	CList();
+	~CList();
+	void push_front(T data);
 };
 
 
-#endif
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// 같은 파일에 정의부 작성
+// 
+// CList 클래스
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//----------------------------------------------------------------------------------------
+// 생성자, 소멸자
+// 
+// 생성자와 소멸자는 클래스가 스택에 할당되어 생성되거나, new 를 사용하여 동적으로 할당할 때
+// 자동으로 생성자가 동작한다. 
+// 
+// 단, malloc, free 를 사용하여 동적 할당을 할 경우 생성자와 소멸자가 동작하지 않는다.
+//----------------------------------------------------------------------------------------
+template <typename T>
+CList<T>::CList()
+{
+	_head._Prev = NULL;
+	_head._Next = &_tail;
+
+	_tail._Next = NULL;
+	_tail._Prev = &_head;
+}
+
+template <typename T>
+CList<T>::~CList()
+{
+
+}
+
+//----------------------------------------------------------------------------------------
+// 클래스의 함수
+// 
+//----------------------------------------------------------------------------------------
+template <typename T>
+CList<T> push_front(T data)
+{
+	Node a;
+}
+
+#endif // !__CLIST_H__
+

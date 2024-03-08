@@ -2,10 +2,19 @@
 //
 
 #include <iostream>
+#include <list>
+
+#include "CList.h"
+
+using namespace std;
 
 int main()
 {
+
+    CList<int> a;
+
     std::cout << "Hello World!\n";
+
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
