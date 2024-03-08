@@ -1,9 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\project",
+    "\\class",
+    "\\class\\class",
+    "\\class\\class\\class",
     "\\project\\List_Project"
   ],
-  "SelectedNode": "\\project\\List_Project\\List_Project.sln",
+  "SelectedNode": "\\class\\class\\class\\class.cpp",
   "PreviewInSolutionExplorer": false
 }
