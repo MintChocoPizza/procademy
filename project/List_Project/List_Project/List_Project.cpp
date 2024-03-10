@@ -13,6 +13,44 @@ int main()
 
     CList<int> a;
 
+
+/*
+    a.push_front(20);
+    a.push_front(19);
+    a.push_front(18);
+    a.push_front(17);
+    a.push_front(16);
+    a.push_front(15);
+    a.push_front(14);
+
+    a.push_back(21);
+    a.push_back(22);
+    a.push_back(23);
+    a.push_back(24);
+    a.push_back(25);
+    a.push_back(26);
+    a.push_back(27);
+
+    a.printAll();
+    
+    cout << endl;
+
+    a.pop_back();
+    a.pop_front();
+
+    a.printAll()*/;
+
+
+    CList<int>::iterator iter;
+    iter = a.begin();
+    iter = a.end();
+
+    a.push_back(11);
+
+    iter = a.begin();
+   
+
+
     std::cout << "Hello World!\n";
 
 }

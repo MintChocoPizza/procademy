@@ -17,6 +17,9 @@ cMYNEW::cMYNEW()
 	pHead = (stALLOCINFO*)malloc(sizeof(stALLOCINFO));
 	pTail = (stALLOCINFO*)malloc(sizeof(stALLOCINFO));
 
+	if (pHead == NULL || pTail == NULL)
+		throw;
+
 	pHead->pNextNode = pTail;
 	pTail->pPreviousNode = pHead;
 }
