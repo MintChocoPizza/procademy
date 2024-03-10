@@ -108,6 +108,9 @@ public:
 void* operator new(size_t size, const char* file, int line);
 void* operator new[](size_t size, const char* file, int line);
 
+void operator delete(void* p, char* File, int lIne);
+void operator delete[](void* p, char* File, int lIne);
+
 
 
 

@@ -245,6 +245,15 @@ void operator delete(void* ptr)
 	}
 }
 
+void operator delete(void* p, char* File, int lIne)
+{
+
+}
+void operator delete[](void* p, char* File, int lIne)
+{
+
+}
+
 //------------------------------------------------------------------------
 // new[] delete[] 연산자 오버로딩 함수
 // 

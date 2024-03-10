@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="hw10_new_Overloding.cpp" />
     <ClCompile Include="MyNew.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyNew.h" />

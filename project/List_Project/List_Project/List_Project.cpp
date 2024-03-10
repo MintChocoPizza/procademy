@@ -11,43 +11,45 @@ using namespace std;
 int main()
 {
 
-    CList<int> a;
+    list<int>lt;
+
+    lt.push_back(10);
+    lt.push_back(20);
+    lt.push_back(108);
+    lt.push_back(60);
+    lt.push_back(10);
+    lt.push_back(100);
+    lt.push_back(40);
+    lt.push_back(50);
+    lt.push_back(109);
+
+    list<int>::iterator iter;
+    for (iter = lt.begin(); iter != lt.end(); iter++)
+    {
+        cout << *iter << " ";
+    }
 
 
-/*
-    a.push_front(20);
-    a.push_front(19);
-    a.push_front(18);
-    a.push_front(17);
-    a.push_front(16);
-    a.push_front(15);
-    a.push_front(14);
+    cout << endl << endl;
 
-    a.push_back(21);
-    a.push_back(22);
-    a.push_back(23);
-    a.push_back(24);
-    a.push_back(25);
-    a.push_back(26);
-    a.push_back(27);
-
-    a.printAll();
     
-    cout << endl;
+    CList<int> cl;
 
-    a.pop_back();
-    a.pop_front();
+    cl.push_back(10);
+    cl.push_back(20);
+    cl.push_back(108);
+    cl.push_back(60);
+    cl.push_back(10);
+    cl.push_back(100);
+    cl.push_back(40);
+    cl.push_back(50);
+    cl.push_back(109);
 
-    a.printAll()*/;
-
-
-    CList<int>::iterator iter;
-    iter = a.begin();
-    iter = a.end();
-
-    a.push_back(11);
-
-    iter = a.begin();
+    CList<int>::iterator citer;
+    for (citer = cl.begin(); citer != cl.end(); citer++)
+    {
+        cout << *iter << " ";
+    }
    
 
 

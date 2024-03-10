@@ -31,11 +31,54 @@ public:
     }
 };
 
-
+void ttt(void);
 
 int main()
 {
-   
+    // 메모리 해제
+    int* a = new int;
+    int* b = new int[5];
+
+    // 메모리 헤제 X
+    // log에 ARRAY로 기록이 남음
+    int* c = new int;
+    int* d = new int[5];
+
+    // 잘못된 메모리 해제
+    int* e = new int;
+    int* f = new int[5];
+
+    // 메모리 해제
+    Test* aTest = new Test;
+    Test* bTest = new Test[5];
+
+    // 메모리 해제 X
+    Test* cTest = new Test;
+    Test* dTest = new Test[5];
+
+    // 잘못된 메모리 해제
+    Test* eTest = new Test;
+    Test* fTest = new Test[5];
+
+
+    // 정상 해제
+    delete a;
+    delete[] b;
+
+    // 정상 해제
+    delete aTest;
+    delete[] bTest;
+
+
+    delete[] e;
+    delete f;
+
+    // 무한 메모리 해제 시도함
+    // delete[] eTest;
+    delete fTest;
+
+
+    ttt();
 
     return 0;
 }

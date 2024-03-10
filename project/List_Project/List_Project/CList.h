@@ -29,16 +29,12 @@ public:
 			_node = node;
 		}
 
-		iterator operator ++(int)
-		{
-			// 후위 증가 연산자 오버로딩
-			// iter++ 를 하게 된다면 다음 노드를 가르키길 원한다. 
-			iterator temp(_node);
-
-			_node = _node->_Next;
-			
-			return temp;
-		}
+		inline iterator operator ++(int);
+		inline iterator& operator ++();
+		inline iterator operator --(int);
+		inline iterator& operator --();
+		inline bool operator !=(const iterator& other);
+		inline T& operator *();
 
 	};
 
@@ -76,11 +72,7 @@ public:
 	// iter = lt.begin();
 	// 
 	//-----------------------------------------------------
-	iterator begin(void)
-	{
-		iterator iter(_head._Next);
-		return iter;
-	}
+	inline iterator begin(void);
 
 	//-----------------------------------------------------
 	// 맨 마지막의 원소의 다음을 가리키는 iterator를 반환한다. 
@@ -89,16 +81,16 @@ public:
 	// iter = It.end();
 	// 
 	//-----------------------------------------------------
-	CList::iterator end(void);
+	inline CList::iterator end(void);
 
 	// 앞쪽으로 원소 data를 삽입한다.
-	void push_front(T data);
+	inline void push_front(T data);
 	// 뒤쪽으로 원소 data를 삽입한다.
-	void push_back(T data);
+	inline void push_back(T data);
 	// 맨 마지막 원소를 제거한다.
-	void pop_back(void);
+	inline void pop_back(void);
 	// 맨 첫번째 원소를 제거한다.
-	void pop_front(void);
+	inline void pop_front(void);
 	//
 
 };
@@ -107,11 +99,60 @@ public:
 
 
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// iterator 클래스 
+// 
+// 연산자 오버로딩
+// 
+//////////////////////////////////////////////////////////////////////////////////////////
+template <typename T>
+inline typename CList<T>::iterator CList<T>::iterator::operator++ (int)
+{
+	CList<T>::iterator iter(this->_node->_Next);
+	this->_node = this->_node->_Next;
 
+	return iter;
+}
 
+template <typename T>
+inline typename CList<T>::iterator& CList<T>::iterator::operator++ ()
+{
+	this->_node = this->_node->_Next;
+	return *this;
+}
 
+template <typename T>
+inline typename CList<T>::iterator CList<T>::iterator::operator-- (int)
+{
+	CList<T>::iterator iter(this->_node->_Prev);
+	this->_node = this->_node->_Prev;
 
+	return iter;
+}
 
+template <typename T>
+inline typename CList<T>::iterator& CList<T>::iterator::operator--()
+{
+	this->_node = this->_node->_Prev;
+	return *this;
+}
+
+template<typename T>
+inline bool CList<T>::iterator::operator!=(const iterator& other)
+{
+	if (this->_node == other._node)
+		return false;
+	else
+		return true;
+}
+
+template<typename T>
+inline T& CList<T>::iterator::operator*()
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+
+	return this->_node->_data;
+}
 
 
 
@@ -183,14 +224,19 @@ void CList<T>::printAll(void)
 	
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// 이 함수들은 원래 list에서도 인라인으로 선언되어 있다. 
+// 
+// 정의를 이렇게 작성할 수 있지만 인라인 위치로 옮긴다.
+// 
+//////////////////////////////////////////////////////////////////////////////////////////
+template <typename T>
+typename CList<T>::iterator CList<T>::begin(void)
+{
+	CList<T>::iterator iter(_head._Next);
+	return iter;
+}
 
-//template <typename T>
-//CList<T>::iterator CList<T>::begin(void)
-//{
-//	CList<T>::iterator iter(_head._Next);
-//	return iter;
-//}
-//
 template <typename T>
 typename CList<T>::iterator CList<T>::end(void)
 {
@@ -199,7 +245,7 @@ typename CList<T>::iterator CList<T>::end(void)
 }
 
 template <typename T>
-void CList<T>::push_front(T data)
+inline void CList<T>::push_front(T data)
 {
 	Node* pNewNode = (Node*)malloc(sizeof(Node));
 	if (pNewNode == NULL)
