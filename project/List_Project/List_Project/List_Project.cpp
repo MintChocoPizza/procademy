@@ -24,6 +24,7 @@ int main()
     lt.push_back(109);
 
     list<int>::iterator iter;
+
     for (iter = lt.begin(); iter != lt.end(); iter++)
     {
         cout << *iter << " ";
@@ -48,12 +49,12 @@ int main()
     CList<int>::iterator citer;
     for (citer = cl.begin(); citer != cl.end(); citer++)
     {
-        cout << *iter << " ";
+        cout << *citer << " ";
     }
    
 
 
-    std::cout << "Hello World!\n";
+    std::cout << "\nHello World!\n";
 
 }
 

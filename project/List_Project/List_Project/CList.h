@@ -20,7 +20,7 @@ public:
 
 	class iterator
 	{
-	private:
+	public:
 		Node* _node;
 	public:
 		iterator(Node* node = nullptr)
@@ -33,9 +33,13 @@ public:
 		inline iterator& operator ++();
 		inline iterator operator --(int);
 		inline iterator& operator --();
+		inline bool operator ==(const iterator& other);
 		inline bool operator !=(const iterator& other);
+		inline iterator& operator += (int num);
 		inline T& operator *();
-
+	
+		
+		
 	};
 
 
@@ -138,6 +142,15 @@ inline typename CList<T>::iterator& CList<T>::iterator::operator--()
 }
 
 template<typename T>
+inline bool CList<T>::iterator::operator==(const iterator& other)
+{
+	if (this->_node == other._node)
+		return true;
+	else
+		return false;
+}
+
+template<typename T>
 inline bool CList<T>::iterator::operator!=(const iterator& other)
 {
 	if (this->_node == other._node)
@@ -147,14 +160,23 @@ inline bool CList<T>::iterator::operator!=(const iterator& other)
 }
 
 template<typename T>
+inline typename CList<T>::iterator& CList<T>::iterator::operator+=(int num)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+	int iCnt;
+	for (iCnt = 0; iCnt < 2; ++iCnt)
+	{
+		_node = _node->_Next;
+	}
+	return *this;
+}
+
+template<typename T>
 inline T& CList<T>::iterator::operator*()
 {
 	// TODO: 여기에 return 문을 삽입합니다.
-
 	return this->_node->_data;
 }
-
-
 
 
 
