@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CParsing.cpp" />
     <ClCompile Include="Easy_Text_Parsing_Project.cpp" />
   </ItemGroup>
   <ItemGroup>

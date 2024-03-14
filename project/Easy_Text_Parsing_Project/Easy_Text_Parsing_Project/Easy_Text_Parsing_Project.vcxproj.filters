@@ -18,6 +18,9 @@
     <ClCompile Include="Easy_Text_Parsing_Project.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="CParsing.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CParsing.h">
