@@ -8,7 +8,6 @@
 
 bool CParsing::SkipNoneCommand(void)
 {
-
 	return false;
 }
 
@@ -30,7 +29,7 @@ void CParsing::LoadFile(TCHAR* fileName)
 
 
 	err = _tfopen_s(&_pFile, fileName, _T("r, ccs=UTF-8"));
-	if (err != NULL)
+	if (err != NULL || _pFile == NULL)
 	{
 		_tprintf_s(_T("%s 파일 열기에 실패했습니다. \n"), fileName);
 		throw;
@@ -55,11 +54,16 @@ void CParsing::LoadFile(TCHAR* fileName)
 
 bool CParsing::GetValue(TCHAR* key, int *iValue)
 {
+	TCHAR* tcpBuff;
+	TCHAR tcWord[256];
+	int iLength;
 	
 	// 찾고자 하는 단어가 나올때까지 계속 찾을 것이므로 while 문으로 검사
-	while (CParsing::GetNextWord())
+	while (CParsing::GetNextWord(&tcpBuff, &iLength))
 	{
-
+		// Word 버퍼에 찾은 단어를 저장한다.
+		memset(tcWord, 0, 256);
+		memcpy(tcWord, tcpBuff, iLength);
 	}
 
 	return false;
