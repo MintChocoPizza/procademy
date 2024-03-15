@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\project",
+    "\\project\\Easy_Text_Parsing_Project",
+    "\\project\\Easy_Text_Parsing_Project\\Easy_Text_Parsing_Project"
   ],
+  "SelectedNode": "\\project\\Easy_Text_Parsing_Project\\Easy_Text_Parsing_Project\\CParsing.cpp",
   "PreviewInSolutionExplorer": false
 }

@@ -3,17 +3,29 @@
 #include <cstring>
 #include <stdio.h>
 #include <malloc.h>
+#include <stdlib.h>
 
 #include "CParsing.h"
 
 bool CParsing::SkipNoneCommand(void)
 {
+	
+
 	return false;
 }
 
-bool CParsing::GetNextWord(TCHAR** chppBuffer, int* ipLength)
+bool CParsing::GetNextWord(unsigned char** ucppBuffer, int* ipLength)
 {
+	int iLength;
+
+	// 주석과 스페이스, 탭 등등을 전부 건너 뛴다.
+	while (CParsing::SkipNoneCommand()) 
+	{
+
+	};
+
 	
+
 
 	return false;
 }
@@ -49,12 +61,14 @@ void CParsing::LoadFile(TCHAR* fileName)
 
 	fread_s(_readBuffer, lFileSize, 1, lFileSize, _pFile);
 
+
+
 	fclose(_pFile);
 }
 
-bool CParsing::GetValue(TCHAR* key, int *iValue)
+bool CParsing::GetValue(TCHAR* key, int *ipValue)
 {
-	TCHAR* tcpBuff;
+	unsigned char* tcpBuff = _readBuffer;
 	TCHAR tcWord[256];
 	int iLength;
 	
@@ -63,7 +77,39 @@ bool CParsing::GetValue(TCHAR* key, int *iValue)
 	{
 		// Word 버퍼에 찾은 단어를 저장한다.
 		memset(tcWord, 0, 256);
-		memcpy(tcWord, tcpBuff, iLength);
+		memcpy_s(tcWord, 256, tcpBuff, iLength);
+		
+		// tcWord 문자열이 0인지 검사한다.
+		if (tcWord[0] == _T('\0'))
+			return false;
+		
+		// 인자로 입력 받은 단어와 같은지 검사한다.
+		if (0 == _tcscmp(key, tcWord))
+		{
+			// 맞다면 바로 뒤에 = 을 찾는다. 
+			if (CParsing::GetNextWord(&tcpBuff, &iLength))
+			{
+				memset(tcWord, 0, 256);
+				memcpy_s(tcWord, 256, tcpBuff, iLength);
+				if (0 == _tcscmp(tcWord, _T("=")))
+				{
+					
+					// = 다음의 데이터 부분을 얻는다. 
+					if (GetNextWord(&tcpBuff, &iLength))
+					{
+						memset(tcWord, 0, 256);
+						memcpy_s(tcWord, 256, tcpBuff, iLength);
+
+						*ipValue = _ttoi(tcWord);
+						return true;
+					}
+					return false;
+				}
+				return false;
+			}
+			return false;
+
+		}
 	}
 
 	return false;
@@ -81,5 +127,6 @@ bool CParsing::GetValue(TCHAR* key, TCHAR* cValue)
 
 void CParsing::MemFree()
 {
+	free(_readBuffer);
 }
 

@@ -30,7 +30,7 @@ private:
 	// Return: (BOOL)TRUE, FALSE,
 	// 
 	//---------------------------------------------------------------------------------------------------
-	bool GetNextWord(TCHAR** tcppBuffer, int* ipLength);
+	bool GetNextWord(unsigned char** ucppBuffer, int* ipLength);
 
 public:
 	CParsing();
