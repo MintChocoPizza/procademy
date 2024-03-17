@@ -4,7 +4,10 @@
 class CBaseObject
 {
 public:
-    CBaseObject(int ObjectType, int Y, int X);
+    CBaseObject(int ObjectType, int Y, int X) : _ObjectType(ObjectType), _iY(Y), _iX(X) 
+    {
+
+    }
 
     virtual ~CBaseObject();
 

@@ -6,14 +6,17 @@
 class CPlayerObject : public CBaseObject
 {
 public:
-    CPlayerObject();
+    CPlayerObject(int ObjectType, int Y, int X);
+    ~CPlayerObject();
 
     virtual bool            Update(void);
     virtual bool            Render(void);
 
 
 protected:
-    
+    void KeyBoradInput(void);
+
+
 };
 
 
