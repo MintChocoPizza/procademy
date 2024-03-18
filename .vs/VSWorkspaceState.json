@@ -1,13 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\class",
     "\\class\\class",
+    "\\class\\class\\class",
     "\\project",
-    "\\project\\OOP_ShootingGame_Project",
-    "\\project\\OOP_ShootingGame_Project\\OOP_ShootingGame_Project",
-    "\\project\\shootingGame_project\\shootingGame_Project_FPS",
-    "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS"
+    "\\project\\OOP_ShootingGame_Project\\OOP_ShootingGame_Project"
   ],
-  "SelectedNode": "\\project\\OOP_ShootingGame_Project\\OOP_ShootingGame_Project\\CScreenBuffer.cpp",
+  "SelectedNode": "\\class\\class\\class\\class.cpp",
   "PreviewInSolutionExplorer": false
 }

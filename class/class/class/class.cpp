@@ -13,6 +13,7 @@ int main()
 
 	printf_s("%d \n", AAA);
 
+	TextOut()
 
 	return 0;
 }
