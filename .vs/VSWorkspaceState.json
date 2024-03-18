@@ -1,8 +1,13 @@
 {
   "ExpandedNodes": [
     "",
+    "\\class",
+    "\\class\\class",
     "\\project",
-    "\\project\\Easy_Text_Parsing_Project\\Easy_Text_Parsing_Project"
+    "\\project\\shootingGame_project",
+    "\\project\\shootingGame_project\\shootingGame_Project_FPS",
+    "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS"
   ],
+  "SelectedNode": "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS\\Buffer.cpp",
   "PreviewInSolutionExplorer": false
 }

@@ -3,23 +3,19 @@
 
 #include "CBaseObject.h"
 
-class CPlayerObject : public CBaseObject
+class CPlayerObject : CBaseObject
 {
 public:
-    CPlayerObject(int ObjectType, int Y, int X);
-    ~CPlayerObject();
-
-    virtual bool            Update(void);
-    virtual bool            Render(void);
+	CPlayerObject(int ObjectType, int Y, int X);
 
 
-protected:
-    void KeyBoradInput(void);
-
-
+public:
+	virtual bool Update(void);
+	virtual void Render(void);
+	void KeyboardInput(void);
+	void DrawPlayer(void);
 };
 
 
 
-#endif
-
+#endif // !__CPLAYEROBJECT_H__

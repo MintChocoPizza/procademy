@@ -4,21 +4,21 @@
 class CBaseObject
 {
 public:
-    CBaseObject(int ObjectType, int Y, int X) : _ObjectType(ObjectType), _iY(Y), _iX(X) 
-    {
+	CBaseObject(int ObjectType, int Y, int X);
+	virtual ~CBaseObject();
 
-    }
+	virtual bool				Update(void) = 0;
+	virtual void				Render(void) = 0;
 
-    virtual ~CBaseObject();
-
-    virtual bool            Update(void) = 0;
-    virtual bool            Render(void) = 0;
+	int GetObjectType(void);
 
 
 protected:
-    int             _iX;
-    int             _iY;
-    int             _ObjectType;
+	int		_iX;
+	int		_iY;
+	int		_OBjectType;
 };
 
-#endif 
+
+#endif // !__CBASEOBJECT_H__
+
