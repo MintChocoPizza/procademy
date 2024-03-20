@@ -8,10 +8,14 @@ class CPlayerObject : CBaseObject
 public:
 	CPlayerObject(int ObjectType, int Y, int X);
 
-
 public:
 	virtual bool Update(void);
 	virtual void Render(void);
+
+
+
+
+public:
 	void KeyboardInput(void);
 	void DrawPlayer(void);
 };

@@ -138,13 +138,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CBaseObject.cpp" />
+    <ClCompile Include="CObjectManager.cpp" />
     <ClCompile Include="CPlayerObject.cpp" />
+    <ClCompile Include="CSceneBase.cpp" />
+    <ClCompile Include="CSceneManager.cpp" />
     <ClCompile Include="CScreenBuffer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBaseObject.h" />
+    <ClInclude Include="CList.h" />
+    <ClInclude Include="CObjectManager.h" />
     <ClInclude Include="CPlayerObject.h" />
+    <ClInclude Include="CSceneBase.h" />
+    <ClInclude Include="CSceneManager.h" />
     <ClInclude Include="CScreenBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

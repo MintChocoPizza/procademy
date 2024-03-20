@@ -1,19 +1,38 @@
 ﻿
+#include <iostream>
 #include <stdio.h>
 #include <Windows.h>
 
+
+using namespace std;
+
+
 int main()
 {
-	char AAA[24][81];
+	int* a = (int*)malloc(101);
+	int* b = (int*)malloc(sizeof(int) * 101);
 
-	printf_s("%d \n", sizeof(AAA));
+	memset(a, 5, 101);
 
-	memset(AAA, 't', sizeof(AAA));
+	memset(b, 6, sizeof(int) * 101);
+
+	cout << a << endl;
+
+	cout << a + 1 << endl;
+
+	cout << a + 101 << endl;
+
+	cout << a + 102 << endl;
 
 
-	printf_s("%d \n", AAA);
 
-	TextOut()
+	cout << b << endl;
+
+	cout << b + 1 << endl;
+
+	cout << b + 101 << endl;
+
+	cout << b + 102 << endl;
 
 	return 0;
 }

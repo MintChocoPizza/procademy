@@ -17,8 +17,10 @@ bool CParsing::SkipNoneCommand(void)
 bool CParsing::GetNextWord(unsigned char** ucppBuffer, int* ipLength)
 {
 	int iLength;
-
+	//---------------------------------------------------------------
 	// 주석과 스페이스, 탭 등등을 전부 건너 뛴다.
+	// 
+	//---------------------------------------------------------------
 	while (CParsing::SkipNoneCommand()) 
 	{
 
@@ -57,6 +59,12 @@ void CParsing::LoadFile(TCHAR* fileName)
 		_tprintf_s(_T("%s 버퍼 확보에 실패했습니다. \n"), fileName);
 		throw;
 	}
+
+	//-----------------------------------------------------------------------
+	// 버퍼의 마지막 주소 + 1을 가르키게 한다. 
+	// 
+	//-----------------------------------------------------------------------
+	_pLastAddressBuffer = _readBuffer + lFileSize;
 
 
 	fread_s(_readBuffer, lFileSize, 1, lFileSize, _pFile);

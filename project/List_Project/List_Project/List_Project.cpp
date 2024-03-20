@@ -2,51 +2,40 @@
 //
 
 #include <iostream>
-#include <list>
 
 #include "CList.h"
 
 using namespace std;
 
+class aaa
+{
+public:
+    aaa();
+    ~aaa();
+
+private:
+
+};
+
+aaa::aaa()
+{
+}
+
+aaa::~aaa()
+{
+}
+
 int main()
 {
-
-    list<int>lt;
-
-    lt.push_back(10);
-    lt.push_back(20);
-    lt.push_back(108);
-    lt.push_back(60);
-    lt.push_back(10);
-    lt.push_back(100);
-    lt.push_back(40);
-    lt.push_back(50);
-    lt.push_back(109);
-
-    list<int>::iterator iter;
-
-    for (iter = lt.begin(); iter != lt.end(); iter++)
-    {
-        cout << *iter << " ";
-    }
 
 
     cout << endl << endl;
 
     
-    CList<int> cl;
+    CList<aaa *> cl;
 
-    cl.push_back(10);
-    cl.push_back(20);
-    cl.push_back(108);
-    cl.push_back(60);
-    cl.push_back(10);
-    cl.push_back(100);
-    cl.push_back(40);
-    cl.push_back(50);
-    cl.push_back(109);
 
-    CList<int>::iterator citer;
+    CList<aaa *>::iterator citer;
     for (citer = cl.begin(); citer != cl.end(); citer++)
     {
         cout << *citer << " ";

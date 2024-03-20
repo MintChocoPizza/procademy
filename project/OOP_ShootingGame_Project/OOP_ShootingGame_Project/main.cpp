@@ -1,24 +1,28 @@
 ﻿
+#include <Windows.h>
 
 #include "CScreenBuffer.h"
-#include "CPlayerObject.h"
+#include "CObjectManager.h"
 
+#pragma comment (lib, "winmm.lib")
 
 int main()
 {
+	timeBeginPeriod(1);
 	CScreenBuffer* pCScreenBuffer = CScreenBuffer::GetInstance();
 
-	CPlayerObject aaa(12, 12, 12);
 
 
 	while (1)
 	{
-		aaa.Update();
 
-		aaa.Render();
+
+
+
 
 		pCScreenBuffer->Flip();
 	}
 
+	timeEndPeriod(1);
 	return 0;
 }

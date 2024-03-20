@@ -14,7 +14,8 @@ class CParsing
 {
 private:
 	FILE* _pFile;
-	unsigned char* _readBuffer;
+	unsigned char* _readBuffer;					// 버퍼의 시작 주소
+	unsigned char* _pLastAddressBuffer;			// 버퍼의 마지막 주소 +1
 
 private:
 	//---------------------------------------------------------------------------------------------------

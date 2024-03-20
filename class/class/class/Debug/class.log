@@ -1,3 +1,2 @@
 ﻿  class.cpp
-C:\Users\user\Desktop\procademy_project\procademy\class\class\class\class.cpp(14,11): warning C4477: 'printf_s' : 서식 문자열 '%d'에 'int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'char (*)[81]'입니다.
-  class.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\class\class\Debug\class.exe
+  class.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\class\class\Debug\class.exe
