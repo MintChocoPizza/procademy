@@ -1,0 +1,53 @@
+#ifndef __CONSOLEBUFFER_H__
+#define __CONSOLEBUFFER_H__
+
+#define dfSCREEN_WIDTH 81
+#define dfSCREEN_HEIGHT 25
+
+class ConsoleBuffer
+{
+private:
+	static ConsoleBuffer _ConsoleBuffer;
+	char ScreenBuffer[dfSCREEN_HEIGHT][dfSCREEN_WIDTH];
+
+	HANDLE hConsole;
+
+private:
+	ConsoleBuffer();
+	~ConsoleBuffer();
+
+
+public:
+	static ConsoleBuffer* GetInstance(void);
+
+	void Buffer_Flip(void);
+	void Buffer_Clear(void);
+	void Sprite_Null(void);
+	void Sprite_Background(unsigned char* pFileMemory);
+	void Sprite_String(int iY, int iX, const char* pSpriteString);
+	void Sprite_Draw(int iY, int iX, char chSprite);
+
+private:
+	//--------------------------------------------
+	// 
+	// 
+	//--------------------------------------------
+	void initial(void);
+
+	void MoveCursor(int iPosY, int iPosX);
+
+	void ClearScreen(void);
+
+
+
+
+
+
+
+
+};
+
+
+
+#endif // !__CONSOLEBUFFER_H__
+

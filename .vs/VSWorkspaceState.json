@@ -2,10 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\List_Project",
     "\\project\\List_Project\\List_Project",
-    "\\project\\OOP_ShootingGame_Project\\OOP_ShootingGame_Project"
+    "\\project\\OOP",
+    "\\project\\OOP\\OOP"
   ],
-  "SelectedNode": "\\project\\List_Project\\List_Project\\CList.h",
+  "SelectedNode": "\\project\\OOP\\OOP\\CList.h",
   "PreviewInSolutionExplorer": false
 }

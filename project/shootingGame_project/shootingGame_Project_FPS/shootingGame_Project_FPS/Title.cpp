@@ -53,6 +53,8 @@ void tt_LoadGameInfo(void)
 	FILE* pFile;
 	size_t szStringLength;
 	int iCnt;
+	
+	
 
 
 	err = fopen_s(&pFile, "GameInfo", "rb");

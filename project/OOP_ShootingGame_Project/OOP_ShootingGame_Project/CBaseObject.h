@@ -17,6 +17,7 @@ protected:
 	int		_iX;
 	int		_iY;
 	int		_OBjectType;
+	bool	_DestroyCheck;
 };
 
 

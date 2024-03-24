@@ -7,36 +7,124 @@
 
 #include "CParsing.h"
 
-bool CParsing::SkipNoneCommand(void)
+bool CParsing::SkipNoneCommand(unsigned char** ucppBuffer)
 {
-	
+	bool isLineComment = false;
+	bool isMultiLineComments = false;
 
-	return false;
+
+
+
+	while (1)
+	{
+		// 버퍼의 범위를 벗어나면 false
+		if (*ucppBuffer >= _pLastAddressBuffer)
+			return false;
+
+		// "//" 주석인 경우 0x0d가 나올때 까지 넘어간다.
+		if (isLineComment == true)
+		{
+			if (**ucppBuffer == 0x0d || **ucppBuffer == 0x0a)
+			{
+				isLineComment = false;
+			}
+			++(*ucppBuffer);
+			continue;
+		}
+
+		// "/* */" 주석인 경우
+		if (isMultiLineComments == true)
+		{
+			if (**ucppBuffer == '*' && *((*ucppBuffer)+1 ) == '/')
+			{
+				isMultiLineComments = false;
+				*ucppBuffer += 2;
+			}
+			else
+			{
+				++(*ucppBuffer);
+			}
+
+			continue;
+		}
+
+
+		if (**ucppBuffer == ',' || **ucppBuffer == '.' || **ucppBuffer == '"' ||
+			**ucppBuffer == 0x20 || **ucppBuffer == 0x08 || **ucppBuffer == 0x09 ||
+			**ucppBuffer == 0x0a || **ucppBuffer == 0x0d)
+		{
+			++(*ucppBuffer);
+			continue;
+		}
+		else if(**ucppBuffer == '/')
+		{
+			if (*((*ucppBuffer) + 1) == '/')
+			{
+				isLineComment = true;
+				*ucppBuffer += 2;
+				continue;
+			}
+			else if (*((*ucppBuffer) + 1) == '*')
+			{
+				isMultiLineComments = true;
+				*ucppBuffer += 2;
+				continue;
+			}
+		}
+
+		break;
+	}
+
+	return true;
 }
 
 bool CParsing::GetNextWord(unsigned char** ucppBuffer, int* ipLength)
 {
-	int iLength;
+	int iLength = 0;
 	//---------------------------------------------------------------
 	// 주석과 스페이스, 탭 등등을 전부 건너 뛴다.
 	// 
+	// 파일의 끝에 도달하면 false
+	// 
 	//---------------------------------------------------------------
-	while (CParsing::SkipNoneCommand()) 
+	if (CParsing::SkipNoneCommand(ucppBuffer)) 
 	{
+		unsigned char* start = *ucppBuffer;
+		while (*start != '\0' && *start != ',' && *start != '.' &&
+			*start != '"' && *start != ' ' && *start != '\t' &&
+			*start != '\r' && *start != '\n')
+		{
+			++iLength;
+			++start;
+		}
+	}
+	else
+	{
+		return false;
+	}
 
-	};
+	*ipLength = iLength;
 
-	
+
+	if (iLength > 0)
+	{
+		return true;
+	}
 
 
 	return false;
+}
+
+CParsing::CParsing() : _pFile(nullptr), _readBuffer(nullptr), _pLastAddressBuffer(nullptr)
+{
+	
 }
 
 CParsing::~CParsing()
 {
 }
 
-void CParsing::LoadFile(TCHAR* fileName)
+void CParsing::LoadFile(const TCHAR* fileName)
 {
 	errno_t err;
 	long lFileSize;
@@ -74,7 +162,7 @@ void CParsing::LoadFile(TCHAR* fileName)
 	fclose(_pFile);
 }
 
-bool CParsing::GetValue(TCHAR* key, int *ipValue)
+bool CParsing::GetValue(const TCHAR* key, int *ipValue)
 {
 	unsigned char* tcpBuff = _readBuffer;
 	TCHAR tcWord[256];
@@ -123,12 +211,12 @@ bool CParsing::GetValue(TCHAR* key, int *ipValue)
 	return false;
 }
 
-bool CParsing::GetValue(TCHAR* key, float* fValue)
+bool CParsing::GetValue(const TCHAR* key, float* fValue)
 {
 	return false;
 }
 
-bool CParsing::GetValue(TCHAR* key, TCHAR* cValue)
+bool CParsing::GetValue(const TCHAR* key, TCHAR* cValue)
 {
 	return false;
 }

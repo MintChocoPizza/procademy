@@ -1,7 +1,10 @@
 #ifndef __CPARSING_H__
 #define __CPARSING_H__
 
+#include <Windows.h>
+
 #define CR_MAX_BUFFER 128
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,7 +25,7 @@ private:
 	//  "//", "/* */" 두개를 주석으로 구분한다.
 	// 
 	//---------------------------------------------------------------------------------------------------
-	bool SkipNoneCommand(void);
+	bool SkipNoneCommand(unsigned char** ucppBuffer);
 
 	//---------------------------------------------------------------------------------------------------
 	// 다음 단어 얻기.
@@ -41,10 +44,10 @@ public:
 	// malloc을 사용하여 메모리를 할당한다. 
 	// 
 	//---------------------------------------------------------------------------------------------------
-	void LoadFile(TCHAR* tcpFileName);
-	bool GetValue(TCHAR* key, int* ipValue);
-	bool GetValue(TCHAR* key, float* fpValue);
-	bool GetValue(TCHAR* key, TCHAR* cpValue);
+	void LoadFile(const TCHAR* tcpFileName);
+	bool GetValue(const TCHAR* key, int* ipValue);
+	bool GetValue(const TCHAR* key, float* fpValue);
+	bool GetValue(const TCHAR* key, TCHAR* cpValue);
 
 	void MemFree();
 };
