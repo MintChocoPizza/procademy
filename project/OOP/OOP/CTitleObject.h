@@ -1,7 +1,6 @@
 #ifndef __CTITLEOBJECT_H__
 #define __CTITLEOBJECT_H__
 
-#include "CBaseObject.h"
 
 class CTitleObject : public CBaseObject
 {

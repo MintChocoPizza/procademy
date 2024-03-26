@@ -1,13 +1,11 @@
 #ifndef __CSCENETITLE_H__
 #define __CSCENETITLE_H__
 
-#include "CSceneBase.h"
-#include "CTitleObject.h"
 
 class CSceneTitle :public CSceneBase
 {
 private: 
-	CTitleObject* _Object;
+	// CTitleObject* _Object;
 
 public:
 	CSceneTitle();

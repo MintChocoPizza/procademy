@@ -1,5 +1,69 @@
-﻿  SceneManager.cpp
+﻿  CBaseObject.cpp
+  CObjectManager.cpp
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.h(16,7): error C2143: 구문 오류: ';'이(가) '<' 앞에 없습니다.
+  (소스 파일 'CObjectManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.h(16,7): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  (소스 파일 'CObjectManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.h(16,32): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+  (소스 파일 'CObjectManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.h(34,3): error C2065: 'ObjectList': 선언되지 않은 식별자입니다.
+  (소스 파일 'CObjectManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.h(34,36): error C2061: 구문 오류: 식별자 'CBaseObject'
+  (소스 파일 'CObjectManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(28,2): error C2065: 'CList': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(28,8): error C2065: 'CBaseObject': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(28,20): error C2059: 구문 오류: '>'
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(28,23): error C2039: 'iterator': '`global namespace''의 멤버가 아닙니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(30,7): error C2065: 'iter': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(30,14): error C2065: 'ObjectList': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(30,34): error C2065: 'iter': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(30,42): error C2065: 'ObjectList': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(30,62): error C2065: 'iter': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(32,3): error C2065: 'CBaseObject': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(32,16): error C2065: 'pObject': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager.cpp(32,27): error C2065: 'iter': 선언되지 않은 식별자입니다.
+  ConsoleBuffer.cpp
+  CParsing_ANSI.cpp
+  CSceneBase.cpp
+  CSceneTitle.cpp
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CTitleObject.h(5,29): error C2504: 'CBaseObject': 기본 클래스를 정의하지 않았습니다.
+  (소스 파일 'CSceneTitle.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneTitle.cpp(16,2): error C2065: '_Object': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneTitle.cpp(29,9): error C2065: '_Object': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneTitle.cpp(29,2): error C2541: 'delete': 포인터가 아닌 개체를 삭제할 수 없습니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneTitle.cpp(36,2): error C2065: '_Object': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneTitle.cpp(37,2): error C2065: '_Object': 선언되지 않은 식별자입니다.
+  CTitleObject.cpp
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CTitleObject.h(5,29): error C2504: 'CBaseObject': 기본 클래스를 정의하지 않았습니다.
+  (소스 파일 'CTitleObject.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CTitleObject.cpp(25,96): error C2614: 'CTitleObject': 멤버 초기화가 잘못되었습니다. 'CBaseObject'이(가) 기본 또는 멤버가 아닙니다.
   main.cpp
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\main.cpp(9,2): error C3861: 'timeBeginPeriod': 식별자를 찾을 수 없습니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\main.cpp(14,3): error C2653: 'CSceneManager': 클래스 또는 네임스페이스 이름이 아닙니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\main.cpp(14,18): error C3861: 'GetInstance': 식별자를 찾을 수 없습니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\main.cpp(20,2): error C3861: 'timeEndPeriod': 식별자를 찾을 수 없습니다.
+  SceneManager.cpp
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneManager.h(15,12): error C2143: 구문 오류: ';'이(가) '*' 앞에 없습니다.
+  (소스 파일 'SceneManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneManager.h(15,12): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  (소스 파일 'SceneManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneManager.h(15,21): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+  (소스 파일 'SceneManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\SceneManager.cpp(14,2): error C2065: '_pScene': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\SceneManager.cpp(14,16): error C2061: 구문 오류: 식별자 'CSceneTitle'
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\SceneManager.cpp(28,2): error C2065: '_pScene': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\SceneManager.cpp(33,10): error C2065: '_pScene': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\SceneManager.cpp(33,3): error C2541: 'delete': 포인터가 아닌 개체를 삭제할 수 없습니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\SceneManager.cpp(38,4): error C2065: '_pScene': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\SceneManager.cpp(38,18): error C2061: 구문 오류: 식별자 'CSceneTitle'
   코드를 생성하고 있습니다...
-  LINK : C:\Users\user\Desktop\procademy_project\procademy\project\OOP\Debug\OOP.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
-  OOP.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\project\OOP\Debug\OOP.exe

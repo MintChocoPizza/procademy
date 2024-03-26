@@ -1,9 +1,7 @@
 
 
-#include "CBaseObject.h"
-#include "CList.h"
-
 #include "CObjectManager.h"
+
 
 CObjectManager CObjectManager::_CObjectManager;
 

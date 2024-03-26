@@ -2,11 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\class",
-    "\\class\\class\\class",
     "\\project",
     "\\project\\OOP",
     "\\project\\OOP\\OOP"
   ],
-  "SelectedNode": "\\project\\OOP\\OOP\\CParsing_ANSI.cpp",
+  "SelectedNode": "\\project\\OOP\\OOP\\CTitleObject.h",
   "PreviewInSolutionExplorer": false
 }

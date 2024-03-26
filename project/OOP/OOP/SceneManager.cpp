@@ -3,12 +3,9 @@
 // 하지만 메니저에서 씬의 메모리를 할당하고 해제하기 위해서는 
 // 씬의 정보가 필수적으로 필요해보임......
 
-#include "CSceneTitle.h"
 
-
-
-#include "CSceneBase.h"
 #include "CSceneManager.h"
+
 
 CSceneManager CSceneManager::_CSceneManager;
 

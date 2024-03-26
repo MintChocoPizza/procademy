@@ -1,9 +1,14 @@
 
+
+
 #include "CSceneBase.h"
+
 
 #include "CTitleObject.h"
 
+
 #include "CSceneTitle.h"
+
 
 CSceneTitle::CSceneTitle()
 {
@@ -16,7 +21,7 @@ CSceneTitle::CSceneTitle()
 
 CSceneTitle::~CSceneTitle()
 {
-	// ㄷㅗㅇㅈㅓㄱ ㅁㅔㅁㅂㅓ ㅈㅓㅇㄹㅣ
+	// 동적 멤버 정리
 
 
 
@@ -27,7 +32,7 @@ CSceneTitle::~CSceneTitle()
 bool CSceneTitle::Update(void)
 {
 
-	// ㅅㅣㄹㅈㅔㄹㅗ ㄷㅗㅇㅈㅏㄱㅎㅏㄴㅡㄴ 
+	// 실제로 동작하는 
 	_Object->Update();
 	_Object->Render();
 

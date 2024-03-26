@@ -1,10 +1,18 @@
 
-#include <Windows.h>
 #include <stdio.h>
+#include <Windows.h>
+#include <stdlib.h>
 
-#include "ConsoleBuffer.h"
-#include "CBaseObject.h"
+// #include "CBaseObject.h"
+
 #include "CParsing_ANSI.h"
+#include "ConsoleBuffer.h"
+
+
+// #include "CBaseObject.h"
+
+
+
 
 #include "CTitleObject.h"
 
@@ -64,7 +72,7 @@ CTitleObject::~CTitleObject()
 
 bool CTitleObject::Update(void)
 {
-	int iCnt;
+	unsigned int iCnt;
 	size_t szStringLength;
 
 	ConsoleBuffer::GetInstance()->Buffer_Clear();
