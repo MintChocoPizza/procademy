@@ -9,7 +9,7 @@
 #include "ConsoleBuffer.h"
 
 
-// #include "CBaseObject.h"
+#include "CBaseObject.h"
 
 
 

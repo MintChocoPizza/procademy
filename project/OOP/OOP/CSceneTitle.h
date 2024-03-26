@@ -5,7 +5,7 @@
 class CSceneTitle :public CSceneBase
 {
 private: 
-	// CTitleObject* _Object;
+	CTitleObject* _Object;
 
 public:
 	CSceneTitle();

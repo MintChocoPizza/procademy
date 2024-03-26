@@ -31,11 +31,9 @@ C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CObjectManager
   CParsing_ANSI.cpp
   CSceneBase.cpp
   CSceneTitle.cpp
-C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneTitle.cpp(16,2): error C2065: '_Object': 선언되지 않은 식별자입니다.
-C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneTitle.cpp(29,9): error C2065: '_Object': 선언되지 않은 식별자입니다.
-C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneTitle.cpp(29,2): error C2541: 'delete': 포인터가 아닌 개체를 삭제할 수 없습니다.
-C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneTitle.cpp(36,2): error C2065: '_Object': 선언되지 않은 식별자입니다.
-C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CSceneTitle.cpp(37,2): error C2065: '_Object': 선언되지 않은 식별자입니다.
+C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\CTitleObject.h(5,29): error C2504: 'CBaseObject': 기본 클래스를 정의하지 않았습니다.
+  (소스 파일 'CSceneTitle.cpp'을(를) 컴파일하는 중)
+  
   CTitleObject.cpp
   main.cpp
 C:\Users\User\Desktop\procademy_project\procademy\project\OOP\OOP\main.cpp(9,2): error C3861: 'timeBeginPeriod': 식별자를 찾을 수 없습니다.

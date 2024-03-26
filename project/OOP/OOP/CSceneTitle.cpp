@@ -13,7 +13,7 @@
 CSceneTitle::CSceneTitle()
 {
 	// 타이틀 Scene에 맞는 기본 객체 생성 및 초기화
-	_Object = new CTitleObject("GameFile\\Title", "GameFile\\GameInfo.txt",0);
+	// _Object = new CTitleObject("GameFile\\Title", "GameFile\\GameInfo.txt",0);
 	
 	
 
