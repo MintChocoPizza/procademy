@@ -3,13 +3,19 @@
 // 하지만 메니저에서 씬의 메모리를 할당하고 해제하기 위해서는 
 // 씬의 정보가 필수적으로 필요해보임......
 
+#include "CBaseObject.h"
+#include "CTitleObject.h"
+#include "CSceneBase.h"
+#include "CSceneTitle.h"
+#include "CSceneGame.h"
+#include "CSceneLoad.h"
 
 #include "CSceneManager.h"
 
 
 CSceneManager CSceneManager::_CSceneManager;
 
-CSceneManager::CSceneManager() : ChangeScene(false), type(TITLE)
+CSceneManager::CSceneManager() : ChangeScene(false), type(TITLE), gameStage(1)
 {
 	_pScene = new CSceneTitle;
 }
@@ -37,7 +43,11 @@ void CSceneManager::run(void)
 		case CSceneManager::TITLE:
 			_pScene = new CSceneTitle;
 			break;
+		case CSceneManager::LOAD:		
+			_pScene = new CSceneLoad(gameStage);
+			break;
 		case CSceneManager::GAME:
+
 			break;
 		case CSceneManager::CLEAR:
 			break;

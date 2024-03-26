@@ -50,7 +50,7 @@ public:
 	void LoadFile(const char* cchpFileName);
 	bool GetValue(const char* key, int* ipValue);
 	bool GetValue(const char* key, double* fpValue);
-	bool GetValue(const char* key, char cpValue[]);
+	bool GetValue(const char* key, char cpValue[], int iSize);
 
 };
 

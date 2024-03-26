@@ -138,9 +138,12 @@
     <ClCompile Include="ConsoleBuffer.cpp" />
     <ClCompile Include="CParsing_ANSI.cpp" />
     <ClCompile Include="CSceneBase.cpp" />
+    <ClCompile Include="CSceneGame.cpp" />
+    <ClCompile Include="CSceneLoad.cpp" />
     <ClCompile Include="CSceneTitle.cpp" />
     <ClCompile Include="CTitleObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,9 +153,12 @@
     <ClInclude Include="ConsoleBuffer.h" />
     <ClInclude Include="CParsing_ANSI.h" />
     <ClInclude Include="CSceneBase.h" />
+    <ClInclude Include="CSceneGame.h" />
+    <ClInclude Include="CSceneLoad.h" />
     <ClInclude Include="CSceneManager.h" />
     <ClInclude Include="CSceneTitle.h" />
     <ClInclude Include="CTitleObject.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

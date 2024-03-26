@@ -3,17 +3,15 @@
 #include <Windows.h>
 #include <stdlib.h>
 
-// #include "CBaseObject.h"
-
 #include "CParsing_ANSI.h"
 #include "ConsoleBuffer.h"
 
+//-----CSceneManager.h --------------
+#include "CSceneBase.h"
+#include "CSceneManager.h"
 
+//-----CTitleObject.h---------------
 #include "CBaseObject.h"
-
-
-
-
 #include "CTitleObject.h"
 
 
@@ -33,6 +31,7 @@ CTitleObject::CTitleObject(const char* ccpFileName, const char* ccpGameInfo, int
 	//-----------------------------------------------------------------------------------
 	// 배경화면 
 	// 
+	// 텍스트로 작성된 배경화면 -> 바이트로 읽으면 화면 위치가 깨진다.
 	//-----------------------------------------------------------------------------------
 	err = fopen_s(&pFile, ccpFileName, "r");
 	if (err != 0)
@@ -61,8 +60,8 @@ CTitleObject::CTitleObject(const char* ccpFileName, const char* ccpGameInfo, int
 	//-----------------------------------------------------------------------------------
 	CParsing_ANSI cParsing;
 	cParsing.LoadFile(ccpGameInfo);
-	cParsing.GetValue("gameName", cGameName);
-	cParsing.GetValue("Version", cGameVersion);
+	cParsing.GetValue("gameName", cGameName, 30);
+	cParsing.GetValue("Version", cGameVersion, 10);
 }
 
 CTitleObject::~CTitleObject()
@@ -83,12 +82,7 @@ bool CTitleObject::Update(void)
 	// 버퍼에 타이틀 출력
 	// 
 	//-------------------------
-	szStringLength = strlen(cGameName);
-	for (iCnt = 0; iCnt < szStringLength; ++iCnt)
-	{
-		ConsoleBuffer::GetInstance()->Sprite_Draw(dfSCREEN_HEIGHT / 2 - 2, (dfSCREEN_WIDTH / 2) - ((int)szStringLength - 1) / 2 + iCnt, cGameName[iCnt]);
-	}
-
+	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT/2-2, cGameName);
 
 	//-------------------------
 	// 버퍼에 게임 버전 출력
@@ -101,11 +95,29 @@ bool CTitleObject::Update(void)
 	}
 
 
+	//-------------------------
+	// 버퍼에 조작에 대한 설명 
+	// 
+	// 출력
+	// 
+	//-------------------------
+	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 2, "Move: WASD, Weapon: J");
+	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 8, "Press Enter.......");
+
 
 	return false;
 }
 
 void CTitleObject::Render(void)
 {
-	//ConsoleBuffer::GetInstance()->Buffer_Flip();
+	KeyboardInput();
+	ConsoleBuffer::GetInstance()->Buffer_Flip();
+}
+
+void CTitleObject::KeyboardInput(void)
+{
+	if (GetAsyncKeyState(VK_RETURN) & 0x8001)
+	{
+		CSceneManager::GetInstance()->LoadScene(CSceneManager::LOAD);
+	}
 }

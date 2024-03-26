@@ -62,6 +62,20 @@ void ConsoleBuffer::Sprite_Background(unsigned char* pFileMemory)
 	Sprite_Null();
 }
 
+void ConsoleBuffer::Sprite_Center_String(int iY, const char* pSpriteString)
+{
+	int iCnt;
+	size_t szStringLength;
+
+
+
+	szStringLength = strlen(pSpriteString);
+	for (iCnt = 0; iCnt < szStringLength; ++iCnt)
+	{
+		Sprite_Draw(iY, (dfSCREEN_WIDTH / 2) - ((int)szStringLength - 1) / 2 + iCnt, pSpriteString[iCnt]);
+	}
+}
+
 void ConsoleBuffer::Sprite_Draw(int iY, int iX, char chSprite)
 {
 	if (iX < 0 || iY < 0 || iX >= dfSCREEN_WIDTH - 1 || iY >= dfSCREEN_HEIGHT)

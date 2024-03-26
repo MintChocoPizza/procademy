@@ -28,11 +28,12 @@ public:
 	// 2. 템플릿을 사용하여 직접 넘겨줄 경우, 클래스의 복사가 일어나서 느리다.  밖에서 new를 하고 주소를 넘겨주면 안되나??
 	// 
 	//----------------------------------------------------------------------------------------------
-	void CreateObject(void* Object)
-	{
-		
-		ObjectList.push_back(static_cast<CBaseObject*> (Object));
-	}
+	void CreateObject(void* object);
+	//void CreateObject(void* Object)
+	//{
+	//	// 원래는 오류가 생겼었는데, 헤더파일 위치를 바로 잡았더니 사라짐.
+	//	ObjectList.push_back(static_cast<CBaseObject*> (Object));
+	//}
 	void DestroyObject(void);
 
 };

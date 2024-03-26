@@ -3,11 +3,10 @@
     "",
     "\\class",
     "\\project",
-    "\\project\\List_Project",
-    "\\project\\List_Project\\List_Project",
     "\\project\\OOP",
-    "\\project\\OOP\\OOP"
+    "\\project\\OOP\\OOP",
+    "\\project\\Profiling"
   ],
-  "SelectedNode": "\\project\\OOP\\OOP\\CParsing_ANSI.cpp",
+  "SelectedNode": "\\project\\OOP\\OOP\\CSceneLoad.cpp",
   "PreviewInSolutionExplorer": false
 }

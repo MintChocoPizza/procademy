@@ -16,6 +16,12 @@ public:
 
 	virtual bool Update(void);
 	virtual void Render(void);
+
+
+private:
+	void KeyboardInput(void);
+
+
 };
 
 

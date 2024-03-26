@@ -163,7 +163,7 @@ void CParsing_ANSI::LoadFile(const char* cchpFileName)
 	}
 
 	fseek(pFile, 0, SEEK_END);
-	lFileSize = ftell(pFile);
+	lFileSize = ftell(pFile)+1;
 	fseek(pFile, 0, SEEK_SET);
 
 	_readBuffer = (unsigned char*)malloc(lFileSize);
@@ -183,6 +183,7 @@ void CParsing_ANSI::LoadFile(const char* cchpFileName)
 	// _pLastAddressBuffer = _readBuffer + (lFileSize - 1);
 
 	fread_s(_readBuffer, lFileSize, 1, lFileSize, pFile);
+	_readBuffer[lFileSize-1] = '\0';
 
 	fclose(pFile);
 }
@@ -281,7 +282,7 @@ bool CParsing_ANSI::GetValue(const char* key, double* fpValue)
 	return false;
 }
 
-bool CParsing_ANSI::GetValue(const char* key, char cpValue[])
+bool CParsing_ANSI::GetValue(const char* key, char cpValue[], int iSize)
 {
 	// 무조건 버퍼의 처음부터 탐색한다. 
 	_tempBuffer = _readBuffer;
@@ -316,7 +317,7 @@ bool CParsing_ANSI::GetValue(const char* key, char cpValue[])
 						memset(chWord, 0, 256);
 						memcpy_s(chWord, 256, _tempBuffer, iLength);
 						// _tempBuffer += iLength;
-						strcpy_s(cpValue, 256, chWord);
+						strcpy_s(cpValue, iSize, chWord);
 						return true;
 					}
 				}

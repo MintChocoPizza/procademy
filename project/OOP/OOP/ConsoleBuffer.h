@@ -24,7 +24,7 @@ public:
 	void Buffer_Clear(void);
 	void Sprite_Null(void);
 	void Sprite_Background(unsigned char* pFileMemory);
-	void Sprite_String(int iY, int iX, const char* pSpriteString);
+	void Sprite_Center_String(int iY, const char* pSpriteString);
 	void Sprite_Draw(int iY, int iX, char chSprite);
 
 private:
