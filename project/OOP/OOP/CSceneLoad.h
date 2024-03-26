@@ -3,9 +3,10 @@
  
 class CSceneLoad : public CSceneBase
 {
+private:
+	char _stageName[128];
 
 public:
-	CSceneLoad();
 
 	CSceneLoad(int iGameStage);
 

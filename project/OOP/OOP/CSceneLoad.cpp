@@ -1,4 +1,6 @@
 
+#include <stdio.h>
+
 #include "CSceneBase.h"
 
 
@@ -7,22 +9,10 @@
 
 
 
-CSceneLoad::CSceneLoad()
-{
-}
 
-CSceneLoad::CSceneLoad(int iGameStage)
+CSceneLoad::CSceneLoad(int iGameStage) :_stageName("")
 {
-	switch (iGameStage)
-	{
-	case 1:
-		
-		break;
-	case 2:
-		break;
-	default:
-		break;
-	}
+	sprintf_s(_stageName, "stage%d.txt", iGameStage);
 }
 
 CSceneLoad::~CSceneLoad()

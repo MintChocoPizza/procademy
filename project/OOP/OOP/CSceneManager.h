@@ -50,11 +50,13 @@ private:
 	// 
 	//------------------------------------------------------------------
 	int gameStage;
+	int maxStage;
 
 
 private:
 	CSceneManager();
 	~CSceneManager();
+	void GetMaxStage(void);
 
 public:
 	static CSceneManager* GetInstance(void);

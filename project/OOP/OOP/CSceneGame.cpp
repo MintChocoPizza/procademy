@@ -1,6 +1,9 @@
 
-#include"CSceneBase.h"
 
+
+
+#include "CPlayer.h"
+#include "CSceneBase.h"
 #include "CSceneGame.h"
 
 

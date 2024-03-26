@@ -26,7 +26,7 @@ int main()
 
 	t.LoadFile("test.txt");
 
-	if (t.GetValue("aaa", val))
+	if (t.GetValue("aaa", val, 256))
 		cout << val << endl;
 	else
 		cout << "실패 \n" << endl;
