@@ -3,9 +3,11 @@
     "",
     "\\class",
     "\\project",
+    "\\project\\List_Project",
+    "\\project\\List_Project\\List_Project",
     "\\project\\OOP",
     "\\project\\OOP\\OOP"
   ],
-  "SelectedNode": "\\project\\OOP\\OOP\\CTitleObject.h",
+  "SelectedNode": "\\project\\OOP\\OOP\\CParsing_ANSI.cpp",
   "PreviewInSolutionExplorer": false
 }
