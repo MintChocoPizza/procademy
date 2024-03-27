@@ -54,9 +54,13 @@ private:
 
 
 private:
+	//---------------------------------------------------------------------------------------
+	// 처음 시작을 타이틀 Scene을 로드 
+	// 
+	//---------------------------------------------------------------------------------------
 	CSceneManager();
 	~CSceneManager();
-	void GetMaxStage(void);
+	int GetMaxStage(void);
 
 public:
 	static CSceneManager* GetInstance(void);

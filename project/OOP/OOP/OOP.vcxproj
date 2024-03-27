@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CBaseObject.cpp" />
+    <ClCompile Include="CEnemy.cpp" />
     <ClCompile Include="CObjectManager.cpp" />
     <ClCompile Include="ConsoleBuffer.cpp" />
     <ClCompile Include="CParsing_ANSI.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="CSceneTitle.h" />
     <ClInclude Include="CTitleObject.h" />
     <ClInclude Include="CPlayer.h" />
+    <ClInclude Include="CEnemy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

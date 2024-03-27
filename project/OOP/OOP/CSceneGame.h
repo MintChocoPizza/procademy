@@ -3,10 +3,7 @@
 
 class CSceneGame : public CSceneBase
 {
-private:
-	CPlayer* player;
 
-	
 
 public:
 	CSceneGame();

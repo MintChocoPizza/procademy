@@ -21,21 +21,23 @@
 
 CSceneManager CSceneManager::_CSceneManager;
 
-CSceneManager::CSceneManager() : ChangeScene(false), type(TITLE), gameStage(1), maxStage(0)
+CSceneManager::CSceneManager() : ChangeScene(false), type(TITLE), gameStage(1)
 {
 	_pScene = new CSceneTitle;
-	GetMaxStage();
+	maxStage = GetMaxStage();
 }
 
 CSceneManager::~CSceneManager()
 {
 }
 
-void CSceneManager::GetMaxStage(void)
+int CSceneManager::GetMaxStage(void)
 {
+	int iMaxStage;
 	CParsing_ANSI cParsing;
 	cParsing.LoadFile("GameFile\\MaxStage.txt");
-	cParsing.GetValue("MaxStage", &maxStage);
+	cParsing.GetValue("MaxStage", &iMaxStage);
+	return iMaxStage;
 }
 
 CSceneManager* CSceneManager::GetInstance(void)
@@ -61,6 +63,7 @@ void CSceneManager::run(void)
 			_pScene = new CSceneGame();
 			break;
 		case CSceneManager::CLEAR:
+
 			break;
 		default:
 			break;

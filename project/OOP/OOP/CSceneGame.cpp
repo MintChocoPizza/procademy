@@ -8,22 +8,21 @@
 #include "CSceneGame.h"
 
 
-CSceneGame::CSceneGame() : player(nullptr)
+CSceneGame::CSceneGame() 
 {
-	player = new CPlayer(1, 20, 20, 'P');
 }
 
 CSceneGame::~CSceneGame()
 {
-	delete player;
 }
 
 bool CSceneGame::Update(void)
 {
 	ConsoleBuffer::GetInstance()->Buffer_Clear();
 
-	player->Update();
-	player->Render();
+	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2, "GAME");
+
+	ConsoleBuffer::GetInstance()->Buffer_Flip();
 
 	return true;
 }

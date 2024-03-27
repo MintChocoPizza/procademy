@@ -1,2 +1,8 @@
-Enemy = 1;
-# 3 3 10 moving1.txt bullet1.txt
+MaxEnemy = 1;
+
+EnemySkin1 = #;
+EnemyHP1 = 3;
+EnemyY1 = 3;
+EnemyX1 = 10;
+EnemyMove1 = moving1.txt;
+EnemyGun1 = bullet1.txt;

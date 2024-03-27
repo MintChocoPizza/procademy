@@ -5,7 +5,6 @@ class CSceneLoad : public CSceneBase
 {
 private:
 	char _stageName[128];
-	int 
 
 public:
 

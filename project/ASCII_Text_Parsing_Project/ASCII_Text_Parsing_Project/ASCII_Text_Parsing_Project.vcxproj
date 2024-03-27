@@ -133,7 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ASCII_Text_Parsing_Project.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="CParsing_ANSI.cpp" />
   </ItemGroup>
   <ItemGroup>

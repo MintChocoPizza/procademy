@@ -9,6 +9,7 @@ private:
 	int _iX;
 	int _iY;
 
+
 public:
 	CPlayer(int ObjectType, int iY, int iX, char cSkin);
 	virtual ~CPlayer();

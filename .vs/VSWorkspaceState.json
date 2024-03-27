@@ -3,10 +3,11 @@
     "",
     "\\class",
     "\\project",
-    "\\project\\shootingGame_project",
-    "\\project\\shootingGame_project\\shootingGame_Project_FPS",
-    "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS"
+    "\\project\\ASCII_Text_Parsing_Project",
+    "\\project\\ASCII_Text_Parsing_Project\\ASCII_Text_Parsing_Project",
+    "\\project\\OOP",
+    "\\project\\OOP\\OOP"
   ],
-  "SelectedNode": "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS\\Load.cpp",
+  "SelectedNode": "\\project\\ASCII_Text_Parsing_Project\\ASCII_Text_Parsing_Project\\main.cpp",
   "PreviewInSolutionExplorer": false
 }
