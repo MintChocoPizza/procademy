@@ -4,11 +4,19 @@
 
 class CPlayer : CBaseObject 
 {
+private:
+	char _cSkin;
+	int _iX;
+	int _iY;
+
 public:
-	CPlayer(int ObjectType);
+	CPlayer(int ObjectType, int iY, int iX, char cSkin);
 	virtual ~CPlayer();
 
 	virtual bool Update(void);
+	virtual void Render(void);
+
+	void KeyboardInput(void);
 };
 
 

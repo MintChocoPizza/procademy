@@ -74,9 +74,9 @@ bool CTitleObject::Update(void)
 	unsigned int iCnt;
 	size_t szStringLength;
 
-	ConsoleBuffer::GetInstance()->Buffer_Clear();
 	ConsoleBuffer::GetInstance()->Sprite_Background(_Buff);
 
+	KeyboardInput();
 
 	//-------------------------
 	// 버퍼에 타이틀 출력
@@ -110,7 +110,7 @@ bool CTitleObject::Update(void)
 
 void CTitleObject::Render(void)
 {
-	KeyboardInput();
+
 	ConsoleBuffer::GetInstance()->Buffer_Flip();
 }
 
@@ -118,6 +118,7 @@ void CTitleObject::KeyboardInput(void)
 {
 	if (GetAsyncKeyState(VK_RETURN) & 0x8001)
 	{
-		CSceneManager::GetInstance()->LoadScene(CSceneManager::LOAD);
+		// CSceneManager::GetInstance()->LoadScene(CSceneManager::LOAD);
+		CSceneManager::GetInstance()->LoadScene(CSceneManager::GAME);
 	}
 }

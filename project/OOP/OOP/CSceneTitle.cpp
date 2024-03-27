@@ -1,6 +1,7 @@
 
 
-
+#include <Windows.h>
+#include "ConsoleBuffer.h"
 
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -32,6 +33,7 @@ CSceneTitle::~CSceneTitle()
 
 bool CSceneTitle::Update(void)
 {
+	ConsoleBuffer::GetInstance()->Buffer_Clear();
 
 	// 실제로 동작하는 
 	_TitleObject->Update();

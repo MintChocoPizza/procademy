@@ -1,14 +1,2 @@
-﻿  CBaseObject.cpp
-  CObjectManager.cpp
-  ConsoleBuffer.cpp
-  CParsing_ANSI.cpp
-  CSceneBase.cpp
-  CSceneGame.cpp
-  CSceneLoad.cpp
-  CSceneTitle.cpp
-  CTitleObject.cpp
-  main.cpp
-  CPlayer.cpp
-  SceneManager.cpp
-  코드를 생성하고 있습니다...
-  OOP.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\project\OOP\x64\Debug\OOP.exe
+﻿  main.cpp
+  OOP.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\project\OOP\x64\Debug\OOP.exe

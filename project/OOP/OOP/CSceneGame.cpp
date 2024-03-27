@@ -1,6 +1,6 @@
 
-
-
+#include <Windows.h>
+#include "ConsoleBuffer.h"
 
 #include "CBaseObject.h"
 #include "CSceneBase.h"
@@ -8,17 +8,22 @@
 #include "CSceneGame.h"
 
 
-CSceneGame::CSceneGame()
+CSceneGame::CSceneGame() : player(nullptr)
 {
-
+	player = new CPlayer(1, 20, 20, 'P');
 }
 
 CSceneGame::~CSceneGame()
 {
-
+	delete player;
 }
 
 bool CSceneGame::Update(void)
 {
-	return false;
+	ConsoleBuffer::GetInstance()->Buffer_Clear();
+
+	player->Update();
+	player->Render();
+
+	return true;
 }

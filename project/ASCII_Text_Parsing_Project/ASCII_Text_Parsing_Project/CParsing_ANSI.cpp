@@ -282,6 +282,66 @@ bool CParsing_ANSI::GetValue(const char* key, double* fpValue)
 	return false;
 }
 
+bool CParsing_ANSI::GetValue(const char* key, char* cpValue)
+{
+	// 무조건 버퍼의 처음부터 탐색한다. 
+	_tempBuffer = _readBuffer;
+	char chWord[256];
+	int iLength;
+
+	// 찾고자 하는 단어가 나올때까지 계속 찾을 것이므로 while 문으로 검사.
+	while (GetNextWord(&_tempBuffer, &iLength))
+	{
+		// chWord 버퍼에 찾은 단어를 저장한다. 
+		memset(chWord, 0, 256);
+		memcpy_s(chWord, 256, _tempBuffer, iLength);
+		_tempBuffer += iLength;
+
+		if (chWord[0] == '\0')
+			return false;
+
+		// 인자로 입력 받은 단어와 같은지 검사한다. 
+		if (0 == strcmp(key, chWord))
+		{
+			// 맞다면 바로 뒤에 = 을 찾자.
+			if (GetNextWord(&_tempBuffer, &iLength))
+			{
+				memset(chWord, 0, 256);
+				memcpy_s(chWord, 256, _tempBuffer, iLength);
+				_tempBuffer += iLength;
+				if (0 == strcmp(chWord, "="))
+				{
+					// = 다음의 데이터 부분을 얻자.
+					if (GetNextValue(&_tempBuffer, &iLength))
+					{
+					
+						if (iLength == 1)
+						{
+							memset(chWord, 0, 256);
+							memcpy_s(chWord, 256, _tempBuffer, iLength);
+							// _tempBuffer += iLength;
+
+							*cpValue = chWord[0];
+
+							return true;
+						}
+						else
+						{
+							return false;
+						}
+					}
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+	}
+	return false;
+}
+
 bool CParsing_ANSI::GetValue(const char* key, char cpValue[], int iSize)
 {
 	// 무조건 버퍼의 처음부터 탐색한다. 

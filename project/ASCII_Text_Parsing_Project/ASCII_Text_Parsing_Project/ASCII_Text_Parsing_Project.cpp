@@ -21,6 +21,7 @@ int main()
 
 	CParsing_ANSI t;
 	char val[256];
+	char cVal;
 	int ival;
 	double dval;
 
@@ -41,6 +42,12 @@ int main()
 		cout << dval << endl;
 	else
 		cout << "d 실패" << endl;
+
+
+	if (t.GetValue("ddd", &cVal))
+		cout << cVal << endl;
+	else
+		cout << "char 실패 " << endl;
 
 	return 0;
 }

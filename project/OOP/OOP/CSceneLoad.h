@@ -5,6 +5,7 @@ class CSceneLoad : public CSceneBase
 {
 private:
 	char _stageName[128];
+	int 
 
 public:
 
@@ -13,6 +14,10 @@ public:
 	~CSceneLoad();
 
 	virtual bool Update(void);
+
+private:
+	void LoadStage(char* cStageName);
+
 };
 
 #endif // !__CSCENELOAD_H__

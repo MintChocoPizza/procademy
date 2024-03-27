@@ -58,7 +58,7 @@ void CSceneManager::run(void)
 			_pScene = new CSceneLoad(gameStage);
 			break;
 		case CSceneManager::GAME:
-
+			_pScene = new CSceneGame();
 			break;
 		case CSceneManager::CLEAR:
 			break;
