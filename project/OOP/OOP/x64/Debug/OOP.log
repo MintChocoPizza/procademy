@@ -8,7 +8,7 @@
   CSceneTitle.cpp
   CTitleObject.cpp
   main.cpp
-  Player.cpp
+  CPlayer.cpp
   SceneManager.cpp
   코드를 생성하고 있습니다...
   OOP.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\project\OOP\x64\Debug\OOP.exe

@@ -1,0 +1,541 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\SceneManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\SceneManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneGame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CSceneGame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CBaseObject.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CBaseObject.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneGame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CSceneGame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneLoad.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CSceneLoad.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CPlayer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CPlayer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CPlayer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CPlayer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneLoad.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CSceneLoad.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CBaseObject.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CBaseObject.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CParsing_ANSI.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CParsing_ANSI.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneTitle.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CSceneTitle.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CTitleObject.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CTitleObject.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CTitleObject.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CTitleObject.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneTitle.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CSceneTitle.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CSceneManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CParsing_ANSI.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CParsing_ANSI.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\ConsoleBuffer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\ConsoleBuffer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CObjectManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CObjectManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CObjectManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CObjectManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneBase.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CSceneBase.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneBase.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\CSceneBase.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\ConsoleBuffer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9FF2BF30-699A-4B61-9EAB-0B3FC0B576FA}|OOP\\OOP.vcxproj|solutionrelative:OOP\\ConsoleBuffer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 102,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CParsing_ANSI.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CParsing_ANSI.cpp",
+              "RelativeDocumentMoniker": "OOP\\CParsing_ANSI.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CParsing_ANSI.cpp",
+              "RelativeToolTip": "OOP\\CParsing_ANSI.cpp",
+              "ViewState": "AQIAABsBAAAAAAAAAAAiwDQBAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T17:39:29.822Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "CParsing_ANSI.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CParsing_ANSI.h",
+              "RelativeDocumentMoniker": "OOP\\CParsing_ANSI.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CParsing_ANSI.h",
+              "RelativeToolTip": "OOP\\CParsing_ANSI.h",
+              "ViewState": "AQIAAAMAAAAAAAAAAADwvzIAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-26T17:37:51.334Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "CObjectManager.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CObjectManager.cpp",
+              "RelativeDocumentMoniker": "OOP\\CObjectManager.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CObjectManager.cpp",
+              "RelativeToolTip": "OOP\\CObjectManager.cpp",
+              "ViewState": "AQIAABEAAAAAAAAAAAAjwCAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T07:22:35.532Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "CObjectManager.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CObjectManager.h",
+              "RelativeDocumentMoniker": "OOP\\CObjectManager.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CObjectManager.h",
+              "RelativeToolTip": "OOP\\CObjectManager.h",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAuwCYAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-26T06:03:51.294Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CBaseObject.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CBaseObject.cpp",
+              "RelativeDocumentMoniker": "OOP\\CBaseObject.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CBaseObject.cpp",
+              "RelativeToolTip": "OOP\\CBaseObject.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T06:04:14.748Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CBaseObject.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CBaseObject.h",
+              "RelativeDocumentMoniker": "OOP\\CBaseObject.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CBaseObject.h",
+              "RelativeToolTip": "OOP\\CBaseObject.h",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAAABkAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-26T06:03:53.351Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "CSceneBase.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneBase.cpp",
+              "RelativeDocumentMoniker": "OOP\\CSceneBase.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneBase.cpp",
+              "RelativeToolTip": "OOP\\CSceneBase.cpp",
+              "ViewState": "AQIAAAEAAAAAAAAAAABAwAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T05:36:56.368Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "CSceneBase.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneBase.h",
+              "RelativeDocumentMoniker": "OOP\\CSceneBase.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneBase.h",
+              "RelativeToolTip": "OOP\\CSceneBase.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-26T05:36:52.862Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ConsoleBuffer.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\ConsoleBuffer.cpp",
+              "RelativeDocumentMoniker": "OOP\\ConsoleBuffer.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\ConsoleBuffer.cpp",
+              "RelativeToolTip": "OOP\\ConsoleBuffer.cpp",
+              "ViewState": "AQIAADAAAAAAAAAAAABAwD4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T05:56:19.782Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "ConsoleBuffer.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\ConsoleBuffer.h",
+              "RelativeDocumentMoniker": "OOP\\ConsoleBuffer.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\ConsoleBuffer.h",
+              "RelativeToolTip": "OOP\\ConsoleBuffer.h",
+              "ViewState": "AQIAAAQAAAAAAAAAAABAwBsAAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-26T05:56:15.142Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\main.cpp",
+              "RelativeDocumentMoniker": "OOP\\main.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\main.cpp",
+              "RelativeToolTip": "OOP\\main.cpp",
+              "ViewState": "AQIAAAEAAAAAAAAAAABAwBMAAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T00:28:49.789Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "3c0f8c3c-f6e0-4550-a743-9ac0f21fe16a",
+        "Display": 1,
+        "X": 2521,
+        "Y": 27,
+        "Width": 985,
+        "Height": 687,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CTitleObject.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CTitleObject.cpp",
+              "RelativeDocumentMoniker": "OOP\\CTitleObject.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CTitleObject.cpp",
+              "RelativeToolTip": "OOP\\CTitleObject.cpp",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAAAD8AAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T05:32:45.713Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "CTitleObject.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CTitleObject.h",
+              "RelativeDocumentMoniker": "OOP\\CTitleObject.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CTitleObject.h",
+              "RelativeToolTip": "OOP\\CTitleObject.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-26T05:32:41.011Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "cae931c1-84cc-486a-bc37-aa206ca94e28",
+        "Display": 1,
+        "X": 25,
+        "Y": 27,
+        "Width": 738,
+        "Height": 687,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CSceneManager.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneManager.h",
+              "RelativeDocumentMoniker": "OOP\\CSceneManager.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneManager.h",
+              "RelativeToolTip": "OOP\\CSceneManager.h",
+              "ViewState": "AQIAABoAAAAAAAAAAAAEwDoAAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-26T05:33:19.185Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SceneManager.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\SceneManager.cpp",
+              "RelativeDocumentMoniker": "OOP\\SceneManager.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\SceneManager.cpp",
+              "RelativeToolTip": "OOP\\SceneManager.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T05:33:27.795Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "ce38a71a-7d46-4c1f-bfee-ee3de1dbe59f",
+        "Display": 1,
+        "X": 1703,
+        "Y": 30,
+        "Width": 810,
+        "Height": 687,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "CSceneTitle.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneTitle.h",
+              "RelativeDocumentMoniker": "OOP\\CSceneTitle.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneTitle.h",
+              "RelativeToolTip": "OOP\\CSceneTitle.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-26T06:13:09.499Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "CSceneTitle.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneTitle.cpp",
+              "RelativeDocumentMoniker": "OOP\\CSceneTitle.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneTitle.cpp",
+              "RelativeToolTip": "OOP\\CSceneTitle.cpp",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T06:13:22.563Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "8b69f918-d766-4838-a696-1cbc7c9596fc",
+        "Display": 1,
+        "X": 59,
+        "Y": 718,
+        "Width": 800,
+        "Height": 687,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CSceneGame.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneGame.cpp",
+              "RelativeDocumentMoniker": "OOP\\CSceneGame.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneGame.cpp",
+              "RelativeToolTip": "OOP\\CSceneGame.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T06:16:36.863Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CSceneGame.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneGame.h",
+              "RelativeDocumentMoniker": "OOP\\CSceneGame.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneGame.h",
+              "RelativeToolTip": "OOP\\CSceneGame.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-26T06:14:46.229Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "995607a4-2395-4037-bb3c-70512901c494",
+        "Display": 1,
+        "X": 1797,
+        "Y": 821,
+        "Width": 849,
+        "Height": 517,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CPlayer.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CPlayer.cpp",
+              "RelativeDocumentMoniker": "OOP\\CPlayer.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CPlayer.cpp",
+              "RelativeToolTip": "OOP\\CPlayer.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T06:39:09.507Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CPlayer.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CPlayer.h",
+              "RelativeDocumentMoniker": "OOP\\CPlayer.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CPlayer.h",
+              "RelativeToolTip": "OOP\\CPlayer.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-26T17:52:34.336Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "413457c8-ae33-479f-ae44-a496d8a18684",
+        "Display": 1,
+        "X": 834,
+        "Y": 643,
+        "Width": 919,
+        "Height": 751,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CSceneLoad.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneLoad.cpp",
+              "RelativeDocumentMoniker": "OOP\\CSceneLoad.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneLoad.cpp",
+              "RelativeToolTip": "OOP\\CSceneLoad.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-26T06:53:45.412Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "CSceneLoad.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneLoad.h",
+              "RelativeDocumentMoniker": "OOP\\CSceneLoad.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\OOP\\OOP\\CSceneLoad.h",
+              "RelativeToolTip": "OOP\\CSceneLoad.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-26T06:52:42.054Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

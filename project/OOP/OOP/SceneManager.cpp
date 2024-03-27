@@ -11,6 +11,7 @@
 #include "CBaseObject.h"
 #include "CTitleObject.h"
 #include "CSceneBase.h"
+#include "CPlayer.h"
 #include "CSceneTitle.h"
 #include "CSceneGame.h"
 #include "CSceneLoad.h"

@@ -2,8 +2,9 @@
 
 
 
-#include "CPlayer.h"
+#include "CBaseObject.h"
 #include "CSceneBase.h"
+#include "CPlayer.h"
 #include "CSceneGame.h"
 
 
