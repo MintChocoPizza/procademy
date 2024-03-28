@@ -71,12 +71,17 @@ CTitleObject::~CTitleObject()
 
 bool CTitleObject::Update(void)
 {
+	KeyboardInput();
+
+	return true;
+}
+
+void CTitleObject::Render(void)
+{
 	unsigned int iCnt;
 	size_t szStringLength;
 
 	ConsoleBuffer::GetInstance()->Sprite_Background(_Buff);
-
-	KeyboardInput();
 
 	//-------------------------
 	// 버퍼에 타이틀 출력
@@ -93,8 +98,6 @@ bool CTitleObject::Update(void)
 	{
 		ConsoleBuffer::GetInstance()->Sprite_Draw(dfSCREEN_HEIGHT - 2, 1 + iCnt, cGameVersion[iCnt]);
 	}
-
-
 	//-------------------------
 	// 버퍼에 조작에 대한 설명 
 	// 
@@ -103,22 +106,12 @@ bool CTitleObject::Update(void)
 	//-------------------------
 	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 2, "Move: WASD, Weapon: J");
 	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 8, "Press Enter.......");
-
-
-	return false;
-}
-
-void CTitleObject::Render(void)
-{
-
-	ConsoleBuffer::GetInstance()->Buffer_Flip();
 }
 
 void CTitleObject::KeyboardInput(void)
 {
 	if (GetAsyncKeyState(VK_RETURN) & 0x8001)
 	{
-		// CSceneManager::GetInstance()->LoadScene(CSceneManager::LOAD);
-		CSceneManager::GetInstance()->LoadScene(CSceneManager::GAME);
+		CSceneManager::GetInstance()->LoadScene(CSceneManager::LOAD);
 	}
 }

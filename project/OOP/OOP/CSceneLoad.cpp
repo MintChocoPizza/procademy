@@ -24,9 +24,6 @@ CSceneLoad::CSceneLoad(int iGameStage) :_stageName("")
 	sprintf_s(_stageName, "GameFile\\stage%d.txt", iGameStage);
 	
 	LoadStage(_stageName);
-
-	CPlayer* player = new CPlayer(1, 20, 20, 'P');
-	CObjectManager::GetInstance()->CreateObject(player);
 }
 
 CSceneLoad::~CSceneLoad()
@@ -44,6 +41,8 @@ void CSceneLoad::LoadStage(char* cStageName)
 	int iCnt;
 	int iMaxEnemy;
 
+	char cPlayerFile[255] = "";
+
 	char cSkin = NULL;
 	int iHp = NULL;
 	int iY = NULL;
@@ -56,11 +55,15 @@ void CSceneLoad::LoadStage(char* cStageName)
 
 	CParsing_ANSI CParsing;
 	CParsing.LoadFile(cStageName);
+
+	CParsing.GetValue("Player", cPlayerFile, 255);
+	CPlayer* Player = new CPlayer(1, cPlayerFile);
+	CObjectManager::GetInstance()->CreateObject(Player);
+	
+
 	CParsing.GetValue("MaxEnemy", &iMaxEnemy);
-
-
 	// stageN.txt 파일을 읽는다.
-	for (iCnt = 1; iCnt < iMaxEnemy; ++iCnt)
+	for (iCnt = 1; iCnt <= iMaxEnemy; ++iCnt)
 	{
 		sprintf_s(cString, "EnemySkin%d", iCnt);
 		CParsing.GetValue(cString, &cSkin);

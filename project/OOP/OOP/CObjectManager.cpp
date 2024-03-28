@@ -36,3 +36,39 @@ void CObjectManager::DestroyObject(void)
 		// pObject.    -> 만약 요소를 파괴해야 한다면 파괴한다. 
 	}
 }
+
+void CObjectManager::ObjectClear(void)
+{
+	CList<CBaseObject*> ::iterator removeIter = ObjectList.begin();
+
+	for (removeIter = ObjectList.begin(); removeIter != ObjectList.end();)
+	{
+		CBaseObject* removeObject = *removeIter;
+
+		delete removeObject;
+
+		removeIter = ObjectList.erase(removeIter);
+	}
+
+}
+
+void CObjectManager::ObjectUpdate(void)
+{
+	CList<CBaseObject*>::iterator iter;
+
+	for (iter = ObjectList.begin(); iter != ObjectList.end(); ++iter)
+	{
+		(*iter)->Update();
+	}
+}
+
+void CObjectManager::ObjectRender(void)
+{
+	CList<CBaseObject*>::iterator iter;
+
+	for (iter = ObjectList.begin(); iter != ObjectList.end(); ++iter)
+	{
+		(*iter)->Render();
+	}
+}
+

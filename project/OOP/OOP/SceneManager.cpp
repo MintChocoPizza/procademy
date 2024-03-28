@@ -6,7 +6,10 @@
 #include <stdio.h>
 #include <Windows.h>
 
+
 #include "CParsing_ANSI.h"
+#include "ConsoleBuffer.h"
+#include "FPSManager.h"
 
 #include "CBaseObject.h"
 #include "CTitleObject.h"
@@ -47,7 +50,24 @@ CSceneManager* CSceneManager::GetInstance(void)
 
 void CSceneManager::run(void)
 {
+
+	//--------------------------------
+	// 로직 프레임 증가
+	//--------------------------------
+	CFpsManager::GetInstance()->LogicTimeUpdate();
+
+	ConsoleBuffer::GetInstance()->Buffer_Clear();
+
+	// 로직부
 	_pScene->Update();
+
+	// 랜더링
+	if (CFpsManager::GetInstance()->FpsSkip())
+	{
+		ConsoleBuffer::GetInstance()->Buffer_Flip();
+	}
+
+	ConsoleBuffer::GetInstance()->print_FPS();
 
 	// 씬 전환 요청이 있다면 여기서 실질적인 씬 전환 
 	if (ChangeScene)

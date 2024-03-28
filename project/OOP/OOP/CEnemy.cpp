@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <Windows.h>
 
 #include "CList.h"
 
@@ -28,14 +29,14 @@ bool CEnemy::Update(void)
 
 void CEnemy::Render(void)
 {
-	Moving temp = *iter;
 
-	ConsoleBuffer::GetInstance()->Sprite_Draw(temp.dY, temp.dX, _Skin);
+	ConsoleBuffer::GetInstance()->Sprite_Draw(_iY, _iX, _Skin);
 }
 
 void CEnemy::GetMoving(char* cMoveFile)
 {
 	int iCnt;
+	char cFileAddr[256];
 	char cString[256];
 	int iMaxMoving=0;
 
@@ -43,7 +44,9 @@ void CEnemy::GetMoving(char* cMoveFile)
 
 	CParsing_ANSI Parsing;
 
-	Parsing.LoadFile(cMoveFile);
+	sprintf_s(cFileAddr, 256, "GameFile\\%s", cMoveFile);
+
+	Parsing.LoadFile(cFileAddr);
 	Parsing.GetValue("MaxMoving", &iMaxMoving);
 
 	for (iCnt = 1; iCnt <= iMaxMoving; ++iCnt)
@@ -64,8 +67,10 @@ void CEnemy::GetMoving(char* cMoveFile)
 void CEnemy::Move(void)
 {
 	++iter;
-
 	if (iter == MovingList.end())
 		iter = MovingList.begin();
+
+	_iY += (*iter).dY;
+	_iX += (*iter).dX;
 }
 

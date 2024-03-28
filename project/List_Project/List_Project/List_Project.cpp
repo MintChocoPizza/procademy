@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <list>
 
 #include "CList.h"
 
@@ -10,41 +11,55 @@ using namespace std;
 class aaa
 {
 public:
-    aaa();
+    aaa(int t);
     ~aaa();
 
 private:
+    int a;
 
 };
 
-aaa::aaa()
+aaa::aaa(int t)
 {
+    cout << "생성자" << endl;
+    a = t;
 }
 
 aaa::~aaa()
 {
+    cout << "소멸자" << endl;
 }
+
 
 int main()
 {
 
+    CList<aaa*> cl;
+    CList<aaa*>::iterator iter;
 
-    cout << endl << endl;
+    for (int i = 0; i < 10; ++i)
+    {
+        aaa* temp = new aaa(i);
+
+        cl.push_back(temp);
+    }
+
 
     
-    CList<aaa *> cl;
-
-
-    CList<aaa *>::iterator citer;
-    for (citer = cl.begin(); citer != cl.end(); citer++)
+    for (iter = cl.begin(); iter != cl.end();)
     {
-        cout << *citer << " ";
+        aaa* temp = *iter;
+
+        delete temp;
+
+       iter = cl.erase(iter);
     }
-   
+
 
 
     std::cout << "\nHello World!\n";
 
+    // 리스트를 사용하고 나서. 메모리는 ???? 전역으로 선언된게 아니면 정리해주는 것이 맞다.
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴

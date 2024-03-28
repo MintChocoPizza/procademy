@@ -10,7 +10,7 @@ public:
 
 	CSceneLoad(int iGameStage);
 
-	~CSceneLoad();
+	virtual ~CSceneLoad();
 
 	virtual bool Update(void);
 

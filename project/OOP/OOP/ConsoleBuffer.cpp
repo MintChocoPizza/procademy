@@ -3,8 +3,7 @@
 #include <Windows.h>
 
 
-
-
+#include "FPSManager.h"
 #include "ConsoleBuffer.h"
 
 ConsoleBuffer ConsoleBuffer::_ConsoleBuffer;
@@ -82,6 +81,14 @@ void ConsoleBuffer::Sprite_Draw(int iY, int iX, char chSprite)
 		return;
 
 	ScreenBuffer[iY][iX] = chSprite;
+}
+
+void ConsoleBuffer::print_FPS(void)
+{
+	MoveCursor(dfSCREEN_HEIGHT, 0);
+	printf_s("                                       ");
+	MoveCursor(dfSCREEN_HEIGHT, 0);
+	CFpsManager::GetInstance()->print_FPS();
 }
 
 

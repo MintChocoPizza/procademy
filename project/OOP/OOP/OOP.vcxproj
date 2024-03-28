@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CBaseObject.cpp" />
+    <ClCompile Include="CBullet.cpp" />
     <ClCompile Include="CEnemy.cpp" />
     <ClCompile Include="CObjectManager.cpp" />
     <ClCompile Include="ConsoleBuffer.cpp" />
@@ -143,12 +144,14 @@
     <ClCompile Include="CSceneLoad.cpp" />
     <ClCompile Include="CSceneTitle.cpp" />
     <ClCompile Include="CTitleObject.cpp" />
+    <ClCompile Include="FPSManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBaseObject.h" />
+    <ClInclude Include="CBullet.h" />
     <ClInclude Include="CList.h" />
     <ClInclude Include="CObjectManager.h" />
     <ClInclude Include="ConsoleBuffer.h" />
@@ -161,6 +164,7 @@
     <ClInclude Include="CTitleObject.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CEnemy.h" />
+    <ClInclude Include="FPSManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

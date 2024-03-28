@@ -1,16 +1,29 @@
 
+
+#include <stdio.h>
 #include <Windows.h>
 
 
 #include "ConsoleBuffer.h"
+#include "CParsing_ANSI.h"
+#include "FPSManager.h"
 
 #include "CBaseObject.h"
 #include "CPlayer.h"
 
-CPlayer::CPlayer(int ObjectType, int iY, int iX, char cSkin) : CBaseObject(ObjectType), _iY(iY), _iX(iX), _cSkin(cSkin)
+CPlayer::CPlayer(int ObjectType, char* PlayerFile) : CBaseObject(ObjectType), _iY(dfSCREEN_HEIGHT-3), _iX((dfSCREEN_WIDTH-1)/2)
 {
+	char cString[255] = "";
+	sprintf_s(cString, "GameFile\\%s", PlayerFile);
 
-
+	CParsing_ANSI CParsing;
+	CParsing.LoadFile(cString);
+	CParsing.GetValue("HP", &_iHP);
+	CParsing.GetValue("Skin", &_cSkin);
+	CParsing.GetValue("Bullet", &_cBulletSkin);
+	CParsing.GetValue("Damage", &_iDamage);
+	CParsing.GetValue("Speed", &_iPlayerSpeed);
+	CParsing.GetValue("CoolTime", &_iBulletCoolTime);
 }
 
 CPlayer::~CPlayer()
@@ -22,37 +35,40 @@ bool CPlayer::Update(void)
 {
 	KeyboardInput();
 
-	ConsoleBuffer::GetInstance()->Sprite_Draw(_iY, _iX, _cSkin);
 
 	return true;
 }
 
 void CPlayer::Render(void)
 {
-	ConsoleBuffer::GetInstance()->Buffer_Flip();
+	ConsoleBuffer::GetInstance()->Sprite_Draw(_iY, _iX, _cSkin);
 }
 
 void CPlayer::KeyboardInput(void)
 {
-	// 왼쪽 이동 A.
-	if (GetAsyncKeyState('A'))
+	// _iPlayerSpeed프레임 마다 이동한다.
+	if (CFpsManager::GetInstance()->_CntFps % _iPlayerSpeed == 0)
 	{
-		_iX += -1;
-	}
-	// 오른쪽 이동 D.
-	if (GetAsyncKeyState('D'))
-	{
-		_iX += 1;
-	}
-	// 위쪽 이동 W.
-	if (GetAsyncKeyState('W') & 0x8001)
-	{
-		_iY -= 1;
-	}
-	// 아래쪽 이동 S.
-	if (GetAsyncKeyState('S') & 0x8001)
-	{
-		_iY += 1;
+		// 왼쪽 이동 A.
+		if (GetAsyncKeyState('A'))
+		{
+			_iX += -1;
+		}
+		// 오른쪽 이동 D.
+		if (GetAsyncKeyState('D'))
+		{
+			_iX += 1;
+		}
+		// 위쪽 이동 W.
+		if (GetAsyncKeyState('W') & 0x8001)
+		{
+			_iY -= 1;
+		}
+		// 아래쪽 이동 S.
+		if (GetAsyncKeyState('S') & 0x8001)
+		{
+			_iY += 1;
+		}
 	}
 	//-------------------------------------------------------------
 	// 플레이어 이동 반경 제한.
@@ -63,4 +79,13 @@ void CPlayer::KeyboardInput(void)
 	_iX = min(_iX, 79);
 	_iY = max(_iY, 0);
 	_iY = min(_iY, 23);
+
+
+	// J 키, (미사일 키)
+	if (CFpsManager::GetInstance()->_CntFps % _iBulletCoolTime == 0)
+	{
+
+	}
+
+	
 }

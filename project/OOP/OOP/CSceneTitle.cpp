@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include "ConsoleBuffer.h"
+#include "CList.h"
 
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -12,6 +13,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 #include "CBaseObject.h"
 #include "CTitleObject.h"
+#include "CObjectManager.h"
 #include "CSceneBase.h"
 #include "CSceneTitle.h"
 
@@ -19,26 +21,22 @@
 CSceneTitle::CSceneTitle()
 {
 	// 타이틀 Scene에 맞는 기본 객체 생성 및 초기화
-	_TitleObject = new CTitleObject("GameFile\\Title", "GameFile\\GameInfo.txt",0);
+	CTitleObject* TitleObject = new CTitleObject("GameFile\\Title", "GameFile\\GameInfo.txt",0);
 	
-	
-
+		
+	CObjectManager::GetInstance()->CreateObject(TitleObject);
 }
 
 CSceneTitle::~CSceneTitle()
 {
-	// 동적 멤버 정리
-	delete _TitleObject;
+	CObjectManager::GetInstance()->ObjectClear();
 }
 
 bool CSceneTitle::Update(void)
 {
-	ConsoleBuffer::GetInstance()->Buffer_Clear();
 
-	// 실제로 동작하는 
-	_TitleObject->Update();
-	_TitleObject->Render();
-
+	CObjectManager::GetInstance()->ObjectUpdate();
+	CObjectManager::GetInstance()->ObjectRender();
 
 	return false;
 }

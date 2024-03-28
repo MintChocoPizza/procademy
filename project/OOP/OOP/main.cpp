@@ -10,20 +10,17 @@
 
 #pragma comment (lib, "winmm.lib")
 
+
+
 int main()
 {
-	timeBeginPeriod(1);
-
 
 	while (1)
 	{
+
 		CSceneManager::GetInstance()->run();
 	}
 
-
-
-
-	timeEndPeriod(1);
 	return 0;
 }
 

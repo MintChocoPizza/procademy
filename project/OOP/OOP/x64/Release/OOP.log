@@ -1,4 +1,5 @@
 ﻿  CBaseObject.cpp
+  CEnemy.cpp
   CObjectManager.cpp
   ConsoleBuffer.cpp
   CParsing_ANSI.cpp
@@ -8,10 +9,10 @@
   CSceneTitle.cpp
   CTitleObject.cpp
   main.cpp
-  Player.cpp
+  CPlayer.cpp
   SceneManager.cpp
   코드를 생성하고 있습니다.
   Previous IPDB not found, fall back to full compilation.
-  All 66 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 114 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
-  OOP.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\project\OOP\x64\Release\OOP.exe
+  OOP.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\project\OOP\x64\Release\OOP.exe

@@ -4,6 +4,7 @@
 
 using namespace std;
 
+/*
 int main()
 {
 	errno_t err;
@@ -29,6 +30,18 @@ int main()
 
 
 	
+
+	return 0;
+}
+*/
+
+int main()
+{
+	int* a = (int*)malloc(10);
+
+	free(a);
+
+	cout << "Hello World" << endl;
 
 	return 0;
 }

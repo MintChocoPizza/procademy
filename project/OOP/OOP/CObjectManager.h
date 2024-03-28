@@ -32,6 +32,10 @@ public:
 	//}
 	void DestroyObject(void);
 
+	void ObjectClear(void);
+
+	void ObjectUpdate(void);
+	void ObjectRender(void);
 };
 
 

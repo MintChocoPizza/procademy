@@ -1,28 +1,37 @@
 
 #include <Windows.h>
+
+#include "CList.h"
 #include "ConsoleBuffer.h"
 
 #include "CBaseObject.h"
 #include "CSceneBase.h"
 #include "CPlayer.h"
+#include "CObjectManager.h"
 #include "CSceneGame.h"
 
 
 CSceneGame::CSceneGame() 
 {
+
 }
 
 CSceneGame::~CSceneGame()
 {
+	CObjectManager::GetInstance()->ObjectClear();
 }
+
 
 bool CSceneGame::Update(void)
 {
-	ConsoleBuffer::GetInstance()->Buffer_Clear();
 
-	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2, "GAME");
 
-	ConsoleBuffer::GetInstance()->Buffer_Flip();
+
+	CObjectManager::GetInstance()->ObjectUpdate();
+	CObjectManager::GetInstance()->ObjectRender();
+
+
+
 
 	return true;
 }

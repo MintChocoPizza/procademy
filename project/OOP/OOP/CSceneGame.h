@@ -7,7 +7,7 @@ class CSceneGame : public CSceneBase
 
 public:
 	CSceneGame();
-	~CSceneGame();
+	virtual ~CSceneGame();
 
 	virtual bool Update(void);
 };

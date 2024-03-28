@@ -17,6 +17,7 @@ private:
 	~ConsoleBuffer();
 
 
+
 public:
 	static ConsoleBuffer* GetInstance(void);
 
@@ -26,6 +27,9 @@ public:
 	void Sprite_Background(unsigned char* pFileMemory);
 	void Sprite_Center_String(int iY, const char* pSpriteString);
 	void Sprite_Draw(int iY, int iX, char chSprite);
+
+	// friend ½È¾î¼­ Æí¹ý
+	void print_FPS(void);
 
 private:
 	//--------------------------------------------
@@ -37,13 +41,6 @@ private:
 	void MoveCursor(int iPosY, int iPosX);
 
 	void ClearScreen(void);
-
-
-
-
-
-
-
 
 };
 

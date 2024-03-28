@@ -6,11 +6,10 @@
 class CSceneTitle :public CSceneBase
 {
 private: 
-	CTitleObject* _TitleObject;
 
 public:
 	CSceneTitle();
-	~CSceneTitle();
+	virtual ~CSceneTitle();
 
 	virtual bool Update(void);
 
