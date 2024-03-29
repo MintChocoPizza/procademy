@@ -1,6 +1,7 @@
 
 
 #include <Windows.h>
+
 #include "ConsoleBuffer.h"
 #include "CList.h"
 
@@ -21,7 +22,7 @@
 CSceneTitle::CSceneTitle()
 {
 	// 타이틀 Scene에 맞는 기본 객체 생성 및 초기화
-	CTitleObject* TitleObject = new CTitleObject("GameFile\\Title", "GameFile\\GameInfo.txt",0);
+	CTitleObject* TitleObject = new CTitleObject("GameFile\\Title", "GameFile\\GameInfo.txt",0, true);
 	
 		
 	CObjectManager::GetInstance()->CreateObject(TitleObject);
@@ -40,3 +41,4 @@ bool CSceneTitle::Update(void)
 
 	return false;
 }
+

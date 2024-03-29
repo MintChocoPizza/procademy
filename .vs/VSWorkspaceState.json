@@ -2,14 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\class",
+    "\\class\\class",
+    "\\class\\class\\class",
     "\\project",
-    "\\project\\List_Project\\List_Project",
-    "\\project\\List_Project\\x64",
+    "\\project\\OOP",
     "\\project\\OOP\\OOP",
     "\\project\\shootingGame_project",
     "\\project\\shootingGame_project\\shootingGame_Project_FPS",
     "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS"
   ],
-  "SelectedNode": "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS\\Load.cpp",
+  "SelectedNode": "\\class\\class\\class\\main.cpp",
   "PreviewInSolutionExplorer": false
 }

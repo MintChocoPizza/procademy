@@ -12,7 +12,6 @@ public:
 
 
 	virtual bool			Update(void) = 0;
-	// virtual void			Render(void) = 0;
 
 protected:
 };

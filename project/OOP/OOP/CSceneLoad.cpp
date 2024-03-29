@@ -6,6 +6,7 @@
 
 #include "CList.h"
 #include "CBaseObject.h"
+#include "CollisionObject.h"
 #include "CObjectManager.h"
 #include "CEnemy.h"
 #include "CPlayer.h"
@@ -57,7 +58,7 @@ void CSceneLoad::LoadStage(char* cStageName)
 	CParsing.LoadFile(cStageName);
 
 	CParsing.GetValue("Player", cPlayerFile, 255);
-	CPlayer* Player = new CPlayer(1, cPlayerFile);
+	CPlayer* Player = new CPlayer(1, true, cPlayerFile);
 	CObjectManager::GetInstance()->CreateObject(Player);
 	
 
@@ -86,7 +87,7 @@ void CSceneLoad::LoadStage(char* cStageName)
 
 
 		// 1번 구현
-		CEnemy* Enemy = new CEnemy(2, cSkin, iHp, iY, iX, cMoveFile, cGunFile);
+		CEnemy* Enemy = new CEnemy(2, true, cSkin, iHp, iY, iX, cMoveFile, cGunFile);
 		
 		// 2번 구현
 		CObjectManager::GetInstance()->CreateObject(Enemy);

@@ -13,6 +13,7 @@
 
 #include "CBaseObject.h"
 #include "CTitleObject.h"
+#include "CollisionObject.h"
 #include "CSceneBase.h"
 #include "CPlayer.h"
 #include "CSceneTitle.h"
@@ -83,7 +84,6 @@ void CSceneManager::run(void)
 			_pScene = new CSceneGame();
 			break;
 		case CSceneManager::CLEAR:
-
 			break;
 		default:
 			break;

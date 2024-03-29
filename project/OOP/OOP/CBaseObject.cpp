@@ -1,12 +1,17 @@
 #include "CBaseObject.h"
 
-CBaseObject::CBaseObject(int ObjectType) : _ObjectType(ObjectType) 
+CBaseObject::CBaseObject(int ObjectType, bool Visible) :
+	_ObjectType(ObjectType), _Visible(Visible)
 {
-
 }
 
 CBaseObject::~CBaseObject()
 {
+}
+
+int CBaseObject::GetVisible(void)
+{
+	return _Visible;
 }
 
 int CBaseObject::GetObjectType(void)

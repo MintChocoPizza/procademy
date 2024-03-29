@@ -35,13 +35,56 @@ int main()
 }
 */
 
+class aaa
+{
+public:
+	aaa(int t) : a(t), b(t)
+	{
+		cout << "aaa 持失切" << endl;
+	}
+	~aaa()
+	{
+		cout << "aaa 社瑚切" << endl;
+	}
+
+private:
+	int a;
+
+
+protected:
+	int b;
+};
+
+class bbb : public aaa
+{
+public:
+	bbb(int t) : aaa(t)
+	{
+		b = 10;
+		cout << "bbb 持失切 " << endl;
+	}
+	~bbb()
+	{
+		cout << "bbb 社瑚切" << endl;
+	}
+
+	void ttt()
+	{
+		cout << b << endl;
+	}
+
+private:
+
+};
+
+
 int main()
 {
-	int* a = (int*)malloc(10);
+	bbb bb(1);
 
-	free(a);
-
-	cout << "Hello World" << endl;
+	bb.ttt();
 
 	return 0;
 }
+
+

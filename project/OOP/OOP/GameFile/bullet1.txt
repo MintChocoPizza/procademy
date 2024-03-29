@@ -1,2 +1,9 @@
-1
-V 1 1 0 25 5
+MaxBullet = 1;
+
+
+Skin1 = V; 
+Damage1 = 1;
+DY1 = 1;
+DX1 = 0;
+CoolTime1 = 25;
+Speed1 = 5;

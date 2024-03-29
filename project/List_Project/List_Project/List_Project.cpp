@@ -8,12 +8,111 @@
 
 using namespace std;
 
+//class aaa
+//{
+//public:
+//    aaa(int t);
+//    ~aaa();
+//
+//    CList<aaa*> cl;
+//    CList<aaa*>::iterator iter;
+//
+//    void ttt(void)
+//    {
+//        for (int i = 0; i < 10; ++i)
+//        {
+//            aaa* temp = new aaa(i);
+//
+//            cl.push_back(temp);
+//        }
+//
+//
+//
+//        for (iter = cl.begin(); iter != cl.end();)
+//        {
+//            aaa* temp = *iter;
+//
+//            delete temp;
+//
+//            iter = cl.erase(iter);
+//        }
+//    }
+//private:
+//    int a;
+//
+//};
+//
+//aaa::aaa(int t)
+//{
+//    cout << "생성자" << endl;
+//    a = t;
+//}
+//
+//aaa::~aaa()
+//{
+//    cout << "소멸자" << endl;
+//}
+//
+//
+//int main()
+//{
+//    aaa t(2);
+//    t.ttt();
+//
+//
+//    std::cout << "\nHello World!\n";
+//
+//}
+
+class bbb
+{
+public:
+    bbb(int b);
+    ~bbb();
+
+private:
+    int b;
+};
+
+bbb::bbb(int b)
+{
+    this->b = b;
+    cout << "b 생성자 \n";
+}
+
+bbb::~bbb()
+{
+    cout << "b 소멸자 \n";
+}
+
 class aaa
 {
 public:
     aaa(int t);
     ~aaa();
 
+    CList<bbb*> cl;
+    CList<bbb*>::iterator iter;
+
+    void ttt(void)
+    {
+        for (int i = 0; i < 10; ++i)
+        {
+            bbb* temp = new bbb(10);
+            cl.push_back(temp);
+        }
+
+
+
+        for (iter = cl.begin(); iter != cl.end();)
+        {
+            bbb* temp = *iter;
+
+            delete temp;
+
+            iter = cl.erase(iter);
+        }
+    }
 private:
     int a;
 
@@ -21,45 +120,22 @@ private:
 
 aaa::aaa(int t)
 {
-    cout << "생성자" << endl;
+    cout << "a 생성자" << endl;
     a = t;
 }
 
 aaa::~aaa()
 {
-    cout << "소멸자" << endl;
+    cout << "a 소멸자" << endl;
 }
-
 
 int main()
 {
+    aaa t(10);
+    t.ttt();
 
-    CList<aaa*> cl;
-    CList<aaa*>::iterator iter;
-
-    for (int i = 0; i < 10; ++i)
-    {
-        aaa* temp = new aaa(i);
-
-        cl.push_back(temp);
-    }
-
-
-    
-    for (iter = cl.begin(); iter != cl.end();)
-    {
-        aaa* temp = *iter;
-
-        delete temp;
-
-       iter = cl.erase(iter);
-    }
-
-
-
-    std::cout << "\nHello World!\n";
-
-    // 리스트를 사용하고 나서. 메모리는 ???? 전역으로 선언된게 아니면 정리해주는 것이 맞다.
+    cout << "Hello World \n";
+    return 0;
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴

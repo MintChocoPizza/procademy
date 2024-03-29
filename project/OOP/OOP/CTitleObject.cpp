@@ -20,7 +20,7 @@
 // 
 //}
 
-CTitleObject::CTitleObject(const char* ccpFileName, const char* ccpGameInfo, int ObjectType) : CBaseObject(ObjectType)
+CTitleObject::CTitleObject(const char* ccpFileName, const char* ccpGameInfo, int ObjectType, bool Visible) : CBaseObject(ObjectType, Visible)
 {
 	// 생성시 파일을 읽는다. 
 
@@ -106,6 +106,11 @@ void CTitleObject::Render(void)
 	//-------------------------
 	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 2, "Move: WASD, Weapon: J");
 	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 8, "Press Enter.......");
+}
+
+bool CTitleObject::OnCollision(CBaseObject* ptr)
+{
+	return false;
 }
 
 void CTitleObject::KeyboardInput(void)

@@ -2,7 +2,7 @@
 #define __CPLAYER_H__
 
 
-class CPlayer : CBaseObject 
+class CPlayer : public CollisionObject
 {
 private:
 	int _iHP;
@@ -12,20 +12,21 @@ private:
 
 	int _iDamage;
 
-	int _iX;
-	int _iY;
+	//int _iX;
+	//int _iY;
 
 	int _iPlayerSpeed;
 	int _iBulletCoolTime;
-
+	int _iBulletSpeed;
 
 
 public:
-	CPlayer(int ObjectType, char* PlayerFile);
+	CPlayer(int ObjectType, bool Visible, char* PlayerFile);
 	virtual ~CPlayer();
 
 	virtual bool Update(void);
 	virtual void Render(void);
+	virtual bool OnCollision(CBaseObject* ptr);
 
 	void KeyboardInput(void);
 };

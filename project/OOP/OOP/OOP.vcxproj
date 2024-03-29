@@ -137,9 +137,11 @@
     <ClCompile Include="CBullet.cpp" />
     <ClCompile Include="CEnemy.cpp" />
     <ClCompile Include="CObjectManager.cpp" />
+    <ClCompile Include="CollisionObject.cpp" />
     <ClCompile Include="ConsoleBuffer.cpp" />
     <ClCompile Include="CParsing_ANSI.cpp" />
     <ClCompile Include="CSceneBase.cpp" />
+    <ClCompile Include="CSceneClear.cpp" />
     <ClCompile Include="CSceneGame.cpp" />
     <ClCompile Include="CSceneLoad.cpp" />
     <ClCompile Include="CSceneTitle.cpp" />
@@ -154,9 +156,11 @@
     <ClInclude Include="CBullet.h" />
     <ClInclude Include="CList.h" />
     <ClInclude Include="CObjectManager.h" />
+    <ClInclude Include="CollisionObject.h" />
     <ClInclude Include="ConsoleBuffer.h" />
     <ClInclude Include="CParsing_ANSI.h" />
     <ClInclude Include="CSceneBase.h" />
+    <ClInclude Include="CSceneClear.h" />
     <ClInclude Include="CSceneGame.h" />
     <ClInclude Include="CSceneLoad.h" />
     <ClInclude Include="CSceneManager.h" />

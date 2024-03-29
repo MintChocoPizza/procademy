@@ -3,16 +3,30 @@
 #include <stdio.h>
 #include <Windows.h>
 
-
+#include "CList.h"
 #include "ConsoleBuffer.h"
 #include "CParsing_ANSI.h"
 #include "FPSManager.h"
 
+#include "CSceneBase.h"
+#include "CSceneManager.h"
+
 #include "CBaseObject.h"
+#include "CollisionObject.h"
+#include "CObjectManager.h"
+#include "CBullet.h"
 #include "CPlayer.h"
 
-CPlayer::CPlayer(int ObjectType, char* PlayerFile) : CBaseObject(ObjectType), _iY(dfSCREEN_HEIGHT-3), _iX((dfSCREEN_WIDTH-1)/2)
+CPlayer::CPlayer(int ObjectType, bool Visible, char* PlayerFile) 
+	: CollisionObject(ObjectType, Visible)
 {
+	
+	_iY = dfSCREEN_HEIGHT - 3;
+	_iX = (dfSCREEN_WIDTH - 1) / 2;
+	_dy = _iY;
+	_dx = _iX;
+
+
 	char cString[255] = "";
 	sprintf_s(cString, "GameFile\\%s", PlayerFile);
 
@@ -24,6 +38,7 @@ CPlayer::CPlayer(int ObjectType, char* PlayerFile) : CBaseObject(ObjectType), _i
 	CParsing.GetValue("Damage", &_iDamage);
 	CParsing.GetValue("Speed", &_iPlayerSpeed);
 	CParsing.GetValue("CoolTime", &_iBulletCoolTime);
+	CParsing.GetValue("BulletSpeed", &_iBulletSpeed);
 }
 
 CPlayer::~CPlayer()
@@ -44,8 +59,33 @@ void CPlayer::Render(void)
 	ConsoleBuffer::GetInstance()->Sprite_Draw(_iY, _iX, _cSkin);
 }
 
+bool CPlayer::OnCollision(CBaseObject* ptr)
+{
+	// 이 유닛과 충돌하는 것은 무조건 총알이다. 
+
+	CBullet* pBullet = static_cast<CBullet*>(ptr);
+
+	if (pBullet->Collision(_iY, _iX))
+	{
+		_iHP -= pBullet->GetDamage();
+		if (_iHP < 1)
+		{
+			CSceneManager::GetInstance()->LoadScene(CSceneManager::CLEAR);
+			_Visible = false;
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void CPlayer::KeyboardInput(void)
 {
+	_dy = _iY;
+	_dx = _iX;
+
 	// _iPlayerSpeed프레임 마다 이동한다.
 	if (CFpsManager::GetInstance()->_CntFps % _iPlayerSpeed == 0)
 	{
@@ -84,8 +124,11 @@ void CPlayer::KeyboardInput(void)
 	// J 키, (미사일 키)
 	if (CFpsManager::GetInstance()->_CntFps % _iBulletCoolTime == 0)
 	{
-
+		if (GetAsyncKeyState('J') & 0x8001)
+		{
+			CBullet* Bullet = new CBullet(_ObjectType, true, _cBulletSkin, _iY - 1, _iX, -1, 0, _iDamage, _iBulletSpeed);
+			
+			CObjectManager::GetInstance()->CreateBullet(Bullet);
+		}
 	}
-
-	
 }

@@ -12,7 +12,6 @@ public:
 	virtual ~CSceneTitle();
 
 	virtual bool Update(void);
-
 };
 
 

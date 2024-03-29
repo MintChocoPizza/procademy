@@ -56,7 +56,3 @@ public:
 #endif // !__FPSMANAGER_H__
 
 
-// 이것들을 하나의 클래스로 만들지 고민
-
-extern unsigned int g_LogicFps;
-extern unsigned int g_CntFps;
