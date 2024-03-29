@@ -6,11 +6,8 @@
     "\\class\\class\\class",
     "\\project",
     "\\project\\OOP",
-    "\\project\\OOP\\OOP",
-    "\\project\\shootingGame_project",
-    "\\project\\shootingGame_project\\shootingGame_Project_FPS",
-    "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS"
+    "\\project\\OOP\\OOP"
   ],
-  "SelectedNode": "\\class\\class\\class\\main.cpp",
+  "SelectedNode": "\\project\\OOP\\OOP\\SceneManager.cpp",
   "PreviewInSolutionExplorer": false
 }

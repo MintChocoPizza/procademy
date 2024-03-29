@@ -16,6 +16,9 @@ private:
 	CList<CBaseObject*> ObjectList;
 	CList<CBaseObject*> BulletList;
 
+	bool PlayerDie;
+	bool EnemyAllDie;
+
 private:
 	CObjectManager();
 	~CObjectManager();
@@ -23,6 +26,12 @@ private:
 
 public:
 	static CObjectManager* GetInstance(void);
+
+
+	void ClearCheck(void);
+	bool GetPlayerDie(void);
+	bool GetEnemyAllDie(void);
+
 
 
 	void CreateObject(void* Object);

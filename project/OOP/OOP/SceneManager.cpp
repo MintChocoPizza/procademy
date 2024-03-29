@@ -19,6 +19,8 @@
 #include "CSceneTitle.h"
 #include "CSceneGame.h"
 #include "CSceneLoad.h"
+#include "CSceneClear.h"
+#include "CSceneOver.h"
 
 #include "CSceneManager.h"
 
@@ -49,9 +51,9 @@ CSceneManager* CSceneManager::GetInstance(void)
 	return &_CSceneManager;
 }
 
-void CSceneManager::run(void)
+bool  CSceneManager::run(void)
 {
-
+	bool ret;
 	//--------------------------------
 	// 로직 프레임 증가
 	//--------------------------------
@@ -60,15 +62,21 @@ void CSceneManager::run(void)
 	ConsoleBuffer::GetInstance()->Buffer_Clear();
 
 	// 로직부
-	_pScene->Update();
+	ret = _pScene->Update();
 
 	// 랜더링
-	if (CFpsManager::GetInstance()->FpsSkip())
+	// 종료되기 직전은 무조건 출력한다.
+	if (CFpsManager::GetInstance()->FpsSkip() || !ret)
 	{
 		ConsoleBuffer::GetInstance()->Buffer_Flip();
 	}
 
 	ConsoleBuffer::GetInstance()->print_FPS();
+
+
+	if (ret == false)
+		delete _pScene;
+
 
 	// 씬 전환 요청이 있다면 여기서 실질적인 씬 전환 
 	if (ChangeScene)
@@ -78,20 +86,26 @@ void CSceneManager::run(void)
 		switch (type)
 		{
 		case CSceneManager::LOAD:		
-			_pScene = new CSceneLoad(gameStage);
+			_pScene = new CSceneLoad(gameStage, maxStage);
+			++gameStage;
 			break;
 		case CSceneManager::GAME:
-			_pScene = new CSceneGame();
+			_pScene = new CSceneGame;
 			break;
 		case CSceneManager::CLEAR:
+			_pScene = new CSceneClear;
 			break;
-		default:
+		case CSceneManager::OVER:
+			_pScene = new CSceneOver;
 			break;
 		}
 
 		ChangeScene = false;
 	}
 
+
+
+	return ret;
 }
 
 void CSceneManager::LoadScene(SceneType type)

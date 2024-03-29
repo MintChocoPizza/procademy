@@ -144,6 +144,7 @@
     <ClCompile Include="CSceneClear.cpp" />
     <ClCompile Include="CSceneGame.cpp" />
     <ClCompile Include="CSceneLoad.cpp" />
+    <ClCompile Include="CSceneOver.cpp" />
     <ClCompile Include="CSceneTitle.cpp" />
     <ClCompile Include="CTitleObject.cpp" />
     <ClCompile Include="FPSManager.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="CSceneGame.h" />
     <ClInclude Include="CSceneLoad.h" />
     <ClInclude Include="CSceneManager.h" />
+    <ClInclude Include="CSceneOver.h" />
     <ClInclude Include="CSceneTitle.h" />
     <ClInclude Include="CTitleObject.h" />
     <ClInclude Include="CPlayer.h" />

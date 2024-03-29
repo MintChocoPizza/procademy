@@ -5,10 +5,12 @@ class CSceneLoad : public CSceneBase
 {
 private:
 	char _stageName[128];
+	int _iGameStage;
+	int _iMaxStage;
 
 public:
 
-	CSceneLoad(int iGameStage);
+	CSceneLoad(int iGameStage, int iMaxStage);
 
 	virtual ~CSceneLoad();
 

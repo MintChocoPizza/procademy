@@ -39,6 +39,6 @@ bool CSceneTitle::Update(void)
 	CObjectManager::GetInstance()->ObjectUpdate();
 	CObjectManager::GetInstance()->ObjectRender();
 
-	return false;
+	return true;
 }
 

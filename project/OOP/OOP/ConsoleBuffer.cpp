@@ -36,14 +36,6 @@ void ConsoleBuffer::Buffer_Clear(void)
 {
 	memset(ScreenBuffer, ' ', sizeof(ScreenBuffer));
 	Sprite_Null();
-
-	/*
-	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; iCnt++)
-	{
-		memset(ScreenBuffer[iCnt], ' ', dfSCREEN_WIDTH);
-		ScreenBuffer[iCnt][dfSCREEN_WIDTH - 1] = (char)NULL;
-	}
-	*/
 }
 
 void ConsoleBuffer::Sprite_Null(void)

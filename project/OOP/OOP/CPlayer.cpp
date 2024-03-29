@@ -69,10 +69,8 @@ bool CPlayer::OnCollision(CBaseObject* ptr)
 	{
 		_iHP -= pBullet->GetDamage();
 		if (_iHP < 1)
-		{
-			CSceneManager::GetInstance()->LoadScene(CSceneManager::CLEAR);
 			_Visible = false;
-		}
+
 		return true;
 	}
 	else

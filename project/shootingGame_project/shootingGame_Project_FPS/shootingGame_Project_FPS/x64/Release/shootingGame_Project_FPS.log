@@ -1,210 +1,134 @@
-﻿  Player.cpp
+﻿  Load.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winbase.h(7810,48): warning C5039: 'TpSetCallbackCleanupGroup': -EHc 아래의 'extern "C"' 함수로 전달되는 잠재적인 throw 함수에 대한 포인터 또는 참조입니다. 이 함수가 예외를 throw하는 경우 정의되지 않은 동작이 발생할 수 있습니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10847,22): warning C4668: '_WIN32_WINNT_WIN10_TH2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10853,22): warning C4668: '_WIN32_WINNT_WIN10_RS1'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10858,22): warning C4668: '_WIN32_WINNT_WIN10_TH2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10863,22): warning C4668: '_WIN32_WINNT_WIN10_TH2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10870,22): warning C4668: '_WIN32_WINNT_WIN10_RS1'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10875,22): warning C4668: '_WIN32_WINNT_WIN10_RS2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10886,22): warning C4668: '_WIN32_WINNT_WIN10_RS2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10891,22): warning C4668: '_WIN32_WINNT_WIN10_TH2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10897,22): warning C4668: '_WIN32_WINNT_WIN10_RS3'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10905,22): warning C4668: '_WIN32_WINNT_WIN10_RS4'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10909,22): warning C4668: '_WIN32_WINNT_WIN10_RS1'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10913,22): warning C4668: '_WIN32_WINNT_WIN10_RS4'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10918,22): warning C4668: '_WIN32_WINNT_WIN10_RS1'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10921,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10970,23): warning C4668: 'NTDDI_WIN10_CU'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10974,23): warning C4668: 'NTDDI_WIN10_CU'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(11171,22): warning C4668: '_WIN32_WINNT_WIN10_RS2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(11195,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(14754,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(14956,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(15059,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(15155,21): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(15259,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16004,23): warning C4668: '_WIN32_WINNT_WIN10_RS2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16092,22): warning C4668: '_WIN32_WINNT_WIN10_RS2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16218,22): warning C4668: '_WIN32_WINNT_WIN10_RS3'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16367,22): warning C4668: '_WIN32_WINNT_WIN10_RS4'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16380,22): warning C4668: '_WIN32_WINNT_WIN10_RS4'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16609,22): warning C4668: '_WIN32_WINNT_WIN10_RS1'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Player.h(23,6): warning C4820: 'st_PLAYER': '2' 바이트 패딩이 데이터 멤버 'st_PLAYER::cBulletSkin' 다음에 추가됨
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Player.h(32,1): warning C4820: 'st_PLAYER': '3' 바이트 패딩이 데이터 멤버 'st_PLAYER::bVisible' 다음에 추가됨
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Player.h(48,6): warning C4820: 'st_BULLET': '2' 바이트 패딩이 데이터 멤버 'st_BULLET::cBulletSkin' 다음에 추가됨
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Enemy.h(13,6): warning C4820: 'st_ENEMY': '3' 바이트 패딩이 데이터 멤버 'st_ENEMY::bVisible' 다음에 추가됨
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Enemy.h(17,6): warning C4820: 'st_ENEMY': '3' 바이트 패딩이 데이터 멤버 'st_ENEMY::cEnemySkin' 다음에 추가됨
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Enemy.h(46,27): warning C4820: 'st_ENEMY': '3' 바이트 패딩이 데이터 멤버 'st_ENEMY::cBulletSkin' 다음에 추가됨
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
 C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Enemy.h(61,6): warning C4820: 'st_ENEMY_BULLET': '2' 바이트 패딩이 데이터 멤버 'st_ENEMY_BULLET::cBulletSkin' 다음에 추가됨
-  (소스 파일 'Player.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Load.cpp'을(를) 컴파일하는 중)
   
-  Title.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winbase.h(7810,48): warning C5039: 'TpSetCallbackCleanupGroup': -EHc 아래의 'extern "C"' 함수로 전달되는 잠재적인 throw 함수에 대한 포인터 또는 참조입니다. 이 함수가 예외를 throw하는 경우 정의되지 않은 동작이 발생할 수 있습니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10847,22): warning C4668: '_WIN32_WINNT_WIN10_TH2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10853,22): warning C4668: '_WIN32_WINNT_WIN10_RS1'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10858,22): warning C4668: '_WIN32_WINNT_WIN10_TH2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10863,22): warning C4668: '_WIN32_WINNT_WIN10_TH2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10870,22): warning C4668: '_WIN32_WINNT_WIN10_RS1'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10875,22): warning C4668: '_WIN32_WINNT_WIN10_RS2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10886,22): warning C4668: '_WIN32_WINNT_WIN10_RS2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10891,22): warning C4668: '_WIN32_WINNT_WIN10_TH2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10897,22): warning C4668: '_WIN32_WINNT_WIN10_RS3'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10905,22): warning C4668: '_WIN32_WINNT_WIN10_RS4'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10909,22): warning C4668: '_WIN32_WINNT_WIN10_RS1'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10913,22): warning C4668: '_WIN32_WINNT_WIN10_RS4'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10918,22): warning C4668: '_WIN32_WINNT_WIN10_RS1'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10921,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10970,23): warning C4668: 'NTDDI_WIN10_CU'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(10974,23): warning C4668: 'NTDDI_WIN10_CU'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(11171,22): warning C4668: '_WIN32_WINNT_WIN10_RS2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(11195,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(14754,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(14956,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(15059,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(15155,21): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(15259,22): warning C4668: '_WIN32_WINNT_WIN10_RS5'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16004,23): warning C4668: '_WIN32_WINNT_WIN10_RS2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16092,22): warning C4668: '_WIN32_WINNT_WIN10_RS2'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16218,22): warning C4668: '_WIN32_WINNT_WIN10_RS3'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16367,22): warning C4668: '_WIN32_WINNT_WIN10_RS4'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16380,22): warning C4668: '_WIN32_WINNT_WIN10_RS4'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\winioctl.h(16609,22): warning C4668: '_WIN32_WINNT_WIN10_RS1'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-  (소스 파일 'Title.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Title.cpp(82,24): warning C4388: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Load.cpp(107,30): warning C4365: '인수': 'long'에서 'size_t'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Load.cpp(114,37): warning C4365: '인수': 'long'에서 'size_t'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Load.cpp(114,23): warning C4365: '인수': 'long'에서 'size_t'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
   코드를 생성하고 있습니다.
-  0 of 52 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Buffer.cpp(96): warning C5045: 컴파일러는 /Qspectre 스위치가 지정된 경우 메모리 로드를 위해 스펙터 완화를 삽입합니다.
+  C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Buffer.cpp(94) : 참고: 이 줄에서 비교에 의해 검사된 인덱스 '' 범위
+  C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Buffer.cpp(96) : 참고: 이 줄에서 호출 피드
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Load.cpp(121): warning C4715: 'ld_LodingGame': 모든 제어 경로에서 값을 반환하지는 않습니다.
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Title.cpp(84): warning C5045: 컴파일러는 /Qspectre 스위치가 지정된 경우 메모리 로드를 위해 스펙터 완화를 삽입합니다.
+  C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Title.cpp(82) : 참고: 이 줄에서 비교에 의해 검사된 인덱스 '' 범위
+  C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Title.cpp(84) : 참고: 이 줄에서 호출 피드
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Load.cpp(73): warning C4710: 'fscanf_s': 함수를 인라인하지 못했습니다.
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Console.cpp(83): warning C4710: 'printf_s': 함수를 인라인하지 못했습니다.
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Console.cpp(63): warning C4710: 'int __cdecl sprintf_s<28>(char (& __ptr64)[28],char const * __ptr64,...)': 함수를 인라인하지 못했습니다.
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Buffer.cpp(28): warning C4710: 'printf_s': 함수를 인라인하지 못했습니다.
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Buffer.cpp(28): warning C5045: 컴파일러는 /Qspectre 스위치가 지정된 경우 메모리 로드를 위해 스펙터 완화를 삽입합니다.
+  C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Buffer.cpp(25) : 참고: 이 줄에서 비교에 의해 검사된 인덱스 'iCnt' 범위
+  C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Buffer.cpp(28) : 참고: 이 줄에서 호출 피드
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Enemy.cpp(267): warning C4715: 'enmy_Is_GetStage': 모든 제어 경로에서 값을 반환하지는 않습니다.
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Enemy.cpp(266): warning C5045: 컴파일러는 /Qspectre 스위치가 지정된 경우 메모리 로드를 위해 스펙터 완화를 삽입합니다.
+  C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Enemy.cpp(103) : 참고: 이 줄에서 비교에 의해 검사된 인덱스 'iCnt' 범위
+  C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Enemy.cpp(266) : 참고: 이 줄에서 호출 피드
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Enemy.cpp(122): warning C5045: 컴파일러는 /Qspectre 스위치가 지정된 경우 메모리 로드를 위해 스펙터 완화를 삽입합니다.
+  C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Enemy.cpp(103) : 참고: 이 줄에서 비교에 의해 검사된 인덱스 'iCnt' 범위
+  C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\Enemy.cpp(122) : 참고: 이 줄에서 호출 피드
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\main.cpp(204): warning C4710: 'printf_s': 함수를 인라인하지 못했습니다.
+C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\shootingGame_Project_FPS\main.cpp(206): warning C4710: 'printf_s': 함수를 인라인하지 못했습니다.
+  All 52 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
   shootingGame_Project_FPS.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\project\shootingGame_project\shootingGame_Project_FPS\x64\Release\shootingGame_Project_FPS.exe

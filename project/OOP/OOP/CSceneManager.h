@@ -26,6 +26,7 @@ public:
 		LOAD,
 		GAME,
 		CLEAR,
+		OVER
 	};
 
 private:
@@ -64,7 +65,7 @@ private:
 
 public:
 	static CSceneManager* GetInstance(void);
-	void run(void);
+	bool run(void);
 
 
 	//---------------------------------------------------------------------------------------

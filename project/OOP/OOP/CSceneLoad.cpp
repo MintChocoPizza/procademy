@@ -19,12 +19,14 @@
 
 
 
-CSceneLoad::CSceneLoad(int iGameStage) :_stageName("")
+CSceneLoad::CSceneLoad(int iGameStage, int iMaxStage) :_stageName(""), _iGameStage(iGameStage), _iMaxStage(iMaxStage)
 {
-	// MaxStage는 SceneManager가 관리한다.
-	sprintf_s(_stageName, "GameFile\\stage%d.txt", iGameStage);
-	
-	LoadStage(_stageName);
+	if (iGameStage <= iMaxStage)
+	{
+		sprintf_s(_stageName, "GameFile\\stage%d.txt", iGameStage);
+
+		LoadStage(_stageName);
+	}
 }
 
 CSceneLoad::~CSceneLoad()
@@ -33,7 +35,11 @@ CSceneLoad::~CSceneLoad()
 
 bool CSceneLoad::Update(void)
 {
-	CSceneManager::GetInstance()->LoadScene(CSceneManager::GAME);
+	if (_iGameStage <= _iMaxStage)
+		CSceneManager::GetInstance()->LoadScene(CSceneManager::GAME);
+	else
+		CSceneManager::GetInstance()->LoadScene(CSceneManager::CLEAR);
+
 	return true;
 }
 

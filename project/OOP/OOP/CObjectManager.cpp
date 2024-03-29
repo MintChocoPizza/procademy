@@ -1,6 +1,9 @@
 
 #include "CList.h"
 #include "CBaseObject.h"
+#include "CSceneBase.h"
+#include "CSceneManager.h"
+
 #include "CObjectManager.h"
 
 
@@ -8,6 +11,8 @@ CObjectManager CObjectManager::_CObjectManager;
 
 CObjectManager::CObjectManager()
 {
+	PlayerDie = true;
+	EnemyAllDie = true;
 }
 
 CObjectManager::~CObjectManager()
@@ -17,6 +22,16 @@ CObjectManager::~CObjectManager()
 CObjectManager* CObjectManager::GetInstance(void)
 {
 	return &_CObjectManager;
+}
+
+bool CObjectManager::GetPlayerDie(void)
+{
+	return PlayerDie;
+}
+
+bool CObjectManager::GetEnemyAllDie(void)
+{
+	return EnemyAllDie;
 }
 
 void CObjectManager::CreateObject(void* Object)
@@ -76,6 +91,9 @@ void CObjectManager::ObjectVisibleCheck(void)
 	// CBaseObject를 소멸시켜도 잘 소멸된다.
 	CList<CBaseObject*>::iterator iter;
 
+	PlayerDie = true;
+	EnemyAllDie = true;
+
 	for (iter = ObjectList.begin(); iter != ObjectList.end();)
 	{
 		CBaseObject* Object = *iter;
@@ -87,7 +105,13 @@ void CObjectManager::ObjectVisibleCheck(void)
 
 		}
 		else
-		{
+		{	
+			if (Object->GetObjectType() == 1)
+				PlayerDie = false;
+
+			else if (Object->GetObjectType() == 2)
+				EnemyAllDie = false;
+
 			++iter;
 		}
 	}
@@ -158,7 +182,7 @@ void CObjectManager::BulletRender(void)
 
 void CObjectManager::BulletVisibleCheck(void)
 {
-	CList<CBaseObject*>::iterator iter;
+	CList<CBaseObject*>::iterator iter = BulletList.begin();
 
 	for (iter = BulletList.begin(); iter != BulletList.end();)
 	{

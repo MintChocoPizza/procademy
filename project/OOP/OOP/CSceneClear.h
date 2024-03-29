@@ -1,11 +1,13 @@
 #ifndef __CSCENECLEAR_H__
 #define __CSCENECLEAR_H__
 
-class CSceneClear
+class CSceneClear : public CSceneBase
 {
 public:
 	CSceneClear();
-	~CSceneClear();
+	virtual ~CSceneClear();
+
+	virtual bool		Update(void);
 };
 
 #endif // !__CSCENECLEAR_H__

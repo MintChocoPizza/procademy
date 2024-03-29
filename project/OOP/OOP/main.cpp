@@ -14,11 +14,11 @@
 
 int main()
 {
-
-	while (1)
+	bool ret = true;
+	// 게임을 깔끔하게 종료하는게 일이다
+	while (ret)
 	{
-
-		CSceneManager::GetInstance()->run();
+		ret = CSceneManager::GetInstance()->run();
 	}
 
 	return 0;
