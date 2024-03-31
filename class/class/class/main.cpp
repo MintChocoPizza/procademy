@@ -1,90 +1,110 @@
-#include <stdio.h>
+
 #include <iostream>
-#include <Windows.h>
 
-using namespace std;
 
-/*
-int main()
+void* operator new[](size_t size, const char* fileName, int line)
+    {
+        void* ptr = malloc(size);
+
+        return ptr;
+    };
+
+
+void* operator new(size_t size, const char* fileName, int line)
 {
-	errno_t err;
-	FILE* pFile;
-	long lFileSize;
+    void* ptr = malloc(size);
 
-	unsigned char* Buff;
-	unsigned char* temp;
-
-	err = fopen_s(&pFile, "test.txt", "rb, ccs=UNICODE");
-	
-	fseek(pFile, 0, SEEK_END);
-	lFileSize = ftell(pFile);
-	fseek(pFile, 0, SEEK_SET);
-
-	Buff = (unsigned char*)malloc(lFileSize);
-	temp = Buff + lFileSize;
-
-	cout << lFileSize << endl;
-
-	fread_s(Buff, lFileSize, 1, lFileSize, pFile);
-	fclose(pFile);
-
-
-	
-
-	return 0;
+    return ptr;
 }
-*/
 
-class aaa
+
+    void operator delete(void* pMem, const char* pszFilename, int nLine) {
+        //free(pMem);
+    }
+
+    void operator delete[](void* pMem, const char* Filename, int Line)
+        {
+            // free(pMem);
+        }
+
+
+
+#define new     new(__FILE__, __LINE__)
+
+class Test
 {
-public:
-	aaa(int t) : a(t), b(t)
-	{
-		cout << "aaa 생성자" << endl;
-	}
-	~aaa()
-	{
-		cout << "aaa 소멸자" << endl;
-	}
-
-private:
-	int a;
-
-
 protected:
+	int a;
 	int b;
-};
+	int c;
 
-class bbb : public aaa
-{
+
+
 public:
-	bbb(int t) : aaa(t)
+	Test()
 	{
+		a = 10;
 		b = 10;
-		cout << "bbb 생성자 " << endl;
+		c = 10;
+		std::cout << "Test에서 생성자 " << std::endl;
 	}
-	~bbb()
+	~Test()
 	{
-		cout << "bbb 소멸자" << endl;
+		a = 0;
+		b = 0;
+		c = 0;
+		std::cout << "Test에서 소멸자" << std::endl;
 	}
-
-	void ttt()
-	{
-		cout << b << endl;
-	}
-
-private:
-
 };
+
+
 
 
 int main()
 {
-	bbb bb(1);
+    // 메모리 해제
+    int* a = new int;
+    int* b = new int[5];
 
-	bb.ttt();
+    // 메모리 헤제 X
+    // log에 ARRAY로 기록이 남음
+    int* c = new int;
+    int* d = new int[5];
 
-	return 0;
+    // 잘못된 메모리 해제
+    int* e = new int;
+    int* f = new int[5];
+
+    // 메모리 해제
+    Test* aTest = new Test;
+    Test* bTest = new Test[5];
+
+    // 메모리 해제 X
+    Test* cTest = new Test;
+    Test* dTest = new Test[5];
+
+    // 잘못된 메모리 해제
+    Test* eTest = new Test;
+    Test* fTest = new Test[5];
+
+
+    // 정상 해제
+    delete a;
+    delete[] b;
+
+    // 정상 해제
+    delete aTest;
+    delete[] bTest;
+
+
+    delete[] e;
+    delete f;
+
+    // 무한 메모리 해제 시도함
+    // delete[] eTest;
+    delete fTest;
+
+
+
+    return 0;
 }
-
-

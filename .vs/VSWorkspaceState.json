@@ -1,13 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\class\\class",
-    "\\class\\class\\class",
     "\\project",
     "\\project\\List_Project",
     "\\project\\List_Project\\List_Project",
+    "\\project\\OOP",
     "\\project\\OOP\\OOP"
   ],
-  "SelectedNode": "\\project\\List_Project\\List_Project\\CList.h",
+  "SelectedNode": "\\project\\OOP\\OOP\\SceneManager.cpp",
   "PreviewInSolutionExplorer": false
 }

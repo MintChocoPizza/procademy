@@ -52,6 +52,7 @@ private:
 	//------------------------------------------------------------------
 	int gameStage;
 	int maxStage;
+	bool loopEscape;
 
 
 private:

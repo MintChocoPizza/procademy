@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include <Windows.h>
-
+#include "MyNew.h"
 #include "CList.h"
 #include "ConsoleBuffer.h"
 #include "CParsing_ANSI.h"

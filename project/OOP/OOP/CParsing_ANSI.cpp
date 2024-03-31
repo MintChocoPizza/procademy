@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <Windows.h>
-
+#include "MyNew.h"
 #include "CParsing_ANSI.h"
 
 

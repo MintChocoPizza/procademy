@@ -438,8 +438,15 @@ typename CList<T>::iterator CList<T>::erase(const iterator _Where)
 
 	--_size;
 
-	delete CurNode;
-
+	//---------------------------------------------
+	//delete CurNode;
+	// push는 malloc인데
+	// erase는 delete....
+	// 동작은 문제 없는데 
+	// 메모리 누수탐지 new 오버로딩에서
+	// 메모리 관리를 실패해 이상한 값이 나옴
+	//---------------------------------------------
+	free(CurNode);
 	return CList<T>::iterator(NextNode);
 }
 
@@ -466,5 +473,4 @@ inline void CList<T>::remove(T const data)
 
 
 #endif // !__CLIST_H__
-
 

@@ -1,5 +1,5 @@
 #include <Windows.h>
-
+#include "MyNew.h"
 #include "FPSManager.h"
 #include "ConsoleBuffer.h"
 
@@ -21,9 +21,9 @@ CSceneOver::~CSceneOver()
 bool CSceneOver::Update(void)
 {
 	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 2, "게임 오버");
-	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 4, "끝내려면 ESC를 누르세요");
+	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 4, "끝내려면 Enter를 누르세요");
 
-	if (GetAsyncKeyState(VK_ESCAPE) & 0x8001)
+	if (GetAsyncKeyState(VK_RETURN) & 0x8001)
 		return false;
 	else
 		return true;

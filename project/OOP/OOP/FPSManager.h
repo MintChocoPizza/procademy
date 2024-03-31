@@ -47,6 +47,9 @@ public:
 	bool FpsSkip(void);
 
 
+	void AddLogicFps(void);
+
+
 	// friend ½È¾î¼­ Æí¹ý
 	void print_FPS(void);
 };

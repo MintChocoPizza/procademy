@@ -1,4 +1,4 @@
-
+#include "MyNew.h"
 #include "CList.h"
 #include "CBaseObject.h"
 #include "CSceneBase.h"
@@ -58,7 +58,7 @@ void CObjectManager::ObjectClear(void)
 	for (removeIter = ObjectList.begin(); removeIter != ObjectList.end();)
 	{
 		CBaseObject* removeObject = *removeIter;
-
+		setLog(__FILE__, __LINE__);
 		delete removeObject;
 
 		removeIter = ObjectList.erase(removeIter);
@@ -99,6 +99,7 @@ void CObjectManager::ObjectVisibleCheck(void)
 		CBaseObject* Object = *iter;
 		if (Object->GetVisible() == false)
 		{
+			setLog(__FILE__, __LINE__);
 			delete Object;
 
 			iter = ObjectList.erase(iter);
@@ -129,6 +130,7 @@ void CObjectManager::BulletClear(void)
 	{
 		CBaseObject* removeObject = *removeIter;
 
+		setLog(__FILE__, __LINE__);
 		delete removeObject;
 
 		removeIter = BulletList.erase(removeIter);
@@ -189,6 +191,7 @@ void CObjectManager::BulletVisibleCheck(void)
 		CBaseObject* Object = *iter;
 		if (Object->GetVisible() == false)
 		{
+			setLog(__FILE__, __LINE__);
 			delete Object;
 
 			iter = BulletList.erase(iter);

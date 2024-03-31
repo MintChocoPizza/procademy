@@ -1,55 +1,7 @@
-﻿  hw10_new_Overloding.cpp
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(51,19): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(108,7):
-  'operator new' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(52,19): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(109,7):
-  'operator new[]' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(55,19): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(108,7):
-  'operator new' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(56,19): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(109,7):
-  'operator new[]' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(59,19): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(108,7):
-  'operator new' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\hw10_new_Overloding.cpp(60,19): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(109,7):
-  'operator new[]' 선언을 참조하십시오.
-  
-  test.cpp
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\test.cpp(40,20): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(108,7):
-  'operator new' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\test.cpp(41,20): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(109,7):
-  'operator new[]' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\test.cpp(44,20): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(108,7):
-  'operator new' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\test.cpp(45,20): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(109,7):
-  'operator new[]' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\test.cpp(48,20): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(108,7):
-  'operator new' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\test.cpp(49,20): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\project\new_Overloding\hw10_new_Overloding\MyNew.h(109,7):
-  'operator new[]' 선언을 참조하십시오.
-  
+﻿  MyNew.cpp
+  hw10_new_Overloding.cpp
   코드를 생성하고 있습니다.
-  2 of 40 functions ( 5.0%) were compiled, the rest were copied from previous compilation.
+  0 of 36 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.

@@ -5,6 +5,7 @@
 #include "MyNew.h"
 
 #undef new
+#undef setLog
 
 cMYNEW cMyNew;
 
@@ -14,11 +15,24 @@ cMYNEW cMyNew;
 /////////////////////////////////////////////////////////////////////////////////////////////
 cMYNEW::cMYNEW()
 {
-	pHead = (stALLOCINFO*)malloc(sizeof(stALLOCINFO));
-	pTail = (stALLOCINFO*)malloc(sizeof(stALLOCINFO));
+	//pHead = (stALLOCINFO*)malloc(sizeof(stALLOCINFO));
+	//pTail = (stALLOCINFO*)malloc(sizeof(stALLOCINFO));
 
-	pHead->pNextNode = pTail;
-	pTail->pPreviousNode = pHead;
+	//pHead->pNextNode = pTail;
+	//pTail->pPreviousNode = pHead;
+
+	pHead.pPreviousNode = NULL;
+	pHead.pNextNode = &pTail;
+
+	pTail.pPreviousNode = &pHead;
+	pTail.pNextNode = NULL;
+
+	///////////////////////////////////////////////////////////////////////////////////////
+	// 강제 기록 로그
+	// 
+	///////////////////////////////////////////////////////////////////////////////////////
+	setting = false;
+	log[0] = NULL;
 }
 
 cMYNEW::~cMYNEW()
@@ -27,22 +41,19 @@ cMYNEW::~cMYNEW()
 	// 파일에 저장한다. 
 	// 
 	//------------------------------------------------------------------------
-	stALLOCINFO* pCur;
+	//stALLOCINFO* pCur;
 
-	for (pCur = pHead->pNextNode; pCur != pTail; pCur = pCur->pNextNode)
+	//for (pCur = pHead->pNextNode; pCur != pTail; pCur = pCur->pNextNode)
+	//{
+	//	saveFile("LEAK", pCur->ptr, pCur);
+	//}
+
+	stALLOCINFO *pCur;
+	for (pCur = pHead.pNextNode; pCur != &pTail; pCur = pCur->pNextNode)
 	{
 		saveFile("LEAK", pCur->ptr, pCur);
 	}
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -129,13 +140,13 @@ bool cMYNEW::setAllocInfo(void* ptr, size_t size, const char* file, int line, bo
 	// 
 	//------------------------------------------------------------------------
 	// 1. newData와 Tail의 앞 노드를 연결한다.
-	stNewData->pPreviousNode = pTail->pPreviousNode;
+	stNewData->pPreviousNode = pTail.pPreviousNode;
 	// 2. Tail의 앞 노드와 newData를 연결한다. 
-	pTail->pPreviousNode->pNextNode = stNewData;
+	pTail.pPreviousNode->pNextNode = stNewData;
 	// 3. newData와 Tail을 연결한다. 
-	stNewData->pNextNode = pTail;
+	stNewData->pNextNode = &pTail;
 	// 4. Tail을 newData와 연결한다. 
-	pTail->pPreviousNode = stNewData;
+	pTail.pPreviousNode = stNewData;
 
 	return true;
 }
@@ -144,7 +155,7 @@ stALLOCINFO* cMYNEW::findAndAllocInfo(void* ptr)
 {
 	stALLOCINFO* stCurrentNode;
 
-	for (stCurrentNode = pHead->pNextNode; stCurrentNode != pTail; stCurrentNode = stCurrentNode->pNextNode)
+	for (stCurrentNode = pHead.pNextNode; stCurrentNode != &pTail; stCurrentNode = stCurrentNode->pNextNode)
 	{
 		if (stCurrentNode->ptr == ptr)
 			return stCurrentNode;
@@ -166,14 +177,6 @@ void cMYNEW::deleteAllocInfo(stALLOCINFO* ptr)
 
 	free(ptr);
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -240,16 +243,85 @@ void operator delete(void* ptr)
 	// 만약 dataPtr이 NULL이면 잘못된 주소를 해지하려 한다면 파일에 NoAlloc를 작성한다.
 	if (dataPtr == NULL)
 	{
+		if (cMyNew.setting)
+		{
+			cMyNew.saveFile(getLog(), ptr, NULL);
+		} 
 		cMyNew.saveFile("NOALLOC", ptr, NULL);
 		return;
 	}
 }
 
-void operator delete(void* p, char* File, int lIne)
+void operator delete(void* p, const char* File, int lIne)
 {
 
 }
-void operator delete[](void* p, char* File, int lIne)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void operator delete[](void* ptr)
+{
+	// list에서 해당 주소가 있는지 찾아본다.
+	stALLOCINFO* dataPtr = cMyNew.findAndAllocInfo((stALLOCINFO*)ptr);
+
+	// 배열 delete를 했어야 하는 경우
+	if (dataPtr != NULL && dataPtr->arr == false)
+	{
+		cMyNew.saveFile("ARRAY", ptr, dataPtr);
+		return;
+	}
+
+	if (dataPtr != NULL)
+	{
+		// list에서 주소의 데이터를 삭제한다.
+		cMyNew.deleteAllocInfo(dataPtr);
+
+		// 기본 delete 연산자로 메모리 해제
+		free(ptr);
+		return;
+	}
+
+	// 만약 dataPtr이 NULL이면 잘못된 주소를 해지하려 한다면 파일에 NoAlloc를 작성한다.
+	if (dataPtr == NULL)
+	{
+		if (cMyNew.setting)
+		{
+			cMyNew.saveFile(getLog(), ptr, NULL);
+		}
+
+		cMyNew.saveFile("NOALLOC", ptr, NULL);
+		return;
+	}
+}
+
+
+void operator delete[](void* p, const char* File, int lIne)
 {
 
 }
@@ -275,33 +347,78 @@ void* operator new[](size_t size, const char* file, int line)
 		// 할당된 메모리 주소 반환
 		return ptr;
 	}
-	void operator delete[](void* ptr)
-		{
-			// list에서 해당 주소가 있는지 찾아본다.
-			stALLOCINFO* dataPtr = cMyNew.findAndAllocInfo((stALLOCINFO*)ptr);
+	//void operator delete[](void* ptr)
+	//	{
+	//		// list에서 해당 주소가 있는지 찾아본다.
+	//		stALLOCINFO* dataPtr = cMyNew.findAndAllocInfo((stALLOCINFO*)ptr);
 
 
-			// 배열 delete를 했어야 하는 경우
-			if (dataPtr != NULL && dataPtr->arr == false)
-			{
-				cMyNew.saveFile("ARRAY", ptr, dataPtr);
-				return;
-			}
+	//		// 배열 delete를 했어야 하는 경우
+	//		if (dataPtr != NULL && dataPtr->arr == false)
+	//		{
+	//			cMyNew.saveFile("ARRAY", ptr, dataPtr);
+	//			return;
+	//		}
 
-			if (dataPtr != NULL)
-			{
-				// list에서 주소의 데이터를 삭제한다.
-				cMyNew.deleteAllocInfo(dataPtr);
+	//		if (dataPtr != NULL)
+	//		{
+	//			// list에서 주소의 데이터를 삭제한다.
+	//			cMyNew.deleteAllocInfo(dataPtr);
 
-				// 기본 delete 연산자로 메모리 해제
-				free(ptr);
-				return;
-			}
+	//			// 기본 delete 연산자로 메모리 해제
+	//			free(ptr);
+	//			return;
+	//		}
 
-			// 만약 dataPtr이 NULL이면 잘못된 주소를 해지하려 한다면 파일에 NoAlloc를 작성한다.
-			if (dataPtr == NULL)
-			{
-				cMyNew.saveFile("NOALLOC", ptr, NULL);
-				return;
-			}
-		}
+	//		// 만약 dataPtr이 NULL이면 잘못된 주소를 해지하려 한다면 파일에 NoAlloc를 작성한다.
+	//		if (dataPtr == NULL)
+	//		{
+	//			cMyNew.saveFile("NOALLOC", ptr, NULL);
+	//			return;
+	//		}
+	//	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+// 강제 기록
+// 
+///////////////////////////////////////////////////////////////////////////////////////
+void setLog(const char* file, int line)
+	{
+		sprintf_s(cMyNew.log, "%s %d", file, line);
+		cMyNew.setting = true;
+	}
+	char* getLog(void)
+	{
+		cMyNew.setting = false;
+		return cMyNew.log;
+	}

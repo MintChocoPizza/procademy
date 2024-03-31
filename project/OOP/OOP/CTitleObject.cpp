@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <Windows.h>
 #include <stdlib.h>
-
+#include "MyNew.h"
 #include "CParsing_ANSI.h"
 #include "ConsoleBuffer.h"
 
@@ -104,8 +104,10 @@ void CTitleObject::Render(void)
 	// 출력
 	// 
 	//-------------------------
-	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 2, "Move: WASD, Weapon: J");
+	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 2, "Move: WASD, Weapon: J, Escape: ESC");
 	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 8, "Press Enter.......");
+	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 4, "로직 시간 늘리기: N");
+	ConsoleBuffer::GetInstance()->Sprite_Center_String(dfSCREEN_HEIGHT / 2 + 6, "로직 시간 줄이기: M");
 }
 
 bool CTitleObject::OnCollision(CBaseObject* ptr)

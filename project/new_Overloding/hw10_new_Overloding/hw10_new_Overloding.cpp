@@ -7,81 +7,148 @@
 
 #include "MyNew.h"
 
-//void* operator new(size_t sz, char* filename, int line);
-//
 //#define  new    new(__FILE__, __LINE__)
+//void* operator new(size_t sz, char* filename, int line)
+//{
+//
+//}
+ 
 
-class Test
+//--------------------------
+// 실행 예제 코드
+//--------------------------
+
+ 
+//class Test
+//{
+//protected:
+//    int a;
+//    int b;
+//    int c;
+//public:
+//    Test()
+//    {
+//        a = 0;
+//        b = 0;
+//        c = 0;
+//        std::cout << "Test에서 메모리 할당 \n";
+//    }
+//    ~Test()
+//    {
+//        a = 1;
+//        b = 1;
+//        c = 1;
+//        std::cout << "Test에서 메모리 해제 \n";
+//    }
+//};
+//
+//
+//int main()
+//{
+//    //// 메모리 해제
+//    //int* a = new int;
+//    //int* b = new int[5];
+//
+//    //// 메모리 헤제 X
+//    //// log에 ARRAY로 기록이 남음
+//    //int* c = new int;
+//    //int* d = new int[5];
+//
+//    //// 잘못된 메모리 해제
+//    //int* e = new int;
+//    //int* f = new int[5];
+//
+//    //// 메모리 해제
+//    //Test* aTest = new Test;
+//    //Test* bTest = new Test[5];
+//
+//    //// 메모리 해제 X
+//    //Test* cTest = new Test;
+//    //Test* dTest = new Test[5];
+//
+//    //// 잘못된 메모리 해제
+//    //Test* eTest = new Test;
+//    //Test* fTest = new Test[5];
+//
+//
+//    //// 정상 해제
+//    //delete a;
+//    //delete[] b;
+//
+//    //// 정상 해제
+//    //delete aTest;
+//    //delete[] bTest;
+//
+//
+//    //delete[] e;
+//    //delete f;
+//
+//    //// 무한 메모리 해제 시도함
+//    //// delete[] eTest;
+//    //delete fTest;
+//
+//
+//
+//    return 0;
+//}
+
+
+
+
+
+class aaa
 {
 protected:
-    int a;
-    int b;
-    int c;
+	int a;
+
 public:
-    Test()
-    {
-        a = 0;
-        b = 0;
-        c = 0;
-        std::cout << "Test에서 메모리 할당 \n";
-    }
-    ~Test()
-    {
-        std::cout << "Test에서 메모리 해제 \n";
-    }
+	aaa()
+	{
+		a = 1;
+		std::cout << "aaa 생성자" << std::endl;
+	}
+	virtual ~aaa()
+	{
+		// a = 0;
+		std::cout << "aaa 소멸자" << std::endl;
+	}
 };
 
-void ttt(void);
+class bbb : public aaa
+{
+protected:
+	int b;
+
+public:
+	bbb()
+	{
+		b = 2;
+		std::cout << "bbb 생성자" << std::endl;
+	}
+	~bbb()
+	{
+		//b = 0;
+		std::cout << "bbb 소멸자" << std::endl;
+	}
+
+	void getB(void)
+	{
+		std::cout << this << std::endl;
+	}
+};
 
 int main()
 {
-    // 메모리 해제
-    int* a = new int;
-    int* b = new int[5];
+	setLog(__FILE__, __LINE__);
+	bbb* b = new bbb[2];
 
-    // 메모리 헤제 X
-    // log에 ARRAY로 기록이 남음
-    int* c = new int;
-    int* d = new int[5];
+	delete b;
 
-    // 잘못된 메모리 해제
-    int* e = new int;
-    int* f = new int[5];
-
-    // 메모리 해제
-    Test* aTest = new Test;
-    Test* bTest = new Test[5];
-
-    // 메모리 해제 X
-    Test* cTest = new Test;
-    Test* dTest = new Test[5];
-
-    // 잘못된 메모리 해제
-    Test* eTest = new Test;
-    Test* fTest = new Test[5];
-
-
-    // 정상 해제
-    delete a;
-    delete[] b;
-
-    // 정상 해제
-    delete aTest;
-    delete[] bTest;
-
-
-    delete[] e;
-    delete f;
-
-    // 무한 메모리 해제 시도함
-    // delete[] eTest;
-    delete fTest;
-
-
-    ttt();
-
-    return 0;
+	return 0;
 }
+
+
+
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
 // 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴

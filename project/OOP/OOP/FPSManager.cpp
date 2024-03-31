@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <Windows.h>
+#include "MyNew.h"
 #include "FPSManager.h"
 
 CFpsManager CFpsManager::_CFpsManager;
@@ -74,6 +75,21 @@ bool CFpsManager::FpsSkip(void)
 	}
 
 	return ret;
+}
+
+void CFpsManager::AddLogicFps(void)
+{
+	if (GetAsyncKeyState('N') & 0x8000)
+	{
+		++_AddTime;
+	}
+
+	if ((_AddTime > 0) && GetAsyncKeyState('M') & 0x8001)
+	{
+		--_AddTime;
+	}
+
+	Sleep(_AddTime);
 }
 
 void CFpsManager::print_FPS(void)

@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <Windows.h>
-
+#include "MyNew.h"
 
 #include "FPSManager.h"
 #include "ConsoleBuffer.h"
@@ -56,14 +56,14 @@ void ConsoleBuffer::Sprite_Background(unsigned char* pFileMemory)
 void ConsoleBuffer::Sprite_Center_String(int iY, const char* pSpriteString)
 {
 	int iCnt;
-	size_t szStringLength;
+	int szStringLength;
 
 
 
-	szStringLength = strlen(pSpriteString);
+	szStringLength = (int)strlen(pSpriteString);
 	for (iCnt = 0; iCnt < szStringLength; ++iCnt)
 	{
-		Sprite_Draw(iY, (dfSCREEN_WIDTH / 2) - ((int)szStringLength - 1) / 2 + iCnt, pSpriteString[iCnt]);
+		Sprite_Draw(iY, (dfSCREEN_WIDTH / 2) - (szStringLength - 1) / 2 + iCnt, pSpriteString[iCnt]);
 	}
 }
 

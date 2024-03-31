@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <Windows.h>
-
+#include "MyNew.h"
 #include "CList.h"
 #include "FPSManager.h"
 

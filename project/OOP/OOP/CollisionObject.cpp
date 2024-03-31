@@ -1,6 +1,6 @@
 
 #include <stdlib.h>
-
+#include "MyNew.h"
 #include "CBaseObject.h"
 #include "CollisionObject.h"
 

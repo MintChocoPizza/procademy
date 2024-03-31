@@ -1,6 +1,6 @@
 
 #include <Windows.h>
-
+#include "MyNew.h"
 #include "CList.h"
 #include "ConsoleBuffer.h"
 
@@ -39,7 +39,6 @@ bool CSceneGame::Update(void)
 
 	CObjectManager::GetInstance()->BulletRender();
 	CObjectManager::GetInstance()->ObjectRender();
-
 
 	if (CObjectManager::GetInstance()->GetEnemyAllDie() == true)
 		CSceneManager::GetInstance()->LoadScene(CSceneManager::LOAD);

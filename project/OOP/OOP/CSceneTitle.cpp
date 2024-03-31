@@ -1,7 +1,7 @@
 
 
 #include <Windows.h>
-
+#include "MyNew.h"
 #include "ConsoleBuffer.h"
 #include "CList.h"
 

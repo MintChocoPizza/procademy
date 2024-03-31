@@ -2,7 +2,7 @@
 //
 
 #include <Windows.h>
-
+#include "MyNew.h"
 
 #include "CSceneBase.h"
 #include "CSceneManager.h"
@@ -16,9 +16,8 @@ int main()
 {
 	bool ret = true;
 	// 게임을 깔끔하게 종료하는게 일이다
-	while (ret)
+	while (CSceneManager::GetInstance()->run())
 	{
-		ret = CSceneManager::GetInstance()->run();
 	}
 
 	return 0;

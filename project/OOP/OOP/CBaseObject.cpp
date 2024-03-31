@@ -1,3 +1,4 @@
+#include "MyNew.h"
 #include "CBaseObject.h"
 
 CBaseObject::CBaseObject(int ObjectType, bool Visible) :

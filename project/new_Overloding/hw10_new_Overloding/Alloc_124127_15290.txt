@@ -1,2 +1,0 @@
-NOALLOC [000001DAC90DE068] 
-LEAK [000001DAC90DE060] [        32] C:\Users\User\Desktop\procademy_project\procademy\procade_homeWork\hw10_new_Overloding\hw10_new_Overloding\hw10_new_Overloding.c& : 38 
