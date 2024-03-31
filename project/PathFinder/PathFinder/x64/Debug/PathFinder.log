@@ -1,3 +1,2 @@
 ﻿  PathFinder.cpp
-C:\Users\User\Desktop\procademy_project\procademy\project\PathFinder\PathFinder\PathFinder.cpp(147,9): warning C4101: 'hdc' :참조되지 않은 지역 변수입니다.
   PathFinder.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\project\PathFinder\x64\Debug\PathFinder.exe

@@ -188,13 +188,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             g_Tile[iTileY][iTileX] = !g_bErase;
             InvalidateRect(hWnd, NULL, true);
+
+            // 마우스 드래그로 데이터가 변경되어 갱신을 요청할 시 마지막 Erase 플래그를 false로 하여 화면
+            // 깜빡임을 없앤다. WM_PAINT 에서는 윈도우 전체를 덮어 쓰기 때문에 지우지 않아도 된다.
         }
     }
     break;
 
     case WM_CREATE:
+    {
         g_hGridPen = CreatePen(PS_SOLID, 1, RGB(200, 200, 200));
         g_hTileBrush = CreateSolidBrush(RGB(100, 100, 100));
+        
+        // 윈도우 생성시 현 윈도우 크기와 동일한 메모리 DC 생성
+        HDC hdc = GetDC(hWnd);
+        GetClientRect(hWnd, &g_MemDCRect);
+        g_hMemDCBitmap = CreateCompatibleBitmap(hdc, g_MemDCRect.right, g_MemDCRect.bottom);
+        g_hMemDC = CreateCompatibleDC(hdc);
+        ReleaseDC(hWnd, hdc);
+        g_hMemDCBitmap_old = (HBITMAP)SelectObject(g_hMemDC, g_hMemDCBitmap);
+    }
         break;
 
     case WM_COMMAND:
@@ -214,18 +227,36 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
+    // 기존에는 윈도우 DC, hdc를 대상으로 출력하였으나 이제는 메모리 DC를 대상으로 출력한다.
     case WM_PAINT:
         {
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
-            RenderObstacle(hdc);
-            RenderGrid(hdc);
+            //HDC hdc = BeginPaint(hWnd, &ps);
+            //// TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
+            //RenderObstacle(hdc);
+            //RenderGrid(hdc);
+            //EndPaint(hWnd, &ps);
+
+            // 메모리 DC를 클리어 하고
+            PatBlt(g_hMemDC, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, WHITENESS);
+            
+            // RenderObstacle, RenderGrid 를 메모리 DC에 출력
+            RenderObstacle(g_hMemDC);
+            RenderGrid(g_hMemDC);
+
+            // 메모리 DC에 랜더링이 끝나면, 메모리 DC -> 윈도위 DC로의 출력
+            hdc = BeginPaint(hWnd, &ps);
+            BitBlt(hdc, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, g_hMemDC, 0, 0, SRCCOPY);
             EndPaint(hWnd, &ps);
+            break;
         }
         break;
     case WM_DESTROY:
-        DeleteObject(g_hTileBrush);
-        DeleteObject(g_hGridPen);
+        //DeleteObject(g_hTileBrush);
+        //DeleteObject(g_hGridPen);
+        //PostQuitMessage(0);
+        SelectObject(g_hMemDC, g_hMemDCBitmap_old);
+        DeleteObject(g_hMemDC);
+        DeleteObject(g_hMemDCBitmap);
         PostQuitMessage(0);
         break;
     default:
