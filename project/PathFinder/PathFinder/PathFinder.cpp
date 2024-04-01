@@ -70,7 +70,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 
     wcex.cbSize = sizeof(WNDCLASSEX);
 
-    wcex.style          = CS_HREDRAW | CS_VREDRAW;
+    wcex.style          = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
     wcex.lpfnWndProc    = WndProc;
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
@@ -130,6 +130,91 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message)
     {
+    case WM_LBUTTONDBLCLK:
+        {
+            int xPos = GET_X_LPARAM(lParam);
+            int yPos = GET_Y_LPARAM(lParam);
+            int iTileX = xPos / GRID_SIZE;
+            int iTileY = yPos / GRID_SIZE;
+
+
+            // 그려진적 없다면 새로 그린다.
+            if(st_Start._bErase == false)
+            {
+                g_Tile[iTileY][iTileX] = 2;
+
+                st_Start._y = iTileY;
+                st_Start._x = iTileX;
+                st_Start._bErase = true;
+            }
+            else
+            {
+                // if(st_Start._bErase == true)
+                // 이미 그려져 있을 때
+
+                // 같은 위치라면, 그림을 지운다.
+                if (st_Start._y == iTileY && st_Start._x == iTileX)
+                {
+                    st_Start._bErase = false;
+                    g_Tile[iTileY][iTileX] = 0;
+                }
+                else
+                {
+                    // 다른위치인 경우
+                    g_Tile[st_Start._y][st_Start._x] = 0;
+                    g_Tile[iTileY][iTileX] = 2;
+                    st_Start._y = iTileY;
+                    st_Start._x = iTileX;
+                }
+            }
+
+            // 화면을 다시 그린다.
+            InvalidateRect(hWnd, NULL, false);
+        }
+        break;
+
+    case WM_RBUTTONDBLCLK:
+        {
+        int xPos = GET_X_LPARAM(lParam);
+        int yPos = GET_Y_LPARAM(lParam);
+        int iTileX = xPos / GRID_SIZE;
+        int iTileY = yPos / GRID_SIZE;
+
+
+        // 그려진적 없다면 새로 그린다.
+        if (st_End._bErase == false)
+        {
+            g_Tile[iTileY][iTileX] = 3;
+
+            st_End._y = iTileY;
+            st_End._x = iTileX;
+            st_End._bErase = true;
+        }
+        else
+        {
+            // if(st_Start._bErase == true)
+            // 이미 그려져 있을 때
+
+            // 같은 위치라면, 그림을 지운다.
+            if (st_End._y == iTileY && st_End._x == iTileX)
+            {
+                st_End._bErase = false;
+                g_Tile[iTileY][iTileX] = 0;
+            }
+            else
+            {
+                // 다른위치인 경우
+                g_Tile[st_End._y][st_End._x] = 0;
+                g_Tile[iTileY][iTileX] = 3;
+                st_End._y = iTileY;
+                st_End._x = iTileX;
+            }
+        }
+
+        // 화면을 다시 그린다.
+        InvalidateRect(hWnd, NULL, false);
+        }
+        break;
     case WM_LBUTTONDOWN:
         g_bDrag = true;
         {
@@ -172,6 +257,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         g_hGridPen = CreatePen(PS_SOLID, 1, RGB(200, 200, 200));
         g_hTileBrush = CreateSolidBrush(RGB(100, 100, 100));
+        g_hTileStartBrush = CreateSolidBrush(RGB(0, 255, 0));
+        g_hTileEndBrush = CreateSolidBrush(RGB(255, 0, 0));
 
         // 윈도우 생성시 현 윈도우 크기와 동일한 메모리 DC 생성
         HDC hdc = GetDC(hWnd);

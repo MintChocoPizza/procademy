@@ -4,10 +4,16 @@
 
 #include "My.h"
 
+st_Position st_Start;
+st_Position st_End;
 
 HBRUSH	g_hTileBrush;
+HBRUSH	g_hTileStartBrush;
+HBRUSH	g_hTileEndBrush;
+
+
 HPEN	g_hGridPen;
-bool	g_Tile[GRID_HEIGHT][GRID_WIDTH];				// 0 장애물 없음, 1 장애물 있음 
+int		g_Tile[GRID_HEIGHT][GRID_WIDTH];				// 0 장애물 없음, 1 장애물 있음, 2 시작 좌표, 3, 끝 좌표
 bool	g_bErase = false;
 bool	g_bDrag = false;
 
@@ -45,8 +51,7 @@ void RenderObstacle(HDC hdc)
 {
 	int iX = 0;
 	int iY = 0;
-	HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, g_hTileBrush);
-	SelectObject(hdc, GetStockObject(NULL_PEN));
+	HBRUSH hOldBrush;
 	// 사각형의 테두리를 안보이도록 하기 위해 NULL_PEN을 지정한다.
 	// CreatePen 으로 NULL_PEN을 생성해도 되지만, GetStockObject를 사용하여 
 	// 이미 시스템에 만들어져 있는 고정 GDI Object를 사용해본다. 
@@ -56,76 +61,42 @@ void RenderObstacle(HDC hdc)
 	{
 		for (int iCntH = 0; iCntH < GRID_HEIGHT; ++iCntH)
 		{
-			if (g_Tile[iCntH][iCntW])
+
+
+			if (g_Tile[iCntH][iCntW] == 1)
 			{
+				hOldBrush = (HBRUSH)SelectObject(hdc, g_hTileBrush);
+				SelectObject(hdc, GetStockObject(NULL_PEN));	// 뭔가 테두리가 사라짐
 				iX = iCntW * GRID_SIZE;
 				iY = iCntH * GRID_SIZE;
 				// 테두리 크기가 있으므로 +2 한다.
 				Rectangle(hdc, iX, iY, iX + GRID_SIZE + 2, iY + GRID_SIZE + 2);
+				SelectObject(hdc, hOldBrush);
 			}
+			else if (g_Tile[iCntH][iCntW] == 2)
+			{
+				hOldBrush = (HBRUSH)SelectObject(hdc, g_hTileStartBrush);
+				SelectObject(hdc, GetStockObject(NULL_PEN));	// 뭔가 테두리가 사라짐
+				iX = iCntW * GRID_SIZE;
+				iY = iCntH * GRID_SIZE;
+				// 테두리 크기가 있으므로 +2 한다.
+				Rectangle(hdc, iX, iY, iX + GRID_SIZE + 2, iY + GRID_SIZE + 2);
+				SelectObject(hdc, hOldBrush);
+			}
+			else if (g_Tile[iCntH][iCntW] == 3)
+			{
+				hOldBrush = (HBRUSH)SelectObject(hdc, g_hTileEndBrush);
+				SelectObject(hdc, GetStockObject(NULL_PEN));	// 뭔가 테두리가 사라짐
+				iX = iCntW * GRID_SIZE;
+				iY = iCntH * GRID_SIZE;
+				// 테두리 크기가 있으므로 +2 한다.
+				Rectangle(hdc, iX, iY, iX + GRID_SIZE + 2, iY + GRID_SIZE + 2);
+				SelectObject(hdc, hOldBrush);
+			}
+			// 어짜피 루프 도는 김에 Start 좌표와 End 좌표의 색깔도 칠한다.
+
+
 		}
 	}
-	SelectObject(hdc, hOldBrush);
+
 }
-
-void wm_LButtonDown(HDC hdc, PAINTSTRUCT ps, LPARAM lParam)
-{
-	g_bDrag = true;
-	{
-		int xPos = GET_X_LPARAM(lParam);
-		int yPos = GET_Y_LPARAM(lParam);
-		int iTileX = xPos / GRID_SIZE;
-		int iTileY = yPos / GRID_SIZE;
-
-		// 첫 선택 타일이 장애물이면 지우기 모드 아니면 장애물 넣기 모드
-		if (g_Tile[iTileY][iTileX] == 1)
-			g_bErase = true;
-		else
-			g_bErase = false;
-	}
-}
-
-void wm_LButtonUp(void)
-{
-	g_bDrag = false;
-}
-
-void wm_MouseMove(HWND hWnd, LPARAM lParam)
-{
-	int xPos = GET_X_LPARAM(lParam);
-	int yPos = GET_Y_LPARAM(lParam);
-
-	if (g_bDrag)
-	{
-		int xPos = GET_X_LPARAM(lParam);
-		int yPos = GET_Y_LPARAM(lParam);
-
-		int iTileX = xPos / GRID_SIZE;
-		int iTileY = yPos / GRID_SIZE;
-
-		g_Tile[iTileY][iTileX] = !g_bErase;
-		InvalidateRect(hWnd, NULL, true);
-	}
-}
-
-void wm_Create(void)
-{
-	g_hGridPen = CreatePen(PS_SOLID, 1, RGB(200, 200, 200));
-	g_hTileBrush = CreateSolidBrush(RGB(100, 100, 100));
-}
-
-void wm_Paint(HWND hWnd, HDC hdc, PAINTSTRUCT ps)
-{
-	hdc = BeginPaint(hWnd, &ps);
-	RenderObstacle(hdc);
-	RenderGrid(hdc);
-	EndPaint(hWnd, &ps);
-}
-
-void wm_Destroy(void)
-{
-	DeleteObject(g_hTileBrush);
-	DeleteObject(g_hGridPen);
-	PostQuitMessage(0);
-}
-

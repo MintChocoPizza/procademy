@@ -2,12 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\class",
-    "\\procade_homeWork",
-    "\\procade_homeWork\\hw3_rand_ex_3",
-    "\\procade_homeWork\\hw3_rand_ex_3\\hw3_rand_ex_3",
-    "\\procade_homeWork\\hw3_rand_ex_4",
-    "\\procade_homeWork\\hw3_rand_ex_4\\hw3_rand_ex_4"
+    "\\procade_homeWork\\hw4_make_dic\\hw4_make_dic",
+    "\\project",
+    "\\project\\OOP\\OOP",
+    "\\project\\PathFinder",
+    "\\project\\PathFinder\\PathFinder"
   ],
-  "SelectedNode": "\\procade_homeWork\\hw3_rand_ex_3\\hw3_rand_ex_3\\hw3_rand_ex_3.cpp",
+  "SelectedNode": "\\project\\PathFinder\\PathFinder\\PathFinder.cpp",
   "PreviewInSolutionExplorer": false
 }
