@@ -1,33 +1,12 @@
 ﻿// PathFinder.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
 
+#include <windowsx.h>
 #include "framework.h"
 #include "PathFinder.h"
+#include "My.h"
 
 #define MAX_LOADSTRING 100
-
-//---------------------------------------------------------------------------------------
-// 사용자 설정
-// 
-//---------------------------------------------------------------------------------------
-#include <windowsx.h>
-#define GRID_SIZE       16                      // 확대 축소는 이것을 더하고 뺀다.
-#define GRID_WIDTH      100                     // 
-#define GRID_HEIGHT     50
-
-HBRUSH  g_hTileBrush;
-HPEN    g_hGridPen;
-char    g_Tile[GRID_HEIGHT][GRID_WIDTH];        // 0: 장애물 없음, 1: 장애물 있음
-bool    g_bErase = false;
-bool    g_bDrag = false;
-HBITMAP g_hMemDCBitmap;
-HBITMAP g_hMemDCBitmap_old;
-HDC     g_hMemDC;
-RECT    g_MemDCRect;
-
-void RenderGrid(HDC hdc);
-void RenderObstacle(HDC hdc);
-
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
@@ -146,7 +125,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-
     PAINTSTRUCT ps;
     HDC hdc;
 
@@ -155,7 +133,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_LBUTTONDOWN:
         g_bDrag = true;
         {
-            // 마우스의 좌표
             int xPos = GET_X_LPARAM(lParam);
             int yPos = GET_Y_LPARAM(lParam);
             int iTileX = xPos / GRID_SIZE;
@@ -177,7 +154,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         int xPos = GET_X_LPARAM(lParam);
         int yPos = GET_Y_LPARAM(lParam);
-        
+
         if (g_bDrag)
         {
             int xPos = GET_X_LPARAM(lParam);
@@ -187,19 +164,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             int iTileY = yPos / GRID_SIZE;
 
             g_Tile[iTileY][iTileX] = !g_bErase;
-            InvalidateRect(hWnd, NULL, true);
-
-            // 마우스 드래그로 데이터가 변경되어 갱신을 요청할 시 마지막 Erase 플래그를 false로 하여 화면
-            // 깜빡임을 없앤다. WM_PAINT 에서는 윈도우 전체를 덮어 쓰기 때문에 지우지 않아도 된다.
+            InvalidateRect(hWnd, NULL, false);
         }
     }
-    break;
-
+        break;
     case WM_CREATE:
     {
         g_hGridPen = CreatePen(PS_SOLID, 1, RGB(200, 200, 200));
         g_hTileBrush = CreateSolidBrush(RGB(100, 100, 100));
-        
+
         // 윈도우 생성시 현 윈도우 크기와 동일한 메모리 DC 생성
         HDC hdc = GetDC(hWnd);
         GetClientRect(hWnd, &g_MemDCRect);
@@ -208,6 +181,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         ReleaseDC(hWnd, hdc);
         g_hMemDCBitmap_old = (HBITMAP)SelectObject(g_hMemDC, g_hMemDCBitmap);
     }
+        break;
+    case WM_PAINT:
+    {
+        //hdc = BeginPaint(hWnd, &ps);
+        //RenderObstacle(hdc);
+        //RenderGrid(hdc);
+        //EndPaint(hWnd, &ps);
+
+        // 메모리 DC를 클리어 하고
+        PatBlt(g_hMemDC, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, WHITENESS);
+
+        // RenderObstacle, RenderGrid를 메모리 DC에 출력
+        RenderObstacle(g_hMemDC);
+        RenderGrid(g_hMemDC);
+
+        // 메모리 DC에 랜더링이 끝나면, 메모리 DC -> 윈도우 DC로의 출력
+        hdc = BeginPaint(hWnd, &ps);
+        BitBlt(hdc, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, g_hMemDC, 0, 0, SRCCOPY);
+        EndPaint(hWnd, &ps);
+    }
+        break;
+    case WM_DESTROY:
+        SelectObject(g_hMemDC, g_hMemDCBitmap_old);
+        DeleteObject(g_hTileBrush);
+        DeleteObject(g_hGridPen);
+        PostQuitMessage(0);
         break;
 
     case WM_COMMAND:
@@ -226,38 +225,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
         }
-        break;
-    // 기존에는 윈도우 DC, hdc를 대상으로 출력하였으나 이제는 메모리 DC를 대상으로 출력한다.
-    case WM_PAINT:
-        {
-            //HDC hdc = BeginPaint(hWnd, &ps);
-            //// TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
-            //RenderObstacle(hdc);
-            //RenderGrid(hdc);
-            //EndPaint(hWnd, &ps);
-
-            // 메모리 DC를 클리어 하고
-            PatBlt(g_hMemDC, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, WHITENESS);
-            
-            // RenderObstacle, RenderGrid 를 메모리 DC에 출력
-            RenderObstacle(g_hMemDC);
-            RenderGrid(g_hMemDC);
-
-            // 메모리 DC에 랜더링이 끝나면, 메모리 DC -> 윈도위 DC로의 출력
-            hdc = BeginPaint(hWnd, &ps);
-            BitBlt(hdc, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, g_hMemDC, 0, 0, SRCCOPY);
-            EndPaint(hWnd, &ps);
-            break;
-        }
-        break;
-    case WM_DESTROY:
-        //DeleteObject(g_hTileBrush);
-        //DeleteObject(g_hGridPen);
-        //PostQuitMessage(0);
-        SelectObject(g_hMemDC, g_hMemDCBitmap_old);
-        DeleteObject(g_hMemDC);
-        DeleteObject(g_hMemDCBitmap);
-        PostQuitMessage(0);
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -283,56 +250,4 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
-}
-
-
-
-
-
-
-void RenderGrid(HDC hdc)
-{
-    int iX = 0;
-    int iY = 0;
-    HPEN hOldPen = (HPEN)SelectObject(hdc, g_hGridPen);
-    // 그리드의 마지막 선을 추가로 그리기 위해 <= 반복 조건 
-    for (int iCntW = 0; iCntW <= GRID_WIDTH; ++iCntW)
-    {
-        MoveToEx(hdc, iX, 0, NULL);
-        LineTo(hdc, iX, GRID_HEIGHT * GRID_SIZE);
-        iX += GRID_SIZE;
-    }
-    for (int iCntH = 0; iCntH <= GRID_HEIGHT; ++iCntH)
-    {
-        MoveToEx(hdc, 0, iY, NULL);
-        LineTo(hdc, GRID_WIDTH * GRID_SIZE, iY);
-        iY += GRID_SIZE;
-    }
-    SelectObject(hdc, hOldPen);
-}
-
-void RenderObstacle(HDC hdc)
-{
-    int iX = 0;
-    int iY = 0;
-    HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, g_hTileBrush);
-    // 사각형의 테두리를 안보이도록 하기 위해 Null Pen을 지정한다. 
-    // CreatePen 으로 NULL PEN 을 생성해도 되지만, GetStockObject를 사용하여
-    // 이미 시스템에 만들어져 있는 고정 GDI Object를 사용해본다.
-    // GetStockObject는 시스템의 고정적인 범용 GDI Object로서 삭제가 필요 없다. 
-    // 시스템 전역적인 GDI Object를 얻어서 사용한다는 개념.
-    for (int iCntW = 0; iCntW < GRID_WIDTH; ++iCntW)
-    {
-        for (int iCntH = 0; iCntH < GRID_HEIGHT; ++iCntH)
-        {
-            if (g_Tile[iCntH][iCntW])
-            {
-                iX = iCntW * GRID_SIZE;
-                iY = iCntH * GRID_SIZE;
-                // 테두리 크기가 있으므로 +2 한다.
-                Rectangle(hdc, iX, iY, iX + GRID_SIZE + 2, iY + GRID_SIZE + 2);
-            }
-        }
-    }
-    SelectObject(hdc, hOldBrush);
 }

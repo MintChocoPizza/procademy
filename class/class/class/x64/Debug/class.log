@@ -1,26 +1,2 @@
 ﻿  main.cpp
-C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(79,19): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(13,7):
-  'operator new' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(80,19): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(5,7):
-  'operator new[]' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(83,19): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(13,7):
-  'operator new' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(84,19): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(5,7):
-  'operator new[]' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(87,19): warning C4291: 'void *operator new(size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(13,7):
-  'operator new' 선언을 참조하십시오.
-  
-C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(88,19): warning C4291: 'void *operator new[](size_t,const char *,int)': 일치하는 operator delete가 없습니다. 초기화할 때 예외가 Throw되지 않으면 메모리가 확보되지 않습니다.
-  C:\Users\User\Desktop\procademy_project\procademy\class\class\class\main.cpp(5,7):
-  'operator new[]' 선언을 참조하십시오.
-  
-  class.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\class\class\x64\Debug\class.exe
+  class.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\class\class\x64\Debug\class.exe
