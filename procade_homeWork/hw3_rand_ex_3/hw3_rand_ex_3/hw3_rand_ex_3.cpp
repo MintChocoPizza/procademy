@@ -25,78 +25,69 @@ st_ITEM g_Gatcha[] = {
 			{"초강력레어레어레어신발3", 1}
 };	// 93개
 
-bool g_ItemVisited[100];// 뽑은 아이템을 저장하기 위한 배열
-int g_MaxItem;			// 아이템의 갯수
-int g_MaxWeight;		// 아이템 가중치를 전부 더한 값, 랜덤에 사용
-int g_CurGetItemCnt;	// 현재까지 뽑은 아이템 갯수, 배열 초기화에 사용
-int g_iCount;			// 실행 횟수
+int g_MaxItem;
+int g_MaxRate;
+bool* Arr;
+int g_iCount;
 
 
-// 실행 처음 아이템들의 갯수를 저장한다.
-// Rand 함수의 범위를 지정하기 위하여 가중치의 합을 계산한다.
-void GetMaxItem(void)
+void initArr(void)
 {
-	int iItemCnt = sizeof(g_Gatcha) / sizeof(st_ITEM);
-	g_MaxItem = iItemCnt;
-
-	for (int i = 0; i < iItemCnt; ++i)
-	{
-		g_MaxWeight += g_Gatcha[i].Rate;
-	}
+	Arr = (bool*)malloc(sizeof(bool) * g_MaxRate+1);
+	memset(Arr, 0, sizeof(bool) *g_MaxRate+1);
 }
 
-void Gatcha(void)
+void init(void)
 {
-	int iRand;
+	g_MaxItem = sizeof(g_Gatcha) / sizeof(st_ITEM);
 
-	// 아이템을 다 뽑은 경우 
-	// 배열을 0으로 밀어버린다.
-	if (g_CurGetItemCnt >= g_MaxWeight)
-	{
-		memset(g_ItemVisited, 0, sizeof(g_ItemVisited));
-		g_CurGetItemCnt = 0;
-	}
-	
-	// 나오는 범위 1~g_MaxWeight
-	iRand = rand() % g_MaxWeight + 1;
-
-	// 이미 뽑은 적 있는 아이템이면 
-	// 다시 뽑는다.
-	while (g_ItemVisited[iRand] == 1)
-	{
-		iRand = rand() % g_MaxWeight + 1;
-	}
-
-	// 뽑은 아이템을 배열에 저장하고
-	// 뽑은 아이템의 갯수를 증가시킨다.
-	g_ItemVisited[iRand] = 1;
-	++g_CurGetItemCnt;
-	++g_iCount;
-
-	// 출력
-	// iRand를 출력하기 위해 가중치를 계산하여 어떤 아이템인지 확인해야 한다.
-	int checkItem = 0;
 	for (int i = 0; i < g_MaxItem; ++i)
 	{
-		// 1~20 까지는 칼이 나와야함
-		// 21~40까지는 방패가 나와야함
-		// 
-		checkItem += g_Gatcha[i].Rate;
-		if (iRand <= checkItem)
-		{
-			printf_s("%d    %d    %d    %s    \n", g_iCount, iRand, g_Gatcha[i].Rate, g_Gatcha[i].cItemName);
-			break;
-		}
+		g_MaxRate += g_Gatcha[i].Rate;
 	}
+	initArr();
 }
 
+
+// 배열에 저장하여 중복을 제거한다. 
+void Gatcha(void)
+{
+	++g_iCount;
+	if (g_iCount > g_MaxRate)
+	{
+		free(Arr);
+		g_iCount = 1;
+		initArr();
+	}
+
+	
+	int iRand = rand() % g_MaxRate + 1;
+	while (Arr[iRand] == true)
+	{
+		iRand = rand() % g_MaxRate + 1;
+	}
+	Arr[iRand] = true;
+
+
+	int temp = iRand;
+	for(int i=0; i<g_MaxItem; ++i)
+	{
+		iRand -= g_Gatcha[i].Rate;
+		if (iRand > 0)
+			continue;
+
+		printf_s("%d    %d    %d    %s \n", g_iCount, temp, g_Gatcha[i].Rate, g_Gatcha[i].cItemName);
+		break;
+	}
+
+}
 
 
 int main()
 {
 	srand(time(NULL));
 
-	GetMaxItem();
+	init();
 
 	while (1)
 	{

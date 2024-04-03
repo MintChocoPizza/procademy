@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <random>
+#include <conio.h>
 
 struct st_ITEM
 {
@@ -23,12 +25,76 @@ st_ITEM g_Gatcha[] =
 			{"초강력레어레어레어신발3", 1}
 };		// 93;
 
-// 배열 생성
+int g_MaxItem;
+int g_MaxRate;
+int* g_Arr;
+int g_iCount;
 
+
+void initArr(void)
+{
+	g_Arr = (int*)malloc(sizeof(int) * g_MaxRate); // 범위 0 ~ g_MaxRate-1
+
+	for (int i = 0; i < g_MaxRate; ++i)
+	{
+		g_Arr[i] = i + 1;
+	}
+
+	// 셔플
+	for (int i = 0; i < g_MaxRate; ++i)
+	{
+		int iRand = rand() % g_MaxRate;
+		int temp = g_Arr[i];
+		g_Arr[i] = g_Arr[iRand];
+		g_Arr[iRand] = temp;
+	}
+}
+
+void init(void)
+{
+	g_MaxItem = sizeof(g_Gatcha) / sizeof(st_ITEM);
+	for (int i = 0; i < g_MaxItem; ++i)
+	{
+		g_MaxRate += g_Gatcha[i].Rate;	// 93
+	}
+
+	initArr();
+}
+
+
+void Gatcha(void)
+{
+	if (g_iCount >= g_MaxRate)
+	{
+		g_iCount = 0;
+		//free(g_Arr);
+		//initArr();
+	}
+
+	int temp = g_Arr[g_iCount];
+	for (int i = 0; i < g_MaxItem; ++i)
+	{
+		temp -= g_Gatcha[i].Rate;
+		if (temp > 0)
+			continue;
+
+		printf_s("%d    %d    %d    %s \n", g_iCount, g_Arr[g_iCount], g_Gatcha[i].Rate, g_Gatcha[i].cItempName);
+		break;
+	}
+	++g_iCount;
+}
 
 int main()
 {
+	srand(time(NULL));
 
+	init();
+
+	while (1)
+	{
+		_getch();
+		Gatcha();
+	}
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴

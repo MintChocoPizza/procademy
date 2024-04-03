@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
 
 // 언어 5개/ 영어한글 2개 / 최대 30글자 단어
 char dic[5][2][30] = {
@@ -16,6 +17,7 @@ char dic[5][2][30] = {
 
 char* toSmall(char* str)
 {
+	char* ret = str;
 	while (*str != '\0')
 	{
 		if ('A' <= *str && *str <= 'Z')
@@ -23,6 +25,7 @@ char* toSmall(char* str)
 
 		str++;
 	}
+	return ret;
 }
 
 int strLen(const char* str)
@@ -112,7 +115,8 @@ int main()
 	char* temp = makeStrTok(cString, " ");
 	while (temp != NULL)
 	{
-		
+		std::cout << temp << std::endl;
+		temp = makeStrTok(NULL, " ");
 	}
 	
 

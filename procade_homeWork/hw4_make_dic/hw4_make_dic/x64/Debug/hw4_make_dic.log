@@ -1,2 +1,4 @@
-﻿  LINK : C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw4_make_dic\x64\Debug\hw4_make_dic.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+﻿  hw4_make_dic.cpp
+C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw4_make_dic\hw4_make_dic\hw4_make_dic.cpp(74,8): warning C4553: '==': 식의 결과가 사용되지 않습니다. '='을(를) 의도했습니까?
+C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw4_make_dic\hw4_make_dic\hw4_make_dic.cpp(106,7): warning C4101: 'cStringTemp' :참조되지 않은 지역 변수입니다.
   hw4_make_dic.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\procade_homeWork\hw4_make_dic\x64\Debug\hw4_make_dic.exe
