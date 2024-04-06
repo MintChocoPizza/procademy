@@ -130,6 +130,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message)
     {
+    case WM_CHAR:
+        {
+            if (wParam == VK_SPACE)
+            {
+                A_START();
+            }
+        }
+        break;
+
+    case WM_MOUSEWHEEL:
+    {
+
+        short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+
+        if (zDelta > 0)
+        {
+            ++GRID_SIZE;
+        }
+        else
+        {
+            --GRID_SIZE;
+        }
+        InvalidateRect(hWnd, NULL, false);
+    }
+    break;
+
     case WM_LBUTTONDBLCLK:
         {
             int xPos = GET_X_LPARAM(lParam);
