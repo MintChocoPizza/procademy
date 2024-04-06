@@ -234,6 +234,22 @@ bool FpsSkip(void)
 		g_Start += 20;
 		ret = false;
 	}
+	// 다른 구현
+	// 
+	// int time = timeGetTime();
+	// 
+	// 프레임이 한프레임 이상 밀린경우
+	// if(time - OldFrameTick >= 20)
+	// {
+	//	OldFrameTic +=;
+	//	++LogicFPS;
+	//	continue;
+	// }
+	// Sleep(20 - (time - OldFrameTick));
+	// 
+	// 랜더링
+	//
+
 
 	if (g_End - g_OneSecond >= 1000)
 	{

@@ -99,6 +99,7 @@ int main()
 		_getch();
 	}
 
+	fclose(pFile);
 	return 0;
 }
 

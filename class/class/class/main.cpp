@@ -57,16 +57,14 @@ public:
 private:
 
 };
+
 int main()
 {
 
-	//{
-	//	// C c;
-	//	B* b = new B;
-	//}
+	C c;
 
-	C* c = new C;
-	
+	c.~C();
+
 	return 0;
 }
 

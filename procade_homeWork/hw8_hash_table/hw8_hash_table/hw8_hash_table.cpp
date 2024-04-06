@@ -22,7 +22,7 @@ struct HASH
     int stKey;
     int stValue;
     int count;
-    NODE* nextNode;
+    NODE* nextNode; // 포인터가 아닌 그냥 그냥 노드로 더미 노드로 하여 연결하는게 구현하기 더 쉽다. 조건문도 덜 생김
     NODE* lastNode;
 };
 

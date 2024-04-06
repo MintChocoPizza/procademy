@@ -1,12 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\procade_homeWork",
-    "\\procade_homeWork\\hw3_rand_ex_4",
-    "\\procade_homeWork\\hw3_rand_ex_4\\hw3_rand_ex_4",
-    "\\procade_homeWork\\hw3_rand_ex_5",
-    "\\procade_homeWork\\hw3_rand_ex_5\\hw3_rand_ex_5"
+    "\\class",
+    "\\class\\class",
+    "\\class\\class\\class",
+    "\\procade_homeWork\\hw4_makeDic\\hw4_makeDic"
   ],
-  "SelectedNode": "\\procade_homeWork\\hw3_rand_ex_5\\hw3_rand_ex_5.sln",
+  "SelectedNode": "\\class\\class\\class\\main.cpp",
   "PreviewInSolutionExplorer": false
 }

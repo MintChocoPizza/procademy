@@ -69,7 +69,7 @@ char* strCpy(char* c1, const char* c2)
 int strCmp( char* c1,  char* c2)
 {
     int ret = 0;
-    while (*c1 != '\0' && *c2 != '\0')
+    while (*c1 != '\0' || *c2 != '\0')
     {
         ret =(*c1) - (*c2);
         c1++;
@@ -98,6 +98,7 @@ char* strLwr(char* c)
     {
         if ('A' <= *c && *c <= 'Z')
             *c += 32;
+        // 또는 *c ^= (1<<5);
 
         c++;
     }
@@ -135,11 +136,12 @@ int main()
     char ch3[100] = "opqrstuvwxyz";
     char ch4[100] = "Hello World";
     char ch5[100];
+    char ch6[100] = "hijklmniadlkjasldkf";
 
     printf_s("문자열 길이(abcdefg): %d \n", strLen(ch1));
     strCpy(ch1, ch2);
     printf_s("문자열 복사: %s \n", ch1);
-    printf_s("문자열 비교: %d, %d \n", strCmp(ch2, ch3), strCmp(ch3, ch3));
+    printf_s("문자열 비교: %d, %d, %d \n", strCmp(ch2, ch3), strCmp(ch3, ch3), strCmp(ch2, ch5));
     strCat(ch2, ch3);
     printf_s("문자열 붙이기: %s \n", ch2);
     strLwr(ch4);

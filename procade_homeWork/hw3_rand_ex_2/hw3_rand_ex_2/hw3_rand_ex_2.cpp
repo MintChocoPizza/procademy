@@ -28,66 +28,61 @@ st_ITEM g_Gatcha[] = {
 
 			// 마지막 3개의 아이템은 일반 확률로는 나오지 않으며
 			// 뒤에 입력된 WinTime 회차때만 100% 로 나옴.
-};
+}; // 총 93
 
-int iCount = 0;
+int iCount;
+int g_FullMaxRate;
+int g_MaxRate;
+int g_MaxItem;
+
+void init()
+{
+	g_MaxItem = sizeof(g_Gatcha) / sizeof(st_ITEM);
+	for (int i = 0; i < g_MaxItem; ++i)
+	{
+		g_FullMaxRate += g_Gatcha[i].Rate;
+		if (g_Gatcha[i].WinTime != 0)
+			continue;
+		g_MaxRate += g_Gatcha[i].Rate;
+
+	}
+}
 
 void Gatcha()
 {
-	// 특정 회차에 무조건 해당 아이템이 나와야 함
-	iCount++;
+	++iCount;
+	if (iCount > g_FullMaxRate)
+		iCount = 1;
 
-	// 전체 아이템들의 비율의 총 합. 
-	// 단 winTime 이 0이 아닌 아이템들은 제외함
-	int max = 0;
-	int itemNum = 0;
-	int itemNumList = sizeof(g_Gatcha) / sizeof(st_ITEM);
-	for (int i = 0; i < itemNumList; ++i)
+	// 특정회차에 출력할 아이템을 찾는다.
+	for (int i = 0; i < g_MaxItem; ++i)
 	{
-		max += g_Gatcha[i].Rate;
-		if (g_Gatcha[i].WinTime != 0)
-			continue;
-
-		itemNum += g_Gatcha[i].Rate;
-	}
-
-	// 이번 회차가 wintime아이템을 뽑아야 하는 회자면 아이템을 뽑고 중단.
-	for (int i = 0; i < itemNumList; ++i)
-	{
-		if (iCount == g_Gatcha[i].WinTime)
+		if (g_Gatcha[i].WinTime == iCount)
 		{
 			printf_s("%d    WinTime    %s \n", iCount, g_Gatcha[i].Name);
-			break;
+			return;
 		}
 	}
 
-	// 확률을 구한다. 
-	int iRand = rand() % itemNum + 1;
-
-
-	// 전체 아이템 테이블을 돌면서 뽑을 아이템을 구한다. 
-	int count = 0;
-	for (int i = 0; i < itemNumList; ++i)
+	int iRand = rand() % g_MaxRate + 1;
+	int temp = iRand;
+	for (int i = 0; i < g_MaxItem; ++i)
 	{
-		count += g_Gatcha[i].Rate;
-		if (iRand <= count)
-		{
-			printf_s("%d    %d    %d    %s \n", iCount, iRand, g_Gatcha[i].Rate, g_Gatcha[i].Name);
-			break;
-		}
-	}
+		iRand -= g_Gatcha[i].Rate;
+		if (iRand > 0)
+			continue;
 
-
-	// 뽑기 회차를 초기화 해야 할지 판단하여 초기화.... 왜??? 초기화해??? 턴 테이블이 최대가 된다면
-	if (iCount >= max)
-	{
-		iCount = 0;
+		printf_s("%d    %d    %d    %s \n", iCount, temp, g_Gatcha[i].Rate, g_Gatcha[i].Name);
+		break;
 	}
 }
 
 int main()
 {
 	srand(time(NULL));
+
+	init();
+
 	while (1)
 	{
 		_getch();
