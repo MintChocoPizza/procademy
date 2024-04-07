@@ -58,12 +58,22 @@ private:
 
 };
 
+struct st_A
+{
+	int a;
+	int b;
+	int c;
+};
+
+void func(st_A t)
+{
+	cout << t.a << endl;
+}
+
 int main()
 {
 
-	C c;
-
-	c.~C();
+	func(st_A{ 1,2,3 });
 
 	return 0;
 }

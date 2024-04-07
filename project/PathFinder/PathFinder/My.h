@@ -1,5 +1,8 @@
 #pragma once
 
+#include <map>
+using namespace std;
+
 // 확대시 값을 변경하기 위하여
 // #define GRID_SIZE			16
 #define	GRID_WIDTH			100
@@ -13,45 +16,59 @@ struct st_Position
 	int _x;
 };
 
-struct st_Data
+struct st_OpenNode
 {
-	st_Data()
-	{}
-	st_Data(int PY, int PX, int G, int H, int F, int y, int x) :
-		_PY(PY), _PX(PX), _G(G), _H(H), _F(F), _Y(y), _X(x)
-	{
+	// 아래의 것이 하나라도 있으면 생성자, 복사 생성자, 등등 다 선언해주어야함....
+	//st_Data()
+	//{}
+	//st_Data(int PY, int PX, int G, int H, int F, int y, int x) :
+	//	_PY(PY), _PX(PX), _G(G), _H(H), _F(F), _Y(y), _X(x)
+	//{
 
-	}
-	st_Data(const st_Data& obj)
-	{
-		_PY = obj._PY;
-		_PX = obj._PX;
-		_G = obj._G;
-		_H = obj._H;
-		_F = obj._F;
-		_Y = obj._Y;
-		_X = obj._X;
-	}
+	//}
+	//st_Data(const st_Data& obj)
+	//{
+	//	_PY = obj._PY;
+	//	_PX = obj._PX;
+	//	_G = obj._G;
+	//	_H = obj._H;
+	//	_F = obj._F;
+	//	_Y = obj._Y;
+	//	_X = obj._X;
+	//}
 	// 부모의 좌표
 	int _PY;
 	int _PX;
 
-	short	_G; // 출발점 부터의 이동 거리, 유클리드(대각선)
-	int		_H;	// 목적지와의 거리, 맨헤튼(가로+세로)
-	int		_F; // G+H
-
 	int		_Y;
 	int		_X;
+	
+	double	_G; // 출발점 부터의 이동 거리, 유클리드(대각선)
+	int		_H;	// 목적지와의 거리, 맨헤튼(가로+세로)
+	double	_F; // G+H
+
+
 };
 
 
 struct st_CloseNode
 {
-	bool	OpenCheck;
-	int		_x;
-	int		_y;
-	int		_pX;
+	//st_CloseNode()
+	//{}
+	//st_CloseNode(bool OpenCheck, int y, int x, int pY, int pX) : _OpenCheck(OpenCheck), _y(y), _x(x), _pY(pY), _pX(pX)
+	//{
+	//}
 	int		_pY;
+	int		_pX;
+
+	int		_y;
+	int		_x;
+
+	double	_G;
+	
+
+	bool	_OpenCheck;			// 1: Open		0: Close
+
 };
 
 extern st_Position st_Start;
@@ -74,7 +91,10 @@ extern HBITMAP	g_hMemDCBitmap_old;
 extern HDC		g_hMemDC;
 extern RECT		g_MemDCRect;
 
+extern bool		findPath;
+
 void A_START(void);
+void A_START_Render(HDC hdc);
 void RenderGrid(HDC hdc);
 void RenderObstacle(HDC hdc);
 

@@ -27,6 +27,7 @@ st_ITEM g_Gatch[] =
 
 int iCount = 0;
 
+// 그냥 랜덤
 void Gatcha()
 {
 	// 전체 아이템들의 비율 총 합을 구한다.

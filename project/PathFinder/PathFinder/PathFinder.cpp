@@ -137,6 +137,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 A_START();
             }
         }
+        InvalidateRect(hWnd, NULL, false);
         break;
 
     case WM_MOUSEWHEEL:
@@ -308,6 +309,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         // RenderObstacle, RenderGrid를 메모리 DC에 출력
         RenderObstacle(g_hMemDC);
         RenderGrid(g_hMemDC);
+        if (findPath == true)
+            A_START_Render(g_hMemDC);
 
         // 메모리 DC에 랜더링이 끝나면, 메모리 DC -> 윈도우 DC로의 출력
         hdc = BeginPaint(hWnd, &ps);
