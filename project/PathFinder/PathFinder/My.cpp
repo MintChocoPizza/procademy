@@ -58,6 +58,7 @@ void A_START(void)
 	// Key: (y, x)
 	//---------------------------------------------------------------
 	//map<pair<int, int >, st_CloseNode>				mCloseList;
+	mCloseList.erase(mCloseList.begin(), mCloseList.end());
 	map<pair<int, int>, st_CloseNode>::iterator		CloseIter;
 	st_CloseNode									st_ParentsCloseNode;
 	st_CloseNode									st_childCloseNode;
@@ -130,6 +131,9 @@ void A_START(void)
 			// 
 			// 추후 경로 보정이 들어가야 함.
 			//---------------------------------------------------------------------------------------------------------------
+			G = sqrt(
+				pow(nY - st_Start._y, 2) + pow(nX - st_Start._x, 2)
+			);
 			CloseIter = mCloseList.find(make_pair(nY, nX));
 			if (CloseIter != mCloseList.end())
 			{
@@ -142,13 +146,9 @@ void A_START(void)
 				//	1. 부모노드와의 연결을 끊는다. 
 				//  2. 나를 부모노드로 하여 새로 연결한다.
 
-				
 			}
 			else
 			{
-				G = sqrt(
-					pow(nY - st_Start._y,2) + pow(nX - st_Start._x,2)
-				);
 				H = abs(nY - st_End._y) + abs(nX - st_End._x);
 				F = G + H;
 
