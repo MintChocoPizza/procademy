@@ -92,16 +92,6 @@ bool A_STAR::find(int sY, int sX, int eY, int eX, HWND hWnd)
 		// 8 방향으로 갈 수 있는 노드를 탐색한다.
 		for (iCnt = 0; iCnt < 8; ++iCnt)
 		{
-			if (GetMessage(&msg, nullptr, 0, 0))
-			{
-				if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-				{
-					TranslateMessage(&msg);
-					DispatchMessage(&msg);
-				}
-			}
-			InvalidateRect(hWnd, NULL, false);
-
 			nY = st_ParentsNode._Y + dy[iCnt];
 			nX = st_ParentsNode._X + dx[iCnt];
 
@@ -124,11 +114,16 @@ bool A_STAR::find(int sY, int sX, int eY, int eX, HWND hWnd)
 			//----------------------------------------------
 			// G, H, F 값 계산
 			//----------------------------------------------
-			G = st_ParentsNode._G +
-				sqrt(
-				pow(nY - st_ParentsNode._Y, 2) + pow(nX - st_ParentsNode._X, 2)
-			);
-			H = abs(nY - sY) + abs(nX - sX);
+			//G = st_ParentsNode._G +
+			//	sqrt(
+			//	pow(nY - st_ParentsNode._Y, 2) + pow(nX - st_ParentsNode._X, 2)
+			//);
+			G = st_ParentsNode._G;
+			if (st_ParentsNode._Y == nY || st_ParentsNode._X == nX)
+				G += 1;
+			else
+				G += 1.5;
+			H = abs(nY - eY) + abs(nX - eX);
 			F = G + H;
 
 

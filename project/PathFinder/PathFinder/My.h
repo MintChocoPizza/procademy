@@ -28,6 +28,7 @@ extern HBRUSH	g_hTileStartBrush;
 extern HBRUSH	g_hTileEndBrush;
 extern HBRUSH	g_hTileOpenListBrush;
 extern HBRUSH	g_hTileCloseListBrush;
+extern HFONT	g_hTileFont;
 
 extern int		g_Tile[GRID_HEIGHT][GRID_WIDTH];				// 0 장애물 없음, 1 장애물 있음 
 extern int		GRID_SIZE;

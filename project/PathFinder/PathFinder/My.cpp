@@ -19,7 +19,7 @@ HBRUSH	g_hTileStartBrush;
 HBRUSH	g_hTileEndBrush;
 HBRUSH	g_hTileOpenListBrush;
 HBRUSH	g_hTileCloseListBrush;
-
+HFONT	g_hTileFont;
 
 
 HPEN	g_hGridPen;
@@ -87,15 +87,19 @@ void RenderGrid(HDC hdc)
 	//------------------------------------------------------------------------
 	for (int iCntW = 0; iCntW <= GRID_WIDTH; iCntW++)
 	{
-		MoveToEx(hdc, iX + g_StartX, 0 + g_StartY, NULL);
-		LineTo(hdc, iX + g_StartX, GRID_HEIGHT * GRID_SIZE + g_StartY);
+		// MoveToEx(hdc, iX + g_StartX, 0 + g_StartY, NULL);
+		// LineTo(hdc, iX + g_StartX, GRID_HEIGHT * GRID_SIZE + g_StartY);
+		MoveToEx(hdc, iX, 0, NULL);
+		LineTo(hdc, iX, GRID_HEIGHT * GRID_SIZE);
 		iX += GRID_SIZE;
 	}
 
 	for (int iCntH = 0; iCntH <= GRID_HEIGHT; ++iCntH)
 	{
-		MoveToEx(hdc, 0 + g_StartX, iY + g_StartY, NULL);
-		LineTo(hdc, GRID_WIDTH * GRID_SIZE + g_StartX, iY + g_StartY);
+		//MoveToEx(hdc, 0 + g_StartX, iY + g_StartY, NULL);
+		//LineTo(hdc, GRID_WIDTH * GRID_SIZE + g_StartX, iY + g_StartY);
+		MoveToEx(hdc, 0, iY, NULL);
+		LineTo(hdc, GRID_WIDTH * GRID_SIZE, iY);
 		iY += GRID_SIZE;
 	}
 	SelectObject(hdc, hOldPen);
@@ -138,31 +142,34 @@ void RenderObstacle(HDC hdc)
 				else
 					hOldBrush = (HBRUSH)SelectObject(hdc, g_hTileCloseListBrush);
 				SelectObject(hdc, GetStockObject(NULL_PEN));	// 뭔가 테두리가 사라짐
-				iX = iCntW * GRID_SIZE + g_StartX;
-				iY = iCntH * GRID_SIZE + g_StartY;
+				//iX = iCntW * GRID_SIZE + g_StartX;
+				//iY = iCntH * GRID_SIZE + g_StartY;
+				iX = iCntW * GRID_SIZE;
+				iY = iCntH * GRID_SIZE ;
 				// 테두리 크기가 있으므로 +2 한다.
 				Rectangle(hdc, iX, iY, iX + GRID_SIZE + 2, iY + GRID_SIZE + 2);
 				SelectObject(hdc, hOldBrush);
 
 
-				// 부모노드쪽으로 붉은 선 긎기
-				hOldPen = (HPEN)SelectObject(hdc, g_hParentPointerPen);
-				if (st._PY >= 0 && st._PX >= 0)
-				{
+				//// 노드에 대한 글자 출력
+				//if (GRID_SIZE > 16)
+				//{
+				//	HFONT hOldFont = (HFONT)SelectObject(hdc, g_hTileFont);
+				//	wchar_t wcBuff[50];
 
-					sY = st._Y * GRID_SIZE + GRID_SIZE / 2;
-					sX = st._X * GRID_SIZE + GRID_SIZE / 2;
-					eY = st._PY * GRID_SIZE + GRID_SIZE / 2;
-					eX = st._PX * GRID_SIZE + GRID_SIZE / 2;
+				//	swprintf_s(wcBuff,50, L"X: %d  Y: %d", st._X, st._Y);
+				//	TextOut(hdc, (st._X + g_StartX + 1) * GRID_SIZE, (st._Y + g_StartY + 2) * GRID_SIZE, wcBuff, wcslen(wcBuff));
 
-					//eY = abs(sY - eY) / 2;
-					//eX = abs(sX - eX) / 2;
+				//	
 
-					MoveToEx(hdc, sX, sY, NULL);
-					LineTo(hdc, eX, eY);
 
-					SelectObject(hdc, hOldPen);
-				}
+
+
+				//	SelectObject(hdc, hOldFont);
+				//}
+
+
+
 			}
 
 

@@ -171,11 +171,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         if (zDelta > 0)
         {
-            GRID_SIZE += 10;
+            GRID_SIZE += 5;
         }
         else
         {
-            GRID_SIZE -= 10;
+            GRID_SIZE -= 5;
             GRID_SIZE = max(GRID_SIZE, 6);
         }
         InvalidateRect(hWnd, NULL, false);
@@ -314,6 +314,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         g_hTileEndBrush = CreateSolidBrush(RGB(255, 0, 0));
         g_hTileOpenListBrush = CreateSolidBrush(RGB(0, 0, 255));
         g_hTileCloseListBrush = CreateSolidBrush(RGB(255, 255, 0));
+        g_hTileFont = CreateFont(10, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
+            CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, DEFAULT_PITCH, L"Arial");
 
         // 윈도우 생성시 현 윈도우 크기와 동일한 메모리 DC 생성
         HDC hdc = GetDC(hWnd);

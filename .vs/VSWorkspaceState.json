@@ -2,10 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\OOP\\OOP",
     "\\project\\PathFinder",
     "\\project\\PathFinder\\PathFinder"
   ],
-  "SelectedNode": "\\project\\PathFinder\\PathFinder\\My.cpp",
+  "SelectedNode": "\\project\\PathFinder\\PathFinder\\A_STAR.cpp",
   "PreviewInSolutionExplorer": false
 }
