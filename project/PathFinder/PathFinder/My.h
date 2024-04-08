@@ -16,60 +16,6 @@ struct st_Position
 	int _x;
 };
 
-struct st_OpenNode
-{
-	// 아래의 것이 하나라도 있으면 생성자, 복사 생성자, 등등 다 선언해주어야함....
-	//st_Data()
-	//{}
-	//st_Data(int PY, int PX, int G, int H, int F, int y, int x) :
-	//	_PY(PY), _PX(PX), _G(G), _H(H), _F(F), _Y(y), _X(x)
-	//{
-
-	//}
-	//st_Data(const st_Data& obj)
-	//{
-	//	_PY = obj._PY;
-	//	_PX = obj._PX;
-	//	_G = obj._G;
-	//	_H = obj._H;
-	//	_F = obj._F;
-	//	_Y = obj._Y;
-	//	_X = obj._X;
-	//}
-	// 부모의 좌표
-	int _PY;
-	int _PX;
-
-	int		_Y;
-	int		_X;
-	
-	double	_G; // 출발점 부터의 이동 거리, 유클리드(대각선)
-	int		_H;	// 목적지와의 거리, 맨헤튼(가로+세로)
-	double	_F; // G+H
-
-
-};
-
-
-struct st_CloseNode
-{
-	//st_CloseNode()
-	//{}
-	//st_CloseNode(bool OpenCheck, int y, int x, int pY, int pX) : _OpenCheck(OpenCheck), _y(y), _x(x), _pY(pY), _pX(pX)
-	//{
-	//}
-	int		_pY;
-	int		_pX;
-
-	int		_y;
-	int		_x;
-
-	double	_G;
-	
-
-	bool	_OpenCheck;			// 1: Open		0: Close
-
-};
 
 extern st_Position st_Start;
 extern st_Position st_End;
@@ -77,10 +23,16 @@ extern st_Position st_End;
 
 extern HBRUSH	g_hTileBrush;
 extern HPEN		g_hGridPen;
+extern HPEN		g_hParentPointerPen;
 extern HBRUSH	g_hTileStartBrush;
 extern HBRUSH	g_hTileEndBrush;
+extern HBRUSH	g_hTileOpenListBrush;
+extern HBRUSH	g_hTileCloseListBrush;
+
 extern int		g_Tile[GRID_HEIGHT][GRID_WIDTH];				// 0 장애물 없음, 1 장애물 있음 
 extern int		GRID_SIZE;
+extern int		g_iX;
+extern int		g_iY;
 extern int		g_StartX;
 extern int		g_StartY;
 extern bool		g_bErase;
@@ -93,8 +45,7 @@ extern RECT		g_MemDCRect;
 
 extern bool		findPath;
 
-void A_START(void);
-void A_START_Render(HDC hdc);
+void RenderPath(HDC hdc);
 void RenderGrid(HDC hdc);
 void RenderObstacle(HDC hdc);
 

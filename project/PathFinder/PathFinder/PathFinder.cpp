@@ -5,6 +5,7 @@
 #include "framework.h"
 #include "PathFinder.h"
 #include "My.h"
+#include "A_STAR.h"
 
 #define MAX_LOADSTRING 100
 
@@ -12,6 +13,9 @@
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
+
+MSG msg;
+HACCEL hAccelTable;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -42,7 +46,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_PATHFINDER));
 
-    MSG msg;
+
 
     // 기본 메시지 루프입니다:
     while (GetMessage(&msg, nullptr, 0, 0))
@@ -123,18 +127,38 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY  - 종료 메시지를 게시하고 반환합니다.
 //
 //
+A_STAR cA_Star(GRID_WIDTH, GRID_HEIGHT);
+bool findPath = false;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     PAINTSTRUCT ps;
     HDC hdc;
 
+
     switch (message)
     {
-    case WM_CHAR:
+    case WM_KEYDOWN:
         {
             if (wParam == VK_SPACE)
             {
-                A_START();
+                findPath = false;
+                findPath = cA_Star.find(st_Start._y, st_Start._x, st_End._y, st_End._x, hWnd);
+            }
+            else if (wParam == 'W')
+            {
+                g_StartY = --g_iY * GRID_SIZE;
+            }
+            else if (wParam == 'S')
+            {
+                g_StartY = ++g_iY * GRID_SIZE;
+            }
+            else if (wParam == 'A')
+            {
+                g_StartX = --g_iX * GRID_SIZE;
+            }
+            else if (wParam == 'D')
+            {
+                g_StartX = ++g_iX * GRID_SIZE;
             }
         }
         InvalidateRect(hWnd, NULL, false);
@@ -147,11 +171,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         if (zDelta > 0)
         {
-            ++GRID_SIZE;
+            GRID_SIZE += 10;
         }
         else
         {
-            --GRID_SIZE;
+            GRID_SIZE -= 10;
+            GRID_SIZE = max(GRID_SIZE, 6);
         }
         InvalidateRect(hWnd, NULL, false);
     }
@@ -269,8 +294,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         if (g_bDrag)
         {
-            int xPos = GET_X_LPARAM(lParam);
-            int yPos = GET_Y_LPARAM(lParam);
+            int xPos = GET_X_LPARAM(lParam) - g_StartX;
+            int yPos = GET_Y_LPARAM(lParam) - g_StartY;
 
             int iTileX = xPos / GRID_SIZE;
             int iTileY = yPos / GRID_SIZE;
@@ -283,9 +308,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_CREATE:
     {
         g_hGridPen = CreatePen(PS_SOLID, 1, RGB(200, 200, 200));
+        g_hParentPointerPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
         g_hTileBrush = CreateSolidBrush(RGB(100, 100, 100));
         g_hTileStartBrush = CreateSolidBrush(RGB(0, 255, 0));
         g_hTileEndBrush = CreateSolidBrush(RGB(255, 0, 0));
+        g_hTileOpenListBrush = CreateSolidBrush(RGB(0, 0, 255));
+        g_hTileCloseListBrush = CreateSolidBrush(RGB(255, 255, 0));
 
         // 윈도우 생성시 현 윈도우 크기와 동일한 메모리 DC 생성
         HDC hdc = GetDC(hWnd);
@@ -298,19 +326,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     case WM_PAINT:
     {
-        //hdc = BeginPaint(hWnd, &ps);
-        //RenderObstacle(hdc);
-        //RenderGrid(hdc);
-        //EndPaint(hWnd, &ps);
-
         // 메모리 DC를 클리어 하고
         PatBlt(g_hMemDC, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, WHITENESS);
 
         // RenderObstacle, RenderGrid를 메모리 DC에 출력
         RenderObstacle(g_hMemDC);
         RenderGrid(g_hMemDC);
+
         if (findPath == true)
-            A_START_Render(g_hMemDC);
+        {
+            RenderPath(g_hMemDC);
+        }
+
 
         // 메모리 DC에 랜더링이 끝나면, 메모리 DC -> 윈도우 DC로의 출력
         hdc = BeginPaint(hWnd, &ps);
@@ -342,6 +369,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
+
+    case WM_SIZE:
+    {
+        SelectObject(g_hMemDC, g_hMemDCBitmap_old);
+        DeleteObject(g_hMemDC);
+        DeleteObject(g_hMemDCBitmap);
+
+        HDC hdc = GetDC(hWnd);
+
+        GetClientRect(hWnd, &g_MemDCRect);
+        g_hMemDCBitmap = CreateCompatibleBitmap(hdc, g_MemDCRect.right, g_MemDCRect.bottom);
+        g_hMemDC = CreateCompatibleDC(hdc);
+        ReleaseDC(hWnd, hdc);
+
+        g_hMemDCBitmap_old = (HBITMAP)SelectObject(g_hMemDC, g_hMemDCBitmap);
+    }
+    break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }

@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="A_STAR.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="My.h" />
     <ClInclude Include="PathFinder.h" />
@@ -140,6 +141,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="A_STAR.cpp" />
     <ClCompile Include="My.cpp" />
     <ClCompile Include="PathFinder.cpp" />
   </ItemGroup>
