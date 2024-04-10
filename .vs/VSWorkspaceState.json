@@ -2,10 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\CMemoryPool",
     "\\project\\CMemoryPool\\CMemoryPool",
+    "\\project\\PathFinder_v2",
     "\\project\\PathFinder_v2\\PathFinder_v2"
   ],
-  "SelectedNode": "\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h",
+  "SelectedNode": "\\project\\PathFinder_v2\\PathFinder_v2\\main.cpp",
   "PreviewInSolutionExplorer": false
 }

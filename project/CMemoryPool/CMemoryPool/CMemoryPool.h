@@ -89,12 +89,13 @@ namespace OreoPizza
 		st_BLOCK_NODE* _pFreeNode;
 
 	private:
-		int m_iCapacity;
-		int m_iUseCount;
+		int		m_iCapacity;
+		int		m_iUseCount;
+		bool	m_bPlacementNew;
 	};
 
 	template<class DATA>
-	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) : m_iCapacity(iBlockNum), m_iUseCount(nullptr)
+	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) : m_iCapacity(iBlockNum), m_iUseCount(nullptr), m_bPlacementNew(bPlacementNew)
 	{
 		int iCnt;
 
