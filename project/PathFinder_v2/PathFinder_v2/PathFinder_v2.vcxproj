@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="A_STAR.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Initstance.h" />
     <ClInclude Include="PathFinder_v2.h" />
@@ -143,6 +144,7 @@
     <ClInclude Include="WndProc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="A_STAR.cpp" />
     <ClCompile Include="Initstance.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RegisterClass.cpp" />
