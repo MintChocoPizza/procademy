@@ -3,8 +3,7 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E992AB2A-6A8D-4D63-8ACD-75E37C4F6112}|PathFinder\\PathFinder.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\My.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{E992AB2A-6A8D-4D63-8ACD-75E37C4F6112}|PathFinder\\PathFinder.vcxproj|solutionrelative:PathFinder\\My.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Downloads\\message.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:1:0:{E992AB2A-6A8D-4D63-8ACD-75E37C4F6112}|PathFinder\\PathFinder.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\PathFinder.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -13,10 +12,6 @@
     {
       "AbsoluteMoniker": "D:2:0:{E992AB2A-6A8D-4D63-8ACD-75E37C4F6112}|PathFinder\\PathFinder.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\PathFinder.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:2:0:{E992AB2A-6A8D-4D63-8ACD-75E37C4F6112}|PathFinder\\PathFinder.vcxproj|solutionrelative:PathFinder\\PathFinder.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E992AB2A-6A8D-4D63-8ACD-75E37C4F6112}|PathFinder\\PathFinder.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\My.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{E992AB2A-6A8D-4D63-8ACD-75E37C4F6112}|PathFinder\\PathFinder.vcxproj|solutionrelative:PathFinder\\My.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E992AB2A-6A8D-4D63-8ACD-75E37C4F6112}|PathFinder\\PathFinder.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\PathFinder.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -30,23 +25,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 76,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "PathFinder.h",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\PathFinder.h",
-              "RelativeDocumentMoniker": "PathFinder\\PathFinder.h",
-              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\PathFinder.h",
-              "RelativeToolTip": "PathFinder\\PathFinder.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-01T01:11:18.055Z"
             },
             {
               "$type": "Document",
@@ -56,10 +39,26 @@
               "RelativeDocumentMoniker": "PathFinder\\PathFinder.cpp",
               "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\PathFinder.cpp",
               "RelativeToolTip": "PathFinder\\PathFinder.cpp",
-              "ViewState": "AQIAAB4BAAAAAAAAAAAMwEABAAATAAAA",
+              "ViewState": "AQIAAC0BAAAAAAAAAAAMwE4BAAAgAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-04-02T14:16:48.659Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PathFinder.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\PathFinder.h",
+              "RelativeDocumentMoniker": "PathFinder\\PathFinder.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\PathFinder.h",
+              "RelativeToolTip": "PathFinder\\PathFinder.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-04-01T01:11:18.055Z"
             }
           ]
         },
@@ -69,68 +68,28 @@
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "message.txt",
+              "DocumentMoniker": "C:\\Users\\User\\Downloads\\message.txt",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Downloads\\message.txt",
+              "ToolTip": "C:\\Users\\User\\Downloads\\message.txt",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\Downloads\\message.txt",
+              "ViewState": "AQIAALABAAAAAAAAAAAYwMgBAAAGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2024-04-09T10:56:34.997Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
               "Title": "PathFinder.cpp",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\PathFinder.cpp",
               "RelativeDocumentMoniker": "PathFinder\\PathFinder.cpp",
               "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\PathFinder.cpp",
               "RelativeToolTip": "PathFinder\\PathFinder.cpp",
-              "ViewState": "AQIAACcBAAAAAAAAAAAmwD0BAAAbAAAA",
+              "ViewState": "AQIAACcBAAAAAAAAAAAmwF4BAAAyAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-04-01T12:41:06.94Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Orientation": 0,
-      "VerticalTabListWidth": 256,
-      "FloatingWindowState": {
-        "Id": "48a9ddba-f0a1-454e-9931-df8737abb71d",
-        "Display": 1,
-        "X": -433,
-        "Y": 300,
-        "Width": 875,
-        "Height": 814,
-        "WindowState": 2
-      },
-      "DocumentGroups": [
-        {
-          "DockedWidth": 225,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "My.cpp",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\My.cpp",
-              "RelativeDocumentMoniker": "PathFinder\\My.cpp",
-              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\My.cpp",
-              "RelativeToolTip": "PathFinder\\My.cpp",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAYwDwAAAA4AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-04-01T12:40:42.332Z",
-              "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 175,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "My.h",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\My.h",
-              "RelativeDocumentMoniker": "PathFinder\\My.h",
-              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\PathFinder\\PathFinder\\My.h",
-              "RelativeToolTip": "PathFinder\\My.h",
-              "ViewState": "AQIAABsAAAAAAAAAAAAYwEIAAAAKAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-07T13:29:57.562Z",
               "EditorCaption": ""
             }
           ]

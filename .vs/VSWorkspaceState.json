@@ -2,10 +2,19 @@
   "ExpandedNodes": [
     "",
     "\\project",
+<<<<<<< Updated upstream
     "\\project\\CMemoryPool\\CMemoryPool",
     "\\project\\PathFinder_v2",
     "\\project\\PathFinder_v2\\PathFinder_v2"
   ],
   "SelectedNode": "\\project\\PathFinder_v2\\PathFinder_v2\\main.cpp",
+=======
+    "\\project\\MemoryPool\\MemoryPool",
+    "\\project\\OOP\\OOP",
+    "\\project\\PathFinder",
+    "\\project\\PathFinder\\PathFinder"
+  ],
+  "SelectedNode": "\\project\\PathFinder\\PathFinder\\PathFinder.cpp",
+>>>>>>> Stashed changes
   "PreviewInSolutionExplorer": false
 }
