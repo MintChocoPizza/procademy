@@ -1,0 +1,3 @@
+﻿  WndProc.cpp
+C:\Users\user\Desktop\procademy_project\procademy\project\PathFinder_v2\PathFinder_v2\WndProc.cpp(194,7): warning C4101: 'hOldPen' :참조되지 않은 지역 변수입니다.
+  PathFinder_v2.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\project\PathFinder_v2\Debug\PathFinder_v2.exe

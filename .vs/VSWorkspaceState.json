@@ -2,9 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\project",
+    "\\project\\OOP\\OOP",
     "\\project\\PathFinder",
-    "\\project\\PathFinder\\PathFinder"
+    "\\project\\PathFinder\\PathFinder",
+    "\\project\\PathFinder_v2",
+    "\\project\\PathFinder_v2\\PathFinder_v2"
   ],
-  "SelectedNode": "\\project\\PathFinder\\PathFinder\\A_STAR.cpp",
+  "SelectedNode": "\\project\\PathFinder_v2\\PathFinder_v2\\WndProc.cpp",
   "PreviewInSolutionExplorer": false
 }
