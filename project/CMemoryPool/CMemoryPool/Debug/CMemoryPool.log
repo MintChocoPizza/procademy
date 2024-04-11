@@ -1,0 +1,7 @@
+﻿  main.cpp
+C:\Users\User\Desktop\procademy_project\procademy\project\CMemoryPool\CMemoryPool\CMemoryPool.h(153,3): error C3878: 구문 오류: 예기치 않은 토큰 '식별자'이(가) 'expression' 다음에 있습니다.
+  (소스 파일 'main.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\User\Desktop\procademy_project\procademy\project\CMemoryPool\CMemoryPool\CMemoryPool.h(153,3): message : 오류 복구를 건너뛰었습니다. '식별자 . 식별자  . . . 식별자'
+  (소스 파일 'main.cpp'을(를) 컴파일하는 중)
+  

@@ -57,4 +57,3 @@ private:
 };
 
 #endif // !__MEMORY_POOL_H__
-e

@@ -19,14 +19,14 @@
 #ifndef __CMEMORY_POOL_H__
 #define __CMEMORY_POOL_H__
 
-
+#include <stdio.h>
 
 namespace OreoPizza
 {
+
 	template <class DATA>
 	struct st_BLOCK_NODE
 	{
-		unsigned int memoryAllocationFlag;
 		DATA data;
 		st_BLOCK_NODE* pNext;
 	};
@@ -34,8 +34,6 @@ namespace OreoPizza
 	template <class DATA>
 	class CMemoryPool
 	{
-
-
 
 	public:
 
@@ -83,10 +81,16 @@ namespace OreoPizza
 		//////////////////////////////////////////////////////////////////////////
 		int		GetUseCount(void) { return m_iUseCount; }
 
+		//////////////////////////////////////////////////////////////////////////
+		// 리스트를 순회한다.
+		// 
+		//////////////////////////////////////////////////////////////////////////
+		void	TraverseMemoryPool(void);
+
 
 		// 스택 방식으로 반환된 (미사용) 오브젝트 블럭을 관리.
 
-		st_BLOCK_NODE* _pFreeNode;
+		st_BLOCK_NODE<DATA> _pFreeNode;
 
 	private:
 		int		m_iCapacity;
@@ -95,39 +99,74 @@ namespace OreoPizza
 	};
 
 	template<class DATA>
-	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) : m_iCapacity(iBlockNum), m_iUseCount(nullptr), m_bPlacementNew(bPlacementNew)
+	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) : 
+		m_iCapacity(iBlockNum), m_iUseCount(0), m_bPlacementNew(bPlacementNew)
 	{
 		int iCnt;
-
+		_pFreeNode.pNext = NULL;
 		for (iCnt = 0; iCnt < iBlockNum; ++iCnt)
 		{
+			st_BLOCK_NODE<DATA>* pNewNode = (st_BLOCK_NODE<DATA> *)malloc(sizeof(st_BLOCK_NODE<DATA> *));
+			if (pNewNode == NULL)
+				throw;
 
+			new(&pNewNode->data) DATA();
+			
+			(*pNewNode).pNext = _pFreeNode.pNext;
+			_pFreeNode.pNext = pNewNode;
 		}
-
 	}	
 
 	template<class DATA>
 	inline CMemoryPool<DATA>::~CMemoryPool()
 	{
+		
 	}
 
 	template<class DATA>
 	inline DATA* CMemoryPool<DATA>::Alloc(void)
 	{
-		DATA* retData = &(_pFreeNode->data);
+		st_BLOCK_NODE<DATA>* tempNode = _pFreeNode.pNext;
 
-		if(m_iCapacity == 0)
-			return nullptr;
+		_pFreeNode.pNext = tempNode->pNext;
 
-		_pFreeNode = _pFreeNode->pNext;
+		if (m_bPlacementNew == true)
+		{
+			new(&(tempNode->data)) DATA();
+		}
 
-		return retData;
+		return &tempNode->data;
 	}
 
 	template<class DATA>
 	inline bool CMemoryPool<DATA>::Free(DATA* pData)
 	{
-		
+		if (m_bPlacementNew == true)
+		{
+			pData->~DATA();
+		}
+
+		// 현재는 data의 위치와 구조체의 주소가 같음.
+		st_BLOCK_NODE<DATA>* st_makeStruct = (st_BLOCK_NODE<DATA> *)pData;
+
+		st_makeStruct->pNext = _pFreeNode.pNext
+		_pFreeNode.pNext = st_makeStruct;
+
+		return true;
+	}
+
+	template<class DATA>
+	inline void CMemoryPool<DATA>::TraverseMemoryPool(void)
+	{
+		st_BLOCK_NODE<DATA>* curNode = _pFreeNode.pNext;
+		int iCnt = 0;
+
+		for (curNode = _pFreeNode.pNext; curNode != NULL; curNode = (*curNode).pNext)
+		{
+			printf_s("노드 출력: %d \n", iCnt);
+			printf_s("노드의 주소: %p, 다음 노드 주소: %p \n", &curNode->data, curNode->pNext);
+			++iCnt;
+		}
 	}
 
 }

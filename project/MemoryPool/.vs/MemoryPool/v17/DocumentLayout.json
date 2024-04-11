@@ -3,23 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\temp1.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|solutionrelative:MemoryPool\\temp1.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\temp.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|solutionrelative:MemoryPool\\temp.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\MemoryPool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|solutionrelative:MemoryPool\\MemoryPool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Downloads\\MemoryPool_mail.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|solutionrelative:MemoryPool\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\temp1.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|solutionrelative:MemoryPool\\temp1.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\MemoryPool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{8E95EAD2-60AC-41D7-82C7-5D8304BD6D2F}|MemoryPool\\MemoryPool.vcxproj|solutionrelative:MemoryPool\\MemoryPool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -29,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 75,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -37,50 +34,45 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "temp1.h",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\temp1.h",
               "RelativeDocumentMoniker": "MemoryPool\\temp1.h",
               "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\temp1.h",
               "RelativeToolTip": "MemoryPool\\temp1.h",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAiwDUAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACIAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-09T10:34:29.943Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-09T10:34:29.943Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "temp.h",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\temp.h",
               "RelativeDocumentMoniker": "MemoryPool\\temp.h",
               "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\temp.h",
               "RelativeToolTip": "MemoryPool\\temp.h",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAiwDsAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACoAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-04-09T10:34:18.786Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "main.cpp",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\main.cpp",
               "RelativeDocumentMoniker": "MemoryPool\\main.cpp",
               "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\main.cpp",
               "RelativeToolTip": "MemoryPool\\main.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAA8AAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-04-09T07:38:00.285Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "MemoryPool.h",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\MemoryPool\\MemoryPool\\MemoryPool.h",
               "RelativeDocumentMoniker": "MemoryPool\\MemoryPool.h",
@@ -88,42 +80,7 @@
               "RelativeToolTip": "MemoryPool\\MemoryPool.h",
               "ViewState": "AQIAAEcAAAAAAAAAAAAiwFgAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-09T07:38:37.493Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Orientation": 0,
-      "VerticalTabListWidth": 256,
-      "FloatingWindowState": {
-        "Id": "2c601919-9bc5-4218-bcdb-31c400c65e4b",
-        "Display": 1,
-        "X": 511,
-        "Y": 251,
-        "Width": 1428,
-        "Height": 877,
-        "WindowState": 0
-      },
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "MemoryPool_mail.h",
-              "DocumentMoniker": "C:\\Users\\User\\Downloads\\MemoryPool_mail.h",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Downloads\\MemoryPool_mail.h",
-              "ToolTip": "C:\\Users\\User\\Downloads\\MemoryPool_mail.h",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\Downloads\\MemoryPool_mail.h",
-              "ViewState": "AQIAAB4AAAAAAAAAAAAAAGkAAAAFAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-09T07:38:49.653Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-09T07:38:37.493Z"
             }
           ]
         }

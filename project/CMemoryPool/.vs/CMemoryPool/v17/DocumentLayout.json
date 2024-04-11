@@ -1,0 +1,64 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\CMemoryPool\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C9C9B541-B4A5-4635-AA0C-22B56C3385DD}|CMemoryPool\\CMemoryPool.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C9C9B541-B4A5-4635-AA0C-22B56C3385DD}|CMemoryPool\\CMemoryPool.vcxproj|solutionrelative:CMemoryPool\\CMemoryPool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C9C9B541-B4A5-4635-AA0C-22B56C3385DD}|CMemoryPool\\CMemoryPool.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\CMemoryPool\\CMemoryPool\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C9C9B541-B4A5-4635-AA0C-22B56C3385DD}|CMemoryPool\\CMemoryPool.vcxproj|solutionrelative:CMemoryPool\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 79,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CMemoryPool.h",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h",
+              "RelativeDocumentMoniker": "CMemoryPool\\CMemoryPool.h",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h",
+              "RelativeToolTip": "CMemoryPool\\CMemoryPool.h",
+              "ViewState": "AQIAAH0AAAAAAAAAAAAMwJwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-04-10T04:12:30.255Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 71,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\CMemoryPool\\CMemoryPool\\main.cpp",
+              "RelativeDocumentMoniker": "CMemoryPool\\main.cpp",
+              "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\CMemoryPool\\CMemoryPool\\main.cpp",
+              "RelativeToolTip": "CMemoryPool\\main.cpp",
+              "ViewState": "AQIAAB4AAAAAAAAAAADwvzIAAAA2AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-04-10T04:12:14.046Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

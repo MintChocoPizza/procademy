@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\new_Overloding\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3F1D7EDE-5EB1-4F49-BD41-8C49E3274DF8}|hw10_new_Overloding\\hw10_new_Overloding.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\new_Overloding\\hw10_new_Overloding\\hw10_new_Overloding.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{3F1D7EDE-5EB1-4F49-BD41-8C49E3274DF8}|hw10_new_Overloding\\hw10_new_Overloding.vcxproj|solutionrelative:hw10_new_Overloding\\hw10_new_Overloding.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3F1D7EDE-5EB1-4F49-BD41-8C49E3274DF8}|hw10_new_Overloding\\hw10_new_Overloding.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\new_Overloding\\hw10_new_Overloding\\MyNew.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{3F1D7EDE-5EB1-4F49-BD41-8C49E3274DF8}|hw10_new_Overloding\\hw10_new_Overloding.vcxproj|solutionrelative:hw10_new_Overloding\\MyNew.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3F1D7EDE-5EB1-4F49-BD41-8C49E3274DF8}|hw10_new_Overloding\\hw10_new_Overloding.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\new_Overloding\\hw10_new_Overloding\\hw10_new_Overloding.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3F1D7EDE-5EB1-4F49-BD41-8C49E3274DF8}|hw10_new_Overloding\\hw10_new_Overloding.vcxproj|solutionrelative:hw10_new_Overloding\\hw10_new_Overloding.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3F1D7EDE-5EB1-4F49-BD41-8C49E3274DF8}|hw10_new_Overloding\\hw10_new_Overloding.vcxproj|C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\new_Overloding\\hw10_new_Overloding\\MyNew.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -35,18 +35,18 @@
           ]
         },
         {
-          "DockedWidth": 211,
+          "DockedWidth": 318,
           "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MyNew.h",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\new_Overloding\\hw10_new_Overloding\\MyNew.h",
               "RelativeDocumentMoniker": "hw10_new_Overloding\\MyNew.h",
               "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\new_Overloding\\hw10_new_Overloding\\MyNew.h",
               "RelativeToolTip": "hw10_new_Overloding\\MyNew.h",
-              "ViewState": "AQIAACcAAAAApAJfXP0UwFEAAAAmAAAA",
+              "ViewState": "AQIAAE4AAAAAAAAAAAAAAFEAAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-03-30T09:59:23.144Z",
               "EditorCaption": ""
@@ -54,7 +54,7 @@
           ]
         },
         {
-          "DockedWidth": 392,
+          "DockedWidth": 285,
           "SelectedChildIndex": 1,
           "Children": [
             {
@@ -71,7 +71,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "hw10_new_Overloding.cpp",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\new_Overloding\\hw10_new_Overloding\\hw10_new_Overloding.cpp",
               "RelativeDocumentMoniker": "hw10_new_Overloding\\hw10_new_Overloding.cpp",
