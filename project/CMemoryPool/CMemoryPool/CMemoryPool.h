@@ -149,7 +149,7 @@ namespace OreoPizza
 		// 현재는 data의 위치와 구조체의 주소가 같음.
 		st_BLOCK_NODE<DATA>* st_makeStruct = (st_BLOCK_NODE<DATA> *)pData;
 
-		st_makeStruct->pNext = _pFreeNode.pNext
+		st_makeStruct->pNext = _pFreeNode.pNext;
 		_pFreeNode.pNext = st_makeStruct;
 
 		return true;

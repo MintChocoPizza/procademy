@@ -2,11 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
+    "\\project\\CMemoryPool",
     "\\project\\CMemoryPool\\CMemoryPool",
-    "\\project\\MemoryPool",
-    "\\project\\MemoryPool\\MemoryPool",
-    "\\project\\OOP\\OOP"
+    "\\project\\MemoryPool\\MemoryPool"
   ],
-  "SelectedNode": "\\project\\MemoryPool\\MemoryPool\\main.cpp",
+  "SelectedNode": "\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h",
   "PreviewInSolutionExplorer": false
 }
