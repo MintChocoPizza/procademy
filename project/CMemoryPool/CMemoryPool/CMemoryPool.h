@@ -124,7 +124,9 @@ namespace OreoPizza
 			// 积己磊 龋免
 			new(&(pNewNode->data)) DATA();
 			// 如利 巢扁扁, 林家 历厘
+#ifdef _DEBUG
 			pNewNode->allocationRecord = this;
+#endif // _DEBUG
 			
 			(*pNewNode).pNext = _pFreeNode.pNext;
 			_pFreeNode.pNext = pNewNode;
@@ -160,7 +162,10 @@ namespace OreoPizza
 
 			// 积己磊 龋免
 			new(&(pTempNode->data)) DATA();
+#ifdef _DEBUG
 			pTempNode->allocationRecord = this;
+#endif // _DEBUG
+
 
 			(*pTempNode).pNext = _pFreeNode.pNext;
 			_pFreeNode.pNext = pTempNode;

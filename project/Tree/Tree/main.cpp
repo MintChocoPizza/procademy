@@ -11,8 +11,6 @@ int main()
 {
     map<int, int> mTree;
 
-    mTree.insert()
-
 
     std::cout << "Hello World!\n";
 }

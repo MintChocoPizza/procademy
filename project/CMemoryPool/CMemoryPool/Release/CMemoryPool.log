@@ -1,13 +1,6 @@
 ﻿  main.cpp
-C:\Users\user\Desktop\procademy_project\procademy\project\CMemoryPool\CMemoryPool\CMemoryPool.h(178,3): error C3861: 'st_makeStruct': 식별자를 찾을 수 없습니다.
-  (소스 파일 'main.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\user\Desktop\procademy_project\procademy\project\CMemoryPool\CMemoryPool\CMemoryPool.h(179,22): error C3861: 'st_makeStruct': 식별자를 찾을 수 없습니다.
-  (소스 파일 'main.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\user\Desktop\procademy_project\procademy\project\CMemoryPool\CMemoryPool\CMemoryPool.h(178,3): error C2065: 'st_makeStruct': 선언되지 않은 식별자입니다.
-  (소스 파일 'main.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\user\Desktop\procademy_project\procademy\project\CMemoryPool\CMemoryPool\CMemoryPool.h(179,22): error C2065: 'st_makeStruct': 선언되지 않은 식별자입니다.
-  (소스 파일 'main.cpp'을(를) 컴파일하는 중)
-  
+  코드를 생성하고 있습니다.
+  Previous IPDB not found, fall back to full compilation.
+  All 26 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  CMemoryPool.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\project\CMemoryPool\Release\CMemoryPool.exe

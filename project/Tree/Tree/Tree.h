@@ -22,8 +22,8 @@ namespace OreoPizza
 		CTREE();
 		~CTREE();
 
-		void insert(int num);
-
+		void insert(int data);
+		int erase(const int key);
 
 	private:
 		st_NODE *st_Root;
@@ -37,14 +37,14 @@ namespace OreoPizza
 	{
 	}
 
-	inline void CTREE::insert(int num)
+	inline void CTREE::insert(int data)
 	{
 		st_NODE* pNewNode = (st_NODE*)malloc(sizeof(st_NODE));
 
 		if (pNewNode == NULL)
 			throw;
 
-		pNewNode->key = num;
+		pNewNode->key = data;
 		pNewNode->pLeft = nullptr;
 		pNewNode->pRight = nullptr;
 
@@ -57,15 +57,42 @@ namespace OreoPizza
 		
 
 		st_NODE* pCurNode = st_Root;
+		st_NODE* pPrntNode = nullptr;
 
-		while (pCurNode != nullptr)
+		while (1)
 		{
-			if (pCurNode->key < num)
-				pCurNode = pCurNode->pRight;
-			else
+			pPrntNode = pCurNode;
+			if (data < pPrntNode->key)
+			{
 				pCurNode = pCurNode->pLeft;
-
+				if (pCurNode == nullptr)
+				{
+					pPrntNode->pLeft = pNewNode;
+					return;
+				}
+			}
+			else
+			{
+				pCurNode = pCurNode->pRight;
+				if (pCurNode == nullptr)
+				{
+					pPrntNode->pRight = pNewNode;
+					return;
+				}
+			}
 		}
+	}
+
+	inline int CTREE::erase(const int key)
+	{
+		int iEraseCnt = 0;
+
+		if (st_Root == nullptr)
+			return 0;
+
+		
+
+		return iEraseCnt;
 	}
 
 }

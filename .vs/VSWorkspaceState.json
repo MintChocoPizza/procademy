@@ -1,14 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\class",
-    "\\class\\class",
-    "\\class\\class\\class",
-    "\\project\\CMemoryPool",
+    "\\project",
     "\\project\\CMemoryPool\\CMemoryPool",
-    "\\project\\OOP",
-    "\\project\\OOP\\OOP"
+    "\\project\\Tree",
+    "\\project\\Tree\\Tree"
   ],
-  "SelectedNode": "\\class\\class\\class\\main.cpp",
+  "SelectedNode": "\\project\\Tree\\Tree\\Tree.h",
   "PreviewInSolutionExplorer": false
 }
