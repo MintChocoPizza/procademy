@@ -31,7 +31,7 @@ private:
 
 int main()
 {
-	CMemoryPool<CTest> CMemoryPool(10, true);
+	CMemoryPool<CTest> CMemoryPool(0, false);
 	CMemoryPool.TraverseMemoryPool();
 	cout << "여기까지 기존의 메모리 풀 입니다. " << endl << endl;
 
@@ -43,7 +43,11 @@ int main()
 	cout << "여기까지 할당했을 때 메모리 풀 입니다. " << endl << endl;
 
 
-	CMemoryPool.Free(pData1);
+	if (CMemoryPool.Free(pData1) == false)
+	{
+		cout << "메모리 해지 안됨" << endl;
+		return 0;
+	}
 	CMemoryPool.Free(pData2);
 	CMemoryPool.Free(pData3);
 	CMemoryPool.Free(pData4);

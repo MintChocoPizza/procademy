@@ -23,10 +23,16 @@
 
 namespace OreoPizza
 {
+	// 클래스 전방선언
+	template <class DATA>
+	class CMemoryPool;
 
 	template <class DATA>
 	struct st_BLOCK_NODE
 	{
+#ifdef _DEBUG
+		CMemoryPool<DATA>* allocationRecord;
+#endif // _DEBUG
 		DATA data;
 		st_BLOCK_NODE* pNext;
 	};
@@ -50,6 +56,8 @@ namespace OreoPizza
 
 		//////////////////////////////////////////////////////////////////////////
 		// 블럭 하나를 할당받는다.  
+		// 
+		// 블럭이 없다면 메모리를 할당하여 블럭을 생성 후 할당한다.
 		//
 		// Parameters: 없음.
 		// Return: (DATA *) 데이타 블럭 포인터.
@@ -89,14 +97,16 @@ namespace OreoPizza
 
 
 		// 스택 방식으로 반환된 (미사용) 오브젝트 블럭을 관리.
-
+		// DATA 생성시 초기에 디폴트 생성자가 동작한다.
 		st_BLOCK_NODE<DATA> _pFreeNode;
 
 	private:
-		int		m_iCapacity;
-		int		m_iUseCount;
-		bool	m_bPlacementNew;
+		int		m_iCapacity;		// 현재 리스트에 연결된 메모리 갯수
+		int		m_iUseCount;		// 현재 사용되고 있는 메모리의 갯수
+		bool	m_bPlacementNew;	
 	};
+
+
 
 	template<class DATA>
 	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) : 
@@ -104,13 +114,17 @@ namespace OreoPizza
 	{
 		int iCnt;
 		_pFreeNode.pNext = NULL;
+
 		for (iCnt = 0; iCnt < iBlockNum; ++iCnt)
 		{
-			st_BLOCK_NODE<DATA>* pNewNode = (st_BLOCK_NODE<DATA> *)malloc(sizeof(st_BLOCK_NODE<DATA> *));
+			st_BLOCK_NODE<DATA>* pNewNode = (st_BLOCK_NODE<DATA> *)malloc(sizeof(st_BLOCK_NODE<DATA>));
 			if (pNewNode == NULL)
 				throw;
 
-			new(&pNewNode->data) DATA();
+			// 생성자 호출
+			new(&(pNewNode->data)) DATA();
+			// 흔적 남기기, 주소 저장
+			pNewNode->allocationRecord = this;
 			
 			(*pNewNode).pNext = _pFreeNode.pNext;
 			_pFreeNode.pNext = pNewNode;
@@ -120,37 +134,84 @@ namespace OreoPizza
 	template<class DATA>
 	inline CMemoryPool<DATA>::~CMemoryPool()
 	{
-		
+		st_BLOCK_NODE<DATA>* deleteNode;
+
+		for (deleteNode = _pFreeNode.pNext; deleteNode != NULL; deleteNode = _pFreeNode.pNext)
+		{
+			_pFreeNode.pNext = deleteNode->pNext;
+
+			(_pFreeNode.data).~DATA();
+
+			free(deleteNode);
+			--m_iCapacity;
+		}
 	}
 
 	template<class DATA>
 	inline DATA* CMemoryPool<DATA>::Alloc(void)
 	{
-		st_BLOCK_NODE<DATA>* tempNode = _pFreeNode.pNext;
+		st_BLOCK_NODE<DATA>* pTempNode;
 
-		_pFreeNode.pNext = tempNode->pNext;
+		if (m_iCapacity == 0)
+		{
+			pTempNode = (st_BLOCK_NODE<DATA>*)malloc(sizeof(st_BLOCK_NODE<DATA>));
+			if (pTempNode == NULL)
+				throw;
+
+			// 생성자 호출
+			new(&(pTempNode->data)) DATA();
+			pTempNode->allocationRecord = this;
+
+			(*pTempNode).pNext = _pFreeNode.pNext;
+			_pFreeNode.pNext = pTempNode;
+
+			++m_iCapacity;
+		}
+		else
+		{
+			pTempNode = _pFreeNode.pNext;
+		}
+
+		_pFreeNode.pNext = pTempNode->pNext;
 
 		if (m_bPlacementNew == true)
 		{
-			new(&(tempNode->data)) DATA();
+			new(&(pTempNode->data)) DATA();
 		}
 
-		return &tempNode->data;
+		--m_iCapacity;
+		++m_iUseCount;
+
+		return &pTempNode->data;
 	}
 
 	template<class DATA>
 	inline bool CMemoryPool<DATA>::Free(DATA* pData)
 	{
+#ifdef _DEBUG
+		st_BLOCK_NODE<DATA>* st_makeStruct = (st_BLOCK_NODE<DATA> *)(pData - 1);
+		if (st_makeStruct->allocationRecord != this)
+		{
+			return false;
+		}
+#else
+		st_BLOCK_NODE<DATA>* st_makeStruct = (st_BLOCK_NODE<DATA> *)(pData);
+#endif // _DEBUG
+
+
+
 		if (m_bPlacementNew == true)
 		{
 			pData->~DATA();
 		}
 
-		// 현재는 data의 위치와 구조체의 주소가 같음.
-		st_BLOCK_NODE<DATA>* st_makeStruct = (st_BLOCK_NODE<DATA> *)pData;
+
 
 		st_makeStruct->pNext = _pFreeNode.pNext;
 		_pFreeNode.pNext = st_makeStruct;
+
+		++m_iCapacity;
+		--m_iUseCount;
 
 		return true;
 	}
@@ -164,9 +225,11 @@ namespace OreoPizza
 		for (curNode = _pFreeNode.pNext; curNode != NULL; curNode = (*curNode).pNext)
 		{
 			printf_s("노드 출력: %d \n", iCnt);
-			printf_s("노드의 주소: %p, 다음 노드 주소: %p \n", &curNode->data, curNode->pNext);
+			printf_s( "노드의 주소 : % p, 다음 노드 주소 : % p \n", curNode, curNode->pNext);
 			++iCnt;
 		}
+
+		printf_s("현재 리스트의 노드 수 %d,  사용중인 노드의 수 %d\n", m_iCapacity, m_iUseCount);
 	}
 
 }
