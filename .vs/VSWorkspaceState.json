@@ -2,10 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\CMemoryPool\\CMemoryPool",
-    "\\project\\Tree",
+    "\\project\\List_Project",
+    "\\project\\List_Project\\List_Project",
     "\\project\\Tree\\Tree"
   ],
-  "SelectedNode": "\\project\\Tree\\Tree\\Tree.h",
+  "SelectedNode": "\\project\\List_Project\\List_Project\\CList.h",
   "PreviewInSolutionExplorer": false
 }

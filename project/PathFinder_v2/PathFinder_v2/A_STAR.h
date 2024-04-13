@@ -32,6 +32,9 @@ public:
 	bool find(int sY, int sX, int eY, int eX, HWND hWnd);
 	st_A_START_NODE* GetNextPosition(void);
 
+	map<pair<int, int>, st_A_START_NODE>::iterator BeginIter(void);
+	map<pair<int, int>, st_A_START_NODE>::iterator EndIter(void);
+
 private:
 
 

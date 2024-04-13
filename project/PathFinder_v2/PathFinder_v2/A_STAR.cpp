@@ -192,3 +192,15 @@ st_A_START_NODE* A_STAR::GetNextPosition(void)
 
 	return temp;
 }
+
+
+map<pair<int, int>, st_A_START_NODE>::iterator A_STAR::BeginIter(void)
+{
+	return _CloseList.begin();
+}
+
+
+map<pair<int, int>, st_A_START_NODE>::iterator A_STAR::EndIter(void)
+{
+	return _CloseList.end();
+}
