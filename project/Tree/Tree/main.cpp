@@ -3,14 +3,60 @@
 
 #include <iostream>
 #include <map>
+#include <set>
+#include <time.h>
+#include <random>
 #include "Tree.h"
 
 using namespace std;
+using namespace OreoPizza;
+
+#define MAX_REPEAT 20
 
 int main()
 {
-    map<int, int> mTree;
+    srand((unsigned int)time(NULL));
 
+    map<int, int> mMap;
+    set<int> mSet;
+    CTREE mTree;
+
+    int tempKey;
+
+    for (int iCnt = 0; iCnt < MAX_REPEAT; ++iCnt)
+    {
+        int num = rand() % 100 + 1;
+
+        if (iCnt == 10)
+            tempKey = num;
+
+        mSet.insert(num);
+        mTree.insert(num);
+    }
+
+    for (auto iter = mSet.begin(); iter != mSet.end(); ++iter)
+        cout << *iter << ' ';
+
+    cout << endl << endl;
+
+    mTree.traverse(2);
+
+    cout << endl;
+
+
+    if (mTree.find(tempKey))
+        cout << tempKey << " 찾음" << endl;
+    else
+        cout << tempKey << " 못찾음" << endl;
+
+    mTree.erase(tempKey);
+
+    if (mTree.find(tempKey))
+        cout << tempKey << "찾음" << endl;
+    else
+        cout << tempKey << "못찾음" << endl;
+
+    mTree.traverse(2);
 
     std::cout << "Hello World!\n";
 }

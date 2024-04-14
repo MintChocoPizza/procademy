@@ -17,13 +17,19 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "DockedWidth": 160,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
+            }
+          ]
+        },
+        {
+          "DockedWidth": 218,
+          "SelectedChildIndex": 0,
+          "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -32,15 +38,15 @@
               "RelativeDocumentMoniker": "Tree\\Tree.h",
               "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\Tree\\Tree\\Tree.h",
               "RelativeToolTip": "Tree\\Tree.h",
-              "ViewState": "AQIAADcAAAAAAAAAAAAiwFwAAAACAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAASAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-12T12:51:39.274Z",
+              "WhenOpened": "2024-04-14T03:18:01.903Z",
               "EditorCaption": ""
             }
           ]
         },
         {
-          "DockedWidth": 200,
+          "DockedWidth": 261,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -51,9 +57,9 @@
               "RelativeDocumentMoniker": "Tree\\main.cpp",
               "ToolTip": "C:\\Users\\User\\Desktop\\procademy_project\\procademy\\project\\Tree\\Tree\\main.cpp",
               "RelativeToolTip": "Tree\\main.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAAAAAA",
+              "ViewState": "AQIAACUAAAAAAAAAAAAAADEAAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-04-12T12:55:39.942Z",
+              "WhenOpened": "2024-04-14T03:18:54.647Z",
               "EditorCaption": ""
             }
           ]
