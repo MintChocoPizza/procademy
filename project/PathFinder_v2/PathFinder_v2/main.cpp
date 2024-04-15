@@ -17,6 +17,9 @@ WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 
 
+HACCEL hAccelTable;
+MSG msg;
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -39,9 +42,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_PATHFINDERV2));
+    hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_PATHFINDERV2));
 
-    MSG msg;
+
 
     // 기본 메시지 루프입니다:
     while (GetMessage(&msg, nullptr, 0, 0))

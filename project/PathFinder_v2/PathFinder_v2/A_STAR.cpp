@@ -1,7 +1,16 @@
 
 #include <stdlib.h>
 #include <Windows.h>
+#include <windowsx.h>
+
+
+#include "resource.h"
+#include "framework.h"
+#include "RegisterClass.h"
+#include "Initstance.h"
+
 #include "WndProc.h"
+#include "PathFinder_v2.h"
 #include "A_STAR.h"
 
 A_STAR::A_STAR()
@@ -53,6 +62,8 @@ bool A_STAR::find(int sY, int sX, int eY, int eX, HWND hWnd)
 
 	while (_OpenList.empty() != true)
 	{
+
+
 		OpenIter = _OpenList.begin();
 		st_CurNode = OpenIter->second;
 
@@ -110,14 +121,23 @@ bool A_STAR::find(int sY, int sX, int eY, int eX, HWND hWnd)
 				// 중복
 				st_NextNode = CloseIter->second;
 
-				if (st_NextNode._F <= F)
-					continue;
 				if (st_NextNode.isOpenList == false)
-				{
-					//continue;
-					MessageBox(NULL, L"F값이 더 작은데 CloseList에 있음", NULL, NULL);
-					return false;
-				}
+					continue;
+
+				if (F >= st_NextNode._F)
+					continue;
+				//if (st_NextNode.isOpenList == false)
+				//{
+				//	//continue;
+				//	MessageBox(NULL, L"F값이 더 작은데 CloseList에 있음", NULL, NULL);
+
+				//	_eY = st_CurNode._Y;
+				//	_eX = st_CurNode._X;
+				//	//_eY = nY;
+				//	//_eX = nX;
+				//	_PathIter = CloseIter;
+				//	return true;
+				//}
 				
 
 				st_A_START_NODE st_temp_Node = {

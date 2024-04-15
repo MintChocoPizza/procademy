@@ -37,6 +37,7 @@ bool findPath = false;  // 길찾기 성공 실패
 
 HPEN g_hGridPen;
 HPEN g_hPathPen;
+HPEN g_hToParentsPen;
 
 HBRUSH g_hTileBrush;
 HBRUSH g_hTileStartBrush;
@@ -62,7 +63,6 @@ void RenderObstacle(HDC hdc);
 void RendefUI(HDC hdc);
 void RenderPath(HDC hdc);
 void RenderList(HDC hdc);
-void RenderWeight(HDC hdc);
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -80,16 +80,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         // RenderObstacle, RenderGrid를 메모리 DC에 출력
         RenderObstacle(g_hMemDC);
-        RenderGrid(g_hMemDC);
 
-
-        RendefUI(g_hMemDC);
 
         if (findPath == true)
         {
             RenderList(g_hMemDC);
             RenderPath(g_hMemDC);
         }
+        RenderGrid(g_hMemDC);
+        RendefUI(g_hMemDC);
+
+
 
         // 메모리 DC에 랜더링이 끝나면, 메모리 DC -> 윈도우 DC로의 출력
         hdc = BeginPaint(hWnd, &ps);
@@ -97,10 +98,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         EndPaint(hWnd, &ps);
 
 
-        // 더블버퍼링 없애기
+        // //더블버퍼링 없애기
         //InvalidateRect(hWnd, NULL, true);
         //hdc = BeginPaint(hWnd, &ps);
         //RenderObstacle(hdc);
+
+        //if (findPath == true)
+        //{
+        //    RenderList(hdc);
+        //    RenderPath(hdc);
+        //}
+        //RenderGrid(hdc);
+        //RendefUI(hdc);
+
         //RenderGrid(hdc);
         //EndPaint(hWnd, &ps);
 
@@ -294,7 +304,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             xChangedStartPos = pt.x - xChangedBottom;
 
             // 직선의 방정식으로 y좌표도 구한다.
-            yChangedStartPos = (pt.y - st_RenderStart._y) / (pt.x - st_RenderStart._x) * (xChangedStartPos - st_RenderStart._x) + st_RenderStart._y;
+            yChangedStartPos = (double)(pt.y - st_RenderStart._y) / (double)(pt.x - st_RenderStart._x) * (xChangedStartPos - st_RenderStart._x) + st_RenderStart._y;
         }
         else
         {
@@ -407,7 +417,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_CREATE:
     {
         g_hGridPen = CreatePen(PS_SOLID, 1, RGB(200, 200, 200));
-        g_hPathPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+        g_hPathPen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
+        g_hToParentsPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+
 
         g_hTileBrush = CreateSolidBrush(RGB(100, 100, 100));
         g_hTileStartBrush = CreateSolidBrush(RGB(0, 255, 0));
@@ -590,12 +602,18 @@ void RenderList(HDC hdc)
     std::map<pair<int, int>, st_A_START_NODE>::iterator iter;
     st_A_START_NODE tempNode;
     HBRUSH hOldBrush;
+    HPEN hOldPen;
     HFONT hFont;
     int iX;
     int iY;
+    int sX;
+    int sY;
+    int eX;
+    int eY;
     wchar_t Buff[50];
 
     hFont = CreateFont(12, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PALETTE | FF_DONTCARE, L"Tahoma");
+    hOldPen = (HPEN)SelectObject(hdc, g_hToParentsPen);
     SelectObject(hdc, hFont);
     SetTextColor(hdc, RGB(0, 0, 0));
 
@@ -608,6 +626,7 @@ void RenderList(HDC hdc)
         if (tempNode._X == st_End._x && tempNode._Y == st_End._y)
             continue;
 
+        // 타일 색깔 칠하기
         if (tempNode.isOpenList == true)
         {
             hOldBrush = (HBRUSH)SelectObject(hdc, g_hTileOpenListBrush);
@@ -626,6 +645,29 @@ void RenderList(HDC hdc)
             SelectObject(hdc, hOldBrush);
         }
 
+        // 부모노드쪽으로 가르키기
+        if (tempNode._pX != -1 || tempNode._pY != -1)
+        {
+            sX = (tempNode._X * GRID_SIZE + st_RenderStart._x) + GRID_SIZE / 2;
+            sY = (tempNode._Y * GRID_SIZE + st_RenderStart._y) + GRID_SIZE / 2;
+            eX = (tempNode._pX * GRID_SIZE + st_RenderStart._x) + GRID_SIZE / 2;
+            eY = (tempNode._pY * GRID_SIZE + st_RenderStart._y) + GRID_SIZE / 2;
+
+            if (eX < tempNode._X * GRID_SIZE + st_RenderStart._x)
+                eX = tempNode._X * GRID_SIZE + st_RenderStart._x;
+            else if (eX >= tempNode._X * GRID_SIZE + st_RenderStart._x + GRID_SIZE)
+                eX = tempNode._X * GRID_SIZE + st_RenderStart._x + GRID_SIZE;
+
+            if (eY < tempNode._Y * GRID_SIZE + st_RenderStart._y)
+                eY = tempNode._Y * GRID_SIZE + st_RenderStart._y;
+            else if (eY > tempNode._Y * GRID_SIZE + st_RenderStart._y + GRID_SIZE)
+                eY = tempNode._Y * GRID_SIZE + st_RenderStart._y + GRID_SIZE;
+
+            MoveToEx(hdc, sX, sY, NULL);
+            LineTo(hdc, eX, eY);
+        }
+
+
         if (GRID_SIZE > 46)
         {
             swprintf_s(Buff, L"G: %0.1lf", tempNode._G);
@@ -638,5 +680,6 @@ void RenderList(HDC hdc)
             TextOut(hdc, iX + 1, iY + 27, Buff, lstrlen(Buff));
         }
     }
+    SelectObject(hdc, hOldPen);
 }
 

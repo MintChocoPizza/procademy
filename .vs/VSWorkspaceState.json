@@ -2,10 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\List_Project",
-    "\\project\\List_Project\\List_Project",
-    "\\project\\OOP\\OOP"
+    "\\project\\OOP\\OOP",
+    "\\project\\PathFinder_v2",
+    "\\project\\PathFinder_v2\\PathFinder_v2"
   ],
-  "SelectedNode": "\\project\\List_Project\\List_Project\\CList.h",
+  "SelectedNode": "\\project\\PathFinder_v2\\PathFinder_v2\\A_STAR.cpp",
   "PreviewInSolutionExplorer": false
 }
