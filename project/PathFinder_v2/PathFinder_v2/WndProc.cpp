@@ -75,44 +75,44 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_PAINT:
     {
-        // 메모리 DC를 클리어 하고
-        PatBlt(g_hMemDC, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, WHITENESS);
+        //// 메모리 DC를 클리어 하고
+        //PatBlt(g_hMemDC, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, WHITENESS);
 
-        // RenderObstacle, RenderGrid를 메모리 DC에 출력
-        RenderObstacle(g_hMemDC);
+        //// RenderObstacle, RenderGrid를 메모리 DC에 출력
+        //RenderObstacle(g_hMemDC);
 
-
-        if (findPath == true)
-        {
-            RenderList(g_hMemDC);
-            RenderPath(g_hMemDC);
-        }
-        RenderGrid(g_hMemDC);
-        RendefUI(g_hMemDC);
-
-
-
-        // 메모리 DC에 랜더링이 끝나면, 메모리 DC -> 윈도우 DC로의 출력
-        hdc = BeginPaint(hWnd, &ps);
-        BitBlt(hdc, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, g_hMemDC, 0, 0, SRCCOPY);
-        EndPaint(hWnd, &ps);
-
-
-        // //더블버퍼링 없애기
-        //InvalidateRect(hWnd, NULL, true);
-        //hdc = BeginPaint(hWnd, &ps);
-        //RenderObstacle(hdc);
 
         //if (findPath == true)
         //{
-        //    RenderList(hdc);
-        //    RenderPath(hdc);
+        //    RenderList(g_hMemDC);
+        //    RenderPath(g_hMemDC);
         //}
-        //RenderGrid(hdc);
-        //RendefUI(hdc);
+        //RenderGrid(g_hMemDC);
+        //RendefUI(g_hMemDC);
 
-        //RenderGrid(hdc);
+
+
+        //// 메모리 DC에 랜더링이 끝나면, 메모리 DC -> 윈도우 DC로의 출력
+        //hdc = BeginPaint(hWnd, &ps);
+        //BitBlt(hdc, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, g_hMemDC, 0, 0, SRCCOPY);
         //EndPaint(hWnd, &ps);
+
+
+         //더블버퍼링 없애기
+        InvalidateRect(hWnd, NULL, true);
+        hdc = BeginPaint(hWnd, &ps);
+        RenderObstacle(hdc);
+
+        if (findPath == true)
+        {
+            RenderList(hdc);
+            RenderPath(hdc);
+        }
+        RenderGrid(hdc);
+        RendefUI(hdc);
+
+        RenderGrid(hdc);
+        EndPaint(hWnd, &ps);
 
     }
     break;
@@ -335,7 +335,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         st_RenderStart._y = min(yChangedStartPos, 0);
         st_RenderStart._x = min(xChangedStartPos, 0);
 
-        if (ChangeWidth <= ScreenSizeY || ChargeHeight <= ScreenSizeX)
+        if (ChangeWidth <= ScreenSizeX || ChargeHeight <= ScreenSizeY)
         {
             st_RenderStart._y = 0;
             st_RenderStart._x = 0;
@@ -570,7 +570,9 @@ void RendefUI(HDC hdc)
     SelectObject(hdc, hFont);
     SetTextColor(hdc, RGB(0, 0, 0));
     //SetBkMode(hdc, )
-    TextOut(hdc, 10, 10, L"안녕하세요", lstrlen(L"안녕하세요"));
+    TextOut(hdc, 10, 10, L"시작: 왼더블클릭 / 끝: 오른더블클릭 / 장애물: 드래그 / 시작: 스페이스", lstrlen(L"시작: 왼더블클릭 / 끝: 오른더블클릭 / 장애물: 드래그 / 시작: 스페이스"));
+    TextOut(hdc, 10, 26, L"AWSD: 스크롤 / 휠: 확대축소", lstrlen(L"AWSD: 스크롤 / 휠: 확대축소"));
+    TextOut(hdc, 10, 41, L" ", lstrlen(L" "));
 }
 
 void RenderPath(HDC hdc)
