@@ -3,6 +3,7 @@
 #ifndef __TREE_H__
 #define __TREE_H__
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
 
@@ -33,8 +34,6 @@ namespace OreoPizza
 		void preorder_traverse(st_NODE* pCurNode);
 		void inorder_traverse(st_NODE* pCurNode);
 		void postorder_traverse(st_NODE* pCurNode);
-
-		bool erase_traverse(const int key, st_NODE* pCurNode);
 
 	private:
 		st_NODE *st_Root;
