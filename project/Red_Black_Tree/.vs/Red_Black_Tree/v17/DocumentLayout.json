@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:1:0:{956AEAD9-E865-450A-AA31-6B802081CED2}|Red_Black_Tree\\Red_Black_Tree.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\Red_Black_Tree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:1:0:{956AEAD9-E865-450A-AA31-6B802081CED2}|Red_Black_Tree\\Red_Black_Tree.vcxproj|solutionrelative:Red_Black_Tree\\Red_Black_Tree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:2:0:{956AEAD9-E865-450A-AA31-6B802081CED2}|Red_Black_Tree\\Red_Black_Tree.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\Red_Black_Tree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:2:0:{956AEAD9-E865-450A-AA31-6B802081CED2}|Red_Black_Tree\\Red_Black_Tree.vcxproj|solutionrelative:Red_Black_Tree\\Red_Black_Tree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{956AEAD9-E865-450A-AA31-6B802081CED2}|Red_Black_Tree\\Red_Black_Tree.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{956AEAD9-E865-450A-AA31-6B802081CED2}|Red_Black_Tree\\Red_Black_Tree.vcxproj|solutionrelative:Red_Black_Tree\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:1:0:{956AEAD9-E865-450A-AA31-6B802081CED2}|Red_Black_Tree\\Red_Black_Tree.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\Red_Black_Tree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:1:0:{956AEAD9-E865-450A-AA31-6B802081CED2}|Red_Black_Tree\\Red_Black_Tree.vcxproj|solutionrelative:Red_Black_Tree\\Red_Black_Tree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 64,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,26 +30,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "main.cpp",
-              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\main.cpp",
-              "RelativeDocumentMoniker": "Red_Black_Tree\\main.cpp",
-              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\main.cpp",
-              "RelativeToolTip": "Red_Black_Tree\\main.cpp",
-              "ViewState": "AQIAAA4AAAAAAAAAAAAmwB8AAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-04-14T07:24:03.277Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Red_Black_Tree.h",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\Red_Black_Tree.h",
               "RelativeDocumentMoniker": "Red_Black_Tree\\Red_Black_Tree.h",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\Red_Black_Tree.h",
               "RelativeToolTip": "Red_Black_Tree\\Red_Black_Tree.h",
-              "ViewState": "AQIAAGIAAAAAODMzMzPjv30AAAAAAAAA",
+              "ViewState": "AQIAADsBAAAAAAAAAAAnwFsBAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-04-14T07:24:22.984Z",
               "EditorCaption": ""
@@ -62,15 +49,49 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Red_Black_Tree.h",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\Red_Black_Tree.h",
               "RelativeDocumentMoniker": "Red_Black_Tree\\Red_Black_Tree.h",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\Red_Black_Tree.h",
               "RelativeToolTip": "Red_Black_Tree\\Red_Black_Tree.h",
-              "ViewState": "AQIAAAsBAAAAAAAAAAArwB0BAAAAAAAA",
+              "ViewState": "AQIAACIBAAAAAAAAAAAnwB0BAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-04-16T08:20:37.994Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "8d221216-b6b9-46d7-a087-9815db8f0b6a",
+        "Display": 1,
+        "X": -523,
+        "Y": 515,
+        "Width": 1330,
+        "Height": 1152,
+        "WindowState": 2
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\main.cpp",
+              "RelativeDocumentMoniker": "Red_Black_Tree\\main.cpp",
+              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Red_Black_Tree\\Red_Black_Tree\\main.cpp",
+              "RelativeToolTip": "Red_Black_Tree\\main.cpp",
+              "ViewState": "AQIAAAIAAAAAAAAAAAAmwB0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-04-14T07:24:03.277Z",
               "EditorCaption": ""
             }
           ]
