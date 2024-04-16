@@ -2,10 +2,37 @@
 //
 
 #include <iostream>
+#include <time.h>
+#include <stdlib.h>
+#include <random>
+#include <set>
+#include <vector>
+
+#include "Red_Black_Tree.h"
+
+using namespace std;
+using namespace OreoPizza;
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    srand(time(NULL));
+    
+    C_RED_BLACK_TREE cTree;
+    set<int> cSet;
+    vector<int> temp;
+
+    cTree.insert(5);
+    cTree.insert(1);
+    cTree.insert(10);
+
+    cTree.traverse(2);
+
+    cTree.LeftRotateNode(cTree.st_Root, cTree.st_Root);
+
+    cTree.traverse(2);
+
+    std::cout << "\nHello World!\n";
+    return 0;
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
