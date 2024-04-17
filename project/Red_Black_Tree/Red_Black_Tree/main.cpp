@@ -25,18 +25,12 @@ int main()
     {
         int iRand = rand() % 100 + 1;
         cTree.insert(iRand);
+        cTree.traverse(0);
+        cout << endl << endl;
     }
-    cTree.traverse(1);
-    cout << endl;
-    cTree.traverse(0);
 
-    st_NODE* node = cTree.st_Root;
-    cTree.RightRotateNode(cTree.st_Root, node);
-    cout << endl;
-    cTree.traverse(1);
-    cout << endl;
+
     cTree.traverse(0);
-   
 
 
     std::cout << "\nHello World!\n";

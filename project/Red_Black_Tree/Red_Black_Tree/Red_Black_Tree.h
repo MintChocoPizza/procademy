@@ -48,8 +48,8 @@ namespace OreoPizza
 
 		void insertFixup(st_NODE* pCurNode);
 
-	public: void RightRotateNode(st_NODE*& root, st_NODE*& pCurNode);
-		void LeftRotateNode(st_NODE*& root, st_NODE*& pCurNode);
+	public: void RightRotateNode(st_NODE*& pCurNode);
+		void LeftRotateNode(st_NODE*& pCurNode);
 
 	private:
 	public: st_NODE* st_Root;
@@ -58,6 +58,7 @@ namespace OreoPizza
 
 	OreoPizza::C_RED_BLACK_TREE::C_RED_BLACK_TREE() : st_Root(nullptr), Nil{nullptr, nullptr, nullptr, BLACK}
 	{
+		st_Root = &Nil;
 	}
 
 	OreoPizza::C_RED_BLACK_TREE::~C_RED_BLACK_TREE()
@@ -66,63 +67,34 @@ namespace OreoPizza
 
 	inline void C_RED_BLACK_TREE::insert(int data)
 	{
-		st_NODE* pCurNode;
-		st_NODE* pPrntNode;
-		st_NODE* pNewNode = (st_NODE*)malloc(sizeof(st_NODE));
+		st_NODE* y = &Nil;
+		st_NODE* x = st_Root;
+		st_NODE* z = new st_NODE;
+		z->key = data;
+		
 
-		if (pNewNode == NULL)
-			throw;
-
-		pNewNode->pLeft = &Nil;
-		pNewNode->pRight = &Nil;
-		pNewNode->key = data;
-
-
-		if (st_Root == nullptr)
+		while (x != &Nil)
 		{
-			pNewNode->pParent = nullptr;
-			pNewNode->Color = BLACK;
-			st_Root = pNewNode;
-			return;
+			y = x;
+			if (z->key < x->key)
+				x = x->pLeft;
+			else
+				x = x->pRight;
 		}
+		z->pParent = y;
 
+		if (y == &Nil)
+			st_Root = z;
+		else if (z->key < y->key)
+			y->pLeft = z;
+		else
+			y->pRight = z;
 
+		z->pLeft = &Nil;
+		z->pRight = &Nil;
+		z->Color = RED;
 
-		pNewNode->Color = RED;
-		pCurNode = st_Root;
-		pPrntNode = nullptr;
-
-		while (1)
-		{
-			pPrntNode = pCurNode;
-			if (data < pPrntNode->key)
-			{
-				pCurNode = pCurNode->pLeft;
-				if (pCurNode == &Nil)
-				{
-					pNewNode->pParent = pPrntNode;
-					pPrntNode->pLeft = pNewNode;
-					break;
-				}
-			}
-			else if (data > pPrntNode->key)
-			{
-				pCurNode = pCurNode->pRight;
-				if (pCurNode == &Nil)
-				{
-					pNewNode->pParent = pPrntNode;
-					pPrntNode->pRight = pNewNode;
-					break;
-				}
-			}
-			else if (data == pPrntNode->key) // 중복 제거
-				return;
-		}
-
-
-
-
-
+		insertFixup(z);
 	}
 
 	inline bool C_RED_BLACK_TREE::find(const int key)
@@ -318,77 +290,220 @@ namespace OreoPizza
 	}
 	inline void C_RED_BLACK_TREE::insertFixup(st_NODE* pCurNode)
 	{
-		if (pCurNode->pParent->Color == 0)
-			return;
+		//st_NODE* p_Cur_Node = pCurNode;
+	
+		//while (1)
+		//{
+		//	// st_Cur_Node가 st_Root인 경우 예외 처리
+		//	if (p_Cur_Node == st_Root)
+		//	{
+		//		p_Cur_Node->Color = BLACK;
+		//		return;
+		//	}
 
+		//	// 깊이가 2단계인 경우 
+
+		//	st_NODE* p_P_Node = p_Cur_Node->pParent;
+		//	st_NODE* p_GP_Node = p_P_Node->pParent;
+		//	st_NODE* p_Uncle_Node;
+
+		//	if (p_GP_Node->pLeft == p_P_Node)
+		//		p_Uncle_Node = p_GP_Node->pRight;
+		//	else
+		//		p_Uncle_Node = p_GP_Node->pLeft;
+
+
+		//	if (p_P_Node->Color == BLACK)
+		//		return;
+
+
+
+		//	// 부모와 삼촌이 RED인 경우
+		//	if (p_P_Node->Color == RED && p_Uncle_Node->Color == RED)
+		//	{
+		//		p_GP_Node->Color = RED;
+		//		p_P_Node->Color = BLACK;
+		//		p_Uncle_Node->Color = BLACK;
+
+
+		//		p_Cur_Node = p_GP_Node;
+		//		continue;
+		//	}
+
+		//	// 나는 부모의 오른 레드, 부모 레드, 삼촌 블랙
+		//	if (p_P_Node->Color == RED && p_Uncle_Node->Color == RED && p_P_Node->pRight == p_Cur_Node)
+		//	{
+		//		LeftRotateNode(p_Cur_Node);
+		//		p_Cur_Node = p_P_Node;
+		//		continue;
+		//	}
+
+		//	// 나는 부모의 왼쪽 레드, 부모 레드, 삼촌 블랙
+		//	if (p_P_Node->Color == RED && p_Uncle_Node->Color == RED && p_P_Node->pLeft == p_Cur_Node)
+		//	{
+		//		p_P_Node->Color = BLACK;
+		//		p_GP_Node->Color = RED;
+		//		
+		//		RightRotateNode(p_GP_Node);
+		//		continue;
+		//	}
+		//}
+
+		st_NODE* y;
+		while (pCurNode->pParent->Color == RED)
+		{
+			if (pCurNode->pParent == pCurNode->pParent->pParent->pLeft)
+			{
+				y = pCurNode->pParent->pParent->pLeft;
+				if (y->Color == RED)
+				{
+					pCurNode->pParent->Color = BLACK;
+					y->Color = BLACK;
+					pCurNode->pParent->pParent->Color = RED;
+					pCurNode = pCurNode->pParent->pParent;
+				}
+				else
+				{
+					if (pCurNode == pCurNode->pParent->pRight)
+					{
+						pCurNode = pCurNode->pParent;
+						LeftRotateNode(pCurNode);
+					}
+					pCurNode->pParent->Color = BLACK;
+					pCurNode->pParent->pParent->Color = RED;
+					RightRotateNode(pCurNode->pParent->pParent);
+				}
+			}
+			else
+			{
+				y = pCurNode->pParent->pParent->pRight;
+				if (y->Color == RED)
+				{
+					pCurNode->pParent->Color = BLACK;
+					y->Color = BLACK;
+					pCurNode->pParent->pParent->Color = RED;
+					pCurNode = pCurNode->pParent->pParent;
+				}
+				else
+				{
+					if (pCurNode = pCurNode->pParent->pLeft)
+					{
+						pCurNode = pCurNode->pParent;
+						RightRotateNode(pCurNode);
+					}
+					pCurNode->pParent->Color = BLACK;
+					pCurNode->pParent->pParent->Color = RED;
+					LeftRotateNode(pCurNode->pParent->pParent);
+				}
+			}
+			st_Root->Color = BLACK;
+		}
+	}
+	inline void C_RED_BLACK_TREE::RightRotateNode(st_NODE *& pCurNode)
+	{
+		//st_NODE* pParentsNode = pCurNode->pParent;
+		//st_NODE* pLeftChild = pCurNode->pLeft;
+		//st_NODE* pLRChild = pLeftChild->pRight;
+
+		//// 1. 왼쪽 자식의 오른쪽 자식을 현재 노드의 왼쪽 자식으로 연결한다. 
+		//pCurNode->pLeft = pLRChild;
+		//
+		//// 2. 역으로 부모 노드도 연결한다. 
+		//pLRChild->pParent = pCurNode;
+
+		//// 3. 왼쪽 자식의 부모 연결을 조부모로 바꾼다. 
+		//pLeftChild->pParent = pParentsNode;
+
+		//// 4. 만약 조부모 노드가 nullptr이면 현재 노드는 루트 노드였다. 
+		//if (pParentsNode == nullptr)
+		//	st_Root = pLeftChild;
+
+		//// 5. 루트 노드가 아니고, 현재 노드가 조부모의 왼쪽 노드인 경우
+		//else if (pCurNode == pParentsNode->pLeft)
+		//	pParentsNode->pLeft = pLeftChild;
+
+		//// 6. 현재 노드가 조부모의 오른쪽 노드인 경우
+		//else
+		//	pParentsNode->pRight = pLeftChild;
+
+		//// 7. 현재 노드를 왼쪽 자식의 오른쪽 노드로 연결
+		//pLeftChild->pRight = pCurNode;
+
+		//// 8. 현재 노드의 부모 노드 연결 변경
+		//pCurNode->pParent = pLeftChild;
+
+		st_NODE* y = pCurNode->pLeft;
+		pCurNode->pLeft = y->pRight;
+
+		if (y->pRight != &Nil)
+			y->pRight->pParent = pCurNode;
+
+		y->pParent = pCurNode->pParent;
+
+		if (pCurNode->pParent == &Nil)
+			st_Root = y;
+		else if (pCurNode == pCurNode->pParent->pRight)
+			pCurNode->pParent->pRight = y;
+		else
+			pCurNode->pParent->pLeft = y;
+
+		y->pRight = pCurNode;
+		pCurNode->pParent = y;
 
 	}
-	inline void C_RED_BLACK_TREE::RightRotateNode(st_NODE*& root, st_NODE *& pCurNode)
+
+	inline void C_RED_BLACK_TREE::LeftRotateNode(st_NODE*& pCurNode)
 	{
-		st_NODE* pParentsNode = pCurNode->pParent;
-		st_NODE* pLeftChild = pCurNode->pLeft;
-		st_NODE* pLRChild = pLeftChild->pRight;
+		//st_NODE* pParentsNode = pCurNode->pParent;
+		//st_NODE* pRightChild = pCurNode->pRight;
+		//st_NODE* pRLChild = pRightChild->pLeft;
 
-		// 1. 왼쪽 자식의 오른쪽 자식을 현재 노드의 왼쪽 자식으로 연결한다. 
-		pCurNode->pLeft = pLRChild;
-		
-		// 2. 역으로 부모 노드도 연결한다. 
-		pLRChild->pParent = pCurNode;
+		//// 1. 오른쪽 자식의 왼쪽 자식을 현재 노드의 오른쪽 자식으로 연결한다. 
+		//pCurNode->pRight = pRLChild;
 
-		// 3. 왼쪽 자식의 부모 연결을 조부모로 바꾼다. 
-		pLeftChild->pParent = pParentsNode;
+		//// 2. 역으로 부모 노드도 연결한다. 
+		//pRLChild->pParent = pCurNode;
 
-		// 4. 만약 조부모 노드가 nullptr이면 현재 노드는 루트 노드였다. 
-		if (pParentsNode == nullptr)
-			root = pLeftChild;
+		//// 3. 오른쪽 자식의 부모 연결을 조부모로 바꾼다. 
+		//pRightChild->pParent = pParentsNode;
 
-		// 5. 루트 노드가 아니고, 현재 노드가 조부모의 왼쪽 노드인 경우
-		else if (pCurNode == pParentsNode->pLeft)
-			pParentsNode->pLeft = pLeftChild;
+		//// 4. 만약 조부모 노드가 nullptr이면 현재 노드는 루트 노드였다.
+		//if (pParentsNode == nullptr)
+		//	st_Root = pRightChild;
 
-		// 6. 현재 노드가 조부모의 오른쪽 노드인 경우
+		//// 5. 루트 노드가 아니고, 현재 노드가 조부모의 왼쪽 노드인 경우
+		//else if (pCurNode == pParentsNode->pLeft)
+		//	pParentsNode->pLeft = pRightChild;
+
+		//// 6. 현재 노드가 조부모의 오른쪽 노드인 경우
+		//else
+		//	pParentsNode->pRight = pRightChild;
+
+		//// 7. 현재 노드를 오른쪽 자식의 왼쪽 노드로 연결
+		//pRightChild->pLeft = pCurNode;
+
+		//// 8. 현재 노드의 부모 노드 연결 변경
+		//pCurNode->pParent = pRightChild;
+
+
+
+		st_NODE* y = pCurNode->pRight;
+		pCurNode->pRight = y->pLeft;
+
+		if (y->pLeft != &Nil)
+			y->pLeft->pParent = pCurNode;
+
+		y->pParent = pCurNode->pParent;
+
+		if (pCurNode->pParent == &Nil)
+			st_Root = y;
+		else if (pCurNode == pCurNode->pParent->pLeft)
+			pCurNode->pParent->pLeft = y;
 		else
-			pParentsNode->pRight = pLeftChild;
+			pCurNode->pParent->pRight = y;
 
-		// 7. 현재 노드를 왼쪽 자식의 오른쪽 노드로 연결
-		pLeftChild->pRight = pCurNode;
-
-		// 8. 현재 노드의 부모 노드 연결 변경
-		pCurNode->pParent = pLeftChild;
-	}
-
-	inline void C_RED_BLACK_TREE::LeftRotateNode(st_NODE*& root, st_NODE*& pCurNode)
-	{
-		st_NODE* pParentsNode = pCurNode->pParent;
-		st_NODE* pRightChild = pCurNode->pRight;
-		st_NODE* pRLChild = pRightChild->pLeft;
-
-		// 1. 오른쪽 자식의 왼쪽 자식을 현재 노드의 오른쪽 자식으로 연결한다. 
-		pCurNode->pRight = pRLChild;
-
-		// 2. 역으로 부모 노드도 연결한다. 
-		pRLChild->pParent = pCurNode;
-
-		// 3. 오른쪽 자식의 부모 연결을 조부모로 바꾼다. 
-		pRightChild->pParent = pParentsNode;
-
-		// 4. 만약 조부모 노드가 nullptr이면 현재 노드는 루트 노드였다.
-		if (pParentsNode == nullptr)
-			root = pRightChild;
-
-		// 5. 루트 노드가 아니고, 현재 노드가 조부모의 왼쪽 노드인 경우
-		else if (pCurNode == pParentsNode->pLeft)
-			pParentsNode->pLeft = pRightChild;
-
-		// 6. 현재 노드가 조부모의 오른쪽 노드인 경우
-		else
-			pParentsNode->pRight = pRightChild;
-
-		// 7. 현재 노드를 오른쪽 자식의 왼쪽 노드로 연결
-		pRightChild->pLeft = pCurNode;
-
-		// 8. 현재 노드의 부모 노드 연결 변경
-		pCurNode->pParent = pRightChild;
+		y->pLeft = pCurNode;
+		pCurNode->pParent = y;
 	}
 
 }
