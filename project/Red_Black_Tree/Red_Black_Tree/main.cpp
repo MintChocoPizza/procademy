@@ -21,15 +21,23 @@ int main()
     set<int> cSet;
     vector<int> temp;
 
-    cTree.insert(5);
-    cTree.insert(1);
-    cTree.insert(10);
+    for (int i = 0; i < 20; ++i)
+    {
+        int iRand = rand() % 100 + 1;
+        cTree.insert(iRand);
+    }
+    cTree.traverse(1);
+    cout << endl;
+    cTree.traverse(0);
 
-    cTree.traverse(2);
+    st_NODE* node = cTree.st_Root;
+    cTree.RightRotateNode(cTree.st_Root, node);
+    cout << endl;
+    cTree.traverse(1);
+    cout << endl;
+    cTree.traverse(0);
+   
 
-    cTree.LeftRotateNode(cTree.st_Root, cTree.st_Root);
-
-    cTree.traverse(2);
 
     std::cout << "\nHello World!\n";
     return 0;

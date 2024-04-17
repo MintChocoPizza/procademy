@@ -1,2 +1,5 @@
 ﻿  main.cpp
+C:\Users\user\Desktop\procademy_project\procademy\project\CMemoryPool\CMemoryPool\main.cpp(46,6): warning C4101: 'temp' :참조되지 않은 지역 변수입니다.
+  MyProfile.cpp
+  코드를 생성하고 있습니다...
   CMemoryPool.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\project\CMemoryPool\Debug\CMemoryPool.exe

@@ -3,60 +3,92 @@
 
 #include <iostream>
 
+#include <vector>
+
+#include "MyProfile.h"
 #include "CMemoryPool.h"
 
 using namespace std;
 using namespace OreoPizza;
 
-
-int num = 0;
-
-class CTest
+class CTEST
 {
+	// 64번씩 1만번
 public:
-	CTest()
-	{
-		a = 10;
-		cout << ++num << " CTest 의 생성자 입니다." << endl;
-	}
-	~CTest()
-	{
-		a = 0;
-		cout << num-- << "CTest의 소멸자 입니다. " << endl;
-	}
-
+	CTEST();
+	~CTEST();
 private:
-	int a;
+	double a;
+	int b;
+	short c;
+	char d;
 };
+
+CTEST::CTEST() : a(1), b(2), c(3), d(4)
+{
+	
+}
+
+CTEST::~CTEST() 
+{
+	a = 0;
+	b = 0;
+	c = 0;
+	d = 0;
+}
+
 
 int main()
 {
-	CMemoryPool<CTest> CMemoryPool(0, false);
-	CMemoryPool.TraverseMemoryPool();
-	cout << "여기까지 기존의 메모리 풀 입니다. " << endl << endl;
+	// 1024byte 1만번 기준	
 
-	CTest* pData1 = CMemoryPool.Alloc();
-	CTest* pData2 = CMemoryPool.Alloc();
-	CTest* pData3 = CMemoryPool.Alloc();
-	CTest* pData4 = CMemoryPool.Alloc();
-	CMemoryPool.TraverseMemoryPool();
-	cout << "여기까지 할당했을 때 메모리 풀 입니다. " << endl << endl;
+	CTEST* Arr[64];
+	int temp;
 
+	ProfileReset();
 
-	if (CMemoryPool.Free(pData1) == false)
+	CMemoryPool<CTEST> MemPool(0, FALSE);
 	{
-		cout << "메모리 해지 안됨" << endl;
-		return 0;
+		for (int iCnt = 0; iCnt < 100; iCnt++)
+		{
+			cMYPROFILE cTest(_T("MemPool"));
+			for (int i = 0; i < 10000; ++i)
+			{
+				for (int j = 0; j < 64; ++j)
+				{
+					Arr[j] = MemPool.Alloc();
+				}
+				for (int j = 0; j < 64; ++j)
+				{
+					MemPool.Free(Arr[j]);
+				}
+			}
+		}
 	}
-	CMemoryPool.Free(pData2);
-	CMemoryPool.Free(pData3);
-	CMemoryPool.Free(pData4);
-	CMemoryPool.TraverseMemoryPool();
-	cout << "여기까지 메모리 해지했을 때 메모리 풀 입니다. " << endl << endl;
-	
 
-	cout << "Hello World" << endl;
+	{
+		for (int iCnt = 0; iCnt < 100; ++iCnt)
+		{
+			cMYPROFILE cTest(_T("New"));
 
+			for (int i = 0; i < 10000; ++i)
+			{
+				for (int j = 0; j < 64; ++j)
+				{
+					Arr[j] = new CTEST();
+				}
+
+				for (int j = 0; j < 64; ++j)
+				{
+					delete Arr[j];
+				}
+			}
+		}
+	}
+	// 약 8배 정도 빠르다.
+
+
+	ProfileDataOutText(L"AAA.txt");
 	return 0;
 }
 

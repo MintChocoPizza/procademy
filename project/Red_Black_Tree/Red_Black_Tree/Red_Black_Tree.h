@@ -40,17 +40,17 @@ namespace OreoPizza
 	private:
 		bool find_traverse(const int key, st_NODE* pCurNode);
 
-		void printTree(st_NODE* pCurNode, int space);
+		void printTree(st_NODE* pCurNode);
 		void preorder_traverse(st_NODE* pCurNode);
 		void loop_preorder_traverse(void);
 		void inorder_traverse(st_NODE* pCurNode);
 		void postorder_traverse(st_NODE* pCurNode);
 
-	public:void RightRotateNode(st_NODE*& root, st_NODE *& pCurNode);
-	public:void LeftRotateNode(st_NODE*& root, st_NODE*& pCurNode);
+	public: void RightRotateNode(st_NODE*& root, st_NODE*& pCurNode);
+		void LeftRotateNode(st_NODE*& root, st_NODE*& pCurNode);
 
 	private:
-	public:st_NODE* st_Root;
+	public: st_NODE* st_Root;
 		st_NODE Nil;
 	};
 
@@ -127,7 +127,7 @@ namespace OreoPizza
 	inline void C_RED_BLACK_TREE::traverse(int Choice)
 	{
 		if (Choice == 0)
-			printTree(st_Root, 0);
+			printTree(st_Root);
 		else if (Choice == 1)
 			preorder_traverse(st_Root);
 		else if (Choice == 2)
@@ -222,26 +222,34 @@ namespace OreoPizza
 		return find_traverse(key, pCurNode->pLeft) || find_traverse(key, pCurNode->pRight);
 	}
 
-	inline void C_RED_BLACK_TREE::printTree(st_NODE* pCurNode, int space)
+	inline void C_RED_BLACK_TREE::printTree(st_NODE* pCurNode)
 	{
-		int COUNT = 10;
-		int iCnt;
-
-		if (pCurNode == nullptr)
-			return;
-		if (pCurNode == &Nil)
-			return;
-
-		space += COUNT;
-
-		printTree(pCurNode->pRight, space);
-		printf_s("\n");
-		for (iCnt = COUNT; iCnt < space; ++iCnt)
+		if (pCurNode != nullptr && pCurNode != &Nil)
 		{
-			printf_s(" ");
+			printf("(");
+			if(pCurNode->pLeft != nullptr)
+				printf(" %d", pCurNode->pLeft->key);
+
+			printf(" %d", pCurNode->key);
+
+			if(pCurNode->pRight != nullptr)
+				printf(" %d", pCurNode->pRight->key);
+
+			printf(")");
+
+			if (pCurNode->pParent != nullptr)
+				printf("-> %d", pCurNode->pParent->key);
+
+			if (pCurNode->Color == 0)
+				printf(" / BLACK");
+			else
+				printf(" / RED");
+
+			printf("\n");
+
+			printTree(pCurNode->pLeft);
+			printTree(pCurNode->pRight);
 		}
-		printf_s("%d\n", pCurNode->key);
-		printTree(pCurNode->pLeft, space);
 	}
 
 	inline void C_RED_BLACK_TREE::preorder_traverse(st_NODE* pCurNode)
@@ -311,7 +319,7 @@ namespace OreoPizza
 		pCurNode->pLeft = pLRChild;
 		
 		// 2. 역으로 부모 노드도 연결한다. 
-		pLeftChild->pParent = pCurNode;
+		pLRChild->pParent = pCurNode;
 
 		// 3. 왼쪽 자식의 부모 연결을 조부모로 바꾼다. 
 		pLeftChild->pParent = pParentsNode;
@@ -368,6 +376,7 @@ namespace OreoPizza
 		// 8. 현재 노드의 부모 노드 연결 변경
 		pCurNode->pParent = pRightChild;
 	}
+
 }
 
 
