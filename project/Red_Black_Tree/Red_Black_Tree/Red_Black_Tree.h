@@ -46,6 +46,8 @@ namespace OreoPizza
 		void inorder_traverse(st_NODE* pCurNode);
 		void postorder_traverse(st_NODE* pCurNode);
 
+		void insertFixup(st_NODE* pCurNode);
+
 	public: void RightRotateNode(st_NODE*& root, st_NODE*& pCurNode);
 		void LeftRotateNode(st_NODE*& root, st_NODE*& pCurNode);
 
@@ -100,7 +102,7 @@ namespace OreoPizza
 				{
 					pNewNode->pParent = pPrntNode;
 					pPrntNode->pLeft = pNewNode;
-					return;
+					break;
 				}
 			}
 			else if (data > pPrntNode->key)
@@ -110,12 +112,17 @@ namespace OreoPizza
 				{
 					pNewNode->pParent = pPrntNode;
 					pPrntNode->pRight = pNewNode;
-					return;
+					break;
 				}
 			}
 			else if (data == pPrntNode->key) // 중복 제거
 				return;
 		}
+
+
+
+
+
 	}
 
 	inline bool C_RED_BLACK_TREE::find(const int key)
@@ -308,6 +315,13 @@ namespace OreoPizza
 			postorder_traverse(pCurNode->pRight);
 			printf_s("%d ", pCurNode->key);
 		}
+	}
+	inline void C_RED_BLACK_TREE::insertFixup(st_NODE* pCurNode)
+	{
+		if (pCurNode->pParent->Color == 0)
+			return;
+
+
 	}
 	inline void C_RED_BLACK_TREE::RightRotateNode(st_NODE*& root, st_NODE *& pCurNode)
 	{
