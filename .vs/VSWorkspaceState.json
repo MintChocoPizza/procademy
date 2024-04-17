@@ -2,9 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\Red_Black_Tree",
+    "\\project\\CMemoryPool",
+    "\\project\\CMemoryPool\\CMemoryPool",
     "\\project\\Red_Black_Tree\\Red_Black_Tree"
   ],
-  "SelectedNode": "\\project\\Red_Black_Tree\\Red_Black_Tree\\main.cpp",
+  "SelectedNode": "\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h",
   "PreviewInSolutionExplorer": false
 }
