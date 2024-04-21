@@ -12,10 +12,10 @@ struct st_Position
 };
 
 
-extern int g_Tile[50][100];
-extern int GRID_SIZE;
-extern const int GRID_WIDTH;
-extern const int GRID_HEIGHT;
+// extern int g_Tile[100][100];
+//extern int GRID_SIZE;
+//extern const int GRID_WIDTH;
+//extern const int GRID_HEIGHT;
 
 
 

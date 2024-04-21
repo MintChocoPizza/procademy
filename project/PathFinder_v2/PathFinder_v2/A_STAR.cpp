@@ -9,9 +9,12 @@
 #include "RegisterClass.h"
 #include "Initstance.h"
 
+#include "Tile.h"
+
 #include "WndProc.h"
 #include "PathFinder_v2.h"
 #include "A_STAR.h"
+
 
 A_STAR::A_STAR()
 {
@@ -90,12 +93,12 @@ bool A_STAR::find(int sY, int sX, int eY, int eX, HWND hWnd)
 			// 예외 처리
 			// 
 			//----------------------------------------------
-			if (nY < 0 || nX < 0 || 50 <= nY || 100 <= nX)
+			if (nY < 0 || nX < 0 || g_GRID_HEIGHT <= nY || g_GRID_WIDTH <= nX)
 			{
 				// 맵 크기를 벗어 난 경우 
 				continue;
 			}
-			if (g_Tile[nY][nX] == 1)
+			if (g_CTile.st_GRID[nY][nX] == 1)
 			{
 				// 벽인 경우
 				continue;

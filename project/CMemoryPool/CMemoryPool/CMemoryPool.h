@@ -31,7 +31,7 @@ namespace OreoPizza
 	struct st_BLOCK_NODE
 	{
 #ifdef _DEBUG
-		CMemoryPool<DATA>* allocationRecord;
+		void* allocationRecord;
 #endif // _DEBUG
 		DATA data;
 		st_BLOCK_NODE* pNext;
@@ -62,7 +62,7 @@ namespace OreoPizza
 		// Parameters: 없음.
 		// Return: (DATA *) 데이타 블럭 포인터.
 		//////////////////////////////////////////////////////////////////////////
-		DATA* Alloc(void);
+		DATA* Alloc(int* pI);
 
 		//////////////////////////////////////////////////////////////////////////
 		// 사용중이던 블럭을 해제한다.
@@ -125,7 +125,7 @@ namespace OreoPizza
 			new(&(pNewNode->data)) DATA();
 			// 흔적 남기기, 주소 저장
 #ifdef _DEBUG
-			pNewNode->allocationRecord = this;
+			pNewNode->allocationRecord = (void*)this;
 #endif // _DEBUG
 			
 			(*pNewNode).pNext = _pFreeNode.pNext;
@@ -142,7 +142,8 @@ namespace OreoPizza
 		{
 			_pFreeNode.pNext = deleteNode->pNext;
 
-			(_pFreeNode.data).~DATA();
+			(deleteNode->data).~DATA();
+			//(_pFreeNode.data).~DATA();
 
 			free(deleteNode);
 			--m_iCapacity;
@@ -150,7 +151,7 @@ namespace OreoPizza
 	}
 
 	template<class DATA>
-	inline DATA* CMemoryPool<DATA>::Alloc(void)
+	inline DATA* CMemoryPool<DATA>::Alloc(int* pI)
 	{
 		st_BLOCK_NODE<DATA>* pTempNode;
 
@@ -167,24 +168,25 @@ namespace OreoPizza
 #endif // _DEBUG
 
 
-			(*pTempNode).pNext = _pFreeNode.pNext;
-			_pFreeNode.pNext = pTempNode;
+			// (*pTempNode).pNext = _pFreeNode.pNext;
+			// _pFreeNode.pNext = pTempNode;
 
-			++m_iCapacity;
+			// ++m_iCapacity;
 		}
 		else
 		{
 			pTempNode = _pFreeNode.pNext;
+			_pFreeNode.pNext = pTempNode->pNext;
+			--m_iCapacity;
 		}
 
-		_pFreeNode.pNext = pTempNode->pNext;
+		// _pFreeNode.pNext = pTempNode->pNext;
 
 		if (m_bPlacementNew == true)
 		{
 			new(&(pTempNode->data)) DATA();
 		}
 
-		--m_iCapacity;
 		++m_iUseCount;
 
 		return &pTempNode->data;
@@ -194,7 +196,8 @@ namespace OreoPizza
 	inline bool CMemoryPool<DATA>::Free(DATA* pData)
 	{
 #ifdef _DEBUG
-		st_BLOCK_NODE<DATA>* st_makeStruct = (st_BLOCK_NODE<DATA> *)(pData - 1);
+		int a = offsetof(st_BLOCK_NODE<DATA>, data);
+		st_BLOCK_NODE<DATA>* st_makeStruct = (st_BLOCK_NODE<DATA> *)((char*)pData - offsetof(st_BLOCK_NODE<DATA>, data));
 		if (st_makeStruct->allocationRecord != this)
 		{
 			return false;

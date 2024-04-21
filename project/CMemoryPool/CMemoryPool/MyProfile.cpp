@@ -218,9 +218,26 @@ void ProfileDataOutText(const TCHAR* szFileName)
 		if ((stProfile[iCnt].lFlag & PROFILE_USED) != PROFILE_USED)
 			continue;
 
+		int iMin1;
+		int iMin2;
+
+		if (stProfile[iCnt].iMin[0] == MAXLONGLONG)
+			iMin1 = 0;
+		else
+			iMin1 = stProfile[iCnt].iMin[0];
+
+		if (stProfile[iCnt].iMin[1] == MAXLONGLONG)
+			iMin2 = 0;
+		else
+			iMin2 = stProfile[iCnt].iMin[1];
+
+
+
+
 		_ftprintf_s(pFile, _T("%64s | %0.1lfµs | %0.1lfµs | %0.1lfµs | %I64u | \n"),
 			stProfile[iCnt].szName,
-			((double)(stProfile[iCnt].iTotalTime - stProfile[iCnt].iMin[0] - stProfile[iCnt].iMin[1] - stProfile[iCnt].iMax[0] - stProfile[iCnt].iMax[1]) / iFreq) / (stProfile[iCnt].iCall - 4),
+		//	((double)(stProfile[iCnt].iTotalTime - stProfile[iCnt].iMin[0] - stProfile[iCnt].iMin[1] - stProfile[iCnt].iMax[0] - stProfile[iCnt].iMax[1]) / iFreq) / (stProfile[iCnt].iCall - 4),
+			((double)(stProfile[iCnt].iTotalTime - iMin1 - iMin2 - stProfile[iCnt].iMax[0] - stProfile[iCnt].iMax[1]) / iFreq) / (stProfile[iCnt].iCall - 4),
 			(double)(stProfile[iCnt].iMin[0]) / iFreq,
 			(double)(stProfile[iCnt].iMax[0]) / iFreq,
 			stProfile[iCnt].iCall - 4);

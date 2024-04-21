@@ -8,6 +8,11 @@
 #include "MyProfile.h"
 #include "CMemoryPool.h"
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
+
 using namespace std;
 using namespace OreoPizza;
 
@@ -18,77 +23,77 @@ public:
 	CTEST();
 	~CTEST();
 private:
-	double a;
-	int b;
-	short c;
-	char d;
+	char a[1024];
 };
 
-CTEST::CTEST() : a(1), b(2), c(3), d(4)
+CTEST::CTEST()
 {
-	
+	a[0] = '\0';
 }
 
 CTEST::~CTEST() 
 {
-	a = 0;
-	b = 0;
-	c = 0;
-	d = 0;
+
+}
+
+
+CTEST* Arr[100000];
+
+CMemoryPool<CTEST> MemPool(10000, true);
+
+void a()
+{
+
+}
+
+void b()
+{
+
 }
 
 
 int main()
 {
-	// 1024byte 1만번 기준	
+	// 메모리 누수 발생 시 그 지점 정보를 출력하도록 한다.
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	CTEST* Arr[64];
-	int temp;
 
 	ProfileReset();
 
-	CMemoryPool<CTEST> MemPool(0, FALSE);
+
+	for (int j = 0; j < 5; ++j)
 	{
-		for (int iCnt = 0; iCnt < 100; iCnt++)
+		cMYPROFILE cTest(_T("Pool"));
+		for (int i = 0; i < 10000; ++i)
 		{
-			cMYPROFILE cTest(_T("MemPool"));
-			for (int i = 0; i < 10000; ++i)
-			{
-				for (int j = 0; j < 64; ++j)
-				{
-					Arr[j] = MemPool.Alloc();
-				}
-				for (int j = 0; j < 64; ++j)
-				{
-					MemPool.Free(Arr[j]);
-				}
-			}
+			Arr[i] = MemPool.Alloc(&i);
+		}
+
+		for (int i = 0; i < 10000; ++i)
+		{
+			MemPool.Free(Arr[i]);
 		}
 	}
 
+
+	memset(Arr, 0, sizeof(Arr));
+
+	for (int j = 0; j < 5; ++j)
 	{
-		for (int iCnt = 0; iCnt < 100; ++iCnt)
+		cMYPROFILE cTest(_T("new delete"));
+		for (int i = 0; i < 10000; ++i)
 		{
-			cMYPROFILE cTest(_T("New"));
-
-			for (int i = 0; i < 10000; ++i)
-			{
-				for (int j = 0; j < 64; ++j)
-				{
-					Arr[j] = new CTEST();
-				}
-
-				for (int j = 0; j < 64; ++j)
-				{
-					delete Arr[j];
-				}
-			}
+			Arr[i] = new CTEST();
+		}
+		for (int i = 0; i < 10000; ++i)
+		{
+			delete Arr[i];
 		}
 	}
-	// 약 8배 정도 빠르다.
-
 
 	ProfileDataOutText(L"AAA.txt");
+	MemPool.~CMemoryPool();
+	_CrtDumpMemoryLeaks();
 	return 0;
 }
 

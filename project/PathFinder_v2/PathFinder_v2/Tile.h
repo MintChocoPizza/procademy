@@ -2,8 +2,14 @@
 #ifndef __TILE_H__
 #define __TILE_H__
 
-const int g_GRID_WIDTH = 100;
-const int g_GRID_HEIGHT = 50;
+
+//extern const int g_GRID_WIDTH;
+//extern const int g_GRID_HEIGHT;
+#define g_GRID_WIDTH 100
+#define g_GRID_HEIGHT 100
+
+
+
 
 class Tile
 {
@@ -11,20 +17,34 @@ public:
 	Tile();
 	~Tile();
 
-private:
+	void Reset();
+
 	struct GRID
 	{
 		int state;
 	};
 
-	GRID st_GRID[g_GRID_HEIGHT][g_GRID_WIDTH];
-	int m_GRID_SIZE;
+	int _GRID_SIZE;
 
-	int m_startY;
-	int m_startX;
+	int _Render_StartY;
+	int _Render_StartX;
 
-	
+	bool _bErase;
+
+
+	int _Starting_Y;
+	int _Starting_X;
+	bool _b_Starting_Erase;
+
+	int _Ending_Y;
+	int _Ending_X;
+	bool _b_Ending_Erase;
+
+	int st_GRID[g_GRID_HEIGHT][g_GRID_WIDTH];
+
 };
+
+extern Tile g_CTile;
 
 
 #endif // !__TILE_H__
