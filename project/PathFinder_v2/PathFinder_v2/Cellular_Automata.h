@@ -1,7 +1,7 @@
 #ifndef __CELLULAR_AUTOMATA_H__
 #define __CELLULAR_AUTOMATA_H__
 
-#include "Tile.h"
+#include <map>
 
 class Cellular_Automata
 {
@@ -11,18 +11,25 @@ public:
 
 	void Update(void);
 
-	void GenerateMap();
-	void  MapRandomFill();
-	void SmoothMap();
+	void GenCave(void);
+	int Near(int x, int y);
+	void SmoothMap(void);
 
-	int** map;
-	int smoothNum;
-	int seed;
+	void searchHole(void);
+	int BFS(int y, int x);
 
-	const int WALL = 1;
-	const int ROAD = 0;
+
+
+	const int alive_Prob = 61;
+	const int generations = 9;
+
+	int field_type;
+
+	std::multimap<int,int, std::greater<int>> field_type_tree;
+
 };
 
+extern Cellular_Automata g_Cellular_Automata;
 
 #endif // !__CELLULAR_AUTOMATA_H__
 

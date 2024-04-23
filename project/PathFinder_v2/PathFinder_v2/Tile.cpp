@@ -1,6 +1,6 @@
 
 #include <string.h>
-
+#include <new>
 #include "Tile.h"
 
 //const int g_GRID_WIDTH = 100;
@@ -22,5 +22,5 @@ Tile::~Tile()
 
 void Tile::Reset()
 {
-	Tile::Tile();
+	new(&g_CTile) Tile();
 }

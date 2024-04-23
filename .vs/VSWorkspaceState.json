@@ -1,15 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\class",
     "\\project",
-    "\\project\\new_Overloding",
     "\\project\\PathFinder_v2",
     "\\project\\PathFinder_v2\\PathFinder_v2"
   ],
-<<<<<<< Updated upstream
-  "SelectedNode": "\\project\\PathFinder_v2\\PathFinder_v2.sln",
-=======
->>>>>>> Stashed changes
+  "SelectedNode": "\\project\\PathFinder_v2\\PathFinder_v2\\Cellular_Automata.cpp",
   "PreviewInSolutionExplorer": false
 }

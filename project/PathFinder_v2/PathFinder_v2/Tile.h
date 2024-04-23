@@ -5,9 +5,13 @@
 
 //extern const int g_GRID_WIDTH;
 //extern const int g_GRID_HEIGHT;
-#define g_GRID_WIDTH 100
+#define g_GRID_WIDTH 190
 #define g_GRID_HEIGHT 100
 
+#define ROAD 0
+#define WALL 1
+#define StART_POINT 2
+#define END_POINT 3
 
 
 

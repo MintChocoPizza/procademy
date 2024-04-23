@@ -3,42 +3,48 @@
   "WorkspaceRootPath": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\WndProc.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\WndProc.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\A_STAR.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\A_STAR.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\WndProc.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\WndProc.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\A_STAR.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\A_STAR.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files (x86)\\Windows Kits\\10\\Source\\10.0.22621.0\\ucrt\\misc\\dbgrptt.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\PathFinder_v2.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\PathFinder_v2.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Initstance.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\Initstance.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Initstance.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\Initstance.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Cellular_Automata.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\Cellular_Automata.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Cellular_Automata.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\Cellular_Automata.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Tile.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\Tile.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Tile.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\Tile.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\include\\xtree||{3B902123-F8A7-4915-9F01-361F908088D0}|"
+      "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\WndProc.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\WndProc.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Initstance.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FE715987-C262-43A7-99D9-A53A3A58D604}|PathFinder_v2\\PathFinder_v2.vcxproj|solutionrelative:PathFinder_v2\\Initstance.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -47,8 +53,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 94,
-          "SelectedChildIndex": 1,
+          "DockedWidth": 182,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -56,68 +62,72 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WndProc.cpp",
+              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\WndProc.cpp",
+              "RelativeDocumentMoniker": "PathFinder_v2\\WndProc.cpp",
+              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\WndProc.cpp",
+              "RelativeToolTip": "PathFinder_v2\\WndProc.cpp",
+              "ViewState": "AQIAADECAAAAAAAAAAAqwLEBAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-04-23T08:14:53.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Cellular_Automata.cpp",
+              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Cellular_Automata.cpp",
+              "RelativeDocumentMoniker": "PathFinder_v2\\Cellular_Automata.cpp",
+              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Cellular_Automata.cpp",
+              "RelativeToolTip": "PathFinder_v2\\Cellular_Automata.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-04-23T06:45:44.389Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Tile.cpp",
+              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Tile.cpp",
+              "RelativeDocumentMoniker": "PathFinder_v2\\Tile.cpp",
+              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Tile.cpp",
+              "RelativeToolTip": "PathFinder_v2\\Tile.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-04-15T19:13:42.402Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "A_STAR.cpp",
+              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\A_STAR.cpp",
+              "RelativeDocumentMoniker": "PathFinder_v2\\A_STAR.cpp",
+              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\A_STAR.cpp",
+              "RelativeToolTip": "PathFinder_v2\\A_STAR.cpp",
+              "ViewState": "AQIAAB8AAAAAAAAAAAAAADEAAAAzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-04-15T19:13:42.402Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "main.cpp",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\main.cpp",
               "RelativeDocumentMoniker": "PathFinder_v2\\main.cpp",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\main.cpp",
               "RelativeToolTip": "PathFinder_v2\\main.cpp",
-              "ViewState": "AQIAACUAAAAAAAAAAADgvzkAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-04-15T19:13:42.201Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "WndProc.h",
-              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\WndProc.h",
-              "RelativeDocumentMoniker": "PathFinder_v2\\WndProc.h",
-              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\WndProc.h",
-              "RelativeToolTip": "PathFinder_v2\\WndProc.h",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAAAA0AAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-15T19:13:42.104Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "xtree",
-              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\include\\xtree",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\include\\xtree",
-              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\include\\xtree",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\include\\xtree",
-              "ViewState": "AQIAAAgBAAAAAAAAAAAWwBUBAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-04-15T13:24:28.456Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "dbgrptt.cpp",
-              "DocumentMoniker": "C:\\Program Files (x86)\\Windows Kits\\10\\Source\\10.0.22621.0\\ucrt\\misc\\dbgrptt.cpp",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Source\\10.0.22621.0\\ucrt\\misc\\dbgrptt.cpp",
-              "ToolTip": "C:\\Program Files (x86)\\Windows Kits\\10\\Source\\10.0.22621.0\\ucrt\\misc\\dbgrptt.cpp",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Source\\10.0.22621.0\\ucrt\\misc\\dbgrptt.cpp",
-              "ViewState": "AQIAAAcBAAAAAAAAAAAuwBsBAAAaAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-04-15T11:48:45.621Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Initstance.h",
-              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Initstance.h",
-              "RelativeDocumentMoniker": "PathFinder_v2\\Initstance.h",
-              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Initstance.h",
-              "RelativeToolTip": "PathFinder_v2\\Initstance.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-15T19:13:42.115Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "Initstance.cpp",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Initstance.cpp",
               "RelativeDocumentMoniker": "PathFinder_v2\\Initstance.cpp",
@@ -129,51 +139,74 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "PathFinder_v2.h",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\PathFinder_v2.h",
               "RelativeDocumentMoniker": "PathFinder_v2\\PathFinder_v2.h",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\PathFinder_v2.h",
               "RelativeToolTip": "PathFinder_v2\\PathFinder_v2.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAFAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAlAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-15T19:13:42.117Z"
-            },
+              "WhenOpened": "2024-04-15T19:13:42.117Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 6,
+          "SelectedChildIndex": 0,
+          "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "A_STAR.h",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\A_STAR.h",
               "RelativeDocumentMoniker": "PathFinder_v2\\A_STAR.h",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\A_STAR.h",
               "RelativeToolTip": "PathFinder_v2\\A_STAR.h",
-              "ViewState": "AQIAABwAAAAAAAAAAAAUwDkAAAA4AAAA",
+              "ViewState": "AQIAABMAAAAAAAAAAAAUwDkAAAA4AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-15T19:13:42.401Z"
+              "WhenOpened": "2024-04-15T19:13:42.401Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Tile.cpp",
-              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Tile.cpp",
-              "RelativeDocumentMoniker": "PathFinder_v2\\Tile.cpp",
-              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Tile.cpp",
-              "RelativeToolTip": "PathFinder_v2\\Tile.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAGAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-04-15T19:13:42.402Z"
+              "DocumentIndex": 7,
+              "Title": "Tile.h",
+              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Tile.h",
+              "RelativeDocumentMoniker": "PathFinder_v2\\Tile.h",
+              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Tile.h",
+              "RelativeToolTip": "PathFinder_v2\\Tile.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-04-23T08:03:30.45Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "A_STAR.cpp",
-              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\A_STAR.cpp",
-              "RelativeDocumentMoniker": "PathFinder_v2\\A_STAR.cpp",
-              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\A_STAR.cpp",
-              "RelativeToolTip": "PathFinder_v2\\A_STAR.cpp",
-              "ViewState": "AQIAADMAAAAAAAAAAAAAAOEAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-04-15T19:13:42.402Z"
+              "DocumentIndex": 6,
+              "Title": "Cellular_Automata.h",
+              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Cellular_Automata.h",
+              "RelativeDocumentMoniker": "PathFinder_v2\\Cellular_Automata.h",
+              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\Cellular_Automata.h",
+              "RelativeToolTip": "PathFinder_v2\\Cellular_Automata.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-04-23T07:44:29.85Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "WndProc.h",
+              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\WndProc.h",
+              "RelativeDocumentMoniker": "PathFinder_v2\\WndProc.h",
+              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\PathFinder_v2\\PathFinder_v2\\WndProc.h",
+              "RelativeToolTip": "PathFinder_v2\\WndProc.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-04-15T19:13:42.104Z",
+              "EditorCaption": ""
             }
           ]
         }

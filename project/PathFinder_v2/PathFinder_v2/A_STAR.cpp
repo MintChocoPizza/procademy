@@ -47,7 +47,7 @@ bool A_STAR::find(int sY, int sX, int eY, int eX, HWND hWnd)
 	_eX = eX;
 
 	H = abs(sY - eY) + abs(sX - eX);
-	st_CurNode = { -1, -1, sY, sX, 0, H, (double)H, true };
+	st_CurNode = { -1, -1, sY, sX, 0, H, (double)H * 5, true };
 	_OpenList.insert(
 		pair<double, st_A_START_NODE>(
 			(double)H, st_CurNode
@@ -111,7 +111,7 @@ bool A_STAR::find(int sY, int sX, int eY, int eX, HWND hWnd)
 			G = st_CurNode._G +
 				sqrt(pow(st_CurNode._Y - nY, 2) + pow(st_CurNode._X - nX, 2));
 			H = abs(nY - eY) + abs(nX - eX);
-			F = G + H;
+			F = G + H * 5;
 
 
 			//----------------------------------------------
