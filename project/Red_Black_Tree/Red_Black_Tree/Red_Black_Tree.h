@@ -489,10 +489,8 @@ namespace OreoPizza
 
 		st_NODE* y = pCurNode->pRight;
 		pCurNode->pRight = y->pLeft;
-
-		if (y->pLeft != &Nil)
-			y->pLeft->pParent = pCurNode;
-
+		
+		y->pLeft->pParent = pCurNode;
 		y->pParent = pCurNode->pParent;
 
 		if (pCurNode->pParent == &Nil)
@@ -502,8 +500,10 @@ namespace OreoPizza
 		else
 			pCurNode->pParent->pRight = y;
 
-		y->pLeft = pCurNode;
-		pCurNode->pParent = y;
+
+			
+		
+
 	}
 
 }
