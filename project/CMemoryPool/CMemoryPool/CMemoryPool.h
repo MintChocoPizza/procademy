@@ -62,7 +62,7 @@ namespace OreoPizza
 		// Parameters: 없음.
 		// Return: (DATA *) 데이타 블럭 포인터.
 		//////////////////////////////////////////////////////////////////////////
-		DATA* Alloc(int* pI);
+		DATA* Alloc();
 
 		//////////////////////////////////////////////////////////////////////////
 		// 사용중이던 블럭을 해제한다.
@@ -123,6 +123,8 @@ namespace OreoPizza
 
 			// 생성자 호출
 			new(&(pNewNode->data)) DATA();
+
+
 			// 흔적 남기기, 주소 저장
 #ifdef _DEBUG
 			pNewNode->allocationRecord = (void*)this;
@@ -132,6 +134,9 @@ namespace OreoPizza
 			_pFreeNode.pNext = pNewNode;
 		}
 	}	
+	
+
+
 
 	template<class DATA>
 	inline CMemoryPool<DATA>::~CMemoryPool()
@@ -151,7 +156,7 @@ namespace OreoPizza
 	}
 
 	template<class DATA>
-	inline DATA* CMemoryPool<DATA>::Alloc(int* pI)
+	inline DATA* CMemoryPool<DATA>::Alloc()
 	{
 		st_BLOCK_NODE<DATA>* pTempNode;
 
