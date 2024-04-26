@@ -52,7 +52,7 @@ namespace OreoPizza
 	struct ST_Log
 	{
 #ifdef _WIN64
-		unsigned __int64 Address
+		unsigned __int64 Address;
 #else
 		unsigned __int32 Address;
 #endif
@@ -83,9 +83,12 @@ namespace OreoPizza
 		#else 
 		unsigned __int32 _Index_Offset_masking;
 		#endif  
+
 		unsigned int _Index_Masking;
 
+
 		ST_Cache_Hit* _Cach_Hit_Check;
+
 		#ifdef _WIN64
 		std::map<unsigned __int64,ST_Log> _Log;
 		#else 
@@ -104,7 +107,7 @@ namespace OreoPizza
 		for (int i = 0; i < 64; ++i)
 		{
 		#ifdef _WIN64
-			new(&Cach_Hit_Check[i].Cache_Way) C_Queue<unsigned __int64>(8);
+			new(&_Cach_Hit_Check[i].Cache_Way) C_Queue<unsigned __int64>(8);
 		#else
 			new(&_Cach_Hit_Check[i].Cache_Way) C_Queue<unsigned __int32>(8);
 		#endif
@@ -141,7 +144,7 @@ namespace OreoPizza
 		for (unsigned int i = 0; i < Index_Masking; ++i)
 		{
 			#ifdef _WIN64
-			new(&Cach_Hit_Check[i].Cache_Way) C_Queue<unsigned __int64>(8);
+			new(&_Cach_Hit_Check[i].Cache_Way) C_Queue<unsigned __int64>(8);
 			#else
 			new(&_Cach_Hit_Check[i].Cache_Way) C_Queue<unsigned __int32>(8);
 			#endif
@@ -167,6 +170,35 @@ namespace OreoPizza
 
 	inline C_Cache_Hit::~C_Cache_Hit()
 	{
+		// map에 기록되어 있는 hit, miss 출력
+		FILE* pFile;
+		struct tm New_Time;
+		__time64_t Long_Time;
+		char Time_Buff[26];
+		ST_Log st_log;
+
+		_time64(&Long_Time);
+		_localtime64_s(&New_Time, &Long_Time);
+		sprintf_s(Time_Buff, "Cache_Log_%d%d%d_%d%d%d.txt", New_Time.tm_year, New_Time.tm_mon, New_Time.tm_mday, New_Time.tm_hour, New_Time.tm_min, New_Time.tm_sec);
+
+		fopen_s(&pFile, Time_Buff, "a");
+
+		#ifdef _WIN64
+		std::map<unsigned __int64, ST_Log>::iterator begin_iter = _Log.begin();
+		std::map<unsigned __int64, ST_Log>::iterator end_iter = _Log.end();
+		#else 
+		std::map<unsigned __int32, ST_Log>::iterator begin_iter = _Log.begin();
+		std::map<unsigned __int32, ST_Log>::iterator end_iter = _Log.end();
+		#endif 
+
+		for (; begin_iter != end_iter; ++begin_iter)
+		{
+			st_log = begin_iter->second;
+			fprintf_s(pFile, "Cache [%p] : Hit_%zd Miss_%zd \n", st_log.Address, st_log.Hit, st_log.Miss);
+		}
+		
+		fclose(pFile);
+		free(_Cach_Hit_Check);
 	}
 
 	inline void C_Cache_Hit::CacheHit(void* address, const char* file, int line)
@@ -182,27 +214,32 @@ namespace OreoPizza
 		#endif 
 
 		FILE* pFile;
-		errno_t err;
 		struct tm New_Time;
 		__time64_t Long_Time;
 		char Time_Buff[26];
 		
+		ST_Log set_log;
 
 		ST_Cache_Hit *Cach_Hit_Check = &_Cach_Hit_Check[Index];
 		
 
-		if (Cach_Hit_Check->Cache_Way.find(&Address_Value))
+		if (Cach_Hit_Check->Cache_Way.find(Address_Value))
 		{
-			// 캐쉬 히트
-			
+			// 캐쉬 히트인 경우는 2번째 이상의 방문이다.
+			#ifdef _WIN64
+			std::map<unsigned __int64, ST_Log>::iterator iter = _Log.find(Address_Value);
+			#else 
+			std::map<unsigned __int32, ST_Log>::iterator iter = _Log.find(Address_Value);
+			#endif 
+			++(iter->second.Hit);
 		}
 		else
 		{
 			// 캐쉬 미스
 			Cach_Hit_Check->Cache_Way.dequeue();
-			Cach_Hit_Check->Cache_Way.enqueue(&Address_Value);
+			Cach_Hit_Check->Cache_Way.enqueue(Address_Value);
 			
-			// 캐쉬 미스가 난 파일과 라인을 기록한다. 
+			// 캐쉬 미스가 난 파일과 라인을 파일에 기록한다. 
 			_time64(&Long_Time);
 			_localtime64_s(&New_Time, &Long_Time);
 			sprintf_s(Time_Buff, "Cache_Miss_%d%d%d_%d%d%d.txt", New_Time.tm_year, New_Time.tm_mon, New_Time.tm_mday, New_Time.tm_hour, New_Time.tm_min, New_Time.tm_sec);
@@ -210,7 +247,34 @@ namespace OreoPizza
 			fopen_s(&pFile, Time_Buff, "a");
 			// [주소] 파일 이름 : 코드 라인
 			fprintf_s(pFile, "Cache Miss [%p] %s : %d \n", address, file, line);
+			fclose(pFile);
+
+
 			
+			#ifdef _WIN64
+			std::map<unsigned __int64, ST_Log>::iterator iter = _Log.find(Address_Value);
+			#else 
+			std::map<unsigned __int32, ST_Log>::iterator iter = _Log.find(Address_Value);
+			#endif 
+			if (iter == _Log.end())
+			{
+				// 캐시 미스 + 처음 방문하는 경우
+				set_log.Address = Address_Value;
+				set_log.Hit = 0;
+				set_log.Miss = 1;
+
+
+				#ifdef _WIN64
+				_Log.insert(std::pair<unsigned __int64, ST_Log>(Address_Value, set_log));
+				#else 
+				_Log.insert(std::pair<unsigned __int32, ST_Log>(Address_Value, set_log));
+				#endif  
+			}
+			else
+			{
+				// 캐시 미스 + 이전에 방문한 경우
+				++(iter->second.Miss);
+			}
 		}
 	
 	}

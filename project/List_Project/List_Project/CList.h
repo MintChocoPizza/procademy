@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------------------------
+// 사용법
+// 
+// CList<T> 변수명;
+// 
+// 
+//----------------------------------------------------------------------------------------------
+
+
 #ifndef __CLIST_H__
 #define __CLIST_H__
 
@@ -104,9 +113,9 @@ public:
 	inline CList::iterator end(void);
 
 	// 앞쪽으로 원소 data를 삽입한다.
-	inline void push_front(T data);
+	inline void push_front(const T& data);
 	// 뒤쪽으로 원소 data를 삽입한다.
-	inline void push_back(T data);
+	inline void push_back(const T& data);
 	// 맨 마지막 원소를 제거한다.
 	inline void pop_back(void);
 	// 맨 첫번째 원소를 제거한다.
@@ -145,7 +154,7 @@ public:
 	//-----------------------------------------------------
 	inline iterator erase(const iterator _Where);
 	// T Date를 기준으로 일치하는 모든 데이터 삭제
-	inline void remove(T const data);
+	inline void remove(const T& data);
 };
 
 
@@ -350,7 +359,7 @@ typename CList<T>::iterator CList<T>::end(void)
 }
 
 template <typename T>
-inline void CList<T>::push_front(T data)
+inline void CList<T>::push_front(const T& data)
 {
 	Node* pNewNode = (Node*)malloc(sizeof(Node));
 	if (pNewNode == NULL)
@@ -367,7 +376,7 @@ inline void CList<T>::push_front(T data)
 }
 
 template <typename T>
-void CList<T>::push_back(T data)
+void CList<T>::push_back(const T& data)
 {
 	Node* pNewNode = (Node*)malloc(sizeof(Node));
 	if (pNewNode == NULL)
@@ -451,7 +460,7 @@ typename CList<T>::iterator CList<T>::erase(const iterator _Where)
 }
 
 template<typename T>
-inline void CList<T>::remove(T const data)
+inline void CList<T>::remove(const T& data)
 {
 	CList<T>::iterator iter;
 	for (iter = begin(); iter != end(); )

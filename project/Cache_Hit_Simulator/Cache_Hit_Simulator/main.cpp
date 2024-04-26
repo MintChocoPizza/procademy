@@ -6,19 +6,44 @@
 
 #include <bitset>
 
+/////////////////////////
+// 메모리 누수 확인
+// 
+/////////////////////////
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #include "C_CacheHit.h"
+#include "C_Queue.h"
 
 using namespace OreoPizza;
+
+void Test()
+{
+    C_Cache_Hit ch;
+
+    int a;
+
+    ch.CacheHit(&a);
+    a = 10;
+
+    ch.CacheHit(&a);
+    a = 20;
+}
 
 
 int main()
 {
-    C_Cache_Hit a(32768, 64, 8);
+    
 
 
-
+    Test();
 
     std::cout << "Hello World!\n";
+
+    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
+    _CrtDumpMemoryLeaks();
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴

@@ -14,38 +14,40 @@ namespace OreoPizza
 		inline C_Queue(int size);
 		inline ~C_Queue();
 
-		inline void enqueue(DATA* data);
+		inline void enqueue(const DATA& data);
 		inline void dequeue(void);
 		inline bool isQueueEmpty(void);
 		inline bool isQueueFull(void);
 
-		inline bool find(DATA* data);
+		inline bool find(const DATA& data);
 
 		int _In;
 		int _Out;
 		int _Size;
-		DATA* queue;
+		DATA* _queue;
 	};
 
 	template<class DATA>
 	inline C_Queue<DATA>::C_Queue(int size) : _In(0), _Out(0), _Size(size)
 	{
-		queue = (DATA*)malloc(sizeof(DATA) * size);
+		// _queue = (DATA*)malloc(sizeof(DATA) * size);
+		_queue = new DATA[size];
 	}
 
 	template<class DATA>
 	inline C_Queue<DATA>::~C_Queue()
 	{
-		free(queue);
+		// free(_queue);
+		delete[] _queue;
 	}
 
 	template<class DATA>
-	inline void C_Queue<DATA>::enqueue(DATA* data)
+	inline void C_Queue<DATA>::enqueue(const DATA& data)
 	{
 		if (isQueueFull())
 			return;
 
-		queue[_In] = *data;
+		_queue[_In] = data;
 		_In = (_In + 1) % _Size;
 	}
 
@@ -70,7 +72,7 @@ namespace OreoPizza
 	}
 
 	template<class DATA>
-	inline bool C_Queue<DATA>::find(DATA* data)
+	inline bool C_Queue<DATA>::find(const DATA& data)
 	{
 		int in = _In;
 		int out = _Out;
@@ -78,7 +80,7 @@ namespace OreoPizza
 
 		while (out != in)
 		{
-			if (queue[out] == *data)
+			if (_queue[out] == data)
 				return true;
 
 			out = (out + 1) % size;
