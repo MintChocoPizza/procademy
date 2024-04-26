@@ -78,6 +78,8 @@ namespace OreoPizza
 
 		unsigned int _Max_Index;
 
+		unsigned int _offset_size;
+
 		#ifdef _WIN64
 		unsigned __int64 _Index_Offset_masking;
 		#else 
@@ -96,7 +98,7 @@ namespace OreoPizza
 		#endif  
 	};
 
-	inline C_Cache_Hit::C_Cache_Hit() : _L1_Data_Cache_Size(32768), _Cache_Line_Size(64), _Cache_Way(8), _Max_Index(64), _Index_Masking(0xFC0),
+	inline C_Cache_Hit::C_Cache_Hit() : _L1_Data_Cache_Size(32768), _Cache_Line_Size(64), _Cache_Way(8), _Max_Index(64), _Index_Masking(0xFC0), _offset_size(6),
 		#ifdef _WIN64
 		_Index_Offset_masking(0x0000000000000fff)
 		#else
@@ -121,17 +123,18 @@ namespace OreoPizza
 	{
 		unsigned int Index_Offset_masking = 0;
 		unsigned int Index_Masking;
-		unsigned int Next_Bit=0;
+		unsigned int offset_size=0;
 
 
 		// offset Masking
 		Index_Offset_masking |= Cache_Line_Size - 1;
 
 
-		while ((Index_Offset_masking >>Next_Bit & 1) == 1)
+		while ((Index_Offset_masking >>offset_size & 1) == 1)
 		{
-			++Next_Bit;
+			++offset_size;
 		}
+		_offset_size = offset_size;
 
 
 		Index_Masking = L1_Data_Cache_Size / Cache_Line_Size / Cache_Way;
@@ -150,7 +153,7 @@ namespace OreoPizza
 			#endif
 		}
 			
-		Index_Masking = (Index_Masking-1) << Next_Bit;
+		Index_Masking = (Index_Masking-1) << offset_size;
 		// save Index_Masking
 		_Index_Masking = Index_Masking;
 
@@ -174,11 +177,11 @@ namespace OreoPizza
 		FILE* pFile;
 		struct tm New_Time;
 		__time64_t Long_Time;
-		char Time_Buff[26];
+		char Time_Buff[128];
 		ST_Log st_log;
 
 		_time64(&Long_Time);
-		_localtime64_s(&New_Time, &Long_Time);
+		errno_t err = _localtime64_s(&New_Time, &Long_Time);
 		sprintf_s(Time_Buff, "Cache_Log_%d%d%d_%d%d%d.txt", New_Time.tm_year, New_Time.tm_mon, New_Time.tm_mday, New_Time.tm_hour, New_Time.tm_min, New_Time.tm_sec);
 
 		fopen_s(&pFile, Time_Buff, "a");
@@ -207,20 +210,22 @@ namespace OreoPizza
 		unsigned __int64 Address_Value	= (unsigned __int64)address;
 		unsigned __int64 Index_Offset	= Address_Value & _Index_Offset_masking;
 		unsigned __int64 Index			= Address_Value & _Index_Masking;
+		Index = Index >> _offset_size;
 		#else
 		unsigned __int32 Address_Value	= (unsigned __int32)address;
 		unsigned __int32 Index_Offset	= Address_Value & _Index_Offset_masking;
 		unsigned __int32 Index			= Address_Value & _Index_Masking;
+		Index = Index >> _offset_size;
 		#endif 
 
 		FILE* pFile;
 		struct tm New_Time;
 		__time64_t Long_Time;
-		char Time_Buff[26];
+		char Time_Buff[128];
 		
 		ST_Log set_log;
 
-		ST_Cache_Hit *Cach_Hit_Check = &_Cach_Hit_Check[Index];
+		ST_Cache_Hit *Cach_Hit_Check = &(_Cach_Hit_Check[Index]);
 		
 
 		if (Cach_Hit_Check->Cache_Way.find(Address_Value))

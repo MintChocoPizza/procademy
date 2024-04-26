@@ -18,12 +18,18 @@
 #include "C_Queue.h"
 
 using namespace OreoPizza;
+using namespace std;
 
 void Test()
 {
     C_Cache_Hit ch;
 
     int a;
+    unsigned int b = (unsigned int)&a;
+
+    printf("%p \n", &a);
+    bitset<sizeof(unsigned int) * 8> binary(b);
+    cout << binary << endl;
 
     ch.CacheHit(&a);
     a = 10;
