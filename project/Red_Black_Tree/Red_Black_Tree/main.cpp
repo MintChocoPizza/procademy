@@ -8,29 +8,11 @@
 #include <set>
 #include <vector>
 
-#include "Red_Black_Tree.h"
 
-using namespace std;
-using namespace OreoPizza;
 
 int main()
 {
-    srand(time(NULL));
-    
-    C_RED_BLACK_TREE cTree;
-    set<int> cSet;
-    vector<int> temp;
 
-    for (int i = 0; i < 20; ++i)
-    {
-        int iRand = rand() % 100 + 1;
-        cTree.insert(iRand);
-        cTree.traverse(0);
-        cout << endl << endl;
-    }
-
-
-    cTree.traverse(0);
 
 
     std::cout << "\nHello World!\n";

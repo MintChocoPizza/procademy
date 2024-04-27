@@ -117,12 +117,13 @@ namespace OreoPizza
 
 		for (iCnt = 0; iCnt < iBlockNum; ++iCnt)
 		{
-			st_BLOCK_NODE<DATA>* pNewNode = (st_BLOCK_NODE<DATA> *)malloc(sizeof(st_BLOCK_NODE<DATA>));
-			if (pNewNode == NULL)
-				throw;
-
-			// 생성자 호출
-			new(&(pNewNode->data)) DATA();
+			// 기존 코드: call malloc, call new 2번의 어셈블리 호출이 일어난다.
+			//st_BLOCK_NODE<DATA>* pNewNode = (st_BLOCK_NODE<DATA> *)malloc(sizeof(st_BLOCK_NODE<DATA>));
+			//if (pNewNode == NULL)
+			//	throw;
+			//// 생성자 호출
+			//new(&(pNewNode->data)) DATA();
+			st_BLOCK_NODE<DATA>* pNewNode = new st_BLOCK_NODE<DATA>;
 
 
 			// 흔적 남기기, 주소 저장
@@ -147,10 +148,12 @@ namespace OreoPizza
 		{
 			_pFreeNode.pNext = deleteNode->pNext;
 
-			(deleteNode->data).~DATA();
-			//(_pFreeNode.data).~DATA();
+			// 기존 코드: call소멸자 call 메모리 해지 -> call이 2번 일어난다.
+			//(deleteNode->data).~DATA();
+			////(_pFreeNode.data).~DATA();
+			//free(deleteNode);
+			delete deleteNode;
 
-			free(deleteNode);
 			--m_iCapacity;
 		}
 	}
@@ -162,12 +165,14 @@ namespace OreoPizza
 
 		if (m_iCapacity == 0)
 		{
-			pTempNode = (st_BLOCK_NODE<DATA>*)malloc(sizeof(st_BLOCK_NODE<DATA>));
-			if (pTempNode == NULL)
-				throw;
+			// 기존 코드: call malloc, call new 2번의 어셈블리 호출이 일어난다.
+			//pTempNode = (st_BLOCK_NODE<DATA>*)malloc(sizeof(st_BLOCK_NODE<DATA>));
+			//if (pTempNode == NULL)
+			//	throw;
+			//// 생성자 호출
+			//new(&(pTempNode->data)) DATA();
+			pTempNode = new st_BLOCK_NODE<DATA>;
 
-			// 생성자 호출
-			new(&(pTempNode->data)) DATA();
 #ifdef _DEBUG
 			pTempNode->allocationRecord = this;
 #endif // _DEBUG
@@ -183,14 +188,19 @@ namespace OreoPizza
 			pTempNode = _pFreeNode.pNext;
 			_pFreeNode.pNext = pTempNode->pNext;
 			--m_iCapacity;
+
+			if (m_bPlacementNew == true)
+			{
+				new(&(pTempNode->data)) DATA();
+			}
 		}
 
 		// _pFreeNode.pNext = pTempNode->pNext;
 
-		if (m_bPlacementNew == true)
-		{
-			new(&(pTempNode->data)) DATA();
-		}
+		//if (m_bPlacementNew == true)
+		//{
+		//	new(&(pTempNode->data)) DATA();
+		//}
 
 		++m_iUseCount;
 
@@ -213,11 +223,12 @@ namespace OreoPizza
 
 
 
-		if (m_bPlacementNew == true)
-		{
-			pData->~DATA();
-		}
-
+		// 소멸자는 무조건 호출 되는게 맞다고 생각함.
+		//if (m_bPlacementNew == true)
+		//{
+		//	pData->~DATA();
+		//}
+		pData->~DATA();
 
 
 		st_makeStruct->pNext = _pFreeNode.pNext;
@@ -243,6 +254,7 @@ namespace OreoPizza
 		}
 
 		printf_s("현재 리스트의 노드 수 %d,  사용중인 노드의 수 %d\n", m_iCapacity, m_iUseCount);
+
 	}
 
 }

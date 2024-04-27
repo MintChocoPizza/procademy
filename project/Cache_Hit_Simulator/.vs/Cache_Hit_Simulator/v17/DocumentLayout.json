@@ -36,7 +36,7 @@
               "RelativeDocumentMoniker": "Cache_Hit_Simulator\\main.cpp",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\Cache_Hit_Simulator\\Cache_Hit_Simulator\\main.cpp",
               "RelativeToolTip": "Cache_Hit_Simulator\\main.cpp",
-              "ViewState": "AQIAAA8AAAAAAAAAAADwvx0AAAAXAAAA",
+              "ViewState": "AQIAAA8AAAAAAAAAAADwvyYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-04-26T10:59:09.316Z",
               "EditorCaption": ""
@@ -51,8 +51,7 @@
               "RelativeToolTip": "Cache_Hit_Simulator\\C_Queue.h",
               "ViewState": "AQIAABUAAAAAAAAAAADgvyIAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-26T02:54:45.06Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-26T02:54:45.06Z"
             },
             {
               "$type": "Document",
@@ -64,8 +63,7 @@
               "RelativeToolTip": "Cache_Hit_Simulator\\C_CacheHit.h",
               "ViewState": "AQIAAKIAAAAAAAAAAADgv68AAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-04-24T14:11:20.192Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-24T14:11:20.192Z"
             }
           ]
         }

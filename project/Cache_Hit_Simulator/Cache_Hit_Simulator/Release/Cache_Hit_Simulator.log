@@ -1,10 +1,10 @@
 ﻿  main.cpp
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\Cache_Hit_Simulator\Cache_Hit_Simulator\C_CacheHit.h(201,21): warning C4477: 'fprintf_s' : 서식 문자열 '%p'에 'void *' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'unsigned int'입니다.
+C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\Cache_Hit_Simulator\Cache_Hit_Simulator\C_CacheHit.h(200,21): warning C4477: 'fprintf_s' : 서식 문자열 '%p'에 'void *' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'unsigned int'입니다.
   (소스 파일 'main.cpp'을(를) 컴파일하는 중)
   
   코드를 생성하고 있습니다.
-  2 of 234 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
+  1 of 234 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Cache_Hit_Simulator.vcxproj -> C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\Cache_Hit_Simulator\Release\Cache_Hit_Simulator.exe

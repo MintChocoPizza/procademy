@@ -218,8 +218,8 @@ void ProfileDataOutText(const TCHAR* szFileName)
 		if ((stProfile[iCnt].lFlag & PROFILE_USED) != PROFILE_USED)
 			continue;
 
-		int iMin1;
-		int iMin2;
+		long long iMin1;
+		long long iMin2;
 
 		if (stProfile[iCnt].iMin[0] == MAXLONGLONG)
 			iMin1 = 0;

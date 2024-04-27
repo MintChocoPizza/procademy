@@ -38,65 +38,51 @@ CTEST::~CTEST()
 
 
 CTEST* Arr[100000];
-
 CMemoryPool<CTEST> MemPool(10000, true);
-
-void a()
-{
-
-}
-
-void b()
-{
-
-}
 
 
 int main()
 {
-//	// 메모리 누수 발생 시 그 지점 정보를 출력하도록 한다.
-//	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-//
-//
-//	ProfileReset();
-//
-//
-//	for (int j = 0; j < 5; ++j)
-//	{
-//		cMYPROFILE cTest(_T("Pool"));
-//		for (int i = 0; i < 10000; ++i)
-//		{
-//			Arr[i] = MemPool.Alloc(&i);
-//		}
-//
-//		for (int i = 0; i < 10000; ++i)
-//		{
-//			MemPool.Free(Arr[i]);
-//		}
-//	}
-//
-//
-//	memset(Arr, 0, sizeof(Arr));
-//
-//	for (int j = 0; j < 5; ++j)
-//	{
-//		cMYPROFILE cTest(_T("new delete"));
-//		for (int i = 0; i < 10000; ++i)
-//		{
-//			Arr[i] = new CTEST();
-//		}
-//		for (int i = 0; i < 10000; ++i)
-//		{
-//			delete Arr[i];
-//		}
-//	}
-//
-//	ProfileDataOutText(L"AAA.txt");
-//	MemPool.~CMemoryPool();
-//	_CrtDumpMemoryLeaks();
+	// 메모리 누수 발생 시 그 지점 정보를 출력하도록 한다.
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	Arr[0] = MemPool.Alloc();
-	MemPool.Free(Arr[0]);
+
+	ProfileReset();
+
+
+	for (int j = 0; j < 5; ++j)
+	{
+		cMYPROFILE cTest(_T("Pool"));
+		for (int i = 0; i < 10000; ++i)
+		{
+			Arr[i] = MemPool.Alloc();
+		}
+
+		for (int i = 0; i < 10000; ++i)
+		{
+			MemPool.Free(Arr[i]);
+		}
+	}
+
+
+	memset(Arr, 0, sizeof(Arr));
+
+	for (int j = 0; j < 5; ++j)
+	{
+		cMYPROFILE cTest(_T("new delete"));
+		for (int i = 0; i < 10000; ++i)
+		{
+			Arr[i] = new CTEST();
+		}
+		for (int i = 0; i < 10000; ++i)
+		{
+			delete Arr[i];
+		}
+	}
+
+	ProfileDataOutText(L"AAA.txt");
+	MemPool.~CMemoryPool();
+	_CrtDumpMemoryLeaks();
 
 	return 0;
 }
