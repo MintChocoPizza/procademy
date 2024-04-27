@@ -58,10 +58,14 @@ int main()
 			Arr[i] = MemPool.Alloc();
 		}
 
+
+
 		for (int i = 0; i < 10000; ++i)
 		{
 			MemPool.Free(Arr[i]);
 		}
+
+
 	}
 
 
@@ -79,6 +83,9 @@ int main()
 			delete Arr[i];
 		}
 	}
+
+
+
 
 	ProfileDataOutText(L"AAA.txt");
 	MemPool.~CMemoryPool();

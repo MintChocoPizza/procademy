@@ -103,13 +103,13 @@ namespace OreoPizza
 	private:
 		int		m_iCapacity;		// 현재 리스트에 연결된 메모리 갯수
 		int		m_iUseCount;		// 현재 사용되고 있는 메모리의 갯수
-		bool	m_bPlacementNew;	
+		bool	m_bPlacementNew;
 	};
 
 
 
 	template<class DATA>
-	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) : 
+	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) :
 		m_iCapacity(iBlockNum), m_iUseCount(0), m_bPlacementNew(bPlacementNew)
 	{
 		int iCnt;
@@ -130,12 +130,12 @@ namespace OreoPizza
 #ifdef _DEBUG
 			pNewNode->allocationRecord = (void*)this;
 #endif // _DEBUG
-			
+
 			(*pNewNode).pNext = _pFreeNode.pNext;
 			_pFreeNode.pNext = pNewNode;
 		}
-	}	
-	
+	}
+
 
 
 
@@ -249,7 +249,7 @@ namespace OreoPizza
 		for (curNode = _pFreeNode.pNext; curNode != NULL; curNode = (*curNode).pNext)
 		{
 			printf_s("노드 출력: %d \n", iCnt);
-			printf_s( "노드의 주소 : % p, 다음 노드 주소 : % p \n", curNode, curNode->pNext);
+			printf_s("노드의 주소 : % p, 다음 노드 주소 : % p \n", curNode, curNode->pNext);
 			++iCnt;
 		}
 
@@ -259,24 +259,5 @@ namespace OreoPizza
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #endif // !__CMEMORY_POOL_H__
+
