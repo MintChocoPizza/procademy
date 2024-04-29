@@ -1,0 +1,5 @@
+﻿  main.cpp
+C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\C_Memory_Overflow_Underflow\C_Memory_Overflow_Underflow\C_Memory_flow.h(51,9): warning C4477: 'printf' : 서식 문자열 '%p'에 'void *' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'size_t'입니다.
+  (소스 파일 'main.cpp'을(를) 컴파일하는 중)
+  
+  C_Memory_Overflow_Underflow.vcxproj -> C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\C_Memory_Overflow_Underflow\Debug\C_Memory_Overflow_Underflow.exe
