@@ -135,6 +135,57 @@ namespace OreoPizza
 			_pFreeNode.pNext = pNewNode;
 		}
 	}
+	// 의외로 어셈블리 똑같음
+//	template<class DATA>
+//	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) :
+//		m_iCapacity(iBlockNum), m_iUseCount(0), m_bPlacementNew(bPlacementNew)
+//	{
+//		int iCnt;
+//		st_BLOCK_NODE<DATA >* p_Head_Node = &_pFreeNode;
+//
+//		p_Head_Node->pNext = NULL;
+//
+//		for (iCnt = 0; iCnt < iBlockNum; ++iCnt)
+//		{
+//			st_BLOCK_NODE<DATA>* pNewNode = new st_BLOCK_NODE<DATA>;
+//
+//
+//			// 흔적 남기기, 주소 저장
+//#ifdef _DEBUG
+//			pNewNode->allocationRecord = (void*)this;
+//#endif // _DEBUG
+//
+//			//(*pNewNode).pNext = _pFreeNode.pNext;
+//			//_pFreeNode.pNext = pNewNode;
+//			(*pNewNode).pNext = p_Head_Node->pNext;
+//			p_Head_Node->pNext = pNewNode;
+//		}
+//	}
+//	template<class DATA>
+//	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) :
+//		m_iCapacity(iBlockNum), m_iUseCount(0), m_bPlacementNew(bPlacementNew)
+//	{
+//		int iCnt;
+//		st_BLOCK_NODE<DATA>** p_Head_Next = &(_pFreeNode.pNext);
+//		p_Head_Next = NULL;
+//
+//		for (iCnt = 0; iCnt < iBlockNum; ++iCnt)
+//		{
+//			st_BLOCK_NODE<DATA>* pNewNode = new st_BLOCK_NODE<DATA>;
+//
+//
+//			// 흔적 남기기, 주소 저장
+//#ifdef _DEBUG
+//			pNewNode->allocationRecord = (void*)this;
+//#endif // _DEBUG
+//
+//			//(*pNewNode).pNext = _pFreeNode.pNext;
+//			//_pFreeNode.pNext = pNewNode;
+//
+//			(*pNewNode).pNext = *p_Head_Next;
+//			*p_Head_Next = pNewNode;
+//		}
+//	}
 
 
 
