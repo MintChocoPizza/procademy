@@ -78,6 +78,7 @@ namespace OreoPizza
 		bool isSuccessful;
 
 		unsigned char* Buff;
+		unsigned int idx;
 
 
 		//////////////////////////////////////////////////////////////////////
@@ -114,9 +115,9 @@ namespace OreoPizza
 				isSuccessful = ReadProcessMemory(_h_Process, _uc_Curr_Memory_Pointer, Buff, _size, NULL);
 
 				// 1Byte 씩 증가하여 메모리를 비교한다. 
-				for (; Buff < _uc_Curr_Memory_Pointer + _Memory_Basic_Info.RegionSize; ++Buff)
+				for (idx = 0; Buff + idx < _uc_Curr_Memory_Pointer + _Memory_Basic_Info.RegionSize; ++idx)
 				{
-					
+
 				}
 
 				
