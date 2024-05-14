@@ -1,15 +1,14 @@
 ﻿// hw11_Check_Back_Log.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
 
-#include <iostream>
+#pragma comment(lib, "Ws2_32.lib")
 
-#include <Windows.h>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
+#include <winsock2.h>
+#include <windows.h>
+#include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-#pragma comment(lib, "Ws2_32.lib")
+#include <iostream>
 
 #define DEFAULT_PORT "27015"
 
@@ -30,6 +29,10 @@ int main()
 	// Create a SOCKET for the server to listen for client connections.
 	// 서버가 클라이언트 연결을 수신을 SOCKET을 만든다.
 	SOCKET Listen_Socket;
+
+	// Accept a client socket
+	// client socket 수락
+	SOCKET Client_Socket;
 
 	// Winsock DLL 사용준비, Initialize Winsock
 	i_Result = WSAStartup(MAKEWORD(2, 2), &wsa_Data);
@@ -94,6 +97,24 @@ int main()
 	}
 
 	// Accept a client socket
+	// client socket 수락
+	//Client_Socket = accept(Listen_Socket, NULL, NULL);
+	//if (Client_Socket == INVALID_SOCKET)
+	//{
+	//	printf_s("accept failed with error: %d \n", WSAGetLastError());
+	//	closesocket(Listen_Socket);
+	//	WSACleanup();
+	//	return 1;
+	//}
+
+	while (1)
+	{
+		printf_s("Listening..... \n");
+
+		// busy waiting
+		for (int i = 0; i < 1000000000; ++i) {}
+	}
+
 
 
 
