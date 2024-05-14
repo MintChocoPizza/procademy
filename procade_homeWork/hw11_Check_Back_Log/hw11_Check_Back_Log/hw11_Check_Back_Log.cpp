@@ -11,6 +11,7 @@
 #include <iostream>
 
 #define DEFAULT_PORT "27015"
+#define DEFAULT_BUFLEN 512
 
 using namespace std;
 
@@ -33,6 +34,22 @@ int main()
 	// Accept a client socket
 	// client socket 수락
 	SOCKET Client_Socket;
+	sockaddr_in client;
+	int client_Size = sizeof(client);
+
+
+	// 클라이언트 ip : port 출력
+	char host[NI_MAXHOST];
+	char service[NI_MAXSERV];
+
+	// Receive until the perr shuts down the connection
+	int i_Send_Result;
+	char recv_buf[DEFAULT_BUFLEN];
+	int recv_buf_len = DEFAULT_BUFLEN;
+
+
+
+
 
 	// Winsock DLL 사용준비, Initialize Winsock
 	i_Result = WSAStartup(MAKEWORD(2, 2), &wsa_Data);
@@ -87,7 +104,8 @@ int main()
 	//-----------------------------------------------------------------------------
 
 	// Listen a client socket
-	i_Result = listen(Listen_Socket, SOMAXCONN);
+	//i_Result = listen(Listen_Socket, SOMAXCONN);
+	i_Result = listen(Listen_Socket, SOMAXCONN_HINT(65535));
 	if (i_Result == SOCKET_ERROR)
 	{
 		printf_s("listen failed with error: %d \n", WSAGetLastError());
@@ -96,31 +114,110 @@ int main()
 		return 1;
 	}
 
-	// Accept a client socket
-	// client socket 수락
-	//Client_Socket = accept(Listen_Socket, NULL, NULL);
-	//if (Client_Socket == INVALID_SOCKET)
+	//while (1)
 	//{
-	//	printf_s("accept failed with error: %d \n", WSAGetLastError());
-	//	closesocket(Listen_Socket);
-	//	WSACleanup();
-	//	return 1;
+	//	Client_Socket = accept(Listen_Socket, (sockaddr*)&client, &client_Size);
+	//	if (Client_Socket == INVALID_SOCKET)
+	//	{
+	//		printf_s("accept failed with error: %d \n", WSAGetLastError());
+	//		closesocket(Listen_Socket);
+	//		WSACleanup();
+	//		return 1;
+	//	}
+
+	//	// 클라이언트 ip : port 출력
+	//	//if(getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0)
+	//	//{
+	//	//	std::cout << host << " : " << service << "에 연결되었습니다." << std::endl;
+	//	//}
+	//	else
+	//	{
+	//		inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
+	//		printf_s("%s : %d 에 연결되었습니다. \n", host, ntohs(client.sin_port));
+	//	}
 	//}
 
-	while (1)
+	while (true)
 	{
-		printf_s("Listening..... \n");
-
-		// busy waiting
-		for (int i = 0; i < 1000000000; ++i) {}
 	}
 
+	/*
+	
+	//////////////////////////////////////////////////////////////////////////
+	// Accept Check
+	//
+	//////////////////////////////////////////////////////////////////////////
+	// Accept a client socket
+	// client socket 수락
+	// Client_Socket = accept(Listen_Socket, NULL, NULL);
+	Client_Socket = accept(Listen_Socket, (sockaddr*)&client, &client_Size);
+	if (Client_Socket == INVALID_SOCKET)
+	{
+		printf_s("accept failed with error: %d \n", WSAGetLastError());
+		closesocket(Listen_Socket);
+		WSACleanup();
+		return 1;
+	}
 
+	// 클라이언트 ip : port 출력
+	//if(getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0)
+	//{
+	//	std::cout << host << " : " << service << "에 연결되었습니다." << std::endl;
+	//}
+	else 
+	{
+		inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
+		printf_s("%s : %d 에 연결되었습니다. \n", host, ntohs(client.sin_port));
+	}
+	
 
+	// No longer need server socket
+	closesocket(Listen_Socket);
 
+	// Receive until the perr shuts down the connection
+	do 
+	{
 
+		i_Result = recv(Client_Socket, recv_buf, recv_buf_len, 0);
+		if (i_Result > 0) {
+			printf_s("Bytes received: %d\n", i_Result);
 
+			// Echo the buffer back to the sender
+			i_Send_Result = send(Client_Socket, recv_buf, i_Result, 0);
+			if (i_Send_Result == SOCKET_ERROR) {
+				printf_s("send failed with error: %d\n", WSAGetLastError());
+				closesocket(Client_Socket);
+				WSACleanup();
+				return 1;
+			}
+			printf_s("Bytes sent: %d\n", i_Send_Result);
+		}
+		else if (i_Result == 0)
+			printf_s("Connection closing...\n");
+		else {
+			printf_s("recv failed with error: %d\n", WSAGetLastError());
+			closesocket(Client_Socket);
+			WSACleanup();
+			return 1;
+		}
+
+	} while (i_Result > 0);
+
+	// shutdown the connection since we're done
+	i_Result = shutdown(Client_Socket, SD_SEND);
+	if (i_Result == SOCKET_ERROR) {
+		printf("shutdown failed with error: %d\n", WSAGetLastError());
+		closesocket(Client_Socket);
+		WSACleanup();
+		return 1;
+	}
+	*/
+
+	// cleanup
+	//closesocket(Client_Socket);
 	WSACleanup();
+
+	printf_s("Hello World \n");
 	return 0;
 }
 
