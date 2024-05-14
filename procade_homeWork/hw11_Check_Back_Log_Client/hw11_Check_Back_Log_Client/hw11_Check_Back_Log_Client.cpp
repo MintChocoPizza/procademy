@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 	bool isEnd = false;
 	while (1)
 	{
-		++count;
+
 		for (ptr = result; ptr != NULL; ptr = ptr->ai_next)
 		{
 			// Create a SOCKET for connecting to server
@@ -97,12 +97,13 @@ int main(int argc, char **argv)
 			break;
 		}
 
-		if (isEnd)
+		if (isEnd || count == 10000)
 			break;
 
+		++count;
 		printf_s("%d \n", count);
 	}
-
+	printf_s("count: %d \n", count); // listen baglog 최대값 65529
 	/*
 	// Attempt to connect tot an address until one succeeds 
 	// 성공할때 까지 주소에 연결을 시도한다.
