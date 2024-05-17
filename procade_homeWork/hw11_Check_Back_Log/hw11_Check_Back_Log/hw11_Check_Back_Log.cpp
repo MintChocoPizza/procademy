@@ -105,7 +105,7 @@ int main()
 
 	// Listen a client socket
 	//i_Result = listen(Listen_Socket, SOMAXCONN);
-	i_Result = listen(Listen_Socket, SOMAXCONN_HINT(100000));	// 양수 ~200 -> 기본 200개, 200~ 갯수 적용,    
+	i_Result = listen(Listen_Socket, SOMAXCONN_HINT(65535));	// 양수 ~200 -> 기본 200개, 200~ 갯수 적용,    
 	// 음수: 제대로 갯수 적용 된다.
 	if (i_Result == SOCKET_ERROR)
 	{

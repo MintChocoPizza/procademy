@@ -2,7 +2,6 @@
 C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw11_Check_Back_Log\hw11_Check_Back_Log\hw11_Check_Back_Log.cpp(46,6): warning C4101: 'i_Send_Result' :참조되지 않은 지역 변수입니다.
 C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw11_Check_Back_Log\hw11_Check_Back_Log\hw11_Check_Back_Log.cpp(43,7): warning C4101: 'service' :참조되지 않은 지역 변수입니다.
 C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw11_Check_Back_Log\hw11_Check_Back_Log\hw11_Check_Back_Log.cpp(47,7): warning C4101: 'recv_buf' :참조되지 않은 지역 변수입니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw11_Check_Back_Log\hw11_Check_Back_Log\hw11_Check_Back_Log.cpp(42,7): warning C4101: 'host' :참조되지 않은 지역 변수입니다.
   코드를 생성하고 있습니다.
   1 of 4 functions (25.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation

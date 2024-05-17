@@ -1,12 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\project",
-    "\\project\\OOP\\OOP",
-    "\\project\\shootingGame_project",
-    "\\project\\shootingGame_project\\shootingGame_Project_FPS",
-    "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS"
+    "\\procade_homeWork",
+    "\\procade_homeWork\\hw11_Check_Back_Log_Client",
+    "\\procade_homeWork\\hw11_Check_Back_Log_Client\\hw11_Check_Back_Log_Client"
   ],
-  "SelectedNode": "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS\\Player.cpp",
+  "SelectedNode": "\\procade_homeWork\\hw11_Check_Back_Log_Client\\hw11_Check_Back_Log_Client\\hw11_Check_Back_Log_Client.cpp",
   "PreviewInSolutionExplorer": false
 }

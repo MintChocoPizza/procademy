@@ -10,7 +10,8 @@
 
 #pragma comment (lib, "Ws2_32.lib")
 
-#define DEFAULT_IP "211.51.91.75"
+//#define DEFAULT_IP "211.51.91.75"
+#define DEFAULT_IP "127.0.0.1"
 #define DEFAULT_PORT "27015"
 #define DEFAULT_BUFLEN 512
 
@@ -89,19 +90,41 @@ int main(int argc, char **argv)
 			i_Result = connect(Connect_Socket, ptr->ai_addr, (int)ptr->ai_addrlen);
 			if (i_Result == SOCKET_ERROR)
 			{
-				closesocket(Connect_Socket);
 				Connect_Socket = INVALID_SOCKET;
+				printf_s("connect failed with error: %ld \n", WSAGetLastError());
 				isEnd = true;
 				//continue;
+				break;
 			}
-			break;
+			++count;
 		}
+
 
 		if (isEnd || count == 10000)
 			break;
 
-		++count;
-		printf_s("%d \n", count);
+		////printf_s("%d \n", count);
+
+		//Connect_Socket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);;
+		//if (Connect_Socket == INVALID_SOCKET)
+		//{
+		//	printf_s("socket failed with error: %ld \n", WSAGetLastError());
+		//	WSACleanup();
+		//	return 1;
+		//};
+	
+		//	// Connect to server
+		//i_Result = connect(Connect_Socket, result->ai_addr, (int)result->ai_addrlen);
+		//if (i_Result == SOCKET_ERROR)
+		//{
+		//	Connect_Socket = INVALID_SOCKET;
+		//	printf_s("connect failed with error: %ld \n", WSAGetLastError());
+		//	break;
+		//}
+		//count++;
+
+		//if (count == 10000)
+		//	break;
 	}
 	printf_s("count: %d \n", count); // listen baglog 최대값 65529
 	/*
