@@ -106,7 +106,7 @@ int main()
 	// Listen a client socket
 	//i_Result = listen(Listen_Socket, SOMAXCONN);
 	i_Result = listen(Listen_Socket, SOMAXCONN_HINT(100000));	// 양수 ~200 -> 기본 200개, 200~ 갯수 적용,    
-																// 음수: 제대로 갯수 적용 된다.
+	// 음수: 제대로 갯수 적용 된다.
 	if (i_Result == SOCKET_ERROR)
 	{
 		printf_s("listen failed with error: %d \n", WSAGetLastError());
@@ -138,9 +138,50 @@ int main()
 	//	}
 	//}
 
-	while (true)
+	bool check = true;
+	while (check)
 	{
+		if (GetAsyncKeyState(VK_ESCAPE))
+		{
+			check = false;
+		}
 	}
+
+	printf_s("Out!!!... \n");
+
+
+	while (1)
+	{
+		if (GetAsyncKeyState('A'))
+		{
+			printf_s("accept!!!.... \n");
+			Sleep(100);
+			printf_s("start!!!.... \n");
+			// Accept a client socket
+			// client socket 수락
+			// Client_Socket = accept(Listen_Socket, NULL, NULL);
+			Client_Socket = accept(Listen_Socket, (sockaddr*)&client, &client_Size);
+			if (Client_Socket == INVALID_SOCKET)
+			{
+				printf_s("accept failed with error: %d \n", WSAGetLastError());
+				closesocket(Listen_Socket);
+				WSACleanup();
+				return 1;
+			}
+			// 클라이언트 ip : port 출력
+//if(getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0)
+//{
+//	std::cout << host << " : " << service << "에 연결되었습니다." << std::endl;
+//}
+			//else
+			{
+				inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
+				printf_s("%s : %d 에 연결되었습니다. \n", host, ntohs(client.sin_port));
+			}
+		}
+	}
+
+
 
 	/*
 	
@@ -165,7 +206,7 @@ int main()
 	//{
 	//	std::cout << host << " : " << service << "에 연결되었습니다." << std::endl;
 	//}
-	else 
+	//else 
 	{
 		inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
 		printf_s("%s : %d 에 연결되었습니다. \n", host, ntohs(client.sin_port));
