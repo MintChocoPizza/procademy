@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\procade_homeWork\\hw12_echoClient\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{88BCE6BC-C603-46AA-A3AF-CE160E433A60}|hw12_echoClient\\hw12_echoClient.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\procade_homeWork\\hw12_echoClient\\hw12_echoClient\\hw12_echoClient.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{88BCE6BC-C603-46AA-A3AF-CE160E433A60}|hw12_echoClient\\hw12_echoClient.vcxproj|solutionrelative:hw12_echoClient\\hw12_echoClient.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 75,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "hw12_echoClient.cpp",
+              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\procade_homeWork\\hw12_echoClient\\hw12_echoClient\\hw12_echoClient.cpp",
+              "RelativeDocumentMoniker": "hw12_echoClient\\hw12_echoClient.cpp",
+              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\procade_homeWork\\hw12_echoClient\\hw12_echoClient\\hw12_echoClient.cpp",
+              "RelativeToolTip": "hw12_echoClient\\hw12_echoClient.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-05-17T11:51:28.416Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
