@@ -1,11 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\procade_homeWork",
-    "\\procade_homeWork\\hw12_echoClient",
-    "\\procade_homeWork\\hw12_echoClient\\hw12_echoClient",
-    "\\procade_homeWork\\hw12_echoServer\\hw12_echoServer"
+    "\\project",
+    "\\project\\OOP\\OOP",
+    "\\project\\shootingGame_project",
+    "\\project\\shootingGame_project\\shootingGame_Project_FPS",
+    "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS"
   ],
-  "SelectedNode": "\\procade_homeWork\\hw12_echoClient\\hw12_echoClient\\hw12_echoClient.cpp",
+  "SelectedNode": "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS\\Player.cpp",
   "PreviewInSolutionExplorer": false
 }

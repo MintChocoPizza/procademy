@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\procade_homeWork\\hw13_Split_File_Transfer\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{29C9F63F-0F2B-4C71-AE5E-4C405C6A3A5A}|hw13_Split_File_Transfer\\hw13_Split_File_Transfer.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\procade_homeWork\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{29C9F63F-0F2B-4C71-AE5E-4C405C6A3A5A}|hw13_Split_File_Transfer\\hw13_Split_File_Transfer.vcxproj|solutionrelative:hw13_Split_File_Transfer\\hw13_Split_File_Transfer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 75,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "hw13_Split_File_Transfer.cpp",
+              "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\procade_homeWork\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer.cpp",
+              "RelativeDocumentMoniker": "hw13_Split_File_Transfer\\hw13_Split_File_Transfer.cpp",
+              "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\procade_homeWork\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer.cpp",
+              "RelativeToolTip": "hw13_Split_File_Transfer\\hw13_Split_File_Transfer.cpp",
+              "ViewState": "AQIAAKkAAAAAAAAAAAAEwL4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-05-20T10:44:16.551Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
