@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <iostream>
 
-#define DEFAULT_PORT "27015"
+#define DEFAULT_PORT "9000"
 #define DEFAULT_BUFLEN 512
 
 using namespace std;
@@ -105,7 +105,7 @@ int main()
 
 	// Listen a client socket
 	//i_Result = listen(Listen_Socket, SOMAXCONN);
-	i_Result = listen(Listen_Socket, SOMAXCONN_HINT(65535));	// 양수 ~200 -> 기본 200개, 200~ 갯수 적용,    
+	i_Result = listen(Listen_Socket, SOMAXCONN_HINT(1000));	// 양수 ~200 -> 기본 200개, 200~ 갯수 적용,    
 	// 음수: 제대로 갯수 적용 된다.
 	if (i_Result == SOCKET_ERROR)
 	{
@@ -138,25 +138,32 @@ int main()
 	//	}
 	//}
 
-	bool check = true;
-	while (check)
+	//bool check = true;
+	//while (check)
+	//{
+	//	if (GetAsyncKeyState(VK_ESCAPE))
+	//	{
+	//		check = false;
+	//	}
+	//}
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+	// backlog queue 다 차면 1/5 빌 때 까지 connect 안된다. 
+	// 
+	// 
+	////////////////////////////////////////////////////////////////////////////////////////////
+
+	printf_s("Start!!!... \n");
+	printf_s("push 'ESC' == accept \n");
+
+	int count = 0;
+	while (1)
 	{
 		if (GetAsyncKeyState(VK_ESCAPE))
 		{
-			check = false;
-		}
-	}
-
-	printf_s("Out!!!... \n");
-
-
-	while (1)
-	{
-		if (GetAsyncKeyState('A'))
-		{
-			printf_s("accept!!!.... \n");
 			Sleep(100);
-			printf_s("start!!!.... \n");
+			printf_s("accept!!!.... \n");
+			++count;
 			// Accept a client socket
 			// client socket 수락
 			// Client_Socket = accept(Listen_Socket, NULL, NULL);
@@ -173,11 +180,14 @@ int main()
 //{
 //	std::cout << host << " : " << service << "에 연결되었습니다." << std::endl;
 //}
-			//else
+			else
 			{
 				inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
 				printf_s("%s : %d 에 연결되었습니다. \n", host, ntohs(client.sin_port));
+				//closesocket(Client_Socket); // closesocket을 해도 더이상 받지 않는다. 
 			}
+			printf_s("%d \n", count);
+
 		}
 	}
 

@@ -12,7 +12,8 @@
 
 //#define DEFAULT_IP "211.51.91.75"
 #define DEFAULT_IP "127.0.0.1"
-#define DEFAULT_PORT "27015"
+#define DEFAULT_PORT "9000"
+#define CLIENT_PORT "60137"
 #define DEFAULT_BUFLEN 512
 
 int main(int argc, char **argv)
@@ -28,6 +29,9 @@ int main(int argc, char **argv)
 	// Resolve the server address and port
 	// 서버 주소 및 포트 확인
 	struct addrinfo *result = NULL;
+	
+	// 클라이언트 bind용 
+	struct addrinfo* client_result = NULL;
 
 	// Attempt to connect tot an address until one succeeds 
 	// 성공할때 까지 주소에 연결을 시도한다.
@@ -70,6 +74,16 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
+
+	// 클라 소켓 bind용 
+	//i_Result = getaddrinfo(DEFAULT_IP, CLIENT_PORT, &hints, &client_result);
+	//if (i_Result != 0)
+	//{
+	//	printf_s("getadrinfo failed with error: %d \n", i_Result);
+	//	WSACleanup();
+	//	return 1;
+	//}
+
 	int count = 0;
 	bool isEnd = false;
 	while (1)
@@ -86,6 +100,17 @@ int main(int argc, char **argv)
 				return 1;
 			}
 
+			// bind
+			//i_Result = bind(Connect_Socket, client_result->ai_addr, (int)client_result->ai_addrlen);
+			//if (i_Result == SOCKET_ERROR)
+			//{
+			//	printf_s("bind failed with error: %d \n", WSAGetLastError());
+			//	freeaddrinfo(client_result);
+			//	closesocket(Connect_Socket);
+			//	WSACleanup();
+			//	return 1;
+			//}
+
 			// Connect to server
 			i_Result = connect(Connect_Socket, ptr->ai_addr, (int)ptr->ai_addrlen);
 			if (i_Result == SOCKET_ERROR)
@@ -97,10 +122,11 @@ int main(int argc, char **argv)
 				break;
 			}
 			++count;
+			// closesocket(Connect_Socket); 포트를 잡아먹어서 더이상 연결을 할 수 없게 된다. 
 		}
 
 
-		if (isEnd || count == 10000)
+		if (isEnd || count == 500)
 			break;
 
 		////printf_s("%d \n", count);
@@ -197,7 +223,7 @@ int main(int argc, char **argv)
 	*/
 
 	// cleanup
-	closesocket(Connect_Socket);
+	//closesocket(Connect_Socket);
 	WSACleanup();
 
 	printf_s("Hello World \n");
