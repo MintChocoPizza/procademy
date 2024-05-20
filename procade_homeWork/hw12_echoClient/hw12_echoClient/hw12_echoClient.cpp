@@ -134,6 +134,11 @@ int main(int argc, char** argv)
 		if (fgets(send_buf, DEFAULT_BUFLEN, stdin) == NULL)
 			break;
 
+		// End 이면 프로그램 종료
+		// 키보드 입력에는 '\n' 가 들어간다.
+		if (strcmp(send_buf, "End\n") == 0)
+			break;
+
 		// '\n' 문자 제거
 		send_len = strlen(send_buf);
 		if (send_buf[send_len - 1] == '\n')
@@ -153,7 +158,6 @@ int main(int argc, char** argv)
 		printf_s("Bytes Sent: %ld\n", i_Result);
 
 		// 데이터 받기
-		bool isEnd = false;
 		// i_Result = recv(Connect_Socket, recv_buf, recv_buf_len, MSG_WAITALL);
 		i_Result = recvn(Connect_Socket, recv_buf, i_Result, 0);
 		if (i_Result > 0)
@@ -187,6 +191,9 @@ int main(int argc, char** argv)
 		WSACleanup();
 		return 1;
 	}
+
+	closesocket(Connect_Socket);
+	WSACleanup();
 
 	std::cout << "Hello World \n" << std::endl;
 	return 0;

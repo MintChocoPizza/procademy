@@ -115,7 +115,7 @@ int main()
 	while (1)
 	{
 		// accept()
-		printf_s("accept를 기다림.....");
+		printf_s("\naccept를 기다림.....");
 		Client_Socket = accept(Listen_Socket, (sockaddr*)&client, &client_Size);
 		if (Client_Socket == INVALID_SOCKET)
 		{
