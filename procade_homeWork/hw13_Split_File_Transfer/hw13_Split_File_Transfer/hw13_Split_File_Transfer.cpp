@@ -10,13 +10,25 @@
 
 #pragma comment (lib, "Ws2_32.lib")
 
-//#define DEFAULT_IP "211.51.91.75"
-#define DEFAULT_IP "127.0.0.1"
-//#define DEFAULT_IP "192.168.10.14"
-//#define DEFAULT_IP "procademyserver.iptime.org"
+//#define procademyserver
 
-// #define DEFAULT_PORT "10010"
+#ifdef procademyserver
+
+#define DEFAULT_IP "procademyserver.iptime.org"
+#define DEFAULT_PORT "10010"
+
+#else
+
+#define DEFAULT_IP "127.0.0.1"
 #define DEFAULT_PORT "9000"
+
+#endif // procademyserver
+
+
+//#define DEFAULT_IP "211.51.91.75"
+//#define DEFAULT_IP "127.0.0.1"
+//#define DEFAULT_IP "192.168.10.14"
+//#define DEFAULT_PORT "9000"
 
 #define DEFAULT_BUFLEN 512
 
@@ -74,8 +86,10 @@ int main(int argc, char** argv)
 	struct st_PACKET_HEADER st_Packet_Header;
 
 	//----------------------------------
-	// send file header
-
+	// send file
+	int Bytes_Send;
+	int Len_Send;
+	
 	//----------------------------------
 	// Receive until the peer closes the connection
 	char Recv_Buff[DEFAULT_BUFLEN];
@@ -206,14 +220,30 @@ int main(int argc, char** argv)
 
 	//----------------------------------
 	// send file
-	i_Result = send(Connect_Socket, p_File_Memory, l_File_Size, 0);
-	if (i_Result == SOCKET_ERROR)
+	//i_Result = send(Connect_Socket, p_File_Memory, l_File_Size, 0);
+	//if (i_Result == SOCKET_ERROR)
+	//{
+	//	printf_s("send failed with error: %d\n", WSAGetLastError());
+	//	closesocket(Connect_Socket);
+	//	WSACleanup();
+	//	return 1;
+	//}
+	Bytes_Send = 0;
+	Len_Send = 1000;
+	do
 	{
-		printf_s("send failed with error: %d\n", WSAGetLastError());
-		closesocket(Connect_Socket);
-		WSACleanup();
-		return 1;
-	}
+		if (l_File_Size - Bytes_Send < 1000)
+			Len_Send = l_File_Size - Bytes_Send;
+		i_Result = send(Connect_Socket, p_File_Memory+Bytes_Send, Len_Send, 0);
+		if (i_Result == SOCKET_ERROR)
+		{
+			printf_s("send failed with error: %d\n", WSAGetLastError());
+			closesocket(Connect_Socket);
+			WSACleanup();
+			return 1;
+		}
+		Bytes_Send += i_Result;
+	} while (Bytes_Send < l_File_Size);
 	printf_s("send file finish \n");
 
 	
