@@ -27,7 +27,7 @@
           ]
         },
         {
-          "DockedWidth": 148,
+          "DockedWidth": 176,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -46,7 +46,7 @@
           ]
         },
         {
-          "DockedWidth": 448,
+          "DockedWidth": 420,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -57,7 +57,7 @@
               "RelativeDocumentMoniker": "hw10_new_Overloding\\MyNew.cpp",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\new_Overloding\\hw10_new_Overloding\\MyNew.cpp",
               "RelativeToolTip": "hw10_new_Overloding\\MyNew.cpp",
-              "ViewState": "AQIAADsAAAAAAAAAAAAgwFAAAAAAAAAA",
+              "ViewState": "AQIAAEIAAAAAAAAAAAAswFAAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-03-10T10:12:19.191Z",
               "EditorCaption": ""

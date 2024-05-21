@@ -15,6 +15,15 @@
 
 using namespace std;
 
+struct st_PACKET_HEADER
+{
+	DWORD	dwPacketCode;		// 0x11223344	우리의 패킷확인 고정값
+
+	WCHAR	szName[32];			// 본인이름, 유니코드 utf-16 NULL 문자 끝
+	WCHAR	szFileName[128];	// 파일이름, 유니코드 utf-16 NULL 문자 끝
+	int	iFileSize;
+};
+
 int main()
 {
 	// Winsock DLL 사용준비, Initialize Winsock
@@ -41,10 +50,23 @@ int main()
 	char host[NI_MAXHOST];
 	char service[NI_MAXSERV];
 
-	// Receive until the perr shuts down the connection
-	int i_Send_Result;
+	// 파일 헤더 수신 
+	struct st_PACKET_HEADER st_Packet_Header;
+	int Bytes_Received_Total;
+
+	// 파일 열기
+	FILE* p_File;
+	wchar_t File_Name[256] = L"";
+
+	// 파일 수신
+	int Bytes_Received;
 	char recv_buf[DEFAULT_BUFLEN];
 	int recv_buf_len = DEFAULT_BUFLEN;
+
+	// 응답 보내기
+	int i_Send_Result;
+	int Send_Data = 0xdddddddd;
+	int Send_Data_Len = sizeof(Send_Data);
 
 
 
@@ -112,7 +134,7 @@ int main()
 	}
 
 
-	while (1)
+	// while (1)
 	{
 		// accept()
 		printf_s("\naccept를 기다림.....");
@@ -136,62 +158,65 @@ int main()
 			printf_s("%s : %d 에 연결되었습니다. \n", host, ntohs(client.sin_port));
 		}
 
-		// 클라이언트와 데이터 통신
+
+
+
+		// 파일 헤더 수신
+		Bytes_Received_Total = 0;
 		do
 		{
+			Bytes_Received = recv(Client_Socket, (char*)&(st_Packet_Header)+Bytes_Received_Total, 1, 0);
+			Bytes_Received_Total += Bytes_Received;
+		} while (Bytes_Received_Total < sizeof(st_PACKET_HEADER));
+		// Bytes_Received = recv(Client_Socket, (char*)&st_Packet_Header, sizeof(st_Packet_Header), 0);
 
-			i_Result = recv(Client_Socket, recv_buf, recv_buf_len, 0);
-			if (i_Result > 0) {
-				printf_s("Bytes received: %d\n", i_Result);
+		// 수신 헤더 확인
+		printf_s("dwPacketCode: %x \n", st_Packet_Header.dwPacketCode);
+		wprintf_s(L"szName: %s \n", st_Packet_Header.szName);
+		wprintf_s(L"szFileName: %s \n", st_Packet_Header.szFileName);
+		printf_s("iFileSize: %d \n", st_Packet_Header.iFileSize);
 
-				// 받은 데이터 출력
-				recv_buf[i_Result] = '\0';
-				// printf_s("[TCP/%s:%d] %s \n", inet_ntoa(client.sin_addr), ntohs(client.sin_port), recv_buf); // inet_ntoa 에러가 발생한다. 
-				printf_s("[TCP/%s:%d] %s \n", host, ntohs(client.sin_port), recv_buf);
+		// 파일 열기
+		wcscat_s(File_Name, st_Packet_Header.szName);
+		wcscat_s(File_Name, L"_");
+		wcscat_s(File_Name, st_Packet_Header.szFileName);
 
-				// Echo the buffer back to the sender
-				i_Send_Result = send(Client_Socket, recv_buf, i_Result, 0);
-				if (i_Send_Result == SOCKET_ERROR) {
-					printf_s("send failed with error: %d\n", WSAGetLastError());
-					closesocket(Client_Socket);
-					WSACleanup();
-					return 1;
-				}
-				printf_s("Bytes sent: %d\n", i_Send_Result);
-			}
-			else if (i_Result == 0)
-				printf_s("Connection closing...\n");
-			else if (WSAGetLastError() == 10054)	// 정상종료
-			{
-				printf_s("Connection closing...\n");
-				i_Result = 0;
-			}
-			else if (WSAGetLastError() == 10053)	// 정상종료
-			{
-				printf_s("Connection closing...\n");
-				i_Result = 0;
-			}
-			else {
-				printf_s("recv failed with error: %d\n", WSAGetLastError());
-				closesocket(Client_Socket);
-				WSACleanup();
-				return 1;
-			}
-
-		} while (i_Result > 0);
-
-		// 연결된 socket을 해지한다. 
-		i_Result = shutdown(Client_Socket, SD_SEND);
-		if (i_Result == SOCKET_ERROR)
+		i_Result = _wfopen_s(&p_File, File_Name, L"ab");
+		if (i_Result != NULL || p_File == NULL)
 		{
-			printf("shutdown failed with error: %d\n", WSAGetLastError());
+			printf_s("파일 불러오기 실패 \n");
+			closesocket(Client_Socket);
+			closesocket(Listen_Socket);
+
+			// WinSock 종료
+			WSACleanup();
+
+			std::cout << "Hello World!\n";
+			return 0;
+		}
+		printf_s("파일 오픈 성공...... \n");
+
+		// 파일 수신
+		Bytes_Received_Total = 0;
+		do
+		{
+			Bytes_Received = recv(Client_Socket, recv_buf, recv_buf_len, 0);
+			fwrite(recv_buf, 1, Bytes_Received, p_File);
+			Bytes_Received_Total += Bytes_Received;
+		} while (Bytes_Received_Total <st_Packet_Header.iFileSize);
+		fclose(p_File);
+		printf_s("파일 수신 완료 \n");
+
+		// 응답 보내기
+
+		i_Send_Result = send(Client_Socket, (char*)&Send_Data, Send_Data_Len, 0);
+		if (i_Send_Result == SOCKET_ERROR) {
+			printf_s("send failed with error: %d\n", WSAGetLastError());
 			closesocket(Client_Socket);
 			WSACleanup();
 			return 1;
 		}
-		closesocket(Client_Socket);
-		printf_s("[TCP 서버] 클라이언트 종료: IP 주소=%s, 포트 번호=%d \n",
-			host, ntohs(client.sin_port));
+
 	}
 
 	// listen socket을 해지한다. 

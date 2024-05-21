@@ -11,15 +11,16 @@
 #pragma comment (lib, "Ws2_32.lib")
 
 //#define DEFAULT_IP "211.51.91.75"
-// #define DEFAULT_IP "127.0.0.1"
+#define DEFAULT_IP "127.0.0.1"
 //#define DEFAULT_IP "192.168.10.14"
-#define DEFAULT_IP "procademyserver.iptime.org"
+//#define DEFAULT_IP "procademyserver.iptime.org"
 
-#define DEFAULT_PORT "10010"
+// #define DEFAULT_PORT "10010"
+#define DEFAULT_PORT "9000"
 
 #define DEFAULT_BUFLEN 512
 
-#define DEFAULT_FILE_NAME L"./CUCKOO"
+const wchar_t *DEFAULT_FILE_NAME = L"./CUCKOO.jpg";
 
 
 
@@ -40,7 +41,7 @@ int main(int argc, char** argv)
 
 	//----------------------------------
 	// 전송할 파일 세팅 
-	wchar_t w_File_Name[DEFAULT_BUFLEN];
+	wchar_t w_File_Name[128];
 	
 	//----------------------------------
 	// Initialize Winsock
@@ -58,6 +59,7 @@ int main(int argc, char** argv)
 	//----------------------------------
 	// Attempt to connect tot an address until one succeeds 
 	// 성공할때 까지 주소에 연결을 시도한다.
+	// 1. 서버 접속
 	struct addrinfo* ptr = NULL;
 	SOCKET Connect_Socket = INVALID_SOCKET;
 
@@ -66,6 +68,13 @@ int main(int argc, char** argv)
 	FILE* p_File;
 	long l_File_Size;
 	char* p_File_Memory;
+
+	//----------------------------------
+	// 4. 헤더 생성
+	struct st_PACKET_HEADER st_Packet_Header;
+
+	//----------------------------------
+	// send file header
 
 	//----------------------------------
 	// Receive until the peer closes the connection
@@ -82,12 +91,13 @@ int main(int argc, char** argv)
 		// 비어있는 경우
 		if (len == 1)
 		{
-			wscanf_s(w_File_Name, DEFAULT_FILE_NAME);
+			wcscpy_s(w_File_Name, DEFAULT_FILE_NAME);
 		}
 		else if (len > 0 && w_File_Name[len - 1] == '\n') {
 			w_File_Name[len - 1] = '\0';
 		}
 	}
+	printf_s("파일 입력 완료 \n");
 
 	//----------------------------------
 	// Initialize Winsock
@@ -119,6 +129,7 @@ int main(int argc, char** argv)
 	//----------------------------------
 	// Attempt to connect tot an address until one succeeds 
 	// 성공할때 까지 주소에 연결을 시도한다.
+	// 1. 서버 접속
 	for (ptr = result; ptr != NULL; ptr = ptr->ai_next)
 	{
 		// Create a SOCKET for connecting to server
@@ -161,6 +172,7 @@ int main(int argc, char** argv)
 		WSACleanup();
 		return -1;
 	}
+	// 3. 사이즈 체크
 	fseek(p_File, 0, SEEK_END);
 	l_File_Size = ftell(p_File);
 	fseek(p_File, 0, SEEK_SET);
@@ -176,6 +188,20 @@ int main(int argc, char** argv)
 
 	fread_s(p_File_Memory, l_File_Size, 1, l_File_Size, p_File);
 	fclose(p_File);
+	printf_s("특정 파일 오픈 성공 \n");
+
+	//----------------------------------
+	// 4. 헤더 생성
+	st_Packet_Header.dwPacketCode = 0x11223344;
+	wcscpy_s(st_Packet_Header.szName, L"최지혁");
+	wcscpy_s(st_Packet_Header.szFileName, L"CUCKOO.jpg");
+	st_Packet_Header.iFileSize = l_File_Size;
+
+	//----------------------------------
+	// 5. 서버로 헤더 전송
+	i_Result = send(Connect_Socket, (char*)&st_Packet_Header, sizeof(st_PACKET_HEADER), 0);
+	printf_s("헤더 전송 성공 \n");
+
 
 
 	//----------------------------------
@@ -188,6 +214,7 @@ int main(int argc, char** argv)
 		WSACleanup();
 		return 1;
 	}
+	printf_s("send file finish \n");
 
 	
 
@@ -198,7 +225,20 @@ int main(int argc, char** argv)
 
 		i_Result = recv(Connect_Socket, Recv_Buff, sizeof(Recv_Buff), 0);
 		if (i_Result > 0)
+		{
 			printf("Bytes received: %d\n", i_Result);
+			printf_s("%x \n", *(int*)Recv_Buff);
+			if (*(int*)Recv_Buff == 0xdddddddd)
+			{
+				printf_s("성공!!!!............. \n");
+				break;
+			}
+			else
+			{
+				printf_s("실패!!!!............. \n");
+				break;
+			}
+		}
 		else if (i_Result == 0)
 			printf("Connection closed\n");
 		else
