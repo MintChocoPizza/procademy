@@ -232,6 +232,8 @@ int main(int argc, char** argv)
 	Len_Send = 1000;
 	do
 	{
+		// 전송해야할 데이터가 1000 보다 작다면 
+		// 남은 데이터의 사이즈를 구하여, 그만큼만 전송한다. 
 		if (l_File_Size - Bytes_Send < 1000)
 			Len_Send = l_File_Size - Bytes_Send;
 		i_Result = send(Connect_Socket, p_File_Memory+Bytes_Send, Len_Send, 0);

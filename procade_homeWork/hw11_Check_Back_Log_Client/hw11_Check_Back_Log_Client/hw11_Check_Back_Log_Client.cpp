@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 		}
 
 
-		if (isEnd || count == 500)
+		if (isEnd || count == 10000)
 			break;
 
 		////printf_s("%d \n", count);
@@ -153,6 +153,7 @@ int main(int argc, char **argv)
 		//	break;
 	}
 	printf_s("count: %d \n", count); // listen baglog 최대값 65529
+	//getchar();
 	/*
 	// Attempt to connect tot an address until one succeeds 
 	// 성공할때 까지 주소에 연결을 시도한다.
