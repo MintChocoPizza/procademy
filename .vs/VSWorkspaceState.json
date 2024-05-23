@@ -1,10 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\procade_homeWork",
-    "\\procade_homeWork\\hw13_Split_File_Transfer",
-    "\\procade_homeWork\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer"
+    "\\test",
+    "\\test\\Force_RST_Transmission_Client\\Force_RST_Transmission_Client",
+    "\\test\\Force_RST_Transmission_Server",
+    "\\test\\Force_RST_Transmission_Server\\Force_RST_Transmission_Server"
   ],
-  "SelectedNode": "\\procade_homeWork\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer.cpp",
+  "SelectedNode": "\\test\\Force_RST_Transmission_Server\\Force_RST_Transmission_Server\\Force_RST_Transmission_Server.cpp",
   "PreviewInSolutionExplorer": false
 }

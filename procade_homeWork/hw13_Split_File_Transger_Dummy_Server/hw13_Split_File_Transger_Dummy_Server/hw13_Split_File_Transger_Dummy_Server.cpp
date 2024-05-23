@@ -11,7 +11,7 @@
 #include <iostream>
 
 #define DEFAULT_PORT "9000"
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFF_LEN 512
 
 using namespace std;
 
@@ -60,8 +60,8 @@ int main()
 
 	// 파일 수신
 	int Bytes_Received;
-	char recv_buf[DEFAULT_BUFLEN];
-	int recv_buf_len = DEFAULT_BUFLEN;
+	char recv_buf[DEFAULT_BUFF_LEN];
+	int recv_buf_len = DEFAULT_BUFF_LEN;
 
 	// 응답 보내기
 	int i_Send_Result;

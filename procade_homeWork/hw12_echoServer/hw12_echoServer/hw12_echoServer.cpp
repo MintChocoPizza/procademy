@@ -43,8 +43,8 @@ int main()
 
 	// Receive until the perr shuts down the connection
 	int i_Send_Result;
-	char recv_buf[DEFAULT_BUFLEN];
-	int recv_buf_len = DEFAULT_BUFLEN;
+	char Recv_BufF[DEFAULT_BUFLEN];
+	int Recv_Buff_Len = DEFAULT_BUFLEN;
 
 
 
@@ -140,17 +140,17 @@ int main()
 		do
 		{
 
-			i_Result = recv(Client_Socket, recv_buf, recv_buf_len, 0);
+			i_Result = recv(Client_Socket, Recv_BufF, Recv_Buff_Len-1, 0);
 			if (i_Result > 0) {
 				printf_s("Bytes received: %d\n", i_Result);
 
 				// 받은 데이터 출력
-				recv_buf[i_Result] = '\0';
+				Recv_BufF[i_Result] = '\0';
 				// printf_s("[TCP/%s:%d] %s \n", inet_ntoa(client.sin_addr), ntohs(client.sin_port), recv_buf); // inet_ntoa 에러가 발생한다. 
-				printf_s("[TCP/%s:%d] %s \n", host, ntohs(client.sin_port), recv_buf);
+				printf_s("[TCP/%s:%d] %s \n", host, ntohs(client.sin_port), Recv_BufF);
 
 				// Echo the buffer back to the sender
-				i_Send_Result = send(Client_Socket, recv_buf, i_Result, 0);
+				i_Send_Result = send(Client_Socket, Recv_BufF, i_Result, 0);
 				if (i_Send_Result == SOCKET_ERROR) {
 					printf_s("send failed with error: %d\n", WSAGetLastError());
 					closesocket(Client_Socket);

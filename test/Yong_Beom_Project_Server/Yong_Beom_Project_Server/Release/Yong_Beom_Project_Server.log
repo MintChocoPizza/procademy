@@ -1,0 +1,7 @@
+﻿  Yong_Beom_Project_Server.cpp
+C:\Users\dpsem\OneDrive\바탕 화면\procademy\test\Yong_Beom_Project_Server\Yong_Beom_Project_Server\Yong_Beom_Project_Server.cpp(4,34): warning C4081: 'newline'이(가) 있어야 하는데 ';'이(가) 있습니다.
+  코드를 생성하고 있습니다.
+  Previous IPDB not found, fall back to full compilation.
+  All 16 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  Yong_Beom_Project_Server.vcxproj -> C:\Users\dpsem\OneDrive\바탕 화면\procademy\test\Yong_Beom_Project_Server\Release\Yong_Beom_Project_Server.exe

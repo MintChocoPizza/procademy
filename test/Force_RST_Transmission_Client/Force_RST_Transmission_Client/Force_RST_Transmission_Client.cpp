@@ -11,7 +11,11 @@
 #pragma comment (lib, "Ws2_32.lib")
 
 #define DEFAULT_IP "127.0.0.1"
-#define DEFAULT_PORT "9000"
+#define DEFAULT_PORT "59812"
+#define DEFAULT_BUFF_LEN 512
+
+// 사용자 정의 데이터 수신 함수
+int recvn(SOCKET s, char* buf, int len, int fags);
 
 int main()
 {
@@ -34,12 +38,37 @@ int main()
     //----------------------------------
 	// Attempt to connect tot an address until one succeeds 
 	// 성공할때 까지 주소에 연결을 시도한다.
-    // 1. 서버 접속
     struct addrinfo* ptr = NULL;
     SOCKET Connect_Socket = INVALID_SOCKET;
+    //
     //----------------------------------
-    // 
+    // setsockopt_Linger
+    struct linger Linger_Opt;
+    //
+    //----------------------------------
+    // Connect to server
 
+    //---------------------------------------------------
+    // getaddrinfo() 에서 할당받은 메모리를 해지한다.
+
+    // 소켓 연결 완료
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //---------------------------------------------------
+    // 전송할 데이터 입력
+    char Send_Buff[DEFAULT_BUFF_LEN];
+    int Send_Len;
+
+    //---------------------------------------------------
+    // 데이터 받기
+    char recv_buf[DEFAULT_BUFF_LEN];
+
+
+    //---------------------------------------------------
+    // Connect_Socket을 해지한다. 
+
+    //---------------------------------------------------
+    // WinSock 종료
 
 
 
@@ -69,7 +98,7 @@ int main()
     {
         printf_s("getadrinfo failed with error: %d \n", i_Result);
         WSACleanup();
-        return 1;
+        return -1;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,9 +114,23 @@ int main()
         {
             printf_s("socket failed with error: %ld \n", WSAGetLastError());
             WSACleanup();
-            return 1;
+            return -1;
         }
 
+        //----------------------------------
+        // setsockopt_Linger
+        Linger_Opt.l_onoff = 1;
+        Linger_Opt.l_linger = 0;
+        i_Result = setsockopt(Connect_Socket, SOL_SOCKET, SO_LINGER, (char*)&Linger_Opt, sizeof(Linger_Opt));
+        if (i_Result == SOCKET_ERROR)
+        {
+            printf_s("setsockopt failed with error: %ld \n", WSAGetLastError());
+            closesocket(Connect_Socket);
+            WSACleanup();
+            return -1;
+        }
+
+        //----------------------------------
         // Connect to server
         i_Result = connect(Connect_Socket, ptr->ai_addr, (int)ptr->ai_addrlen);
         if (i_Result == SOCKET_ERROR)
@@ -99,14 +142,125 @@ int main()
         break;
     }
 
+    //---------------------------------------------------
+    // getaddrinfo() 에서 할당받은 메모리를 해지한다.
+    freeaddrinfo(result);
+
+    if (Connect_Socket == INVALID_SOCKET)
+    {
+        // Connect_Socket == INVALID_SOCKET 인 경우는 무조건 closesocket(Connect_Socket) 되어있다.
+        printf_s("Unable to connect to server \n");
+        WSACleanup();
+    }
+
+    // 소켓 연결 완료
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    while (1)
+    {
+        //---------------------------------------------------
+        // 전송할 데이터 입력
+        printf_s("\n[보낼 데이터] ");
+        if (fgets(Send_Buff, DEFAULT_BUFF_LEN, stdin) == NULL)
+            break;
+
+        // End 이면 프로그램 종료
+        // 키보드 입력에는 '\n' 가 들어간다.
+        if (strcmp(Send_Buff, "End\n") == 0)
+            break;
+
+        // 512를 입력하면 한번에 512 바이트를 전송한다.
+        if (strcmp(Send_Buff, "512\n") == 0)
+        {
+            memset(Send_Buff, 0xff, DEFAULT_BUFF_LEN);
+            Send_Buff[DEFAULT_BUFF_LEN-1] = '\0';
+        }
+
+        // '\n' 문자 제거
+        Send_Len = strlen(Send_Buff);
+        if (Send_Buff[Send_Len - 1] == '\n')
+            Send_Buff[Send_Len - 1] = '\0';
+        if (strlen(Send_Buff) == 0)
+            break;
+
+        // 데이터 보내기
+        i_Result = send(Connect_Socket, Send_Buff, (int)strlen(Send_Buff), 0);
+        if (i_Result == SOCKET_ERROR)
+        {
+            printf_s("send failed with error: %d\n", WSAGetLastError());
+            closesocket(Connect_Socket);
+            WSACleanup();
+            return 1;
+        }
+        printf_s("Bytes Sent: %ld\n", i_Result);
+
+        //---------------------------------------------------
+        // 데이터 받기
+        // i_Result = recv(Connect_Socket, recv_buf, recv_buf_len, MSG_WAITALL);
+        i_Result = recvn(Connect_Socket, recv_buf, i_Result, 0);
+        if (i_Result > 0)
+        {
+            recv_buf[i_Result] = '\0';
+            printf_s("[받은 데이터] %s \n", recv_buf);
+            printf_s("Bytes received: %d\n", i_Result);
+
+        }
+        else if (i_Result == 0)
+        {
+            printf_s("Connection closed\n");
+            closesocket(Connect_Socket);
+            WSACleanup();
+            return 1;
+        }
+        else
+        {
+            printf_s("recv failed with error: %d\n", WSAGetLastError());
+            closesocket(Connect_Socket);
+            WSACleanup();
+            return 1;
+        }
+    }
+
+
+
+    
+    
 
 
 
 
+    //---------------------------------------------------
+    // Connect_Socket을 해지한다. 
+    closesocket(Connect_Socket);
+
+    //---------------------------------------------------
+    // WinSock 종료
+    WSACleanup();
 
     std::cout << "Hello World! " << std::endl;
     
     return 0;
+}
+
+// 사용자 정의 데이터 수신 함수
+int recvn(SOCKET s, char* buf, int len, int fags)
+{
+    int received;
+    char* ptr = buf;
+    int left = len;
+
+    while (left > 0)
+    {
+        received = recv(s, ptr, left, fags);
+        if (received == SOCKET_ERROR)
+            return SOCKET_ERROR;
+        else if (received == 0)
+            break;
+
+        left -= received;
+        ptr += received;
+    }
+
+    return (len - left);
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
