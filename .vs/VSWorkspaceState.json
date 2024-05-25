@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\test\\Force_RST_Transmission_Server",
-    "\\test\\Force_RST_Transmission_Server\\Force_RST_Transmission_Server"
+    "\\project",
+    "\\project\\Cache_Hit_Simulator",
+    "\\project\\Cache_Hit_Simulator\\Cache_Hit_Simulator"
   ],
+  "SelectedNode": "\\project\\Cache_Hit_Simulator\\Cache_Hit_Simulator\\main.cpp",
   "PreviewInSolutionExplorer": false
 }

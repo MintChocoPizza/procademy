@@ -10,8 +10,12 @@
 
 #include "Console.h"
 #include "ConnectSocket.h"
+#include "C_Queue.h"
 
 #pragma comment (lib, "Ws2_32.lib")
+
+using namespace std;
+using namespace OreoPizza;
 
 struct st_PACKET
 {
@@ -33,11 +37,18 @@ struct st_PLAYER
 SOCKET Connect_Socket = INVALID_SOCKET;
 WSADATA wsa_Data;
 
+st_PLAYER *st_My_Player = NULL;
+
+
 
 int main()
 {
+    FD_SET Read_Set;
+    TIMEVAL Time_Val;
+    C_Queue<st_PACKET> Recv_Buff(64);
     int i_Result;
     int i_Cnt;
+    int i_Recv_Buff_Len; 
     bool Is_True;
 
 
@@ -47,15 +58,35 @@ int main()
         printf_s("연결을 실패했습니다. \n");
         return -1;
     }
+
+    Recv_Buff = (unsigned char*)malloc(sizeof(st_PLAYER) * 64);
+    i_Recv_Buff_Len = sizeof(st_PLAYER) * 64;
     
     while (1)
     {
         //---------------------------------------------------
         // 키보드 입력
+        // 키 입력을 받는 함수 
         
 
         //---------------------------------------------------
-        // 네트워크 
+        // 네트워크
+        FD_ZERO(&Read_Set);
+        FD_SET(Connect_Socket, &Read_Set);
+        Time_Val.tv_sec = 0;
+        Time_Val.tv_usec = 0;
+
+        i_Result = select(0, &Read_Set, 0, 0, &Time_Val);
+        if (i_Result > 0)
+        {
+            if (FD_ISSET(Connect_Socket, &Read_Set))
+            {
+                recv(Connect_Socket, Recv_Buff, )
+            }
+        }
+        
+        
+        
 
         //---------------------------------------------------
         // 랜더
@@ -67,6 +98,8 @@ int main()
 
 
 
+    //---------------------------------------------------
+    // 할당 받은 메모리를 해지한다.
 
 
     //---------------------------------------------------

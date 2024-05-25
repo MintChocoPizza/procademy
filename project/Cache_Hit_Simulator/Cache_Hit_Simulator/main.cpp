@@ -13,6 +13,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
+#include <queue>
 
 #include "C_CacheHit.h"
 #include "C_Queue.h"
@@ -36,6 +37,13 @@ void Test()
 
     ch.CacheHit(&a);
     a = 20;
+
+
+
+
+
+    queue<int> q;
+    q.back();
 }
 
 
