@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <Windows.h>
+
+#include "Buffer.h"
+
+//----------------------------------
+// 더블 버퍼링을 위한 화면 버퍼
+// 
+//----------------------------------
+char g_szScreenBuffer[dfSCREEN_HEIGHT][dfSCREEN_WIDTH];
+
+//--------------------------------------------------------------------
+// 버퍼의 내용을 화면으로 찍어주는 함수.
+//
+// 적군,아군,총알 등을 szScreenBuffer 에 넣어주고, 
+// 1 프레임이 끝나는 마지막에 본 함수를 호출하여 버퍼 -> 화면 으로 그린다.
+//--------------------------------------------------------------------
+void buff_Buffer_Flip(void)
+{
+	int iCnt;
+	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; ++iCnt)
+	{
+		cs_MoveCursor(iCnt, 0);
+		printf_s(g_szScreenBuffer[iCnt]);
+	}
+}
+
+//--------------------------------------------------------------------
+// 화면 버퍼를 지워주는 함수
+//
+// 매 프레임 그림을 그리기 직전에 버퍼를 지워 준다. 
+// 안그러면 이전 프레임의 잔상이 남으니까
+//--------------------------------------------------------------------
+void buff_Buffer_Clear(void)
+{
+	int iCnt;
+	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; iCnt++)
+	{
+		memset(g_szScreenBuffer[iCnt], ' ', dfSCREEN_WIDTH);
+		g_szScreenBuffer[iCnt][dfSCREEN_WIDTH - 1] = (char)NULL;
+	}
+}
+
+//--------------------------------------------------------------------
+// 버퍼의 행의 끝에 '\0'문자열을 출력
+// 
+//--------------------------------------------------------------------
+void buff_Sprite_Null(void)
+{
+	int iCnt;
+	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; ++iCnt)
+	{
+		g_szScreenBuffer[iCnt][dfSCREEN_WIDTH - 1] = '\0';
+	}
+}

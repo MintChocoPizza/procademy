@@ -1,11 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\test",
-    "\\test\\Force_RST_Transmission_Client\\Force_RST_Transmission_Client",
     "\\test\\Force_RST_Transmission_Server",
     "\\test\\Force_RST_Transmission_Server\\Force_RST_Transmission_Server"
   ],
-  "SelectedNode": "\\test\\Force_RST_Transmission_Server\\Force_RST_Transmission_Server\\Force_RST_Transmission_Server.cpp",
   "PreviewInSolutionExplorer": false
 }

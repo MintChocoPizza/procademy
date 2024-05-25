@@ -1,0 +1,6 @@
+﻿  ConnectSocket.cpp
+  main.cpp
+C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Client\OnlineStar_Client\main.cpp(44,9): warning C4101: 'i_Cnt' :참조되지 않은 지역 변수입니다.
+C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Client\OnlineStar_Client\main.cpp(43,9): warning C4101: 'i_Result' :참조되지 않은 지역 변수입니다.
+  코드를 생성하고 있습니다...
+  OnlineStar_Client.vcxproj -> C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Client\Debug\OnlineStar_Client.exe
