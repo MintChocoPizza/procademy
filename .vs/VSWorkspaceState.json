@@ -1,10 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\project",
-    "\\project\\Cache_Hit_Simulator",
-    "\\project\\Cache_Hit_Simulator\\Cache_Hit_Simulator"
+    "\\procade_homeWork",
+    "\\procade_homeWork\\hw13_Split_File_Transfer",
+    "\\procade_homeWork\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer",
+    "\\project\\Cache_Hit_Simulator"
   ],
-  "SelectedNode": "\\project\\Cache_Hit_Simulator\\Cache_Hit_Simulator\\main.cpp",
+  "SelectedNode": "\\procade_homeWork\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer.cpp",
   "PreviewInSolutionExplorer": false
 }

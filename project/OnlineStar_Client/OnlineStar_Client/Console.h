@@ -2,8 +2,8 @@
 #ifndef __CONSOLE_H__
 #define __CONSOLE_H__
 
-#define dfSCREEN_WIDTH 80
-#define dfSCREEN_HEIGHT 23
+#define dfSCREEN_WIDTH 80 + 1 + 1
+#define dfSCREEN_HEIGHT 24 + 1
 
 //--------------------------------------------
 // 콘솔 제어를 위한 준비 작업

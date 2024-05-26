@@ -214,6 +214,13 @@ int main(int argc, char** argv)
 	//----------------------------------
 	// 5. 서버로 헤더 전송
 	i_Result = send(Connect_Socket, (char*)&st_Packet_Header, sizeof(st_PACKET_HEADER), 0);
+	if (i_Result == SOCKET_ERROR)
+	{
+		printf_s("send failed with error: %d\n", WSAGetLastError());
+		closesocket(Connect_Socket);
+		WSACleanup();
+		return 1;
+	}
 	printf_s("헤더 전송 성공 \n");
 
 
