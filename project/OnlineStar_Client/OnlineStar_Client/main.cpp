@@ -61,6 +61,7 @@ map<int, st_Other_PLAYER> g_Other_Player;
 int main()
 {
     FD_SET Read_Set;
+    FD_SET Write_Set;
     char Connection_Info[sizeof(char) * dfSCREEN_WIDTH];
     C_Queue<char> Recv_Buff(sizeof(st_PACKET) * 65535 * 8);
     st_PACKET st_Temp_Packet;
@@ -145,15 +146,33 @@ int main()
             // 좌표가 이동되었으면 좌표를 전송한다. 
             if (is_Player_Move == true)
             {
-                // st_Temp_Packet = { 3, g_st_Player.ID, x, y };
-                st_Temp_Packet.Type = 3;
-                st_Temp_Packet.ID = g_st_Player.ID;
-                st_Temp_Packet.X = x;
-                st_Temp_Packet.Y = y;
-                c_Temp__Buff = (char*)malloc(sizeof(st_Temp_Packet));
-                memcpy(c_Temp__Buff, &st_Temp_Packet, sizeof(st_Temp_Packet));
-                i_Result = send(Connect_Socket, c_Temp__Buff, sizeof(st_Temp_Packet), 0);
-                free(c_Temp__Buff);
+                FD_ZERO(&Write_Set);
+                FD_SET(Connect_Socket, &Write_Set);
+                Time_Val.tv_sec = 0;
+                Time_Val.tv_usec = 0;
+                i_Result = select(0, 0, &Write_Set, 0, &Time_Val);
+                if (i_Result > 0)
+                {
+                    if (FD_ISSET(Connect_Socket, &Write_Set))
+                    {
+                        // st_Temp_Packet = { 3, g_st_Player.ID, x, y };
+                        st_Temp_Packet.Type = 3;
+                        st_Temp_Packet.ID = g_st_Player.ID;
+                        st_Temp_Packet.X = x;
+                        st_Temp_Packet.Y = y;
+                        c_Temp__Buff = (char*)malloc(sizeof(st_Temp_Packet));
+                        if (c_Temp__Buff == NULL)
+                        {
+                            printf_s("malloc failed with error: %d\n", WSAGetLastError());
+                            closesocket(Connect_Socket);
+                            WSACleanup();
+                            return -1;
+                        }
+                        memcpy(c_Temp__Buff, &st_Temp_Packet, sizeof(st_Temp_Packet));
+                        i_Result = send(Connect_Socket, c_Temp__Buff, sizeof(st_Temp_Packet), 0);
+                        free(c_Temp__Buff);
+                    }
+                }
             }
         }
         
@@ -188,7 +207,7 @@ int main()
                         printf_s("send failed with error: %d\n", WSAGetLastError());
                         closesocket(Connect_Socket);
                         WSACleanup();
-                        return 1;
+                        return -1;
                     }
                 }
 
@@ -277,6 +296,7 @@ int main()
         //---------------------------------------------------
         // 출력 버퍼에 그리기
         buff_Buffer_Clear();
+
         if (g_st_Player.is_Create_Star)
             buff_Sprite_Draw(g_st_Player.Y+1, g_st_Player.X, '*');
 
@@ -288,7 +308,7 @@ int main()
         }
 
         sprintf_s(Connection_Info, "Connect Client: %d / Packet: %d", i_Cnt_Connect_Client, i_Recv_Buff_Empty_Size);
-
+        buff_Sprite_Draw_String(0, 0, Connection_Info, strnlen_s(Connection_Info, sizeof(char)* dfSCREEN_WIDTH));
 
         
 
@@ -298,10 +318,8 @@ int main()
         //---------------------------------------------------
         // 랜더
         buff_Buffer_Flip();
-        cs_MoveCursor(0, 0);
-        printf_s("%s", Connection_Info);
 
-        Sleep(10);
+        //Sleep(12);
 
 
         //if (g_st_Player.is_Create_Star == true)

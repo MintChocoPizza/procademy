@@ -32,5 +32,11 @@ void buff_Buffer_Clear(void);
 //--------------------------------------------------------------------
 void buff_Sprite_Draw(int iY, int iX, char chSprite);
 
+//--------------------------------------------------------------------
+// 버퍼의 특정 위치에 원하는 문자열을 출력.
+//
+// 입력 받은 X,Y 좌표 부터 시작하여 문자열을 출력한다. (버퍼에 그림)
+//--------------------------------------------------------------------
+void buff_Sprite_Draw_String(int iY, int iX, const char* cpSprite, int Str_Len);
 
 #endif // !__BUFFER_H__

@@ -18,7 +18,7 @@ void buff_Buffer_Flip(void)
 {
 	int iCnt;
 	//for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; ++iCnt)
-	for (iCnt = 1; iCnt < dfSCREEN_HEIGHT; ++iCnt)
+	for (iCnt = 0; iCnt < dfSCREEN_HEIGHT; ++iCnt)
 	{
 		cs_MoveCursor(iCnt, 0);
 		printf_s(g_szScreenBuffer[iCnt]);
@@ -52,4 +52,26 @@ void buff_Sprite_Draw(int iY, int iX, char chSprite)
 		return;
 
 	g_szScreenBuffer[iY][iX] = chSprite;
+}
+
+//--------------------------------------------------------------------
+// 버퍼의 특정 위치에 원하는 문자열을 출력.
+//
+// 입력 받은 X,Y 좌표 부터 시작하여 문자열을 출력한다. (버퍼에 그림)
+//--------------------------------------------------------------------
+void buff_Sprite_Draw_String(int iY, int iX, const char* cpSprite, int Str_Len)
+{
+	int i_Cnt;
+
+	if (iX < 0 || iY < 0 || iX >= dfSCREEN_WIDTH - 1 || iY >= dfSCREEN_HEIGHT)
+		return;
+
+	for (i_Cnt = 0; i_Cnt < Str_Len; ++i_Cnt)
+	{
+		if (iX + i_Cnt < 0 || iY < 0 || iX + i_Cnt >= dfSCREEN_WIDTH - 1 || iY >= dfSCREEN_HEIGHT)
+			continue;
+
+		g_szScreenBuffer[iY][iX + i_Cnt] = cpSprite[i_Cnt];
+	}
+	
 }

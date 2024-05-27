@@ -18,9 +18,6 @@
     <ClCompile Include="Console.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Buffer.h">
-      <Filter>헤더 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Buffer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -39,6 +36,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="C_Queue.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

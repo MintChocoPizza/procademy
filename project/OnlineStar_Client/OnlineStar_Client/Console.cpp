@@ -57,7 +57,7 @@ void cs_Initial(void)
 	//col = 가로, lines = 세로
 	// 
 	//-----------------------------------------------------
-	sprintf_s(cCommand, "mode con:cols=%d lines=%d", dfSCREEN_WIDTH, dfSCREEN_HEIGHT + 2);
+	sprintf_s(cCommand, "mode con:cols=%d lines=%d", dfSCREEN_WIDTH, dfSCREEN_HEIGHT);
 
 	system(cCommand);
 }

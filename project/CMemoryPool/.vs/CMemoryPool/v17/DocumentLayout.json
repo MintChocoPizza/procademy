@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\CMemoryPool\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C9C9B541-B4A5-4635-AA0C-22B56C3385DD}|CMemoryPool\\CMemoryPool.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{C9C9B541-B4A5-4635-AA0C-22B56C3385DD}|CMemoryPool\\CMemoryPool.vcxproj|solutionrelative:CMemoryPool\\CMemoryPool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C9C9B541-B4A5-4635-AA0C-22B56C3385DD}|CMemoryPool\\CMemoryPool.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\CMemoryPool\\CMemoryPool\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C9C9B541-B4A5-4635-AA0C-22B56C3385DD}|CMemoryPool\\CMemoryPool.vcxproj|solutionrelative:CMemoryPool\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C9C9B541-B4A5-4635-AA0C-22B56C3385DD}|CMemoryPool\\CMemoryPool.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C9C9B541-B4A5-4635-AA0C-22B56C3385DD}|CMemoryPool\\CMemoryPool.vcxproj|solutionrelative:CMemoryPool\\CMemoryPool.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C9C9B541-B4A5-4635-AA0C-22B56C3385DD}|CMemoryPool\\CMemoryPool.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\CMemoryPool\\CMemoryPool\\MyProfile.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 59,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,29 +42,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "main.cpp",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\CMemoryPool\\CMemoryPool\\main.cpp",
               "RelativeDocumentMoniker": "CMemoryPool\\main.cpp",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\CMemoryPool\\CMemoryPool\\main.cpp",
               "RelativeToolTip": "CMemoryPool\\main.cpp",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAuwB8AAAAAAAAA",
+              "ViewState": "AQIAACEAAAAAAAAAAAAAADQAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-04-24T08:23:42.725Z"
+              "WhenOpened": "2024-04-24T08:23:42.725Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "CMemoryPool.h",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h",
               "RelativeDocumentMoniker": "CMemoryPool\\CMemoryPool.h",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h",
               "RelativeToolTip": "CMemoryPool\\CMemoryPool.h",
-<<<<<<< Updated upstream
-              "ViewState": "AQIAABEBAAAAAAAAAAAQwAEBAAAaAAAA",
-=======
-              "ViewState": "AQIAAF0AAAAAAAAAAAArwIcAAAACAAAA",
->>>>>>> Stashed changes
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAeAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-04-10T04:12:30.255Z",
               "EditorCaption": ""

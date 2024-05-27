@@ -1,11 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\procade_homeWork",
-    "\\procade_homeWork\\hw13_Split_File_Transfer",
-    "\\procade_homeWork\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer",
-    "\\project\\Cache_Hit_Simulator"
+    "\\project",
+    "\\project\\CMemoryPool",
+    "\\project\\CMemoryPool\\CMemoryPool",
+    "\\project\\OnlineStar_Client\\OnlineStar_Client"
   ],
-  "SelectedNode": "\\procade_homeWork\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer\\hw13_Split_File_Transfer.cpp",
+  "SelectedNode": "\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h",
   "PreviewInSolutionExplorer": false
 }

@@ -3,14 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Console.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\Console.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Console.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\Console.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -19,20 +11,28 @@
       "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\Buffer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\C_Queue.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\C_Queue.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Buffer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\Buffer.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\ConnectSocket.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\ConnectSocket.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\ConnectSocket.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\ConnectSocket.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\ConnectSocket.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\ConnectSocket.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Console.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\Console.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Console.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\Console.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\C_Queue.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EC3C85A9-D610-4DA3-84D8-20212D86E03C}|OnlineStar_Client\\OnlineStar_Client.vcxproj|solutionrelative:OnlineStar_Client\\C_Queue.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 75,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,59 +50,59 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "Console.cpp",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Console.cpp",
               "RelativeDocumentMoniker": "OnlineStar_Client\\Console.cpp",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Console.cpp",
               "RelativeToolTip": "OnlineStar_Client\\Console.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAEgAAAAOAAAA",
+              "ViewState": "AQIAACoAAAAAAAAAAAAAAC0AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-05-25T01:33:00.574Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
               "Title": "Console.h",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Console.h",
               "RelativeDocumentMoniker": "OnlineStar_Client\\Console.h",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Console.h",
               "RelativeToolTip": "OnlineStar_Client\\Console.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAhAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAgAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-05-25T01:25:04.098Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "Buffer.cpp",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Buffer.cpp",
               "RelativeDocumentMoniker": "OnlineStar_Client\\Buffer.cpp",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Buffer.cpp",
               "RelativeToolTip": "OnlineStar_Client\\Buffer.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAjAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-05-25T01:41:17.463Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "Buffer.h",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Buffer.h",
               "RelativeDocumentMoniker": "OnlineStar_Client\\Buffer.h",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\Buffer.h",
               "RelativeToolTip": "OnlineStar_Client\\Buffer.h",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAACEAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-05-25T01:39:42.749Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 4,
               "Title": "ConnectSocket.cpp",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\ConnectSocket.cpp",
               "RelativeDocumentMoniker": "OnlineStar_Client\\ConnectSocket.cpp",
@@ -115,32 +115,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 3,
               "Title": "ConnectSocket.h",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\ConnectSocket.h",
               "RelativeDocumentMoniker": "OnlineStar_Client\\ConnectSocket.h",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\ConnectSocket.h",
               "RelativeToolTip": "OnlineStar_Client\\ConnectSocket.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAeAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAA5AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-05-25T01:52:46.463Z"
+              "WhenOpened": "2024-05-25T01:52:46.463Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "main.cpp",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\main.cpp",
               "RelativeDocumentMoniker": "OnlineStar_Client\\main.cpp",
               "ToolTip": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\main.cpp",
               "RelativeToolTip": "OnlineStar_Client\\main.cpp",
-              "ViewState": "AQIAAD4AAAAAAAAAAADgv0kAAAAhAAAA",
+              "ViewState": "AQIAAN0AAAAAAAAAAAAnwPAAAAAnAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-05-25T00:22:06.5Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "C_Queue.h",
               "DocumentMoniker": "C:\\Users\\dpsem\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\procademy\\project\\OnlineStar_Client\\OnlineStar_Client\\C_Queue.h",
               "RelativeDocumentMoniker": "OnlineStar_Client\\C_Queue.h",
@@ -148,8 +149,7 @@
               "RelativeToolTip": "OnlineStar_Client\\C_Queue.h",
               "ViewState": "AQIAAGAAAAAAAAAAAADgv4UAAAACAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-05-26T05:25:49.172Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-26T05:25:49.172Z"
             }
           ]
         }

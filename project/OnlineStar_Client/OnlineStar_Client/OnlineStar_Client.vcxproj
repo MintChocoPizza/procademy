@@ -142,7 +142,7 @@
     <ClInclude Include="ConnectSocket.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="C_Queue.h" />
-	<ClInclude Include="Buffer.h" />
+    <ClInclude Include="Buffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
