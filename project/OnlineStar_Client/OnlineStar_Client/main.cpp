@@ -319,7 +319,8 @@ int main()
         // 랜더
         buff_Buffer_Flip();
 
-        //Sleep(12);
+        Sleep(12);
+
 
 
         //if (g_st_Player.is_Create_Star == true)

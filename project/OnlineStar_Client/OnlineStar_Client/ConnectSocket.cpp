@@ -66,7 +66,7 @@ bool connect_Server(void* Connect_Socket, void* wsa_Data)
     u_long on;
 
     //---------------------------------------------------
-// 포트와 ip를 입력하세요
+    // 포트와 ip를 입력하세요
     printf_s("접속할 IP 주소를 입력하세요(defult 127.0.0.1) :");
     // scanf_s("%s", &IP, (unsigned)_countof(IP)); // 그냥 엔터를 누르면 넘어가지 않는다. 
     fgets(IP, sizeof(IP), stdin);
@@ -182,6 +182,12 @@ bool connect_Server(void* Connect_Socket, void* wsa_Data)
     // 넌블로킹 소켓으로 전환
     on = 1;
     i_Result = ioctlsocket(Temp_Connect_Socket, FIONBIO, &on);
+    if (i_Result == SOCKET_ERROR)
+    {
+        printf_s("ioctlsocket failed with error: %ld \n", WSAGetLastError());
+        WSACleanup();
+        return false;
+    }
 
     *(SOCKET*)Connect_Socket = Temp_Connect_Socket;
 

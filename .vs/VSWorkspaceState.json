@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
     "",
-    "\\project",
-    "\\project\\CMemoryPool",
-    "\\project\\CMemoryPool\\CMemoryPool",
-    "\\project\\OnlineStar_Client\\OnlineStar_Client"
+    "\\project"
   ],
-  "SelectedNode": "\\project\\CMemoryPool\\CMemoryPool\\CMemoryPool.h",
   "PreviewInSolutionExplorer": false
 }
