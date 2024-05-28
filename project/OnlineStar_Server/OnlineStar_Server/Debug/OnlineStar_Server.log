@@ -1,7 +1,7 @@
 ﻿  main.cpp
 C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\OnlineStar_Server\main.cpp(92,12): warning C4101: 'Client_Socket' :참조되지 않은 지역 변수입니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\OnlineStar_Server\main.cpp(332,10): warning C4101: 'c_Message' :참조되지 않은 지역 변수입니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\OnlineStar_Server\main.cpp(335,9): warning C4101: 'i_Temp_ID' :참조되지 않은 지역 변수입니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\OnlineStar_Server\main.cpp(331,15): warning C4101: 'st_Message' :참조되지 않은 지역 변수입니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\OnlineStar_Server\main.cpp(447,31): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\OnlineStar_Server\main.cpp(336,10): warning C4101: 'c_Message' :참조되지 않은 지역 변수입니다.
+C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\OnlineStar_Server\main.cpp(339,9): warning C4101: 'i_Temp_ID' :참조되지 않은 지역 변수입니다.
+C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\OnlineStar_Server\main.cpp(335,15): warning C4101: 'st_Message' :참조되지 않은 지역 변수입니다.
+C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\OnlineStar_Server\main.cpp(469,31): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   OnlineStar_Server.vcxproj -> C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\Debug\OnlineStar_Server.exe

@@ -285,6 +285,8 @@ bool send_Unicast(SOCKET* Client_Socket, char* message, int Message_Size)
     // 반환값 저장
     int Ret_select;
     int Ret_send;
+    int Ret_WSAGetLastError;
+
 
     Time_Val.tv_sec = 0;
     Time_Val.tv_usec = 0;
@@ -300,10 +302,12 @@ bool send_Unicast(SOCKET* Client_Socket, char* message, int Message_Size)
             Ret_send = send(*Client_Socket, message, Message_Size, 0);
             if (Ret_send == SOCKET_ERROR)
             {
+                Ret_WSAGetLastError = WSAGetLastError();
+
                 //---------------------------------------------------
                 // 소켓 해지는 여기서 안한다.
                 // list에 한번에 모아서, 한번에 제거한다.
-                if (WSAGetLastError() == WSAEWOULDBLOCK)
+                if (Ret_WSAGetLastError == WSAEWOULDBLOCK)
                 {
                     printf_s("send_Unicast failed with error: %d\n", WSAGetLastError());
                     set_Delete_List.insert(*Client_Socket);
@@ -313,7 +317,7 @@ bool send_Unicast(SOCKET* Client_Socket, char* message, int Message_Size)
                 {
                     printf_s("send_Unicast failed with error: %d\n", WSAGetLastError());
                     set_Delete_List.insert(*Client_Socket);
-                    return false;
+                    throw;
                 }
             }
         }
@@ -338,6 +342,7 @@ void send_Broadcast(char* message, int Message_Size)
     // 반환값 저장
     int Ret_select;
     int Ret_send;
+    int Ret_WSAGetLastError;
 
     Time_Val.tv_sec = 0;
     Time_Val.tv_usec = 0;
@@ -360,13 +365,14 @@ void send_Broadcast(char* message, int Message_Size)
                 Ret_send = send((*iter_Player_List).first, message, Message_Size, 0);
                 if (Ret_send == SOCKET_ERROR)
                 {
-                    if (WSAGetLastError() == WSAEWOULDBLOCK)
+                    Ret_WSAGetLastError = WSAGetLastError();
+                    if (Ret_WSAGetLastError == WSAEWOULDBLOCK)
                     {
                         printf_s("send_Broadcast failed with error: %d\n", WSAGetLastError());
                         // 보낼 수 없다면 연결을 끊어버릴거야
                         set_Delete_List.insert((*iter_Player_List).first);
                     }
-                    else if (WSAGetLastError() == 10054)
+                    else if (Ret_WSAGetLastError == 10054)
                     {
                         ////---------------------------------------------------
                         //// rst를 전송하는 강제종료이다. 
@@ -385,12 +391,17 @@ void send_Broadcast(char* message, int Message_Size)
                         set_Delete_List.insert((*iter_Player_List).first);
 
                     }
+                    else if (Ret_WSAGetLastError == 10053)
+                    {
+                        printf_s("recv failed with error: %d\n", WSAGetLastError());
+                        set_Delete_List.insert((*iter_Player_List).first);
+                    }
                     else
                     {
                         printf_s("send_Broadcast failed with error: %d\n", WSAGetLastError());
                         // 보낼 수 없다면 연결을 끊어버릴거야
                         set_Delete_List.insert((*iter_Player_List).first);
-
+                        throw;
                     }
                 }
             }
@@ -440,10 +451,16 @@ void recv_Procedure(const SOCKET* Client_Socket)
             printf_s("recv failed with error: %d\n", WSAGetLastError());
             set_Delete_List.insert(*Client_Socket);
         }
-        else if (Ret_WSAGetLastError != WSAEWOULDBLOCK)
+        else if (Ret_WSAGetLastError == WSAEWOULDBLOCK)
         {
             printf_s("recv failed with error: %d\n", WSAGetLastError());
             set_Delete_List.insert(*Client_Socket);
+        }
+        else
+        {
+            printf_s("recv failed with error: %d\n", WSAGetLastError());
+            set_Delete_List.insert(*Client_Socket);
+            throw;
         }
     }
     else

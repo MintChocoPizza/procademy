@@ -1,11 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\procade_homeWork",
-    "\\procade_homeWork\\hw11_Check_Back_Log\\hw11_Check_Back_Log",
-    "\\procade_homeWork\\hw12_echoServer",
-    "\\procade_homeWork\\hw12_echoServer\\hw12_echoServer"
+    "\\procade_homeWork\\hw12_echoServer\\hw12_echoServer",
+    "\\project",
+    "\\project\\OnlineStar_Server",
+    "\\project\\OnlineStar_Server\\OnlineStar_Server"
   ],
-  "SelectedNode": "\\procade_homeWork\\hw12_echoServer\\hw12_echoServer\\hw12_echoServer.cpp",
+  "SelectedNode": "\\project\\OnlineStar_Server\\OnlineStar_Server\\main.cpp",
   "PreviewInSolutionExplorer": false
 }
