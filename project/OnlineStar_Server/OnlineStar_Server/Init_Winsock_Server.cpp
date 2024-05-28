@@ -23,6 +23,7 @@ bool init_Listen_Socket(void* Listen_Socket, void* wsa_Data)
 	struct addrinfo* result = NULL;
 	SOCKET Temp_Listen_Socket = *(SOCKET*)Listen_Socket;
 	u_long on;
+	linger Linger_Opt;
 	
 	//---------------------------------------------------
 	// return 값 저장 변수 
@@ -31,6 +32,7 @@ bool init_Listen_Socket(void* Listen_Socket, void* wsa_Data)
 	int Ret_bind;
 	int Ret_listen;
 	int Ret_ioctlsocket;
+	int Ret_setsockopt;
 
 	//---------------------------------------------------
 	// Initialize Winsock
@@ -71,6 +73,21 @@ bool init_Listen_Socket(void* Listen_Socket, void* wsa_Data)
 		WSACleanup();
 		return false;
 	}
+
+	//---------------------------------------------------
+	// setsockopt_Linger
+	Linger_Opt.l_onoff = 1;
+	Linger_Opt.l_linger = 0;
+	Ret_setsockopt = setsockopt(Temp_Listen_Socket, SOL_SOCKET, SO_LINGER, (char*)&Linger_Opt, sizeof(Linger_Opt));
+	if (Ret_setsockopt == SOCKET_ERROR)
+	{
+		printf_s("setsockopt failed with error: %ld \n", WSAGetLastError());
+		closesocket(Temp_Listen_Socket);
+		WSACleanup();
+		return false;
+	}
+
+
 
 	//---------------------------------------------------
 	// Setup the TCP listening socket

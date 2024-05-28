@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include <list>
 
 #include <WinSock2.h>
 #include <Windows.h>
@@ -12,14 +13,18 @@
 
 #pragma comment(lib, "Ws2_32.lib")
 
+#define dfSCREEN_WIDTH 80
+#define dfSCREEN_HEIGHT 23
+
 using namespace std;
 
-//---------------------------------------------------
-// 플레이어 리스트가 필요한 기능
-// 1. 플레이어에게서 메시지가 들어오면 플레이어를 찾아야햠 
-// 2. 리스트 순회
-// 3. 
-
+struct st_PACKET
+{
+    int _Type;
+    int _ID;
+    int _X;
+    int _Y;
+};
 
 struct st_PLAYER
 {
@@ -30,7 +35,42 @@ struct st_PLAYER
     //SOCKET Socket;
 };
 
-int g_ID = 1;
+map<SOCKET, st_PLAYER> Player_List;
+int g_ID = 0;
+
+//--------------------------------------------------------------------
+// 1. accept
+// 2. 새로운 플레이어 생성 및 초기화
+// 3. ID할당, 메시지 생성
+// 4. sendunicast()
+// 5. 플레이어 리스트에 등록
+// 6. 플레이어 별 생성 메시지 
+// 7. sendBroadcast() 
+//--------------------------------------------------------------------
+bool new_Player_Connect(SOCKET* Listen_Socket);
+
+//--------------------------------------------------------------------
+// Connect_Socket 에 message를 보낸다.
+//  
+//--------------------------------------------------------------------
+bool send_Unicast(SOCKET* Client_Socket, char* message, int Message_Size);
+
+//--------------------------------------------------------------------
+// 모두에게 message를 보낸다.
+//  
+//--------------------------------------------------------------------
+void send_Broadcast(char* message, int Message_Size);
+
+//--------------------------------------------------------------------
+// 메시지를 받는다.
+//   
+//--------------------------------------------------------------------
+bool recv_Procedure(const SOCKET* Client_Socket);
+
+//--------------------------------------------------------------------
+// 플레이어를 삭제한다.
+//--------------------------------------------------------------------
+void DisConnect(SOCKET* Client_Socket);
 
 int main()
 {
@@ -44,11 +84,7 @@ int main()
     //
     WSADATA wsa_Data;
     FD_SET Read_Set;
-    FD_SET Write_Set;
-    sockaddr_in Client_Addr;
-    map<SOCKET, st_PLAYER> Player_List;
     map<SOCKET, st_PLAYER>::iterator iter_Player_List;
-    int Client_Addr_Len = sizeof(Client_Addr);
     // TIMEVAL Time_Val;
     SOCKET Listen_Socket = INVALID_SOCKET;
     SOCKET Client_Socket;
@@ -79,26 +115,28 @@ int main()
             // 신규 접속 처리
             if (FD_ISSET(Listen_Socket, &Read_Set))
             {
-
+                if (new_Player_Connect(&Listen_Socket) == false)
+                {
+                    // 유저 한명이 접속 못했으면 그냥 못한거다. 
+                    // 다른 행동을 하지 않는다.
+                }
             }
 
             //---------------------------------------------------
             // 메시지 처리
+            // 메시지를 받아서 모든 유저에게? 나를 제외한 모두에게? 전송한다.
             for (iter_Player_List = Player_List.begin(); iter_Player_List != Player_List.end(); ++iter_Player_List)
             {
                 if (FD_ISSET((*iter_Player_List).first, &Read_Set))
                 {
-                    
+                    // 수신에 실패하면 플레이어를 삭제한다.
+                    if (recv_Procedure(&(*iter_Player_List).first) == false)
+                    {
+                        DisConnect()
+                    }
                 }
             }
-
-
-            
         }
-        
-
-
-
 
 
         // 로직 -> 현재 서버는 따로 연산하는 값이 없다.
@@ -118,6 +156,278 @@ int main()
     std::cout << "Hello World!\n";
 }
 
+
+//--------------------------------------------------------------------
+// 1. accept
+// 2. 새로운 플레이어 생성 및 초기화
+// 3. ID할당, 메시지 생성
+// 4. sendunicast()
+// 5. 플레이어 리스트에 등록
+// 6. 플레이어 별 생성 메시지 
+// 7. sendBroadcast() 
+// 
+// 여기서 오류가 발생하면 모든 행동을 초기화 하고, 없던일로 한다.
+//--------------------------------------------------------------------
+bool new_Player_Connect(SOCKET* Listen_Socket)
+{
+    st_PLAYER st_New_Player;
+    st_PACKET st_Message;
+    char c_Message[sizeof(st_PACKET)];
+    sockaddr_in Client_Addr;
+    SOCKET Client_Socket;
+    u_long on;
+    linger Linger_Opt;
+    int Client_Addr_Len = sizeof(Client_Addr);
+
+
+    //---------------------------------------------------
+    // 반환값 저장
+    int Ret_ioctlsocket;
+    int Ret_setsockopt;
+
+
+     
+    
+    //---------------------------------------------------
+    // 나는 Client_Socket을 논블러킹 소켓으로 만든적이 없다 == 아마 상속되는거 같음 ?? 실제로 확인하기
+    // accept로 연결에 실패하면 그냥 연결을 안하면 된다. 
+    Client_Socket = accept(*Listen_Socket, (sockaddr*)&Client_Addr, &Client_Addr_Len);
+    if (Client_Socket == INVALID_SOCKET)
+    {
+        if (Client_Socket != WSAEWOULDBLOCK)
+        {
+            printf_s("accept failed with error: %d \n", WSAGetLastError());
+            return false;
+        }
+    }
+
+    //---------------------------------------------------
+    // 넌블로킹 소켓으로 전환
+    on = 1;
+    Ret_ioctlsocket = ioctlsocket(Client_Socket, FIONBIO, &on);
+    if (Ret_ioctlsocket == SOCKET_ERROR)
+    {
+        printf_s("ioctlsocket failed with error: %ld \n", WSAGetLastError());
+        closesocket(Client_Socket);
+        return false;
+    }
+
+    //---------------------------------------------------
+    // setsockopt_Linger
+    Linger_Opt.l_onoff = 1;
+    Linger_Opt.l_linger = 0;
+    Ret_setsockopt = setsockopt(Client_Socket, SOL_SOCKET, SO_LINGER, (char*)&Linger_Opt, sizeof(Linger_Opt));
+    if (Ret_setsockopt == SOCKET_ERROR)
+    {
+        printf_s("setsockopt failed with error: %ld \n", WSAGetLastError());
+        closesocket(Client_Socket);
+        return false;
+    }
+
+
+    st_New_Player.ID = ++g_ID;
+    st_New_Player.Y = dfSCREEN_HEIGHT / 2;
+    st_New_Player.X = dfSCREEN_WIDTH / 2;
+    st_New_Player.Socket_Addr = Client_Addr;
+
+    // 새로운 플레이어에게 ID 전송
+    st_Message._Type = 0;
+    st_Message._ID = g_ID;
+    memcpy_s(c_Message, sizeof(st_Message), &st_Message, sizeof(st_Message));
+    if (send_Unicast(&Client_Socket, c_Message, sizeof(st_Message)) == false)
+    {
+        closesocket(Client_Socket);
+        return false;
+    }
+
+    Player_List.insert(pair<SOCKET, st_PLAYER>(Client_Socket, st_New_Player));
+
+    // 모든 플레이어에게 새로운 별 생성 메시지를 보낸다. 
+    st_Message._Type = 1;
+    st_Message._ID = st_New_Player.ID;
+    st_Message._Y = st_New_Player.Y;
+    st_Message._X = st_New_Player.X;
+    memcpy_s(c_Message, sizeof(st_Message), &st_Message, sizeof(st_Message));
+    send_Broadcast(c_Message, sizeof(st_Message));
+
+
+    return true;
+}
+
+//--------------------------------------------------------------------
+// Connect_Socket 에 message를 보낸다.
+//  
+//--------------------------------------------------------------------
+bool send_Unicast(SOCKET* Client_Socket, char* message, int Message_Size)
+{
+    FD_SET Write_Set;
+    TIMEVAL Time_Val;
+
+    //---------------------------------------------------
+    // 반환값 저장
+    int Ret_select;
+    int Ret_send;
+
+    Time_Val.tv_sec = 0;
+    Time_Val.tv_usec = 0;
+    FD_ZERO(&Write_Set);
+    FD_SET(*Client_Socket, &Write_Set);
+    Ret_select = select(0, 0, &Write_Set, 0, &Time_Val);
+    if (Ret_select > 0)
+    {
+        if (FD_ISSET(*Client_Socket, &Write_Set))
+        {
+            Ret_send = send(*Client_Socket, message, Message_Size, 0);
+            if (Ret_send == SOCKET_ERROR)
+            {
+                // 소켓 해지는 여기서 안한다.
+                if (WSAGetLastError() == WSAEWOULDBLOCK)
+                {
+                    printf_s("send failed with error: %d\n", WSAGetLastError());
+                    return false;
+                }
+                else
+                {
+                    printf_s("send failed with error: %d\n", WSAGetLastError());
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------
+// 모두에게 message를 보낸다.
+//  
+//--------------------------------------------------------------------
+void  send_Broadcast(char* message, int Message_Size)
+{
+    FD_SET Write_Set;
+    st_PACKET st_Message;
+    char c_Message[sizeof(st_PACKET)];
+    TIMEVAL Time_Val;
+    map<SOCKET, st_PLAYER>::iterator iter_Player_List;
+    list< map<SOCKET, st_PLAYER>::iterator> li_Delete_List;
+    list< map<SOCKET, st_PLAYER>::iterator>::iterator iter_li_Delete_List;
+    int i_Temp_ID;
+
+    //---------------------------------------------------
+    // 반환값 저장
+    int Ret_select;
+    int Ret_send;
+
+    Time_Val.tv_sec = 0;
+    Time_Val.tv_usec = 0;
+    FD_ZERO(&Write_Set);
+
+    for (auto iter = Player_List.begin(); iter != Player_List.end(); ++iter)
+    {
+        FD_SET((*iter).first, &Write_Set);
+    }
+
+    Ret_select = select(0, 0, &Write_Set, 0, &Time_Val);
+    if (Ret_select > 0)
+    {
+        for (iter_Player_List = Player_List.begin(); iter_Player_List != Player_List.end(); ++iter_Player_List)
+        {
+            if (FD_ISSET((*iter_Player_List).first, &Write_Set))
+            {
+                Ret_send = send((*iter_Player_List).first, message, Message_Size, 0);
+                if (Ret_send == SOCKET_ERROR)
+                {
+                    if (WSAGetLastError() == WSAEWOULDBLOCK)
+                    {
+                        printf_s("send failed with error: %d\n", WSAGetLastError());
+                        // 보낼 수 없다면 연결을 끊어버릴거야
+                        li_Delete_List.push_back(iter_Player_List);
+                    }
+                    else
+                    {
+                        printf_s("send failed with error: %d\n", WSAGetLastError());
+                        // 보낼 수 없다면 연결을 끊어버릴거야
+                        li_Delete_List.push_back(iter_Player_List);
+                    }
+                }
+            }
+            else
+            {
+                // 보낼 수 없다면 연결을 끊어버릴거야
+                li_Delete_List.push_back(iter_Player_List);
+            }
+        }
+    }
+
+    // 보낼 수 없는 소켓은 전부 끊어버린다. 
+    for (iter_li_Delete_List = li_Delete_List.begin(); iter_li_Delete_List != li_Delete_List.end(); ++iter_li_Delete_List)
+    {
+        // 모두에게 삭제 메시지를 보내야 한다. 
+        i_Temp_ID = (*(*iter_li_Delete_List)).second.ID;
+        Player_List.erase((*iter_li_Delete_List));
+        
+        st_Message._Type = 2;
+        st_Message._ID = i_Temp_ID;
+        memcpy_s(c_Message, sizeof(st_Message), &st_Message, sizeof(st_Message));
+        send_Broadcast(c_Message, sizeof(st_Message));
+    }
+}
+
+//--------------------------------------------------------------------
+// 메시지를 받는다.
+//   
+//--------------------------------------------------------------------
+bool recv_Procedure(const SOCKET* Client_Socket)
+{
+    char c_Buffer[1024];
+
+    //---------------------------------------------------
+    // 반환값 저장
+    int Ret_recv;
+    int Ret_WSAGetLastError;
+
+
+    // 메시지는 끊어져서 오지 않는다고 가정
+    Ret_recv = recv(*Client_Socket, c_Buffer, sizeof(c_Buffer), 0);
+    
+    if (Ret_recv == 0)
+    {
+        //---------------------------------------------------
+        // 순서는 상관 없다.
+        // 
+        // 1. 연결을 끊기
+        // 2. 리스트에서 소켓 제거하기
+        // 3. 별 삭제 메시지 보내기
+        return false;
+    }
+    if (Ret_recv == -1)
+    {
+        Ret_WSAGetLastError = WSAGetLastError();
+        if (Ret_WSAGetLastError != WSAEWOULDBLOCK)
+        {
+            printf_s("recv failed with error: %d\n", WSAGetLastError());
+            return false;
+        }
+    }
+}
+
+//--------------------------------------------------------------------
+// 플레이어를 삭제한다.
+//--------------------------------------------------------------------
+void DisConnect(SOCKET* Client_Socket)
+{
+    map<SOCKET, st_PLAYER>::iterator iter_Player_List;
+    int Erase_Player_ID;
+
+    iter_Player_List = Player_List.find(*Client_Socket);
+    Erase_Player_ID = (*iter_Player_List).second.ID;
+
+    Player_List.erase(iter_Player_List);
+
+    
+
+    
+}
+
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
 // 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
 
@@ -129,13 +439,3 @@ int main()
 //   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다.
 //   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.
 
-
-        //Client_Socket = accept(Listen_Socket, (SOCKADDR*)&Client_Socket, &Client_Addr_Len);
-        //if (Client_Socket == INVALID_SOCKET)
-        //{
-        //    if (WSAGetLastError() != WSAEWOULDBLOCK)
-        //    {
-        //        printf_s("accpet failed with error: %ld \n", WSAGetLastError());
-        //        return -1;
-        //    }
-        //}

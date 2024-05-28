@@ -1,6 +1,8 @@
 ﻿  Init_Winsock_Server.cpp
+  main.cpp
+C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\OnlineStar_Server\main.cpp(85,12): warning C4101: 'Client_Socket' :참조되지 않은 지역 변수입니다.
   코드를 생성하고 있습니다.
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 14 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Previous IPDB not found, fall back to full compilation.
+  All 206 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
   OnlineStar_Server.vcxproj -> C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\OnlineStar_Server\Release\OnlineStar_Server.exe
