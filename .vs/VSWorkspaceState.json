@@ -2,9 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\OnlineStar_Client",
-    "\\project\\OnlineStar_Client\\OnlineStar_Client"
+    "\\project\\OnlineStar_Client\\OnlineStar_Client",
+    "\\project\\OnlineStar_Server",
+    "\\project\\OnlineStar_Server\\OnlineStar_Server"
   ],
-  "SelectedNode": "\\project\\OnlineStar_Client\\OnlineStar_Client\\main.cpp",
+  "SelectedNode": "\\project\\OnlineStar_Server\\OnlineStar_Server\\main.cpp",
   "PreviewInSolutionExplorer": false
 }

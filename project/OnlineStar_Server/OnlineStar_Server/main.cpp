@@ -70,7 +70,7 @@ bool recv_Procedure(const SOCKET* Client_Socket);
 //--------------------------------------------------------------------
 // 플레이어를 삭제한다.
 //--------------------------------------------------------------------
-void DisConnect(SOCKET* Client_Socket);
+void DisConnect(map<SOCKET, st_PLAYER>::iterator *iter_Player_List);
 
 int main()
 {
@@ -132,7 +132,7 @@ int main()
                     // 수신에 실패하면 플레이어를 삭제한다.
                     if (recv_Procedure(&(*iter_Player_List).first) == false)
                     {
-                        DisConnect()
+                        DisConnect(&iter_Player_List);
                     }
                 }
             }
@@ -170,6 +170,7 @@ int main()
 //--------------------------------------------------------------------
 bool new_Player_Connect(SOCKET* Listen_Socket)
 {
+    map<SOCKET, st_PLAYER>::iterator iter_Player_List;
     st_PLAYER st_New_Player;
     st_PACKET st_Message;
     char c_Message[sizeof(st_PACKET)];
@@ -240,6 +241,19 @@ bool new_Player_Connect(SOCKET* Listen_Socket)
         return false;
     }
 
+    //---------------------------------------------------
+    // 새로운 플레이어에게 기존 플레이어들의 별 생성 메시지를 보낸다.
+    for (iter_Player_List = Player_List.begin(); iter_Player_List != Player_List.end(); ++iter_Player_List)
+    {
+        st_Message._Type = 1;
+        st_Message._ID = (*iter_Player_List).second.ID;
+        st_Message._X = (*iter_Player_List).second.X;
+        st_Message._Y = (*iter_Player_List).second.Y;
+        memcpy_s(c_Message, sizeof(st_Message), &st_Message, sizeof(st_Message));
+        send_Broadcast(c_Message, sizeof(st_Message));
+    }
+
+
     Player_List.insert(pair<SOCKET, st_PLAYER>(Client_Socket, st_New_Player));
 
     // 모든 플레이어에게 새로운 별 생성 메시지를 보낸다. 
@@ -283,12 +297,12 @@ bool send_Unicast(SOCKET* Client_Socket, char* message, int Message_Size)
                 // 소켓 해지는 여기서 안한다.
                 if (WSAGetLastError() == WSAEWOULDBLOCK)
                 {
-                    printf_s("send failed with error: %d\n", WSAGetLastError());
+                    printf_s("send_Unicast failed with error: %d\n", WSAGetLastError());
                     return false;
                 }
                 else
                 {
-                    printf_s("send failed with error: %d\n", WSAGetLastError());
+                    printf_s("send_Unicast failed with error: %d\n", WSAGetLastError());
                     return false;
                 }
             }
@@ -301,7 +315,7 @@ bool send_Unicast(SOCKET* Client_Socket, char* message, int Message_Size)
 // 모두에게 message를 보낸다.
 //  
 //--------------------------------------------------------------------
-void  send_Broadcast(char* message, int Message_Size)
+void send_Broadcast(char* message, int Message_Size)
 {
     FD_SET Write_Set;
     st_PACKET st_Message;
@@ -338,13 +352,23 @@ void  send_Broadcast(char* message, int Message_Size)
                 {
                     if (WSAGetLastError() == WSAEWOULDBLOCK)
                     {
-                        printf_s("send failed with error: %d\n", WSAGetLastError());
+                        printf_s("send_Broadcast failed with error: %d\n", WSAGetLastError());
                         // 보낼 수 없다면 연결을 끊어버릴거야
                         li_Delete_List.push_back(iter_Player_List);
                     }
+                    else if (WSAGetLastError() == 10054)
+                    {
+                        // 1. 리스트에서 삭제 
+                        // 2. 삭제 메시지 브로드 캐스트로 뿌려주기
+                        st_Message._Type = 2;
+                        st_Message._ID = (*iter_Player_List).second.ID;
+                        memcpy_s(c_Message, sizeof(st_Message), &st_Message, sizeof(st_Message));
+                        send_Broadcast(c_Message, sizeof(st_Message));
+                        Player_List.erase(iter_Player_List);;
+                    }
                     else
                     {
-                        printf_s("send failed with error: %d\n", WSAGetLastError());
+                        printf_s("send_Broadcast failed with error: %d\n", WSAGetLastError());
                         // 보낼 수 없다면 연결을 끊어버릴거야
                         li_Delete_List.push_back(iter_Player_List);
                     }
@@ -364,6 +388,7 @@ void  send_Broadcast(char* message, int Message_Size)
         // 모두에게 삭제 메시지를 보내야 한다. 
         i_Temp_ID = (*(*iter_li_Delete_List)).second.ID;
         Player_List.erase((*iter_li_Delete_List));
+        closesocket((*(*iter_li_Delete_List)).first);
         
         st_Message._Type = 2;
         st_Message._ID = i_Temp_ID;
@@ -379,6 +404,8 @@ void  send_Broadcast(char* message, int Message_Size)
 bool recv_Procedure(const SOCKET* Client_Socket)
 {
     char c_Buffer[1024];
+
+    int i_Cnt;
 
     //---------------------------------------------------
     // 반환값 저장
@@ -399,13 +426,25 @@ bool recv_Procedure(const SOCKET* Client_Socket)
         // 3. 별 삭제 메시지 보내기
         return false;
     }
-    if (Ret_recv == -1)
+    else if (Ret_recv == -1)
     {
         Ret_WSAGetLastError = WSAGetLastError();
-        if (Ret_WSAGetLastError != WSAEWOULDBLOCK)
+        if (Ret_WSAGetLastError == 10054)
+        {
+
+        }
+        else if (Ret_WSAGetLastError != WSAEWOULDBLOCK)
         {
             printf_s("recv failed with error: %d\n", WSAGetLastError());
             return false;
+        }
+    }
+    else
+    {
+        // 정상적인 경우
+        for (i_Cnt = 0; i_Cnt < Ret_recv / sizeof(st_PACKET); i_Cnt += sizeof(st_PACKET))
+        {
+            send_Broadcast(c_Buffer + i_Cnt, sizeof(st_PACKET));
         }
     }
 }
@@ -413,19 +452,18 @@ bool recv_Procedure(const SOCKET* Client_Socket)
 //--------------------------------------------------------------------
 // 플레이어를 삭제한다.
 //--------------------------------------------------------------------
-void DisConnect(SOCKET* Client_Socket)
+void DisConnect(map<SOCKET, st_PLAYER>::iterator* iter_Player_List)
 {
-    map<SOCKET, st_PLAYER>::iterator iter_Player_List;
-    int Erase_Player_ID;
+    st_PACKET st_Message;
+    char c_Message[sizeof(st_Message)];
 
-    iter_Player_List = Player_List.find(*Client_Socket);
-    Erase_Player_ID = (*iter_Player_List).second.ID;
+    st_Message._Type = 2;
+    st_Message._ID = (*(*iter_Player_List)).second.ID;
+    memcpy_s(c_Message, sizeof(st_Message), &st_Message, sizeof(st_Message));
 
-    Player_List.erase(iter_Player_List);
+    Player_List.erase(*iter_Player_List);
 
-    
-
-    
+    send_Broadcast(c_Message, sizeof(st_Message));
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
