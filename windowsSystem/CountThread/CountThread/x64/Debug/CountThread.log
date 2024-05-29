@@ -1,5 +1,0 @@
-﻿  CountThread.cpp
-C:\Users\User\Desktop\procademy_project\procademy\windowsSystem\CountThread\CountThread\CountThread.cpp(12,23): warning C4311: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 포인터가 잘립니다.
-C:\Users\User\Desktop\procademy_project\procademy\windowsSystem\CountThread\CountThread\CountThread.cpp(12,23): warning C4302: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 잘립니다.
-C:\Users\User\Desktop\procademy_project\procademy\windowsSystem\CountThread\CountThread\CountThread.cpp(31,60): warning C4312: '형식 캐스트': 'DWORD'에서 더 큰 'LPVOID'(으)로의 변환입니다.
-  CountThread.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\windowsSystem\CountThread\x64\Debug\CountThread.exe

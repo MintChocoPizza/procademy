@@ -1,5 +1,0 @@
-﻿  ThreadPooling.cpp
-C:\Users\User\Desktop\procademy_project\procademy\windowsSystem\ThreadPooling\ThreadPooling\ThreadPooling.cpp(140,87): warning C4312: '형식 캐스트': 'DWORD'에서 더 큰 'LPVOID'(으)로의 변환입니다.
-C:\Users\User\Desktop\procademy_project\procademy\windowsSystem\ThreadPooling\ThreadPooling\ThreadPooling.cpp(159,48): warning C4311: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 포인터가 잘립니다.
-C:\Users\User\Desktop\procademy_project\procademy\windowsSystem\ThreadPooling\ThreadPooling\ThreadPooling.cpp(159,48): warning C4302: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 잘립니다.
-  ThreadPooling.vcxproj -> C:\Users\User\Desktop\procademy_project\procademy\windowsSystem\ThreadPooling\x64\Debug\ThreadPooling.exe

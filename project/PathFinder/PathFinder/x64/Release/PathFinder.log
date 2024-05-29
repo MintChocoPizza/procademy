@@ -1,8 +1,0 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppClean.targets(77,5): warning : 'c:\users\user\desktop\procademy_project\procademy\project\pathfinder\x64\release\pathfinder.exe' 경로에 대한 액세스가 거부되었습니다.
-  My.cpp
-  PathFinder.cpp
-  코드를 생성하고 있습니다.
-  Previous IPDB not found, fall back to full compilation.
-  All 7 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  코드를 생성했습니다.
-  PathFinder.vcxproj -> C:\Users\user\Desktop\procademy_project\procademy\project\PathFinder\x64\Release\PathFinder.exe

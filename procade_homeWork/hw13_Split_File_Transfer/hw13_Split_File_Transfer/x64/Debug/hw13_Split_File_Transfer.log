@@ -1,5 +1,0 @@
-﻿  hw13_Split_File_Transfer.cpp
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw13_Split_File_Transfer\hw13_Split_File_Transfer\hw13_Split_File_Transfer.cpp(67,7): warning C4101: 'recv_buf' :참조되지 않은 지역 변수입니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw13_Split_File_Transfer\hw13_Split_File_Transfer\hw13_Split_File_Transfer.cpp(63,7): warning C4101: 'send_buf' :참조되지 않은 지역 변수입니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw13_Split_File_Transfer\hw13_Split_File_Transfer\hw13_Split_File_Transfer.cpp(64,6): warning C4101: 'send_len' :참조되지 않은 지역 변수입니다.
-  hw13_Split_File_Transfer.vcxproj -> C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw13_Split_File_Transfer\x64\Debug\hw13_Split_File_Transfer.exe

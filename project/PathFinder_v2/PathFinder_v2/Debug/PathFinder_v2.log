@@ -1,6 +1,0 @@
-﻿  WndProc.cpp
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\PathFinder_v2\PathFinder_v2\WndProc.cpp(309,37): warning C4244: '=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\PathFinder_v2\PathFinder_v2\WndProc.cpp(315,63): warning C4244: '=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\PathFinder_v2\PathFinder_v2\WndProc.cpp(334,37): warning C4244: '=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\PathFinder_v2\PathFinder_v2\WndProc.cpp(548,7): warning C4101: 'hOldPen' :참조되지 않은 지역 변수입니다.
-  PathFinder_v2.vcxproj -> C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\PathFinder_v2\Debug\PathFinder_v2.exe

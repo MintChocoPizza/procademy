@@ -1,6 +1,0 @@
-﻿  hw11_Check_Back_Log.cpp
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw11_Check_Back_Log\hw11_Check_Back_Log\hw11_Check_Back_Log.cpp(46,6): warning C4101: 'i_Send_Result' :참조되지 않은 지역 변수입니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw11_Check_Back_Log\hw11_Check_Back_Log\hw11_Check_Back_Log.cpp(43,7): warning C4101: 'service' :참조되지 않은 지역 변수입니다.
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw11_Check_Back_Log\hw11_Check_Back_Log\hw11_Check_Back_Log.cpp(47,7): warning C4101: 'recv_buf' :참조되지 않은 지역 변수입니다.
-  LINK : C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw11_Check_Back_Log\Debug\hw11_Check_Back_Log.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
-  hw11_Check_Back_Log.vcxproj -> C:\Users\dpsem\OneDrive\바탕 화면\procademy\procade_homeWork\hw11_Check_Back_Log\Debug\hw11_Check_Back_Log.exe

@@ -1,4 +1,0 @@
-﻿  List_Project.cpp
-  main.cpp
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: void __thiscall CList<int>::printAll(void)" (?printAll@?$CList@H@@QAEXXZ)
-C:\Users\dpsem\OneDrive\바탕 화면\procademy\project\List_Project\Release\List_Project.exe : fatal error LNK1120: 1개의 확인할 수 없는 외부 참조입니다.
