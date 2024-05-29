@@ -485,12 +485,32 @@ void recv_Procedure(const SOCKET* Client_Socket)
         // 정상적인 경우
         for (i_Cnt = 0; i_Cnt < Ret_recv / sizeof(st_PACKET); i_Cnt += sizeof(st_PACKET))
         {
-            send_Broadcast(c_Buffer + i_Cnt, sizeof(st_PACKET));
             memcpy_s(&st_Packet, sizeof(st_Packet), c_Buffer + i_Cnt, sizeof(st_Packet));
-           
+
+            //---------------------------------------------------
+            // 이상한 패킷이면 연결을 끝낸다.
+            if (st_Packet._Type < 0 || 3 < st_Packet._Type)
+            {
+                set_Delete_List.insert(*Client_Socket);
+                return;
+            }
+            if(st_Packet._ID > g_ID)
+            {
+                set_Delete_List.insert(*Client_Socket);
+                return;
+            }
+            if (st_Packet._X < 0 || st_Packet._Y < 0 || st_Packet._X >= dfSCREEN_WIDTH - 1 || st_Packet._Y >= dfSCREEN_HEIGHT)
+            {
+                set_Delete_List.insert(*Client_Socket);
+                return;
+            }
+
             iter_Player_List = Player_List.find(*Client_Socket);
             (*iter_Player_List).second.Y = st_Packet._Y;
             (*iter_Player_List).second.X = st_Packet._X;
+            send_Broadcast(c_Buffer + i_Cnt, sizeof(st_PACKET));
+           
+
         }
     }
 }
