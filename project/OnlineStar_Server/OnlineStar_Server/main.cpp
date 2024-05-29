@@ -11,6 +11,8 @@
 #include <WS2tcpip.h>
 
 #include "Init_Winsock_Server.h"
+#include "Console.h"
+#include "Buffer.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -90,9 +92,12 @@ int main()
     // TIMEVAL Time_Val;
     SOCKET Listen_Socket = INVALID_SOCKET;
     SOCKET Client_Socket;
+    int Y;
+    int X;
 
 
-
+    cs_Initial();
+    cs_ClearScreen();
 
     Is_Init_Listen_Socket = init_Listen_Socket(&Listen_Socket, &wsa_Data);
     if (Is_Init_Listen_Socket == false)
@@ -145,7 +150,19 @@ int main()
 
         // 로직 -> 현재 서버는 따로 연산하는 값이 없다.
 
+        //---------------------------------------------------
         // 랜더는 어떻게 할까?
+        // 그냥 출력
+        buff_Buffer_Clear();
+        for (iter_Player_List = Player_List.begin(); iter_Player_List != Player_List.end(); ++iter_Player_List)
+        {
+            Y = (*iter_Player_List).second.Y + 1;
+            X = (*iter_Player_List).second.X;
+
+            buff_Sprite_Draw(Y, X, '*');
+        }
+        buff_Buffer_Flip();
+
     }
 
 
