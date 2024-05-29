@@ -16,8 +16,8 @@
 
 #pragma comment(lib, "Ws2_32.lib")
 
-#define dfSCREEN_WIDTH 80
-#define dfSCREEN_HEIGHT 23
+//#define dfSCREEN_WIDTH 80
+//#define dfSCREEN_HEIGHT 23
 
 using namespace std;
 
@@ -499,7 +499,7 @@ void recv_Procedure(const SOCKET* Client_Socket)
                 set_Delete_List.insert(*Client_Socket);
                 return;
             }
-            if (st_Packet._X < 0 || st_Packet._Y < 0 || st_Packet._X >= dfSCREEN_WIDTH - 1 || st_Packet._Y >= dfSCREEN_HEIGHT)
+            if (st_Packet._X < 0 || st_Packet._Y < 0 || dfSCREEN_WIDTH-2 < st_Packet._X || dfSCREEN_HEIGHT-2 < st_Packet._Y)
             {
                 set_Delete_List.insert(*Client_Socket);
                 return;
@@ -528,6 +528,20 @@ void DisConnect()
 
     st_Message._Type = 2;
     
+    /////////////////////////////////////////////////////////////////////////////////////
+    // 구조가 잘못되었다. 
+    // 
+    // 삭제 메시지 송신과 리스트에서 삭제를 동시에 하는 것이 아닌 
+    // 
+    // 삭제 메시지를 보내면서 그 때 바로 삭제 리스트를 전부 업데이트 해야한다. 
+    // 
+    // 그리고 전부 돌리고 나서
+    // 
+    // 삭제 메시지 송신이 끝난 다음에
+    // 
+    // 최종적으로 리스트를 전부 삭제해야한다.
+    // 
+    /////////////////////////////////////////////////////////////////////////////////////
     //---------------------------------------------------
     // set_Delete_List가 빌때까지 전부 삭제한다.
     while(!set_Delete_List.empty())
