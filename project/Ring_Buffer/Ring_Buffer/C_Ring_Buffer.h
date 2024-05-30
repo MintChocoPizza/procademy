@@ -2,14 +2,22 @@
 #ifndef __C_RING_BUFFER_H__
 #define __C_RING_BUFFER_H__
 
+// TMI: 클래스 포인터 멤버 변수 -> 지역변수에 저장하여 접근하는 방식 
+//	직접 접근: 매 순간 어셈블리 2줄 + 값 저장하는 1줄 == 총 3줄 
+//	지역 변수: 지역 변수에 저장 3줄 + 값 저장하는 1줄 == 총 4줄 
+//		But!!!!!
+//		최종적인 저장 == 직접 접근하여 변수를 저장 총 3줄이 추가된다. 
+// ==> 3 + 3 + 3 = 9
+// ==> 4 + 1 + 3 = 8
+// 단순하게 계산하면 3번 이상 접근하여 저장한다면 지역 변수에 저장하여 접근하는 것이 이득이다. 
 
-template <class Data>
 class C_RING_BUFFER
 {
-	Data* _Buffer;
+	char* _Buffer;
 
-	Data* _In;
-	Data* _Out;
+	char* _In;
+	char* _Out;
+	const char* _Buffer_End;
 
 	//-----------------------------------------------------------------------
 	// 고민!!!! 사용중인 공간이랑 빈 공간은 사실 하나로 만들 수 있음
@@ -54,8 +62,7 @@ public:
 	// Parameters: (char *)데이타 포인터. (int)크기. 
 	// Return: (int)넣은 크기.
 	/////////////////////////////////////////////////////////////////////////
-	int	Enqueue(const char* chpData, int iSize);
-	int Enqueue(const Data* pData, int iSize);
+	int Enqueue(const char* chpData, int iSize);
 	
 	/////////////////////////////////////////////////////////////////////////
 	// ReadPos 에서 데이타 가져옴. ReadPos 이동.
