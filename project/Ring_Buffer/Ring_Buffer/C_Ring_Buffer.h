@@ -64,7 +64,7 @@ public:
 	// Parameters: (char *)데이타 포인터. (int)크기. 
 	// Return: (int)넣은 크기.
 	/////////////////////////////////////////////////////////////////////////
-	int Enqueue(const char* chpData, size_t iSize);
+	int Enqueue(const char* chpData, int iSize);
 	
 	/////////////////////////////////////////////////////////////////////////
 	// ReadPos 에서 데이타 가져옴. ReadPos 이동.
@@ -72,7 +72,7 @@ public:
 	// Parameters: (char *)데이타 포인터. (int)크기.
 	// Return: (int)가져온 크기.
 	/////////////////////////////////////////////////////////////////////////
-	int	Dequeue(char* chpDest, size_t iSize);
+	int	Dequeue(char* chpDest, int iSize);
 
 	/////////////////////////////////////////////////////////////////////////
 	// ReadPos 에서 데이타 읽어옴. ReadPos 고정.
