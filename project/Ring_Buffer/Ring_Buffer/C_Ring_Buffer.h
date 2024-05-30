@@ -11,6 +11,8 @@
 // ==> 4 + 1 + 3 = 8
 // 단순하게 계산하면 3번 이상 접근하여 저장한다면 지역 변수에 저장하여 접근하는 것이 이득이다. 
 
+constexpr int df_C_RING_BUFFER_DEFAULT_LEN = 10000;
+
 class C_RING_BUFFER
 {
 	char* _Buffer;
@@ -26,7 +28,7 @@ class C_RING_BUFFER
 	// 구현하다 적게 쓰는것을 메인으로 쓰기로 함.
 	int _Full_Size;
 	int _Use_Size;
-	int _Free_Size;
+	// int _Free_Size;
 
 public:
 	/////////////////////////////////////////////////////////////////////////
@@ -37,7 +39,7 @@ public:
 
 	~C_RING_BUFFER();
 
-	int GetBufferSize(void);
+	int GetBufferSize(void) { return _Full_Size; }
 
 	/////////////////////////////////////////////////////////////////////////
 	// 현재 사용중인 용량 얻기.
@@ -45,7 +47,7 @@ public:
 	// Parameters: 없음.
 	// Return: (int)사용중인 용량.
 	/////////////////////////////////////////////////////////////////////////
-	int	GetUseSize(void);
+	int	GetUseSize(void) { return _Use_Size; }
 
 	/////////////////////////////////////////////////////////////////////////
 	// 현재 버퍼에 남은 용량 얻기. 
@@ -53,7 +55,7 @@ public:
 	// Parameters: 없음.
 	// Return: (int)남은용량.
 	/////////////////////////////////////////////////////////////////////////
-	int	GetFreeSize(void);
+	int	GetFreeSize(void) { return _Full_Size - _Use_Size; }
 
 	/////////////////////////////////////////////////////////////////////////
 	// WritePos 에 데이타 넣음.
@@ -62,7 +64,7 @@ public:
 	// Parameters: (char *)데이타 포인터. (int)크기. 
 	// Return: (int)넣은 크기.
 	/////////////////////////////////////////////////////////////////////////
-	int Enqueue(const char* chpData, int iSize);
+	int Enqueue(const char* chpData, size_t iSize);
 	
 	/////////////////////////////////////////////////////////////////////////
 	// ReadPos 에서 데이타 가져옴. ReadPos 이동.
@@ -70,15 +72,15 @@ public:
 	// Parameters: (char *)데이타 포인터. (int)크기.
 	// Return: (int)가져온 크기.
 	/////////////////////////////////////////////////////////////////////////
-	int	Dequeue(char* chpDest, int iSize);
+	int	Dequeue(char* chpDest, size_t iSize);
 
 	/////////////////////////////////////////////////////////////////////////
 	// ReadPos 에서 데이타 읽어옴. ReadPos 고정.
 	//
-	// Parameters: (char *)데이타 포인터. (int)크기.
+	// Parameters: (char *)데이타 포인터. (int)크기. (bool)반환시점 설정
 	// Return: (int)가져온 크기.
 	/////////////////////////////////////////////////////////////////////////
-	int	Peek(char* chpDest, int iSize);
+	int	Peek(char* chpDest, size_t iSize, bool flag = false);
 
 	/////////////////////////////////////////////////////////////////////////
 	// 버퍼의 모든 데이타 삭제.
@@ -86,7 +88,7 @@ public:
 	// Parameters: 없음.
 	// Return: 없음.
 	/////////////////////////////////////////////////////////////////////////
-	void	ClearBuffer(void);
+	void ClearBuffer(void) { _In = _Out; }
 
 
 

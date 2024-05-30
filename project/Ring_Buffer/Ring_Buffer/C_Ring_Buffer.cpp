@@ -6,52 +6,25 @@
 /////////////////////////////////////////////////////////////////////////
 // 기본 사이즈를 1만 Byte로 할당한다.
 /////////////////////////////////////////////////////////////////////////
-inline C_RING_BUFFER::C_RING_BUFFER(void) : _In(0), _Out(0), _Full_Size(10000)
+C_RING_BUFFER::C_RING_BUFFER(void) : _In(0), _Out(0), _Full_Size(df_C_RING_BUFFER_DEFAULT_LEN), _Use_Size(0)
 {
-	_Buffer = new char[10000];
+	_Buffer = new char[df_C_RING_BUFFER_DEFAULT_LEN];
 
-	_Buffer_End = _Buffer + 10000;
+	_Buffer_End = _Buffer + df_C_RING_BUFFER_DEFAULT_LEN;
 }
 
-C_RING_BUFFER::C_RING_BUFFER(int i_Buffer_Size) : _In(0), _Out(0), _Full_Size(10000)
+C_RING_BUFFER::C_RING_BUFFER(int i_Buffer_Size) : _In(0), _Out(0), _Full_Size(10000), _Use_Size(0)
 {
 	_Buffer = new char[i_Buffer_Size];
 
 	_Buffer_End = _Buffer + i_Buffer_Size;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// 현재 버퍼의 최대 크기
-// 
-// Parameters: 없음.
-// Return: (int)버퍼 최대 용량.
-/////////////////////////////////////////////////////////////////////////
-int C_RING_BUFFER::GetBufferSize(void)
+C_RING_BUFFER::~C_RING_BUFFER()
 {
-	return _Full_Size;
+	delete[] _Buffer;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// 현재 사용중인 용량 얻기.
-//
-// Parameters: 없음.
-// Return: (int)사용중인 용량.
-/////////////////////////////////////////////////////////////////////////
-int C_RING_BUFFER::GetUseSize(void)
-{
-	return _Use_Size;
-}
-
-/////////////////////////////////////////////////////////////////////////
-// 현재 버퍼에 남은 용량 얻기. 
-//
-// Parameters: 없음.
-// Return: (int)남은용량.
-/////////////////////////////////////////////////////////////////////////
-int C_RING_BUFFER::GetFreeSize(void)
-{
-	return _Free_Size;
-}
 
 /////////////////////////////////////////////////////////////////////////
 // WritePos 에 데이타 넣음.
@@ -60,32 +33,149 @@ int C_RING_BUFFER::GetFreeSize(void)
 // Parameters: (char *)데이타 포인터. (int)크기. 
 // Return: (int)넣은 크기.
 /////////////////////////////////////////////////////////////////////////
-int C_RING_BUFFER::Enqueue(const char* pData, int iSize)
+int C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 {
+	char* Temp_In;
 	int Data_Chunk_Size;
-	char* Temp_In = _In;
 
-	if(_Free_Size < iSize)
+	if(_Full_Size - _Use_Size < iSize)
 		return 0;
 
 	// (_Buffer + _Full_Size): 마지막 버퍼 그 다음 위치
 	// (_Buffer + Full_Size) - _In : 현재 위치에서 마지막 버퍼까지 넣을 수 있는 데이터의 수가 나온다. 
+	Temp_In = _In;
 	Data_Chunk_Size = _Buffer_End - Temp_In;
 	
 	if(iSize <= Data_Chunk_Size)
 	{
 		memcpy(Temp_In, pData, iSize);
-		_In = (char*)(((intptr_t)Temp_In + iSize) % _Full_Size);
 	}
 	else
 	{
 		memcpy(Temp_In, pData, Data_Chunk_Size);
 		memcpy(_Buffer, pData + Data_Chunk_Size, iSize - Data_Chunk_Size);
-		_In = (char*)(((intptr_t)Temp_In + iSize) % _Full_Size);
 	}
+	_In = (char*)(((uintptr_t)Temp_In + iSize) % (uintptr_t)_Buffer_End);
+
+
+	//-----------------------------------------------------------------------
+	// 어떤 것을 유지할지 결정하지 못하였다. 
+	_Use_Size += iSize;
 
 	return iSize;
 }
 
+/////////////////////////////////////////////////////////////////////////
+// ReadPos 에서 데이타 가져옴. ReadPos 이동.
+//
+// Parameters: (char *)데이타 포인터. (int)크기.
+// Return: (int)가져온 크기.
+/////////////////////////////////////////////////////////////////////////
+int C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
+{
+	char* Temp_Out;
+	size_t Data_Chunk_Size;
+	int Temp_Use_Size;
+
+	Temp_Use_Size = _Use_Size;
+
+	if (Temp_Use_Size == 0)
+		return 0;
+
+	Temp_Out = _Out;
+	Data_Chunk_Size = _Buffer_End - Temp_Out;
+
+
+	if (iSize <= Temp_Use_Size)
+	{
+		if (iSize <= Data_Chunk_Size)
+		{
+			memcpy(chpDest, Temp_Out, iSize);
+		}
+		else
+		{
+			memcpy(chpDest, Temp_Out, Data_Chunk_Size);
+			memcpy(chpDest + Data_Chunk_Size, _Buffer, iSize - Data_Chunk_Size);
+		}
+
+		_Out = (char*)(((uintptr_t)Temp_Out + iSize) % (uintptr_t)_Buffer_End);
+		
+		_Use_Size = Temp_Use_Size - iSize;
+
+		return iSize;
+	}
+	else
+	{
+		if (iSize <= Data_Chunk_Size)
+		{
+			memcpy(chpDest, Temp_Out, Temp_Use_Size);
+		}
+		else
+		{
+			memcpy(chpDest, Temp_Out, Data_Chunk_Size);
+			memcpy(chpDest + Data_Chunk_Size, _Buffer, Temp_Use_Size - Data_Chunk_Size);
+		}
+
+		_Out = (char*)(((uintptr_t)Temp_Out + Temp_Use_Size) % (uintptr_t)_Buffer_End);
+
+		_Use_Size = 0;
+
+		return Temp_Use_Size;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////
+// ReadPos 에서 데이타 읽어옴. ReadPos 고정.
+//
+// flag	== true: if(iSize > _Use_Size ) return 0;
+// 
+// Parameters: (char *)데이타 포인터. (int)크기. (bool)defualt = false
+// Return: (int)가져온 크기.
+/////////////////////////////////////////////////////////////////////////
+int C_RING_BUFFER::Peek(char* chpDest, size_t iSize, bool flag)
+{
+	size_t Data_Chunk_Size;
+	int Temp_Use_Size;
+
+	Temp_Use_Size = _Use_Size;
+
+	if (Temp_Use_Size == 0)
+		return 0;
+
+	Data_Chunk_Size = _Buffer_End - _Out;
+
+
+	if (iSize <= Temp_Use_Size)
+	{
+		
+		if (iSize <= Data_Chunk_Size)
+		{
+			memcpy(chpDest, _Out, iSize);
+		}
+		else
+		{
+			memcpy(chpDest, _Out, Data_Chunk_Size);
+			memcpy(chpDest + Data_Chunk_Size, _Buffer, iSize - Data_Chunk_Size);
+		}
+
+		return iSize;
+	}
+	else if(flag == true)	// if(iSize > _Use_Size)
+	{
+		if (iSize <= Data_Chunk_Size)
+		{
+			memcpy(chpDest, _Out, Temp_Use_Size);
+		}
+		else
+		{
+			memcpy(chpDest, _Out, Data_Chunk_Size);
+			memcpy(chpDest + Data_Chunk_Size, _Buffer, Temp_Use_Size - Data_Chunk_Size);
+		}
+
+		return Temp_Use_Size;
+	}
+
+	return 0;
+}
 
 
