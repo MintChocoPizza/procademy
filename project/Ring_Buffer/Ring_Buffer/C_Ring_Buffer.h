@@ -77,7 +77,9 @@ public:
 	/////////////////////////////////////////////////////////////////////////
 	// ReadPos 에서 데이타 읽어옴. ReadPos 고정.
 	//
-	// Parameters: (char *)데이타 포인터. (int)크기. (bool)반환시점 설정
+	// flag	== true: if(iSize > _Use_Size ) return 0;
+	// 
+	// Parameters: (char *)데이타 포인터. (int)크기. (bool)defualt = false
 	// Return: (int)가져온 크기.
 	/////////////////////////////////////////////////////////////////////////
 	int	Peek(char* chpDest, size_t iSize, bool flag = false);

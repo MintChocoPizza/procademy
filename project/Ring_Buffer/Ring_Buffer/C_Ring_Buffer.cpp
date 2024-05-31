@@ -6,16 +6,23 @@
 /////////////////////////////////////////////////////////////////////////
 // 기본 사이즈를 1만 Byte로 할당한다.
 /////////////////////////////////////////////////////////////////////////
-C_RING_BUFFER::C_RING_BUFFER(void) : _In(0), _Out(0), _Full_Size(df_C_RING_BUFFER_DEFAULT_LEN), _Use_Size(0)
+C_RING_BUFFER::C_RING_BUFFER(void) :  _Full_Size(df_C_RING_BUFFER_DEFAULT_LEN), _Use_Size(0)
 {
 	_Buffer = new char[df_C_RING_BUFFER_DEFAULT_LEN];
+
+	_In = _Buffer;
+	_Out = _Buffer;
+
 
 	_Buffer_End = _Buffer + df_C_RING_BUFFER_DEFAULT_LEN;
 }
 
-C_RING_BUFFER::C_RING_BUFFER(int i_Buffer_Size) : _In(0), _Out(0), _Full_Size(10000), _Use_Size(0)
+C_RING_BUFFER::C_RING_BUFFER(int i_Buffer_Size) : _Full_Size(i_Buffer_Size), _Use_Size(0)
 {
 	_Buffer = new char[i_Buffer_Size];
+
+	_In = _Buffer;
+	_Out = _Buffer;
 
 	_Buffer_End = _Buffer + i_Buffer_Size;
 }
@@ -104,15 +111,24 @@ int C_RING_BUFFER::Dequeue(char* chpDest, int iSize)
 
 		return iSize;
 	}
-	else
+	else // if(iSize > _Use_Size) 내가 준비한 버퍼가 들어있는 데이터보다 더 크다.
 	{
-		if (iSize <= Data_Chunk_Size)
+		//if (iSize <= Data_Chunk_Size)
+		//{
+		//	memcpy(chpDest, Temp_Out, Temp_Use_Size);
+		//}
+		//else
+		//{
+		//	memcpy(chpDest, Temp_Out, Data_Chunk_Size);
+		//	memcpy(chpDest + Data_Chunk_Size, _Buffer, Temp_Use_Size - Data_Chunk_Size);
+		//}
+		if (Temp_Use_Size <= Data_Chunk_Size)
 		{
-			memcpy(chpDest, Temp_Out, Temp_Use_Size);
+			memcpy(chpDest, _Out, Temp_Use_Size);
 		}
 		else
 		{
-			memcpy(chpDest, Temp_Out, Data_Chunk_Size);
+			memcpy(chpDest, _Out, Data_Chunk_Size);
 			memcpy(chpDest + Data_Chunk_Size, _Buffer, Temp_Use_Size - Data_Chunk_Size);
 		}
 
@@ -128,6 +144,7 @@ int C_RING_BUFFER::Dequeue(char* chpDest, int iSize)
 // ReadPos 에서 데이타 읽어옴. ReadPos 고정.
 //
 // flag	== true: if(iSize > _Use_Size ) return 0;
+// 헤더에 필요한 데이터를 다 채우지 않았다면 0을 리턴한다.
 // 
 // Parameters: (char *)데이타 포인터. (int)크기. (bool)defualt = false
 // Return: (int)가져온 크기.
@@ -160,9 +177,19 @@ int C_RING_BUFFER::Peek(char* chpDest, size_t iSize, bool flag)
 
 		return iSize;
 	}
-	else if(flag == true)	// if(iSize > _Use_Size)
+	else if(flag == true)	// if(iSize > _Use_Size) 내가 준비한 버퍼가 들어있는 데이터보다 더 크다.
 	{
-		if (iSize <= Data_Chunk_Size)
+		//if (iSize <= Data_Chunk_Size)
+		//{
+		//	memcpy(chpDest, _Out, Temp_Use_Size);
+		//}
+		//else
+		//{
+		//	memcpy(chpDest, _Out, Data_Chunk_Size);
+		//	memcpy(chpDest + Data_Chunk_Size, _Buffer, Temp_Use_Size - Data_Chunk_Size);
+		//}
+
+		if (Temp_Use_Size <= Data_Chunk_Size)
 		{
 			memcpy(chpDest, _Out, Temp_Use_Size);
 		}
@@ -171,6 +198,7 @@ int C_RING_BUFFER::Peek(char* chpDest, size_t iSize, bool flag)
 			memcpy(chpDest, _Out, Data_Chunk_Size);
 			memcpy(chpDest + Data_Chunk_Size, _Buffer, Temp_Use_Size - Data_Chunk_Size);
 		}
+
 
 		return Temp_Use_Size;
 	}

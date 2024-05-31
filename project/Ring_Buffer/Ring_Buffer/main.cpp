@@ -5,83 +5,143 @@
 #include <iostream>
 #include <time.h>
 #include <random>
+#include <Windows.h>
 
 #include "C_Ring_Buffer.h"
 
 using namespace std;
 
-int str_Index = 0;
-int str_Cnt = 0;
-const char* str = "1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345\
-                   1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345\
-                   1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345\
-                   1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345\
-                   1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345";
+constexpr int MAX_SIZE = 81;
 
+HANDLE h_Console;
+const char* str = "1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345";// 1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345 1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345 1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345 1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345";
 C_RING_BUFFER c_Ring_Buffer(100);
+
+void cs_Initial(void);
 
 int main()
 {
-    srand((unsigned int)time(NULL));
+	cs_Initial();
 
-    size_t sz_Str = sizeof(str);
+	srand((unsigned int)time(NULL));
+	size_t index = 0;
+	size_t Str_Len;
+	int En_Random;
+	int ret_En;
 
-    int Eq_Size;
-    int Eq_Rand_Num;
+	int ret_Pk;
+	char Buff_Pk[100];
 
-    int Dq_Rand_Num;
+	int Dq_Random;
+	int ret_Dq;
+	char Buff_Dq[100];
 
-    int Pk_Size;
-    char Pk_Buff[100];
-    
-    int Dq_Size;
-    char Dq_Buff[100];
+	char Buffer[100];
 
-    int idx = 0;
-    char Prt_Buff[100];
+	while (1)
+	{
+		memset(Buff_Pk, 0, 100);
+		memset(Buff_Dq, 0, 100);
 
-    while (1)
-    {
-        memset(Pk_Buff, 0, 100);
-        memset(Dq_Buff, 0, 100);
+		Str_Len = strlen(str + index) + 1;
 
-        Eq_Rand_Num = rand() % sz_Str;
-        str_Cnt += Eq_Rand_Num;
-        {
-            
-        }
-        Eq_Size = c_Ring_Buffer.Enqueue(str + str_Index, Eq_Rand_Num);
-        if (Eq_Size != Eq_Rand_Num)
-        {
-            __debugbreak(); // 인터럽트 3번
-        }
+		En_Random = rand() % Str_Len;
+		ret_En = c_Ring_Buffer.Enqueue(str + index, En_Random);
+		if (ret_En != En_Random)
+		{
+			__debugbreak();		// 인터럽트 3번을 발생한다. 
+		}
+		index += En_Random;
+		if (index == strlen(str))
+		{
+			index = 0;
+		}
 
-        Dq_Rand_Num = rand() % sz_Str;
-        Pk_Size = c_Ring_Buffer.Peek(Pk_Buff, Dq_Rand_Num);
-        if (Pk_Size != Dq_Rand_Num)
-        {
-            __debugbreak();
-        }
+		
 
-        Dq_Size = c_Ring_Buffer.Dequeue(Pk_Buff, Dq_Rand_Num);
-        if (Dq_Size != Dq_Rand_Num)
-        {
-            __debugbreak();
-        }
 
-        if (memcmp(Pk_Buff, Dq_Buff, 100) != 0)
-        {
-            __debugbreak();
-        }
 
+		Dq_Random = rand() % (strlen(str) + 1);
+		ret_Pk = c_Ring_Buffer.Peek(Buff_Pk, Dq_Random, true);
+		//if (ret_Pk != Dq_Random)
+		//{
+		//	__debugbreak();		// 인터럽트 3번을 발생한다. 
+		//}
+
+		ret_Dq = c_Ring_Buffer.Dequeue(Buff_Dq, Dq_Random);
+		//if (ret_Dq != Dq_Random)
+		//{
+		//	__debugbreak();		// 인터럽트 3번을 발생한다. 
+		//}
+
+		if (memcmp(Buff_Pk, Buff_Dq, 100) != 0)
+		{
+			__debugbreak();		// 인터럽트 3번을 발생한다. 
+		}
+
+		printf("%s", Buff_Dq);
+
+
+
+	}
+
+
+	//printf("%s \n\n", str);
+	//char c[100] = { 0, };
+	//while (1)
+	//{
+	//	Str_Len = strlen(str + index)+1;
+	//	En_Random = rand() % Str_Len;
+
+	//	memcpy(c+index, str + index, En_Random);
+
+	//	printf("%s", c);
+
+	//	index += En_Random;
+
+	//	if (index == strlen(str))
+	//	{
+	//		printf("%s", c);
+	//		memset(c, 0, 100);
+	//		index = 0;
+	//	}
+
+
+
+	//	getchar();
+	//}
         
-
-        
-        
-    }
-    
-
     std::cout << "Hello World!\n";
+}
+
+void cs_Initial(void)
+{
+	CONSOLE_CURSOR_INFO stConsoleCursor;
+	char cCommand[28];
+
+	//-----------------------------------------------------
+	// 화면의 커서를 안보이게끔 설정한다.
+	//-----------------------------------------------------
+	stConsoleCursor.bVisible = FALSE;
+	stConsoleCursor.dwSize = 1;				// 커서 크기
+	// 이상하게도 0이면 나온다. 1로 하면 안나온다.
+
+	//-----------------------------------------------------
+	// 콘솔화면 (스텐다드 아웃풋) 핸들을 구한다. 
+	// 
+	//-----------------------------------------------------
+	h_Console = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorInfo(h_Console, &stConsoleCursor);
+
+
+	//-----------------------------------------------------
+	// 콘솔화면 크기를 설정한다.
+	//col = 가로, lines = 세로
+	// 
+	//-----------------------------------------------------
+	sprintf_s(cCommand, "mode con:cols=%d lines=%d", 81, 40);
+
+	system(cCommand);
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
