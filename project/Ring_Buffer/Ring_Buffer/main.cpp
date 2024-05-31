@@ -6,6 +6,7 @@
 #include <time.h>
 #include <random>
 #include <Windows.h>
+#include <conio.h>
 
 #include "C_Ring_Buffer.h"
 
@@ -47,10 +48,10 @@ int main()
 
 		En_Random = rand() % Str_Len;
 		ret_En = c_Ring_Buffer.Enqueue(str + index, En_Random);
-		if (ret_En != En_Random)
-		{
-			__debugbreak();		// 인터럽트 3번을 발생한다. 
-		}
+		//if (ret_En != En_Random) // 넣을 수 없는경우 안넣는다.
+		//{
+		//	__debugbreak();		// 인터럽트 3번을 발생한다. 
+		//}
 		index += En_Random;
 		if (index == strlen(str))
 		{
@@ -81,8 +82,7 @@ int main()
 
 		printf("%s", Buff_Dq);
 
-
-
+		//_getch();
 	}
 
 
