@@ -2,9 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\OnlineStar_Client",
-    "\\project\\OnlineStar_Client\\OnlineStar_Client"
+    "\\project\\Ring_Buffer",
+    "\\project\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\project\\OnlineStar_Client\\OnlineStar_Client\\main.cpp",
+  "SelectedNode": "\\project\\Ring_Buffer\\Ring_Buffer\\OSJ_Test.cpp",
   "PreviewInSolutionExplorer": false
 }

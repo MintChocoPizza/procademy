@@ -42,7 +42,7 @@ public:
 	C_RING_BUFFER(void);
 	C_RING_BUFFER(int i_Buffer_Size);
 
-	~C_RING_BUFFER();
+	virtual ~C_RING_BUFFER();
 
 	int GetBufferSize(void) { return _Full_Size; }
 

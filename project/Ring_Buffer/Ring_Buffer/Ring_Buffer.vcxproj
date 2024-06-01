@@ -135,9 +135,11 @@
   <ItemGroup>
     <ClCompile Include="C_Ring_Buffer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OSJ_Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C_Ring_Buffer.h" />
+    <ClInclude Include="OSJ_Test.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
