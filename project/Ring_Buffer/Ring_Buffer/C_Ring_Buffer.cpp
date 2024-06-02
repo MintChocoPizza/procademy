@@ -6,24 +6,14 @@
 /////////////////////////////////////////////////////////////////////////
 // 기본 사이즈를 1만 Byte로 할당한다.
 /////////////////////////////////////////////////////////////////////////
-C_RING_BUFFER::C_RING_BUFFER(void) :  _Full_Size(df_C_RING_BUFFER_DEFAULT_LEN), _Use_Size(0), _In(0), _Out(0)
+C_RING_BUFFER::C_RING_BUFFER(void) :  _Full_Size(df_C_RING_BUFFER_DEFAULT_LEN + 1), _Use_Size(0), _In(0), _Out(0)
 {
-	_Buffer = new char[df_C_RING_BUFFER_DEFAULT_LEN];
-
-	//_In = _Buffer;
-	//_Out = _Buffer;
-
-	// _Buffer_End = _Buffer + df_C_RING_BUFFER_DEFAULT_LEN;
+	_Buffer = new char[df_C_RING_BUFFER_DEFAULT_LEN + 1];
 }
 
 C_RING_BUFFER::C_RING_BUFFER(int i_Buffer_Size) : _Full_Size(i_Buffer_Size), _Use_Size(0), _In(0), _Out(0)
 {
 	_Buffer = new char[i_Buffer_Size];
-
-	//_In = _Buffer;
-	//_Out = _Buffer;
-
-	// _Buffer_End = _Buffer + i_Buffer_Size;
 }
 
 C_RING_BUFFER::~C_RING_BUFFER()
@@ -83,59 +73,6 @@ int C_RING_BUFFER::Enqueue(const char* pData, int iSize)
 // Parameters: (char *)데이타 포인터. (int)크기.
 // Return: (int)가져온 크기.
 /////////////////////////////////////////////////////////////////////////
-//int C_RING_BUFFER::Dequeue(char* chpDest, int iSize)
-//{
-//	char* Temp_Out;
-//	int Data_Chunk_Size;
-//	int Temp_Use_Size;
-//
-//	Temp_Use_Size = _Use_Size;
-//
-//	if (Temp_Use_Size == 0)
-//		return 0;
-//
-//	Temp_Out = _Out;
-//	Data_Chunk_Size = _Buffer_End - Temp_Out;
-//
-//
-//	if (iSize <= Temp_Use_Size)
-//	{
-//		if (iSize <= Data_Chunk_Size)
-//		{
-//			memcpy(chpDest, Temp_Out, iSize);
-//		}
-//		else
-//		{
-//			memcpy(chpDest, Temp_Out, Data_Chunk_Size);
-//			memcpy(chpDest + Data_Chunk_Size, _Buffer, iSize - Data_Chunk_Size);
-//		}
-//
-//		_Out = (char*)(((uintptr_t)Temp_Out + iSize) % (uintptr_t)_Buffer_End);
-//		
-//		_Use_Size = Temp_Use_Size - iSize;
-//
-//		return iSize;
-//	}
-//	else // if(iSize > _Use_Size) 내가 준비한 버퍼가 들어있는 데이터보다 더 크다.
-//	{
-//		//if (iSize <= Data_Chunk_Size)
-//		if (Temp_Use_Size <= Data_Chunk_Size)
-//		{
-//			memcpy(chpDest, _Out, Temp_Use_Size);
-//		}
-//		else
-//		{
-//			memcpy(chpDest, _Out, Data_Chunk_Size);
-//			memcpy(chpDest + Data_Chunk_Size, _Buffer, Temp_Use_Size - Data_Chunk_Size);
-//		}
-//
-//		_Out = (char*)(((uintptr_t)Temp_Out + Temp_Use_Size) % (uintptr_t)_Buffer_End);
-//
-//		_Use_Size = 0;
-//
-//		return Temp_Use_Size;
-//	}
-//}
 int C_RING_BUFFER::Dequeue(char* chpDest, int iSize)
 {
 	int Data_Chunk_Size;

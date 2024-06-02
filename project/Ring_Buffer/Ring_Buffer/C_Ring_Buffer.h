@@ -116,8 +116,28 @@ private:
 	// Parameters: 없음.
 	// Return: (int)사용가능 용량.
 	////////////////////////////////////////////////////////////////////////
-	int	DirectEnqueueSize(void);
-	int	DirectDequeueSize(void);
+	int	DirectEnqueueSize(void)
+	{
+		if (_In >= _Out)
+		{
+			return _Full_Size - _In;
+		}
+		else
+		{
+			return _Out - _In;
+		}
+	}
+	int	DirectDequeueSize(void)
+	{
+		if (_In >= _Out)
+		{
+			return _In - _Out;
+		}
+		else
+		{
+			return _Full_Size - _Out;
+		}
+	}
 
 	/////////////////////////////////////////////////////////////////////////
 	// 원하는 길이만큼 읽기위치 에서 삭제 / 쓰기 위치 이동
@@ -125,18 +145,29 @@ private:
 	// Parameters: 없음.
 	// Return: (int)이동크기
 	/////////////////////////////////////////////////////////////////////////
-	int	MoveRear(int iSize);
-	int	MoveFront(int iSize);
+	int	MoveRear(int iSize)
+	{
+		_In = (_In + iSize) % _Full_Size;
+		return _In;
+	}
+	int	MoveFront(int iSize)
+	{
+		_Out = (_Out + iSize) % _Full_Size;
+		return _Out;
+	}
 
 
 
 	/////////////////////////////////////////////////////////////////////////
-	// 버퍼의 Front 포인터 얻음.
+	// 버퍼의 Front, Out 포인터 얻음.
 	//
 	// Parameters: 없음.
 	// Return: (char *) 버퍼 포인터.
 	/////////////////////////////////////////////////////////////////////////
-	char* GetFrontBufferPtr(void);
+	char* GetFrontBufferPtr(void)
+	{
+		return _Buffer + _In;
+	}
 
 
 	/////////////////////////////////////////////////////////////////////////
@@ -145,7 +176,10 @@ private:
 	// Parameters: 없음.
 	// Return: (char *) 버퍼 포인터.
 	/////////////////////////////////////////////////////////////////////////
-	char* GetRearBufferPtr(void);
+	char* GetRearBufferPtr(void)
+	{
+		return _Buffer + _Out;
+	}
 
 };
 

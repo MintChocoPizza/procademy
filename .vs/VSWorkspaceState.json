@@ -2,9 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\Ring_Buffer",
+    "\\project\\OOP",
+    "\\project\\OOP\\OOP",
     "\\project\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\project\\Ring_Buffer\\Ring_Buffer\\OSJ_Test.cpp",
+  "SelectedNode": "\\project\\OOP\\OOP\\CSceneLoad.h",
   "PreviewInSolutionExplorer": false
 }
