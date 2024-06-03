@@ -2,11 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\OnlineStar_Client",
-    "\\project\\OnlineStar_Client\\OnlineStar_Client",
-    "\\project\\OOP\\OOP",
+    "\\project\\Ring_Buffer",
     "\\project\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\project\\OnlineStar_Client\\OnlineStar_Client\\C_Queue.h",
+  "SelectedNode": "\\project\\Ring_Buffer\\Ring_Buffer\\C_Ring_Buffer.h",
   "PreviewInSolutionExplorer": false
 }
