@@ -2,10 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\OOP",
+    "\\project\\OnlineStar_Client",
+    "\\project\\OnlineStar_Client\\OnlineStar_Client",
     "\\project\\OOP\\OOP",
     "\\project\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\project\\OOP\\OOP\\CSceneLoad.h",
+  "SelectedNode": "\\project\\OnlineStar_Client\\OnlineStar_Client\\C_Queue.h",
   "PreviewInSolutionExplorer": false
 }
