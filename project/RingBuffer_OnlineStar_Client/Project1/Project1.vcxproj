@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{ab68e409-20ae-44f2-93c7-a06727ba2fd7}</ProjectGuid>
-    <RootNamespace>RingBufferOnlineStarClient</RootNamespace>
+    <ProjectGuid>{5ca6850b-7b07-4b16-a85f-95cc534b5563}</ProjectGuid>
+    <RootNamespace>Project1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,15 +127,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CSceneBase.cpp" />
-    <ClCompile Include="CSceneLoad.cpp" />
-    <ClCompile Include="CSceneManager.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="CList.h" />
+    <ClInclude Include="CObjectBase.h" />
+    <ClInclude Include="CObjectLoad.h" />
+    <ClInclude Include="CObjectManager.h" />
     <ClInclude Include="CSceneBase.h" />
     <ClInclude Include="CSceneLoad.h" />
     <ClInclude Include="CSceneManager.h" />
+    <ClInclude Include="CSessionBase.h" />
+    <ClInclude Include="CSessionManager.h" />
+    <ClInclude Include="c_Save_Log.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Save_Log\Save_Log\c_Save_Log.cpp" />
+    <ClCompile Include="CObjectBase.cpp" />
+    <ClCompile Include="CObjectLoad.cpp" />
+    <ClCompile Include="CObjectManager.cpp" />
+    <ClCompile Include="CSceneBase.cpp" />
+    <ClCompile Include="CSceneLoad.cpp" />
+    <ClCompile Include="CSceneManager.cpp" />
+    <ClCompile Include="CSessionBase.cpp" />
+    <ClCompile Include="CSessionManager.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

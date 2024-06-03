@@ -4,8 +4,18 @@
 
 class C_SceneManager
 {
+public:
+	enum SceneType
+	{
+		LOAD, 
+		GAME
+	};
+
 private:
 	static C_SceneManager _C_SceneManager;
+	C_SceneBase* _pScene;
+
+	SceneType type;
 	
 private:
 	C_SceneManager();

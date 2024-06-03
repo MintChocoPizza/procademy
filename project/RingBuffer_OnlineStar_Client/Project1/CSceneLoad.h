@@ -4,6 +4,7 @@
 
 class C_SceneLoad : public C_SceneBase
 {
+public:
 	C_SceneLoad();
 
 	virtual ~C_SceneLoad();
@@ -13,4 +14,4 @@ class C_SceneLoad : public C_SceneBase
 
 
 
-#endif // !__CSCENEOAD_H__
+#endif // !__CSCENELOAD_H__
