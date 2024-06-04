@@ -1,13 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\procade_homeWork\\hw12_echoServer",
-    "\\procade_homeWork\\hw12_echoServer\\hw12_echoServer",
+    "\\procade_homeWork\\hw11_Check_Back_Log_Client\\hw11_Check_Back_Log_Client",
     "\\project",
-    "\\project\\OnlineStar_Server",
     "\\project\\Ring_Buffer",
     "\\project\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\project\\OnlineStar_Server\\OnlineStar_Server.sln",
+  "SelectedNode": "\\project\\Ring_Buffer\\Ring_Buffer.sln",
   "PreviewInSolutionExplorer": false
 }

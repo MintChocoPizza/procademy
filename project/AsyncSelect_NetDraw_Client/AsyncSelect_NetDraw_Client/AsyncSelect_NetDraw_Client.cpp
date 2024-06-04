@@ -436,11 +436,6 @@ void WriteEvent()
         
         // 링버퍼는 전부 차지 않는 다는 가정으로 만들어졌다. 고로 끊어진 메시지는 있을 수 없다. 
          Send_Size = send(Connect_Socket, Send_Buffer.GetFrontBufferPtr(), Send_Buffer.DirectDequeueSize(), 0);
-        
-        //char buffer[1000] = { 0, };
-        //int sendPeekRet = Send_Buffer.Peek(buffer, min(1000, Send_Buffer.GetUseSize()));
-        //if (sendPeekRet == 0) break;
-        //Send_Size = send(Connect_Socket, buffer, sendPeekRet, 0);
 
         if (Send_Size == SOCKET_ERROR)
         {
