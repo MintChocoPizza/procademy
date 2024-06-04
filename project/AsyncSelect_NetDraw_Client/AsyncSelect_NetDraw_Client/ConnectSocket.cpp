@@ -12,7 +12,7 @@
 extern const char* DEFAULT_PORT;
 extern SOCKET Connect_Socket;
 extern WSADATA wsa_Data;
-extern char IP[256];
+ char IP[256];
 
 //--------------------------------------------------------------------
 // 소켓의 포인터를 전달한다. 
@@ -108,6 +108,24 @@ bool connect_Server()
             WSACleanup();
             return false;
         }
+
+        ////////////////////////////////////////////////////////////////////////////
+        // int main() {
+        // WSADATA wsaData;
+        // WSAStartup(MAKEWORD(2, 2), &wsaData);
+        //
+        // HWND hwnd = CreateWindowA("STATIC", "AsyncSocket", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, NULL, NULL);
+        //
+        // SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        //
+        // WSAAsyncSelect(sock, hwnd, WM_SOCKET, FD_CONNECT);
+        //
+        // struct sockaddr_in serverAddr;
+        // serverAddr.sin_family = AF_INET;
+        // serverAddr.sin_port = htons(80); // Example port, change as needed
+        // serverAddr.sin_addr.s_addr = inet_addr("93.184.216.34"); /
+        ////////////////////////////////////////////////////////////////////////////
+
 
         //----------------------------------
         // setsockopt_Linger
