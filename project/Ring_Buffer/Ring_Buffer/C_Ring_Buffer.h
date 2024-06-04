@@ -95,7 +95,7 @@ public:
 	// Parameters: 없음.
 	// Return: 없음.
 	/////////////////////////////////////////////////////////////////////////
-	void ClearBuffer(void) { _In = _Out; }
+	void ClearBuffer(void) { _In = _Out = 0; }
 
 
 
@@ -118,14 +118,20 @@ private:
 	////////////////////////////////////////////////////////////////////////
 	int	DirectEnqueueSize(void)
 	{
-		if (_In >= _Out)
-		{
-			return _Full_Size - _In;
-		}
-		else
-		{
-			return _Out - _In;
-		}
+		int Full_Size = _Full_Size;
+		int In = _In;
+		int Out = _Out;
+		// Enqueue의 경우 _In 바로 다음이 _Out인 경우 꽉 찬 경우이다. 
+		// if (_Use_Size == 0) return 0;
+		if ((In + 1) % Full_Size == Out)
+			return 0;
+
+		if (In <= ((Out + Full_Size - 1) % Full_Size))
+			return ((Out + Full_Size - 1) % Full_Size) - In;
+		else if (In >= Out)
+			return Full_Size - In;
+
+		return 0;
 	}
 	int	DirectDequeueSize(void)
 	{
@@ -147,11 +153,13 @@ private:
 	/////////////////////////////////////////////////////////////////////////
 	int	MoveRear(int iSize)
 	{
+		_Use_Size += iSize;
 		_In = (_In + iSize) % _Full_Size;
 		return _In;
 	}
 	int	MoveFront(int iSize)
 	{
+		_Use_Size -= iSize;
 		_Out = (_Out + iSize) % _Full_Size;
 		return _Out;
 	}
@@ -159,26 +167,26 @@ private:
 
 
 	/////////////////////////////////////////////////////////////////////////
-	// 버퍼의 Front, Out 포인터 얻음.
+	// 버퍼의 Front, _Out 포인터 얻음.
 	//
 	// Parameters: 없음.
 	// Return: (char *) 버퍼 포인터.
 	/////////////////////////////////////////////////////////////////////////
 	char* GetFrontBufferPtr(void)
 	{
-		return _Buffer + _In;
+		return _Buffer + _Out;
 	}
 
 
 	/////////////////////////////////////////////////////////////////////////
-	// 버퍼의 RearPos 포인터 얻음.
+	// 버퍼의 RearPos, _In 포인터 얻음.
 	//
 	// Parameters: 없음.
 	// Return: (char *) 버퍼 포인터.
 	/////////////////////////////////////////////////////////////////////////
 	char* GetRearBufferPtr(void)
 	{
-		return _Buffer + _Out;
+		return _Buffer + _In;
 	}
 
 };
