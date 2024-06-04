@@ -231,6 +231,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         case FD_CONNECT:
         {
 
+            break;
         }
         case FD_CLOSE:
         {
