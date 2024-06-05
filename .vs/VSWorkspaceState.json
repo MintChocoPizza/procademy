@@ -2,10 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
+    "\\project\\AsyncSelect_NetDraw_Client",
     "\\project\\AsyncSelect_NetDraw_Client\\AsyncSelect_NetDraw_Client",
-    "\\project\\Ring_Buffer",
     "\\project\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\project\\Ring_Buffer\\Ring_Buffer\\C_Ring_Buffer.cpp",
+  "SelectedNode": "\\project\\AsyncSelect_NetDraw_Client\\AsyncSelect_NetDraw_Client\\AsyncSelect_NetDraw_Client.cpp",
   "PreviewInSolutionExplorer": false
 }
