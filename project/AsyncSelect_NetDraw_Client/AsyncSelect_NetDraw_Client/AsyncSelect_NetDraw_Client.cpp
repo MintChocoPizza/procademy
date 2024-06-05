@@ -49,8 +49,8 @@ wchar_t IP[256];
 wchar_t Log[256];
 struct sockaddr_in Server_Addr;
 
-C_RING_BUFFER Send_Buffer;
-C_RING_BUFFER Recv_Buffer;
+C_RING_BUFFER *Send_Buffer;
+C_RING_BUFFER *Recv_Buffer;
 
 
 
@@ -75,6 +75,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     // TODO: 여기에 코드를 입력합니다.
     int i_Result;
     WSADATA wsaData;
+
+    Send_Buffer = new C_RING_BUFFER;
+    Recv_Buffer = new C_RING_BUFFER;
 
     i_Result = WSAStartup(MAKEWORD(2, 2), &wsa_Data);
     if (i_Result != 0)
@@ -105,14 +108,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         return FALSE;
     }
-    i_Result = WSAAsyncSelect(Connect_Socket, hWnd, UM_NETWORK, FD_CONNECT | FD_CLOSE | FD_READ | FD_WRITE);
-    if (i_Result == SOCKET_ERROR)
-    {
-        swprintf_s(Log, L"WSAAsyncSelect failed with error: %ld \n", WSAGetLastError());
-        c_Save_Log.saveLog(Log);
-        WSACleanup();
-        return false;
-    }
+
+    //i_Result = WSAAsyncSelect(Connect_Socket, hWnd, UM_NETWORK, FD_CONNECT | FD_CLOSE | FD_READ | FD_WRITE);
+    //if (i_Result == SOCKET_ERROR)
+    //{
+    //    swprintf_s(Log, L"WSAAsyncSelect failed with error: %ld \n", WSAGetLastError());
+    //    c_Save_Log.saveLog(Log);
+    //    WSACleanup();
+    //    return false;
+    //}
 
 
 
@@ -173,6 +177,8 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
+    int i_Result;
+
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
    hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
@@ -182,6 +188,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    {
       return FALSE;
    }
+
+
+
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
@@ -230,12 +239,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
         case FD_CONNECT:
         {
-
             break;
         }
         case FD_CLOSE:
         {
-            // 연결 종료 알아서
+            swprintf_s(Log, L"연결이 종료되었습니다.  \n");
+            c_Save_Log.saveLog(Log);
+
+            closesocket(Connect_Socket);
+            WSACleanup();
+
+            delete Send_Buffer;
+            delete Recv_Buffer;
+
+            PostMessage(hWnd, WM_DESTROY, 0, 0);
+            break;
         }
         case FD_WRITE:
         {
@@ -255,6 +273,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     break;
     case WM_CREATE:
     {
+        int i_Result = WSAAsyncSelect(Connect_Socket, hWnd, UM_NETWORK, FD_CONNECT | FD_CLOSE | FD_READ | FD_WRITE);
+        if (i_Result == SOCKET_ERROR)
+        {
+            swprintf_s(Log, L"WSAAsyncSelect failed with error: %ld \n", WSAGetLastError());
+            c_Save_Log.saveLog(Log);
+            WSACleanup();
+            return false;
+        }
+
         DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), hWnd, (DLGPROC)MyDialogBox);
     }
     break;
@@ -309,8 +336,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             packet.iEndX = x;
             packet.iEndY = y;
 
-            Send_Buffer.Enqueue((const char*)&header, sizeof(header));
-            Send_Buffer.Enqueue((const char*)&packet, sizeof(packet));
+            Send_Buffer->Enqueue((const char*)&header, sizeof(header));
+            Send_Buffer->Enqueue((const char*)&packet, sizeof(packet));
 
             WriteEvent();
         }
@@ -362,8 +389,7 @@ BOOL CALLBACK MyDialogBox(HWND hwndDig, UINT message, WPARAM wParam, LPARAM IPar
                             swprintf_s(Log, L"WSAEWOULDBLOCK to server  %ld \n", WSAGetLastError());
                             c_Save_Log.saveLog(Log);
                         }
-
-                        if (WSAGetLastError() != WSAEWOULDBLOCK)
+                        else if (WSAGetLastError() != WSAEWOULDBLOCK)
                         {
                             swprintf_s(Log, L"Unable to connect to server  %ld \n", WSAGetLastError());
                             c_Save_Log.saveLog(Log);
@@ -432,11 +458,11 @@ void WriteEvent()
     while (1)
     {
         // 링 버퍼에 있는 것을 전부 보내야 한다. 
-        if (Send_Buffer.GetUseSize() == 0)
+        if (Send_Buffer->GetUseSize() == 0)
             return;
         
         // 링버퍼는 전부 차지 않는 다는 가정으로 만들어졌다. 고로 끊어진 메시지는 있을 수 없다. 
-         Send_Size = send(Connect_Socket, Send_Buffer.GetFrontBufferPtr(), Send_Buffer.DirectDequeueSize(), 0);
+         Send_Size = send(Connect_Socket, Send_Buffer->GetFrontBufferPtr(), Send_Buffer->DirectDequeueSize(), 0);
 
         if (Send_Size == SOCKET_ERROR)
         {
@@ -453,7 +479,7 @@ void WriteEvent()
             b_Flag = false;
             break;
         }
-        Send_Buffer.MoveFront(Send_Size);
+        Send_Buffer->MoveFront(Send_Size);
     }
 }
 void ReadEvent()
@@ -467,7 +493,7 @@ void ReadEvent()
     st_HEADER header;
     st_DRAW_PACKET packet;
 
-    Recv_Size = recv(Connect_Socket, Recv_Buffer.GetRearBufferPtr(), Recv_Buffer.DirectEnqueueSize(), 0);
+    Recv_Size = recv(Connect_Socket, Recv_Buffer->GetRearBufferPtr(), Recv_Buffer->DirectEnqueueSize(), 0);
     if (Recv_Size == SOCKET_ERROR)
     {
         if (WSAGetLastError() == WSAEWOULDBLOCK)
@@ -489,7 +515,7 @@ void ReadEvent()
         }
     }
 
-    Recv_Buffer.MoveRear(Recv_Size);
+    Recv_Buffer->MoveRear(Recv_Size);
 
 
     // Recv버퍼에 받은 내용을 바로 그린다.
@@ -497,20 +523,20 @@ void ReadEvent()
     while (1)
     {
         // 헤더도 완성하지 못했다면 반환한다. 
-        if (Recv_Buffer.GetUseSize() < sizeof(st_DRAW_PACKET)) break;
+        if (Recv_Buffer->GetUseSize() < sizeof(st_DRAW_PACKET)) break;
 
         // 헤더를 열어서 사이즈를 확인한다. 
-        Peek_Result = Recv_Buffer.Peek((char*)&header, sizeof(st_HEADER), true);
+        Peek_Result = Recv_Buffer->Peek((char*)&header, sizeof(st_HEADER), true);
         if (Peek_Result == 0) break;
 
         // (헤더 + 메시지) 를 완성하지 못했다면 반환한다. 
-        if (Recv_Buffer.GetUseSize() < sizeof(st_HEADER) + header.Len) break;
+        if (Recv_Buffer->GetUseSize() < sizeof(st_HEADER) + header.Len) break;
 
         //---------------------------------------------
         // 메시지 완성됨 == 메시지를 꺼내서 그린다. 
-        Recv_Buffer.MoveFront(sizeof(st_HEADER));
+        Recv_Buffer->MoveFront(sizeof(st_HEADER));
 
-        Dq_Result = Recv_Buffer.Dequeue((char*)&packet, header.Len);
+        Dq_Result = Recv_Buffer->Dequeue((char*)&packet, header.Len);
         // 혹시 모를 에러체크, 싱글 스레드에서는 일어날 일이 없다.
         // 근데 Dequeue로 이미 뺏는데 뻑나면, 뭐함???? 이미 망했는데???
         if (Dq_Result < header.Len)

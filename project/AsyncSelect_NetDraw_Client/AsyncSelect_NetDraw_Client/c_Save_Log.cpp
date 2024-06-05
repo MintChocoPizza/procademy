@@ -44,7 +44,7 @@ void C_SAVE_LOG::saveLog(const wchar_t* Log_Str)
 	FILE* p_File;
 	errno_t err;
 
-	err = _wfopen_s(&p_File, timebuf, L"wt, ccs=UTF-16LE");
+	err = _wfopen_s(&p_File, timebuf, L"at, ccs=UTF-16LE");
 	if (err != 0 || p_File == NULL)
 	{
 		wprintf_s(L"파일 열기 실패 \n");
