@@ -1,11 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\procade_homeWork\\hw11_Check_Back_Log_Client\\hw11_Check_Back_Log_Client",
     "\\project",
+    "\\project\\AsyncSelect_NetDraw_Client\\AsyncSelect_NetDraw_Client",
     "\\project\\Ring_Buffer",
     "\\project\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\project\\Ring_Buffer\\Ring_Buffer.sln",
+  "SelectedNode": "\\project\\Ring_Buffer\\Ring_Buffer\\C_Ring_Buffer.cpp",
   "PreviewInSolutionExplorer": false
 }

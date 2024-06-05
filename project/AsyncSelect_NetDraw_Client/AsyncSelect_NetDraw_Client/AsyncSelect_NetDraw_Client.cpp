@@ -336,8 +336,37 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             packet.iEndX = x;
             packet.iEndY = y;
 
-            Send_Buffer->Enqueue((const char*)&header, sizeof(header));
-            Send_Buffer->Enqueue((const char*)&packet, sizeof(packet));
+            i_Result = Send_Buffer->Enqueue((const char*)&header, sizeof(header));
+            if (i_Result == 0)
+            {
+                swprintf_s(Log, L"SendBuff가 다 차서 종료되었습니다.  \n");
+                c_Save_Log.saveLog(Log);
+
+                closesocket(Connect_Socket);
+                WSACleanup();
+
+                delete Send_Buffer;
+                delete Recv_Buffer;
+
+                PostMessage(hWnd, WM_DESTROY, 0, 0);
+                break;
+            }
+
+            i_Result = Send_Buffer->Enqueue((const char*)&packet, sizeof(packet));
+            if (i_Result == 0)
+            {
+                swprintf_s(Log, L"SendBuff가 다 차서 종료되었습니다.  \n");
+                c_Save_Log.saveLog(Log);
+
+                closesocket(Connect_Socket);
+                WSACleanup();
+
+                delete Send_Buffer;
+                delete Recv_Buffer;
+
+                PostMessage(hWnd, WM_DESTROY, 0, 0);
+                break;
+            }
 
             WriteEvent();
         }
@@ -500,6 +529,9 @@ void ReadEvent()
         {
             swprintf_s(Log, L"recv WSAEWOULDBLOCK failed with error: %ld \n", WSAGetLastError());
             c_Save_Log.saveLog(Log);
+            
+            // 안뜰거 같은데
+            __debugbreak();
             return;
         }
 
@@ -532,6 +564,19 @@ void ReadEvent()
         // (헤더 + 메시지) 를 완성하지 못했다면 반환한다. 
         if (Recv_Buffer->GetUseSize() < sizeof(st_HEADER) + header.Len) break;
 
+        // (헤더 + 메시지) 크기가 링버퍼의 최대 크기보다 크다면 연결을 끊는다. 
+        if (header.Len + sizeof(header) > Recv_Buffer->GetBufferSize())
+        {
+            ReleaseDC(hWnd, hdc);
+            swprintf_s(Log, L"recv(헤더 + 메시지)의 크기가 버퍼 총 사이즈보다 크다. with error. \n");
+            c_Save_Log.saveLog(Log);
+
+            closesocket(Connect_Socket);
+            WSACleanup();
+            PostMessage(hWnd, WM_DESTROY, 0, 0);
+            return;
+        }
+
         //---------------------------------------------
         // 메시지 완성됨 == 메시지를 꺼내서 그린다. 
         Recv_Buffer->MoveFront(sizeof(st_HEADER));
@@ -554,5 +599,4 @@ void ReadEvent()
 
     }
     ReleaseDC(hWnd, hdc);
-
 }
