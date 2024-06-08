@@ -30,6 +30,7 @@ public:
 
 	// 오버로딩: 과적하다. 하나의 함수에 여러가지 기능을 '과적하다'
 	void saveLog(const wchar_t* Log_Str);
+	void printfLog(const wchar_t* format, ...);
 
 private:
 	wchar_t timebuf[26];
@@ -37,7 +38,7 @@ private:
 
 };
 
-extern C_SAVE_LOG c_Save_Log;
+// extern C_SAVE_LOG c_Save_Log;
 
 
 #endif // !__C_SAVE_LOG_H__

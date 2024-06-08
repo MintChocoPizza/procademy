@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <tchar.h>
+#include <stdarg.h>
 
 #include "c_Save_Log.h"
 
@@ -53,5 +54,31 @@ void C_SAVE_LOG::saveLog(const wchar_t* Log_Str)
 
 	fwprintf_s(p_File, Log_Str);
 
+	fclose(p_File);
+}
+
+void C_SAVE_LOG::printfLog(const wchar_t* format, ...)
+{
+	FILE* p_File;
+	errno_t err;
+
+	err = _wfopen_s(&p_File, timebuf, L"wt, ccs=UTF-16LE");
+	if (err != 0 || p_File == NULL)
+	{
+		wprintf_s(L"파일 열기 실패 \n");
+		throw;
+	}
+
+	// 가변 인자 목록 선언 및 초기화
+	va_list args;
+	va_start(args, format);
+
+	// 가변 인자를 파일에 출력
+	vfwprintf(p_File, format, args);
+
+	// 가변 인자 목록 종료
+	va_end(args);
+
+	// 파일 닫기
 	fclose(p_File);
 }
