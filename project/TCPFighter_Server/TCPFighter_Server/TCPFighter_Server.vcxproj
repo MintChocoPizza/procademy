@@ -146,6 +146,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="NetWork.h" />
     <ClInclude Include="PacketDefine.h" />
+    <ClInclude Include="Set_Log.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

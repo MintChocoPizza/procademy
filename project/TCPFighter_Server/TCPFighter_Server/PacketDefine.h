@@ -22,6 +22,8 @@
 #ifndef __PACKET_DEFINE_H__
 #define __PACKET_DEFINE_H__
 
+constexpr int dfNETWORK_PACKET_CODE = 0x89;
+
 #pragma pack(push, 1)
 //---------------------------------------------------------------
 // 패킷헤더.
@@ -407,10 +409,10 @@ bool netPacketProc_SC_CREATE_OTHER_CHARACTER(st_SESSION* p_Session, char* pHeade
 bool netPacketProc_SC_DELETE_CHARACTER(st_SESSION* p_Session, char* pHeader, char* pPacket);
 
 bool netPacketProc_CS_MOVE_START(st_SESSION* p_Session, char* pPacket);
-bool netPacketProc_SC_MOVE_START(st_SESSION* p_Session, char* pHeader, char* pPacket);
+bool netPacketProc_SC_MOVE_START(char* pHeader, char* pPacket, char Direction, __int32 ID, short X, short Y);
 
 bool netPacketProc_CS_MOVE_STOP(st_SESSION* p_Session, char* pPacket);
-bool netPacketProc_SC_MOVE_STOP(st_SESSION* p_Session, char* pHeader, char* pPacket);
+bool netPacketProc_SC_MOVE_STOP(char* pHeader, char* pPacket, char Direction, __int32 ID, short X, short Y);
 
 bool netPacketProc_CS_ATTACK1(st_SESSION* p_Session, char* pPacket);
 bool netPacketProc_SC_ATTACK1(st_SESSION* p_Session, char* pHeader, char* pPacket);
@@ -418,7 +420,7 @@ bool netPacketProc_SC_ATTACK1(st_SESSION* p_Session, char* pHeader, char* pPacke
 bool netPacketProc_CS_ATTACK2(st_SESSION* p_Session, char* pPacket);
 bool netPacketProc_SC_ATTACK2(st_SESSION* p_Session, char* pHeader, char* pPacket);
 
-bool netPakcetProc_CS_ATTACK3(st_SESSION* p_Session, char* pPacket);
+bool netPacketProc_CS_ATTACK3(st_SESSION* p_Session, char* pPacket);
 bool netPacketProc_SC_ATTACK3(st_SESSION* p_Session, char* pHeader, char* pPacket);
 
 bool netPacketProc_SC_DAMAGE(st_SESSION* p_Session, st_SESSION* p_Damage_Session, char* pHeader, char* pPacket, int Damage);

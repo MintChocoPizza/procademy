@@ -9,12 +9,13 @@
 
 C_SAVE_LOG c_Save_Log;
 
-C_SAVE_LOG::C_SAVE_LOG() 
+C_SAVE_LOG::C_SAVE_LOG() : isWrite(false)
 {
 	FILE* p_File;
 	errno_t err;
 	struct tm newtime;
 	__time64_t long_time;
+	timebuf[0] = '\0';
 
 	_time64(&long_time);
 	err = _localtime64_s(&newtime, &long_time);
@@ -37,7 +38,10 @@ C_SAVE_LOG::C_SAVE_LOG()
 
 C_SAVE_LOG::~C_SAVE_LOG()
 {
-
+	if (isWrite == false)
+	{
+		_wremove(timebuf);
+	}
 }
 
 void C_SAVE_LOG::saveLog(const wchar_t* Log_Str)
@@ -45,7 +49,7 @@ void C_SAVE_LOG::saveLog(const wchar_t* Log_Str)
 	FILE* p_File;
 	errno_t err;
 
-	err = _wfopen_s(&p_File, timebuf, L"wt, ccs=UTF-16LE");
+	err = _wfopen_s(&p_File, timebuf, L"at, ccs=UTF-16LE");
 	if (err != 0 || p_File == NULL)
 	{
 		wprintf_s(L"파일 열기 실패 \n");
@@ -53,6 +57,8 @@ void C_SAVE_LOG::saveLog(const wchar_t* Log_Str)
 	}
 
 	fwprintf_s(p_File, Log_Str);
+
+	isWrite = true;
 
 	fclose(p_File);
 }
@@ -62,7 +68,7 @@ void C_SAVE_LOG::printfLog(const wchar_t* format, ...)
 	FILE* p_File;
 	errno_t err;
 
-	err = _wfopen_s(&p_File, timebuf, L"wt, ccs=UTF-16LE");
+	err = _wfopen_s(&p_File, timebuf, L"at, ccs=UTF-16LE");
 	if (err != 0 || p_File == NULL)
 	{
 		wprintf_s(L"파일 열기 실패 \n");
@@ -78,6 +84,8 @@ void C_SAVE_LOG::printfLog(const wchar_t* format, ...)
 
 	// 가변 인자 목록 종료
 	va_end(args);
+
+	isWrite = true;
 
 	// 파일 닫기
 	fclose(p_File);

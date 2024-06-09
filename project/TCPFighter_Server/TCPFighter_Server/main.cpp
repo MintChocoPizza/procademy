@@ -39,7 +39,7 @@ int wmain(int argc, wchar_t* argv[])
 
     while (!g_bShutdown)
     {
-        // netIOProcess();
+        netIOProcess();
 
 
 

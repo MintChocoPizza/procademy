@@ -1,4 +1,5 @@
 
+#include <map>
 
 #include <WinSock2.h>
 #include <Windows.h>
@@ -6,6 +7,7 @@
 
 #pragma comment (lib, "Ws2_32.lib")
 
+#include "Set_Log.h"
 #include "CList.h"
 #include "c_Save_Log.h"
 #include "C_Ring_Buffer.h"
@@ -13,11 +15,34 @@
 #include "PacketDefine.h"
 #include "main.h"
 
+
+
+
+/////////////////////////////////////////////////////////////////////
+// 
+// WSAAccept, accept
+//-연결 요청 받지 못함
+//
+//closesocket
+//- SO_LINGER옵션에 타임아웃
+//
+//WSAConnect, connect
+//- 연결 시도
+//
+//recv함수들
+//- 데이터 아직 못받음 : 다시 요청 해야함
+//
+//send함수들
+//- 전송할 버퍼 공간 없음.나중에 다시 시도.
+// 
+/////////////////////////////////////////////////////////////////////
+
 const char* DEFAULT_PORT = "5000";
 
-
-CList<st_SESSION*> g_Session_List;
+std::map<DWORD, st_SESSION*> g_Session_List;
+// std::map<DWORD, st_SESSION*> g_Disconnect_List;
 CList<st_SESSION*> g_Disconnect_List;
+
 DWORD g_Session_ID;
 
 
@@ -46,6 +71,7 @@ bool init_Listen_Socket(void* Listen_Socket, void* wsa_Data)
 		c_Save_Log.printfLog(L"WSAStartup failed with error: %d \n", Ret_WSAStartup);
 		return false;
 	}
+	printf_s("WSAStartup # \n");
 
 	//---------------------------------------------------
 	// SetUp hints 
@@ -105,6 +131,7 @@ bool init_Listen_Socket(void* Listen_Socket, void* wsa_Data)
 		WSACleanup();
 		return false;
 	}
+	printf_s("Bind OK # Port: %s \n", DEFAULT_PORT);
 
 	freeaddrinfo(result);
 
@@ -119,6 +146,7 @@ bool init_Listen_Socket(void* Listen_Socket, void* wsa_Data)
 		WSACleanup();
 		return false;
 	}
+	printf_s("Listen OK # \n");
 
 	//---------------------------------------------------
 	// 넌블로킹 소켓으로 전환
@@ -141,7 +169,7 @@ void netIOProcess(void)
 {
 	int i_Result;
 
-	CList<st_SESSION*>::iterator iter;
+	std::map<DWORD, st_SESSION*>::iterator iter;
 
 	st_SESSION* pSession;
 
@@ -164,7 +192,7 @@ void netIOProcess(void)
 	//------------------------------------------
 	for (iter = g_Session_List.begin(); iter != g_Session_List.end(); ++iter)
 	{
-		pSession = *iter;
+		pSession = (*iter).second;
 		//------------------------------------------
 		// 해당 클라이언트 Read Set 등록 / SendQ 에 데이터가 있다면 Write Set 등록
 		//------------------------------------------
@@ -198,7 +226,7 @@ void netIOProcess(void)
 		//------------------------------------------
 		for (iter = g_Session_List.begin(); iter != g_Session_List.end(); ++iter)
 		{
-			pSession = *iter;
+			pSession = (*iter).second;
 			if (FD_ISSET(pSession->Socket, &ReadSet))
 			{
 				netProc_Recv(pSession);
@@ -216,11 +244,24 @@ void netIOProcess(void)
 
 void netProc_Accept(void)
 {
+#ifdef DEFAULT_LOG
+	char host[NI_MAXHOST];
+#endif // DEFAULT_LOG
+
+	std::map<DWORD, st_SESSION*>::iterator iter;
+
 	SOCKET Client_Socket;
 
 	st_SESSION* st_New_Player;
 	sockaddr_in Clinet_Addr;
-	int Client_Addr_Len = NULL;
+	int Client_Addr_Len = sizeof(Clinet_Addr);
+
+	st_PACKET_HEADER header_SC_CRESTE_MY_CHARACTER;
+	st_PACKET_HEADER header_SC_CREATE_OTHER_CHARACTER;
+	st_PACKET_HEADER header_for_me_SC_CREATE_OTHER_CHARACTER;
+	st_PACKET_SC_CREATE_MY_CHARACTER		packet_SC_CRESTE_MY_CHARACTER;
+	st_PACKET_SC_CREATE_OTHER_CHARACTER		packet_SC_CREATE_OTHER_CHARACTER;
+	st_PACKET_SC_CREATE_OTHER_CHARACTER		packet_for_me_SC_CREATE_OTHER_CHARACTER;
 
 	Client_Socket = accept(g_Listen_Socket, (sockaddr*)&Clinet_Addr, &Client_Addr_Len);
 	if (Client_Socket == INVALID_SOCKET)
@@ -228,27 +269,73 @@ void netProc_Accept(void)
 		if (Client_Socket != WSAEWOULDBLOCK)
 		{
 			c_Save_Log.printfLog(L"ioctlsocket failed with error: %ld \n", WSAGetLastError());
-			return;
+			DebugBreak();
+			__debugbreak();
 		}
 	}
 
 	st_New_Player = new st_SESSION;
 	init_Session(Client_Socket, st_New_Player);
-	g_Session_List.push_back(st_New_Player);
+	// g_Session_List.push_back(st_New_Player);
+	g_Session_List.insert(std::pair<DWORD, st_SESSION*>(st_New_Player->dwSessionID, st_New_Player));
 
+#ifdef DEFAULT_LOG
+	// 접속한 클라이언트 정보 출력
+	//if (getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0)
+	//{
+	//	std::cout << host << " : " << service << "에 연결되었습니다." << std::endl;
+	//}
+	inet_ntop(AF_INET, &Clinet_Addr.sin_addr, host, NI_MAXHOST);
+	printf_s("Conncet # IP:%s : Port: %d / SessionID: %d \n", host, ntohs(Clinet_Addr.sin_port), st_New_Player->dwSessionID);
+#endif // DEFAULT_LOG
+
+
+
+	//---------------------------------------------------------------------------------
 	// 캐릭터 생성 메시지 생성
-	
-
-
-	
-
-
 	// 1. 새로운 플레이어 생성 메시지 보내기.
 	// 2. 나를 제외한 모든 플레이어에게 나의 생성 메시지 보내기. 
 	// 3. 나에게 다른 플레이어들에 대한 생성 메시지 보내기.
+	//---------------------------------------------------------------------------------
+#ifdef DEFAULT_LOG
+	printf_s("# PACKET_CONNECT # SessionID: %d \n", st_New_Player->dwSessionID);
+#endif // DEFAULT_LOG
+	netPacketProc_SC_CREATE_MY_CHARACTER(st_New_Player, (char*)&header_SC_CRESTE_MY_CHARACTER, (char*)&packet_SC_CRESTE_MY_CHARACTER);
+	netSendUnicast(st_New_Player, (char*)&header_SC_CRESTE_MY_CHARACTER, (char*)&packet_SC_CRESTE_MY_CHARACTER, sizeof(packet_SC_CRESTE_MY_CHARACTER));
+#ifdef DEFAULT_LOG
+	printf_s("Create Character SessionID: %d    X:%d    Y:%d \n", st_New_Player->dwSessionID, st_New_Player->shX, st_New_Player->shY);
+#endif // DEFAULT_LOG
+
+	netPacketProc_SC_CREATE_OTHER_CHARACTER(st_New_Player, (char*)&header_SC_CREATE_OTHER_CHARACTER, (char*)&packet_SC_CREATE_OTHER_CHARACTER);
+	netSendBroadcast(st_New_Player, (char*)&header_SC_CREATE_OTHER_CHARACTER, (char*)&packet_SC_CREATE_OTHER_CHARACTER, sizeof(packet_SC_CREATE_OTHER_CHARACTER));
+#ifdef DETAILS_LOG
+	printf_s("Create Character SessionID : %d to Other \n", st_New_Player->dwSessionID);
+#endif // DETAILS_LOG
 
 
+	// 3. 나에게 다른 플레이어들에 대한 생성 메시지 보내기.
+	for (iter = g_Session_List.begin(); iter != g_Session_List.end(); ++iter)
+	{
+		if ((*iter).second == st_New_Player) continue;
 
+		// 일단 그냥 생성 메시지만 보낸다.
+		netPacketProc_SC_CREATE_OTHER_CHARACTER((*iter).second, (char*)&header_for_me_SC_CREATE_OTHER_CHARACTER, (char*)&packet_for_me_SC_CREATE_OTHER_CHARACTER);
+		netSendUnicast(st_New_Player, (char*)&header_for_me_SC_CREATE_OTHER_CHARACTER, (char*)&packet_for_me_SC_CREATE_OTHER_CHARACTER, sizeof(packet_for_me_SC_CREATE_OTHER_CHARACTER));
+
+
+		///////////////////////////////
+		// 추후 새로운 참가자가 들어 왔을 때 누군가 움직이고 있었다면 움직이는 동작을 이어서 보여주어야 한다.
+		//  
+		// 
+		///////////////////////////////
+		if ((*iter).second->dwAction != -1)
+		{
+			
+		}
+	}
+#ifdef DETAILS_LOG
+	printf_s("Create Character SessionID : %d from Other \n", st_New_Player->dwSessionID);
+#endif // DETAILS_LOG
 }
 
 void init_Session(SOCKET Client_Socket, st_SESSION* st_New_Player)
@@ -257,51 +344,169 @@ void init_Session(SOCKET Client_Socket, st_SESSION* st_New_Player)
 	st_New_Player->chHP = 100;
 	st_New_Player->byDirection = dfPACKET_MOVE_DIR_LL;
 	st_New_Player->dwSessionID = ++g_Session_ID;
-	st_New_Player->dwAction = NULL;
+	st_New_Player->dwAction = -1;
 	st_New_Player->shY = rand() % (dfRANGE_MOVE_BOTTOM - dfRANGE_MOVE_TOP + 1) + dfRANGE_MOVE_TOP;
 	st_New_Player->shX = rand() % (dfRANGE_MOVE_RIGHT - dfRANGE_MOVE_LEFT + 1) + dfRANGE_MOVE_LEFT;
 }
 
 void netProc_Recv(st_SESSION* pSession)
 {
+	// Recv버퍼의 모든 메시지를 Recv링버퍼로 가지고 온다. 
+	
+	int Recv_Size;
+	int err;
+	int Ret_Peek;
+	int Ret_Dq;
+
+	st_PACKET_HEADER header;
+	char Temp_Packet_Buffer[64];
+
+	Recv_Size = recv(pSession->Socket, pSession->RecvQ.GetRearBufferPtr(), pSession->RecvQ.DirectEnqueueSize(), 0);
+	if (Recv_Size == 0)
+	{
+		// 아마도 상대방의 연결 종료
+#ifdef DEFAULT_LOG
+		printf_s("Disconnect # SessionID: %d \n", pSession->dwSessionID);
+#endif // DEFAULT_LOG
+		PushDisconnectList(pSession);
+	}
+	else if (Recv_Size == SOCKET_ERROR)
+	{
+		err = WSAGetLastError();
+		if (err == WSAEWOULDBLOCK)
+		{
+			// Selete로 Recv 할 수 있는 상황에서 WSAEWOULDBLOCK은 절대로 뜨면 안된다. 그러니까 중지한다. 
+			c_Save_Log.printfLog(L"Send failed with error: %ld \n", err);
+			__debugbreak();
+		}
+		else
+		{
+			c_Save_Log.printfLog(L"Srnd failed with error: %ld \n", err);
+			__debugbreak();
+		}
+	}
+	pSession->RecvQ.MoveRear(Recv_Size);
+
+
+	// *완료패킷 처리 부
+	// 완료패킷 처리 부분은 Recv()에 들어있는 모든 완성 패킷을 처리 해야 함
+	while (1)
+	{
+		// 기저 사례1. RecvQ에 최소한의 사이즈가 있는지 확인. 조건 - 헤더사이즈 초과
+		if (pSession->RecvQ.GetUseSize() < sizeof(st_PACKET_HEADER)) break;
+		
+		// 헤더를 열어 페이로드 사이즈를 확인한다.
+		Ret_Peek = pSession->RecvQ.Peek((char*)&header, sizeof(st_PACKET_HEADER), true);
+
+		// 기저 사례2. Header에서 byCode를 확인한다. 다르면 연결 끊기
+		if (header.byCode != 0x89)
+		{
+#ifdef DEFAULT_LOG
+			printf_s("Header code Errer # SessionID: %d \n", pSession->dwSessionID);
+#endif // DEFAULT_LOG
+			PushDisconnectList(pSession);
+			break;
+		}
+
+		// 기저 사례3. (헤더 + 메시지)를 완성하지 못했다면 반환한다. 
+		if (pSession->RecvQ.GetUseSize() < sizeof(st_PACKET_HEADER) + header.bySize) break;
+
+		// 기저 사례4. (헤더 + 메시지)크기가 링버퍼의 최대 크기보다 크다면 연결 끊기
+		if (pSession->RecvQ.GetBufferSize() < sizeof(st_PACKET_HEADER) + header.bySize)
+		{
+#ifdef DEFAULT_LOG
+			printf_s("Header Size Errer # SessionID: %d \n", pSession->dwSessionID);
+#endif // DEFAULT_LOG
+			PushDisconnectList(pSession);
+			break;
+		}
+
+		//---------------------------------------------
+		// 메시지 완성됨 == 메시지를 꺼내서 처리한다. '
+		pSession->RecvQ.MoveFront(sizeof(st_PACKET_HEADER));
+
+		Ret_Dq = pSession->RecvQ.Dequeue(Temp_Packet_Buffer, header.bySize);
+		if (Ret_Dq < header.bySize)
+		{
+			// 혹시 모를 에러체크, 싱글 스레드에서는 일어날 일이 없다. 
+			c_Save_Log.printfLog(L"Dequeue failed with error \n");
+			__debugbreak();
+		}
+		
+		PacketProc(pSession, header.byType, Temp_Packet_Buffer);
+	}
 }
 
 void netProc_Send(st_SESSION* pSession)
 {
+	// Send의 경우 한번에 링버퍼에 있는 모든 메시지를 전송하면 된다.
+	
+	int Send_Size;
+	int err;
+
+	while (1)
+	{
+		if (pSession->SendQ.GetUseSize() == 0)
+			break;
+
+		Send_Size = send(pSession->Socket, pSession->SendQ.GetFrontBufferPtr(), pSession->SendQ.DirectDequeueSize(), 0);
+
+		if (Send_Size == SOCKET_ERROR)
+		{
+			err = WSAGetLastError();
+			
+			// Send의 WSAEWOULDBLOCK 이 나오면 Send Buffer이 가득 찼다 -> 상대 Recv Buffer도 가득 찼다 == 그냥 연결을 끊으면 된다 
+			c_Save_Log.printfLog(L"Srnd failed with error: %ld \n", err);
+			__debugbreak();
+		}
+		pSession->SendQ.MoveFront(Send_Size);
+	}
 }
 
-void netSendUnicast(st_SESSION* pSession, st_PACKET_HEADER *header, char* packet, int Packet_Len)
+void netSendUnicast(st_SESSION* pSession, char* header, char* packet, int Packet_Len)
 {
 	int Ret_Header;
 	int Ret_Packet;
 
-	Ret_Header = pSession->SendQ.Enqueue((char*)header, sizeof(st_PACKET_HEADER));
+	Ret_Header = pSession->SendQ.Enqueue(header, sizeof(st_PACKET_HEADER));
 	if (Ret_Header == 0)
 	{
 		c_Save_Log.printfLog(L"Header Unicast failed with error: \n");
-		g_Disconnect_List.push_back(pSession);
+#ifdef DEFAULT_LOG
+		printf_s("Disconnect Header Unicast failed with error # SessionID: %d \n", pSession->dwSessionID);
+#endif // DEFAULT_LOG
+		PushDisconnectList(pSession);
 	}
 
 	Ret_Packet = pSession->SendQ.Enqueue(packet, Packet_Len);
 	if(Ret_Packet == 0)
 	{
 		c_Save_Log.printfLog(L"Packet Unicast failed with error: \n");
-		g_Disconnect_List.push_back(pSession);
+#ifdef DEFAULT_LOG
+		printf_s("Disconnect Packet Unicast failed with error # SessionID: %d \n", pSession->dwSessionID);
+#endif // DEFAULT_LOG
+		PushDisconnectList(pSession);
 	}
 }
-void netSendBroadcast(st_SESSION* pSession, st_PACKET_HEADER* header, char* packet, int Packet_Len)
+void netSendBroadcast(st_SESSION* pSession, char* header, char* packet, int Packet_Len)
 {
-	CList<st_SESSION*>::iterator iter;
+	// CList<st_SESSION*>::iterator iter;
+	std::map<DWORD, st_SESSION*>::iterator iter;
 	st_SESSION* p_Temp_Session;
 
 	for (iter = g_Session_List.begin(); iter != g_Session_List.end(); ++iter)
 	{
-		p_Temp_Session = *iter;
+		p_Temp_Session = (*iter).second;
 
 		if (p_Temp_Session == pSession) continue;
 
-		netSendUnicast(pSession, header, packet, Packet_Len);
+		netSendUnicast(p_Temp_Session, header, packet, Packet_Len);
 	}
+}
+
+void PushDisconnectList(st_SESSION* pSession)
+{
+	g_Disconnect_List.push_back(pSession);
 }
 
 void Disconnect()
@@ -315,12 +520,67 @@ void Disconnect()
 	{
 		p_Session = *iter;
 		netPacketProc_SC_DELETE_CHARACTER(p_Session, (char*)&header, (char*)&packet);
-		netSendBroadcast(p_Session, &header, (char*)&packet, sizeof(st_PACKET_SC_DELETE_CHARACTER));
+		netSendBroadcast(p_Session, (char*)&header, (char*)&packet, sizeof(st_PACKET_SC_DELETE_CHARACTER));
 	}
 	
 
 	for (iter = g_Disconnect_List.begin(); iter != g_Disconnect_List.end(); ++iter)
 	{
-		
+		// 모든 삭제 메시지 전송이 끝나고 나면 
+		// 저장되어 있는 모든 소켓을 삭제한다. 
+
+		// 1. 소켓을 지운다. 
+		// 2. map 에서 지운다. 
+
+		closesocket((*iter)->Socket);
+		g_Session_List.erase((*iter)->dwSessionID);
 	}
+}
+
+bool PacketProc(st_SESSION* pSession, BYTE byPacketType, char* pPacket)
+{
+	switch (byPacketType)
+	{
+	case dfPACKET_CS_MOVE_START:
+	{
+		return netPacketProc_CS_MOVE_START(pSession, pPacket);
+		break;
+	}
+	case dfPACKET_CS_MOVE_STOP:
+	{
+		return netPacketProc_CS_MOVE_STOP(pSession, pPacket);
+		break;
+	}
+	case dfPACKET_CS_ATTACK1:
+	{
+		return netPacketProc_CS_ATTACK1(pSession, pPacket);
+		break;
+	}
+	case dfPACKET_CS_ATTACK2:
+	{
+		return netPacketProc_CS_ATTACK2(pSession, pPacket);
+		break;
+	}
+	case dfPACKET_CS_ATTACK3:
+	{
+		return netPacketProc_CS_ATTACK3(pSession, pPacket);
+		break;
+	}
+	case dfPACKET_CS_SYNC:
+	{
+		return false;
+		break;
+	}
+	default:
+	{
+		return false;
+		break;
+	}
+	}
+
+}
+
+void CreateMessage()
+{
+
 }
