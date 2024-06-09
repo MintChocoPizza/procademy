@@ -2,9 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\OnlineStar_Server",
-    "\\project\\OnlineStar_Server\\OnlineStar_Server"
+    "\\project\\Ring_Buffer",
+    "\\project\\Ring_Buffer\\Ring_Buffer",
+    "\\project\\Save_Log"
   ],
-  "SelectedNode": "\\project\\OnlineStar_Server\\OnlineStar_Server\\main.cpp",
+  "SelectedNode": "\\project\\Ring_Buffer\\Ring_Buffer.sln",
   "PreviewInSolutionExplorer": false
 }
