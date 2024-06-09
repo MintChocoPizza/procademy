@@ -9,7 +9,7 @@
 
 C_SAVE_LOG c_Save_Log;
 
-C_SAVE_LOG::C_SAVE_LOG() 
+C_SAVE_LOG::C_SAVE_LOG() : isWrite(false)
 {
 	FILE* p_File;
 	errno_t err;
@@ -37,7 +37,10 @@ C_SAVE_LOG::C_SAVE_LOG()
 
 C_SAVE_LOG::~C_SAVE_LOG()
 {
-
+	if (isWrite == false)
+	{
+		_wremove(timebuf);
+	}
 }
 
 void C_SAVE_LOG::saveLog(const wchar_t* Log_Str)
@@ -53,6 +56,8 @@ void C_SAVE_LOG::saveLog(const wchar_t* Log_Str)
 	}
 
 	fwprintf_s(p_File, Log_Str);
+
+	isWrite = true;
 
 	fclose(p_File);
 }
@@ -78,6 +83,8 @@ void C_SAVE_LOG::printfLog(const wchar_t* format, ...)
 
 	// 가변 인자 목록 종료
 	va_end(args);
+
+	isWrite = true;
 
 	// 파일 닫기
 	fclose(p_File);

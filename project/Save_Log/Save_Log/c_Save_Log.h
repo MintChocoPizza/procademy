@@ -34,7 +34,7 @@ public:
 
 private:
 	wchar_t timebuf[26];
-	
+	bool isWrite;
 
 };
 
