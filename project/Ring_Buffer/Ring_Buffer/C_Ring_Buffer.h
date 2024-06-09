@@ -11,14 +11,15 @@
 // ==> 4 + 1 + 3 = 8
 // 단순하게 계산하면 3번 이상 접근하여 저장한다면 지역 변수에 저장하여 접근하는 것이 이득이다. 
 
-constexpr int df_C_RING_BUFFER_DEFAULT_LEN = 10000;
+constexpr size_t df_C_RING_BUFFER_DEFAULT_LEN = 10000;
 
 class C_RING_BUFFER
 {
+private:
 	char* _Buffer;
 
-	int _In;
-	int _Out;
+	size_t _In;
+	size_t _Out;
 
 	//-----------------------------------------------------------------------
 	// idx 초기값이 0이 아니라면, 관리하기가 어렵다.
@@ -31,8 +32,8 @@ class C_RING_BUFFER
 	// 이걸 기록하는 과정 -> 데이터 넣고 뺄때 마다 연산해야 함. 
 	// 연산량이 많아질거 같음
 	// 구현하다 적게 쓰는것을 메인으로 쓰기로 함.
-	int _Full_Size;
-	int _Use_Size;
+	size_t _Full_Size;
+	size_t _Use_Size;
 	// int _Free_Size;
 
 public:
@@ -44,7 +45,7 @@ public:
 
 	virtual ~C_RING_BUFFER();
 
-	int GetBufferSize(void) { return _Full_Size; }
+	size_t GetBufferSize(void) { return _Full_Size; }
 
 	/////////////////////////////////////////////////////////////////////////
 	// 현재 사용중인 용량 얻기.
@@ -52,7 +53,7 @@ public:
 	// Parameters: 없음.
 	// Return: (int)사용중인 용량.
 	/////////////////////////////////////////////////////////////////////////
-	int	GetUseSize(void) { return _Use_Size; }
+	size_t	GetUseSize(void) { return _Use_Size; }
 
 	/////////////////////////////////////////////////////////////////////////
 	// 현재 버퍼에 남은 용량 얻기. 
@@ -60,7 +61,7 @@ public:
 	// Parameters: 없음.
 	// Return: (int)남은용량.
 	/////////////////////////////////////////////////////////////////////////
-	int	GetFreeSize(void) { return _Full_Size - _Use_Size; }
+	size_t	GetFreeSize(void) { return _Full_Size - _Use_Size; }
 
 	/////////////////////////////////////////////////////////////////////////
 	// WritePos 에 데이타 넣음.
@@ -69,7 +70,7 @@ public:
 	// Parameters: (char *)데이타 포인터. (int)크기. 
 	// Return: (int)넣은 크기.
 	/////////////////////////////////////////////////////////////////////////
-	int Enqueue(const char* chpData, int iSize);
+	size_t Enqueue(const char* chpData, size_t iSize);
 	
 	/////////////////////////////////////////////////////////////////////////
 	// ReadPos 에서 데이타 가져옴. ReadPos 이동.
@@ -77,7 +78,7 @@ public:
 	// Parameters: (char *)데이타 포인터. (int)크기.
 	// Return: (int)가져온 크기.
 	/////////////////////////////////////////////////////////////////////////
-	int	Dequeue(char* chpDest, int iSize);
+	size_t	Dequeue(char* chpDest, size_t iSize);
 
 	/////////////////////////////////////////////////////////////////////////
 	// ReadPos 에서 데이타 읽어옴. ReadPos 고정.
@@ -87,7 +88,7 @@ public:
 	// Parameters: (char *)데이타 포인터. (int)크기. (bool)defualt = false
 	// Return: (int)가져온 크기.
 	/////////////////////////////////////////////////////////////////////////
-	int	Peek(char* chpDest, size_t iSize, bool flag = false);
+	size_t	Peek(char* chpDest, size_t iSize, bool flag = false);
 
 	/////////////////////////////////////////////////////////////////////////
 	// 버퍼의 모든 데이타 삭제.
@@ -116,7 +117,7 @@ private:
 	// Parameters: 없음.
 	// Return: (int)사용가능 용량.
 	////////////////////////////////////////////////////////////////////////
-	int	DirectEnqueueSize(void)
+	size_t	DirectEnqueueSize(void)
 	{
 		int Full_Size = _Full_Size;
 		int In = _In;
@@ -133,7 +134,7 @@ private:
 
 		return 0;
 	}
-	int	DirectDequeueSize(void)
+	size_t	DirectDequeueSize(void)
 	{
 		if (_In >= _Out)
 		{
@@ -151,13 +152,13 @@ private:
 	// Parameters: 없음.
 	// Return: (int)이동크기
 	/////////////////////////////////////////////////////////////////////////
-	int	MoveRear(int iSize)
+	size_t	MoveRear(size_t iSize)
 	{
 		_Use_Size += iSize;
 		_In = (_In + iSize) % _Full_Size;
 		return _In;
 	}
-	int	MoveFront(int iSize)
+	size_t	MoveFront(size_t iSize)
 	{
 		_Use_Size -= iSize;
 		_Out = (_Out + iSize) % _Full_Size;

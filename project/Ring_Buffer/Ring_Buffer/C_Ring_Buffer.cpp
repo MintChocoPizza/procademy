@@ -29,11 +29,11 @@ C_RING_BUFFER::~C_RING_BUFFER()
 // Parameters: (char *)데이타 포인터. (int)크기. 
 // Return: (int)넣은 크기.
 /////////////////////////////////////////////////////////////////////////
-int C_RING_BUFFER::Enqueue(const char* pData, int iSize)
+size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 {
-	int Data_Chunk_Size;
-	int Temp_Full_Size = _Full_Size;
-	int Temp_In;
+	size_t Data_Chunk_Size;
+	size_t Temp_Full_Size = _Full_Size;
+	size_t Temp_In;
 
 	if(Temp_Full_Size - _Use_Size < iSize)
 		return 0;
@@ -73,11 +73,11 @@ int C_RING_BUFFER::Enqueue(const char* pData, int iSize)
 // Parameters: (char *)데이타 포인터. (int)크기.
 // Return: (int)가져온 크기.
 /////////////////////////////////////////////////////////////////////////
-int C_RING_BUFFER::Dequeue(char* chpDest, int iSize)
+size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 {
-	int Data_Chunk_Size;
-	int Temp_Use_Size = _Use_Size;
-	int Temp_Out;
+	size_t Data_Chunk_Size;
+	size_t Temp_Use_Size = _Use_Size;
+	size_t Temp_Out;
 
 	if (Temp_Use_Size == 0)
 		return 0;
@@ -135,11 +135,11 @@ int C_RING_BUFFER::Dequeue(char* chpDest, int iSize)
 // Parameters: (char *)데이타 포인터. (int)크기. (bool)defualt = false
 // Return: (int)가져온 크기.
 /////////////////////////////////////////////////////////////////////////
-int C_RING_BUFFER::Peek(char* chpDest, size_t iSize, bool flag)
+size_t C_RING_BUFFER::Peek(char* chpDest, size_t iSize, bool flag)
 {
-	int Data_Chunk_Size;
-	int Temp_Use_Size = _Use_Size;
-	int Temp_Out;
+	size_t Data_Chunk_Size;
+	size_t Temp_Use_Size = _Use_Size;
+	size_t Temp_Out;
 
 	if (Temp_Use_Size == 0)
 		return 0;
