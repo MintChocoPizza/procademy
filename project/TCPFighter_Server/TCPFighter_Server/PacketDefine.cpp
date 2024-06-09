@@ -112,7 +112,7 @@ bool netPacketProc_CS_MOVE_START(st_SESSION* p_Session, char* pPacket)
 	//---------------------------------------------------------------------------------------------------
 	// 현재 접속중인 사용자에게 모든 패킷을 뿌린다. 당사자 제외
 	//---------------------------------------------------------------------------------------------------
-	netPacketProc_SC_MOVE_START((char*)&Header, (char*)&SendMsg, p_Session->dwSessionID, p_Session->byDirection, p_Session->shX, p_Session->shY);
+	netPacketProc_SC_MOVE_START((char*)&Header, (char*)&SendMsg, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
 	netSendBroadcast(p_Session, (char*)&Header, (char*)&SendMsg, sizeof(SendMsg));
 
 	return true;
@@ -181,7 +181,7 @@ bool netPacketProc_CS_MOVE_STOP(st_SESSION* p_Session, char* pPacket)
 	//---------------------------------------------------------------------------------------------------
 	// 현재 접속중인 사용자에게 모든 패킷을 뿌린다. 당사자 제외
 	//---------------------------------------------------------------------------------------------------
-	netPacketProc_SC_MOVE_STOP((char*)&Header, (char*)&SendMsg, p_Session->dwSessionID, p_Session->byDirection, p_Session->shX, p_Session->shY);
+	netPacketProc_SC_MOVE_STOP((char*)&Header, (char*)&SendMsg, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
 	netSendBroadcast(p_Session, (char*)&Header, (char*)&SendMsg, sizeof(SendMsg));
 
 	return true;
