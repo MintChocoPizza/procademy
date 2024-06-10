@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="C_Ring_Buffer.cpp" />
     <ClCompile Include="c_Save_Log.cpp" />
+    <ClCompile Include="Logic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetWork.cpp" />
     <ClCompile Include="PacketDefine.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="CList.h" />
     <ClInclude Include="C_Ring_Buffer.h" />
     <ClInclude Include="c_Save_Log.h" />
+    <ClInclude Include="Logic.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="NetWork.h" />
     <ClInclude Include="PacketDefine.h" />

@@ -11,6 +11,7 @@
 #include "CList.h"
 #include "c_Save_Log.h"
 #include "C_Ring_Buffer.h"
+#include "Logic.h"
 #include "NetWork.h"
 #include "PacketDefine.h"
 #include "main.h"
@@ -40,7 +41,6 @@
 const char* DEFAULT_PORT = "5000";
 
 std::map<DWORD, st_SESSION*> g_Session_List;
-// std::map<DWORD, st_SESSION*> g_Disconnect_List;
 CList<st_SESSION*> g_Disconnect_List;
 
 DWORD g_Session_ID;
@@ -193,6 +193,9 @@ void netIOProcess(void)
 	for (iter = g_Session_List.begin(); iter != g_Session_List.end(); ++iter)
 	{
 		pSession = (*iter).second;
+
+		if (pSession->Disconnect) continue;
+
 		//------------------------------------------
 		// 해당 클라이언트 Read Set 등록 / SendQ 에 데이터가 있다면 Write Set 등록
 		//------------------------------------------
@@ -215,7 +218,7 @@ void netIOProcess(void)
 	//------------------------------------------
 	while (i_Result > 0)
 	{
-		if (FD_ISSET(g_Listen_Socket, &ReadSet))
+		if (FD_ISSET(g_Listen_Socket, &ReadSet) && g_Session_List.size() < 64)
 		{
 			netProc_Accept();
 			--i_Result;
@@ -240,6 +243,8 @@ void netIOProcess(void)
 			}
 		}
 	}
+
+	Disconnect();
 }
 
 void netProc_Accept(void)
@@ -253,15 +258,19 @@ void netProc_Accept(void)
 	SOCKET Client_Socket;
 
 	st_SESSION* st_New_Player;
+	st_SESSION* pTempSession;
 	sockaddr_in Clinet_Addr;
 	int Client_Addr_Len = sizeof(Clinet_Addr);
 
 	st_PACKET_HEADER header_SC_CRESTE_MY_CHARACTER;
 	st_PACKET_HEADER header_SC_CREATE_OTHER_CHARACTER;
 	st_PACKET_HEADER header_for_me_SC_CREATE_OTHER_CHARACTER;
+	st_PACKET_HEADER header_Sync_Move_SC_MOVE_START;
+
 	st_PACKET_SC_CREATE_MY_CHARACTER		packet_SC_CRESTE_MY_CHARACTER;
 	st_PACKET_SC_CREATE_OTHER_CHARACTER		packet_SC_CREATE_OTHER_CHARACTER;
 	st_PACKET_SC_CREATE_OTHER_CHARACTER		packet_for_me_SC_CREATE_OTHER_CHARACTER;
+	st_PACKET_SC_MOVE_START					packet_Sync_Move_SC_MOVE_START;
 
 	Client_Socket = accept(g_Listen_Socket, (sockaddr*)&Clinet_Addr, &Client_Addr_Len);
 	if (Client_Socket == INVALID_SOCKET)
@@ -316,21 +325,24 @@ void netProc_Accept(void)
 	// 3. 나에게 다른 플레이어들에 대한 생성 메시지 보내기.
 	for (iter = g_Session_List.begin(); iter != g_Session_List.end(); ++iter)
 	{
-		if ((*iter).second == st_New_Player) continue;
+		pTempSession = (*iter).second;
+		if (pTempSession == st_New_Player) continue;
+		if (pTempSession->Disconnect) continue;
 
 		// 일단 그냥 생성 메시지만 보낸다.
-		netPacketProc_SC_CREATE_OTHER_CHARACTER((*iter).second, (char*)&header_for_me_SC_CREATE_OTHER_CHARACTER, (char*)&packet_for_me_SC_CREATE_OTHER_CHARACTER);
+		netPacketProc_SC_CREATE_OTHER_CHARACTER(pTempSession, (char*)&header_for_me_SC_CREATE_OTHER_CHARACTER, (char*)&packet_for_me_SC_CREATE_OTHER_CHARACTER);
 		netSendUnicast(st_New_Player, (char*)&header_for_me_SC_CREATE_OTHER_CHARACTER, (char*)&packet_for_me_SC_CREATE_OTHER_CHARACTER, sizeof(packet_for_me_SC_CREATE_OTHER_CHARACTER));
 
 
 		///////////////////////////////
 		// 추후 새로운 참가자가 들어 왔을 때 누군가 움직이고 있었다면 움직이는 동작을 이어서 보여주어야 한다.
 		//  
-		// 
+		// 그러려면 현재 위치에서 dwAction과 동일한 패킷 메시지를 보내야 한다.
 		///////////////////////////////
-		if ((*iter).second->dwAction != -1)
+		if (pTempSession->dwAction != dfPACKET_CS_MOVE_STOP)
 		{
-			
+			netPacketProc_SC_MOVE_START((char*)&header_Sync_Move_SC_MOVE_START, (char*)&packet_Sync_Move_SC_MOVE_START, pTempSession->byDirection, pTempSession->dwSessionID, pTempSession->shX, pTempSession->shY);
+			netSendUnicast(st_New_Player, (char*)&header_Sync_Move_SC_MOVE_START, (char*)&packet_Sync_Move_SC_MOVE_START, sizeof(packet_Sync_Move_SC_MOVE_START));
 		}
 	}
 #ifdef DETAILS_LOG
@@ -344,9 +356,10 @@ void init_Session(SOCKET Client_Socket, st_SESSION* st_New_Player)
 	st_New_Player->chHP = 100;
 	st_New_Player->byDirection = dfPACKET_MOVE_DIR_LL;
 	st_New_Player->dwSessionID = ++g_Session_ID;
-	st_New_Player->dwAction = -1;
+	st_New_Player->dwAction = dfPACKET_CS_MOVE_STOP;
 	st_New_Player->shY = rand() % (dfRANGE_MOVE_BOTTOM - dfRANGE_MOVE_TOP + 1) + dfRANGE_MOVE_TOP;
 	st_New_Player->shX = rand() % (dfRANGE_MOVE_RIGHT - dfRANGE_MOVE_LEFT + 1) + dfRANGE_MOVE_LEFT;
+	st_New_Player->Disconnect = false;
 }
 
 void netProc_Recv(st_SESSION* pSession)
@@ -366,7 +379,7 @@ void netProc_Recv(st_SESSION* pSession)
 	{
 		// 아마도 상대방의 연결 종료
 #ifdef DEFAULT_LOG
-		printf_s("Disconnect # SessionID: %d \n", pSession->dwSessionID);
+		printf_s("Disconnect Recv 0 # SessionID: %d \n", pSession->dwSessionID);
 #endif // DEFAULT_LOG
 		PushDisconnectList(pSession);
 	}
@@ -378,6 +391,14 @@ void netProc_Recv(st_SESSION* pSession)
 			// Selete로 Recv 할 수 있는 상황에서 WSAEWOULDBLOCK은 절대로 뜨면 안된다. 그러니까 중지한다. 
 			c_Save_Log.printfLog(L"Send failed with error: %ld \n", err);
 			__debugbreak();
+		}
+		else if (err == 10054)
+		{
+			c_Save_Log.printfLog(L"Send failed with error: %ld \n", err);
+		}
+		else if (err == 10053)
+		{
+			c_Save_Log.printfLog(L"Send failed with error: %ld \n", err);
 		}
 		else
 		{
@@ -399,7 +420,7 @@ void netProc_Recv(st_SESSION* pSession)
 		Ret_Peek = pSession->RecvQ.Peek((char*)&header, sizeof(st_PACKET_HEADER), true);
 
 		// 기저 사례2. Header에서 byCode를 확인한다. 다르면 연결 끊기
-		if (header.byCode != 0x89)
+		if (header.byCode != dfNETWORK_PACKET_CODE)
 		{
 #ifdef DEFAULT_LOG
 			printf_s("Header code Errer # SessionID: %d \n", pSession->dwSessionID);
@@ -455,8 +476,14 @@ void netProc_Send(st_SESSION* pSession)
 		{
 			err = WSAGetLastError();
 			
+			if (err == WSAEWOULDBLOCK)
+			{
+				c_Save_Log.printfLog(L"Send failed with error: %ld \n", err);
+				break;
+			}
+
 			// Send의 WSAEWOULDBLOCK 이 나오면 Send Buffer이 가득 찼다 -> 상대 Recv Buffer도 가득 찼다 == 그냥 연결을 끊으면 된다 
-			c_Save_Log.printfLog(L"Srnd failed with error: %ld \n", err);
+			c_Save_Log.printfLog(L"Send failed with error: %ld \n", err);
 			__debugbreak();
 		}
 		pSession->SendQ.MoveFront(Send_Size);
@@ -471,7 +498,7 @@ void netSendUnicast(st_SESSION* pSession, char* header, char* packet, int Packet
 	Ret_Header = pSession->SendQ.Enqueue(header, sizeof(st_PACKET_HEADER));
 	if (Ret_Header == 0)
 	{
-		c_Save_Log.printfLog(L"Header Unicast failed with error: \n");
+		c_Save_Log.printfLog(L"Header Unicast failed with error: \n" );
 #ifdef DEFAULT_LOG
 		printf_s("Disconnect Header Unicast failed with error # SessionID: %d \n", pSession->dwSessionID);
 #endif // DEFAULT_LOG
@@ -497,7 +524,8 @@ void netSendBroadcast(st_SESSION* pSession, char* header, char* packet, int Pack
 	for (iter = g_Session_List.begin(); iter != g_Session_List.end(); ++iter)
 	{
 		p_Temp_Session = (*iter).second;
-
+		
+		if (p_Temp_Session->Disconnect) continue;
 		if (p_Temp_Session == pSession) continue;
 
 		netSendUnicast(p_Temp_Session, header, packet, Packet_Len);
@@ -506,6 +534,8 @@ void netSendBroadcast(st_SESSION* pSession, char* header, char* packet, int Pack
 
 void PushDisconnectList(st_SESSION* pSession)
 {
+	if (pSession->Disconnect) return;
+	pSession->Disconnect = true;
 	g_Disconnect_List.push_back(pSession);
 }
 
@@ -513,14 +543,14 @@ void Disconnect()
 {
 	CList<st_SESSION*>::iterator iter;
 	st_SESSION* p_Session;
-	st_PACKET_SC_DELETE_CHARACTER packet;
-	st_PACKET_HEADER header;
+	st_PACKET_SC_DELETE_CHARACTER packet_SC_DELETE;
+	st_PACKET_HEADER header_SC_DELETE;
 
 	for (iter = g_Disconnect_List.begin(); iter != g_Disconnect_List.end(); ++iter)
 	{
 		p_Session = *iter;
-		netPacketProc_SC_DELETE_CHARACTER(p_Session, (char*)&header, (char*)&packet);
-		netSendBroadcast(p_Session, (char*)&header, (char*)&packet, sizeof(st_PACKET_SC_DELETE_CHARACTER));
+		netPacketProc_SC_DELETE_CHARACTER(p_Session, (char*)&header_SC_DELETE, (char*)&packet_SC_DELETE);
+		netSendBroadcast(NULL, (char*)&header_SC_DELETE, (char*)&packet_SC_DELETE, sizeof(st_PACKET_SC_DELETE_CHARACTER));
 	}
 	
 
@@ -543,26 +573,41 @@ bool PacketProc(st_SESSION* pSession, BYTE byPacketType, char* pPacket)
 	{
 	case dfPACKET_CS_MOVE_START:
 	{
+#ifdef DEFAULT_LOG
+		printf_s("# PACKET_MOVE_START # SessionID:%d / Direction:%d / X:%d /Y:%d \n", pSession->dwSessionID, ((st_PACKET_CS_MOVE_START*)pPacket)->Direction, ((st_PACKET_CS_MOVE_START*)pPacket)->X, ((st_PACKET_CS_MOVE_START*)pPacket)->Y);
+#endif // DEFAULT_LOG
 		return netPacketProc_CS_MOVE_START(pSession, pPacket);
 		break;
 	}
 	case dfPACKET_CS_MOVE_STOP:
 	{
+#ifdef DEFAULT_LOG
+		printf_s("# PACKET_MOVE_STOP # SessionID:%d / Direction:%d / X:%d /Y:%d \n", pSession->dwSessionID, ((st_PACKET_CS_MOVE_STOP*)pPacket)->Direction, ((st_PACKET_CS_MOVE_STOP*)pPacket)->X, ((st_PACKET_CS_MOVE_STOP*)pPacket)->Y);
+#endif // DEFAULT_LOG
 		return netPacketProc_CS_MOVE_STOP(pSession, pPacket);
 		break;
 	}
 	case dfPACKET_CS_ATTACK1:
 	{
+#ifdef DEFAULT_LOG
+		printf_s("# PACKET_ATTACK1 # SessionID:%d / Direction:%d / X:%d /Y:%d \n", pSession->dwSessionID, ((st_PACKET_CS_ATTACK1*)pPacket)->Direction, ((st_PACKET_CS_ATTACK1*)pPacket)->X, ((st_PACKET_CS_ATTACK1*)pPacket)->Y);
+#endif // DEFAULT_LOG
 		return netPacketProc_CS_ATTACK1(pSession, pPacket);
 		break;
 	}
 	case dfPACKET_CS_ATTACK2:
 	{
+#ifdef DEFAULT_LOG
+		printf_s("# PACKET_ATTACK2 # SessionID:%d / Direction:%d / X:%d /Y:%d \n", pSession->dwSessionID, ((st_PACKET_CS_ATTACK2*)pPacket)->Direction, ((st_PACKET_CS_ATTACK2*)pPacket)->X, ((st_PACKET_CS_ATTACK2*)pPacket)->Y);
+#endif // DEFAULT_LOG
 		return netPacketProc_CS_ATTACK2(pSession, pPacket);
 		break;
 	}
 	case dfPACKET_CS_ATTACK3:
 	{
+#ifdef DEFAULT_LOG
+		printf_s("# PACKET_ATTACK3 # SessionID:%d / Direction:%d / X:%d /Y:%d \n", pSession->dwSessionID, ((st_PACKET_CS_ATTACK3*)pPacket)->Direction, ((st_PACKET_CS_ATTACK3*)pPacket)->X, ((st_PACKET_CS_ATTACK3*)pPacket)->Y);
+#endif // DEFAULT_LOG
 		return netPacketProc_CS_ATTACK3(pSession, pPacket);
 		break;
 	}
@@ -577,10 +622,5 @@ bool PacketProc(st_SESSION* pSession, BYTE byPacketType, char* pPacket)
 		break;
 	}
 	}
-
-}
-
-void CreateMessage()
-{
 
 }

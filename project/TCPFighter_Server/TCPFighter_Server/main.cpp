@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include <time.h>
+#include <map>
 
 #include <WinSock2.h>
 #include <Windows.h>
@@ -12,6 +13,7 @@
 #include "c_Save_Log.h"
 #include "C_Ring_Buffer.h"
 #include "CList.h"
+#include "Logic.h"
 #include "NetWork.h"
 #include "PacketDefine.h"
 #include "main.h"
@@ -19,6 +21,13 @@
 #pragma comment (lib, "winmm.lib")
 #pragma comment (lib, "Ws2_32.lib")
 
+
+//---------------------------------
+// 시간 측정 변수
+//---------------------------------
+DWORD g_Start_Time;
+DWORD g_End_Time;
+DWORD g_One_Second;
 
 bool g_bShutdown = false;
 SOCKET g_Listen_Socket;
@@ -36,14 +45,14 @@ int wmain(int argc, wchar_t* argv[])
     // 초기화();
 	init_Listen_Socket(&g_Listen_Socket, &wsaData);
 
-
+    g_Start_Time = timeGetTime();
     while (!g_bShutdown)
     {
         netIOProcess();
 
 
 
-        // Update();
+        Update();
     }
     
 

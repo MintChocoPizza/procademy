@@ -24,6 +24,26 @@
 
 constexpr int dfNETWORK_PACKET_CODE = 0x89;
 
+//---------------------------------------------------------------
+// 공격범위.
+//---------------------------------------------------------------
+constexpr int dfATTACK1_RANGE_X = 80;
+constexpr int dfATTACK2_RANGE_X = 90;
+constexpr int dfATTACK3_RANGE_X = 100;
+constexpr int dfATTACK1_RANGE_Y = 10;
+constexpr int dfATTACK2_RANGE_Y = 10;
+constexpr int dfATTACK3_RANGE_Y = 20;
+
+//---------------------------------------------------------------
+// 공격력.
+//---------------------------------------------------------------
+constexpr int dfATTACK1_DAMAGE = 10;
+constexpr int dfATTACK2_DAMAGE = 30;
+constexpr int dfATTACK3_DAMAGE = 50;
+
+
+
+
 #pragma pack(push, 1)
 //---------------------------------------------------------------
 // 패킷헤더.
@@ -127,6 +147,7 @@ struct st_PACKET_SC_DELETE_CHARACTER
 #define dfPACKET_MOVE_DIR_RD					5
 #define dfPACKET_MOVE_DIR_DD					6
 #define dfPACKET_MOVE_DIR_LD					7
+
 struct st_PACKET_CS_MOVE_START
 {
 	char	Direction;	// (LL / RR)
@@ -415,7 +436,7 @@ bool netPacketProc_CS_MOVE_STOP(st_SESSION* p_Session, char* pPacket);
 bool netPacketProc_SC_MOVE_STOP(char* pHeader, char* pPacket, char Direction, __int32 ID, short X, short Y);
 
 bool netPacketProc_CS_ATTACK1(st_SESSION* p_Session, char* pPacket);
-bool netPacketProc_SC_ATTACK1(st_SESSION* p_Session, char* pHeader, char* pPacket);
+bool netPacketProc_SC_ATTACK1(char* pHeader, char* pPacket, char Direction, __int32 ID, short X, short Y);
 
 bool netPacketProc_CS_ATTACK2(st_SESSION* p_Session, char* pPacket);
 bool netPacketProc_SC_ATTACK2(st_SESSION* p_Session, char* pHeader, char* pPacket);
@@ -423,7 +444,7 @@ bool netPacketProc_SC_ATTACK2(st_SESSION* p_Session, char* pHeader, char* pPacke
 bool netPacketProc_CS_ATTACK3(st_SESSION* p_Session, char* pPacket);
 bool netPacketProc_SC_ATTACK3(st_SESSION* p_Session, char* pHeader, char* pPacket);
 
-bool netPacketProc_SC_DAMAGE(st_SESSION* p_Session, st_SESSION* p_Damage_Session, char* pHeader, char* pPacket, int Damage);
+bool netPacketProc_SC_DAMAGE(char* pHeader, char* pPacket, __int32 AttackID, __int32 DamageID, char HP);
 
 bool netPacketProc_CS_SYNC(st_SESSION* p_Session, char* pPacket);
 bool netPacketProc_SC_SYNC(st_SESSION* p_Session, char* pHeader, char* pPacket);

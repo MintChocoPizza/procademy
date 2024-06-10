@@ -4,8 +4,9 @@
     "\\project",
     "\\project\\Ring_Buffer",
     "\\project\\Ring_Buffer\\Ring_Buffer",
-    "\\project\\Save_Log"
+    "\\project\\UDP_Test_Client",
+    "\\project\\UDP_Test_Client\\hw"
   ],
-  "SelectedNode": "\\project\\Ring_Buffer\\Ring_Buffer.sln",
+  "SelectedNode": "\\project\\Ring_Buffer\\Ring_Buffer\\C_Ring_Buffer.h",
   "PreviewInSolutionExplorer": false
 }

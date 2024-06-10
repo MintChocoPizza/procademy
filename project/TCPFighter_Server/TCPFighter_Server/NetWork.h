@@ -2,28 +2,13 @@
 #ifndef __NETWORK_H__
 #define __NETWORK_H__
 
-//-----------------------------------------------------------------
-// 화면 이동영역 
-//-----------------------------------------------------------------
-constexpr int dfRANGE_MOVE_TOP = 50;
-constexpr int dfRANGE_MOVE_LEFT = 10;
-constexpr int dfRANGE_MOVE_RIGHT = 630;
-constexpr int dfRANGE_MOVE_BOTTOM = 470;
+
 
 //-----------------------------------------------------------------
 // 이동 오류체크 범위
 //-----------------------------------------------------------------
 constexpr int dfERROR_RANGE = 50;
 
-//---------------------------------------------------------------
-// 공격범위.
-//---------------------------------------------------------------
-constexpr int  dfATTACK1_RANGE_X = 80;
-constexpr int dfATTACK2_RANGE_X = 90;
-constexpr int  dfATTACK3_RANGE_X = 100;
-constexpr int  dfATTACK1_RANGE_Y = 10;
-constexpr int dfATTACK2_RANGE_Y = 10;
-constexpr int dfATTACK3_RANGE_Y = 20;
 
 struct st_SESSION
 {
@@ -39,7 +24,17 @@ struct st_SESSION
 	short			shY;
 
 	char			chHP;
+
+	bool			Disconnect;
+
+	st_SESSION() :Socket(INVALID_SOCKET), dwSessionID(0), RecvQ(150), SendQ(150), dwAction(-1), byDirection(-1), shX(-1), shY(-1), chHP(-1), Disconnect(false)
+	{
+
+	}
 };
+
+extern std::map<DWORD, st_SESSION*> g_Session_List;
+extern CList<st_SESSION*> g_Disconnect_List;
 
 
 
@@ -57,7 +52,6 @@ void netSendBroadcast(st_SESSION* pSession, char* header, char* packet, int Pack
 
 void PushDisconnectList(st_SESSION* pSession);
 void Disconnect(void);
-void CreateMessage(void);
 bool PacketProc(st_SESSION* pSession, BYTE byPacketType, char* pPacket);
 
 
