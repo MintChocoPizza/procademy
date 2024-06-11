@@ -466,7 +466,7 @@ bool netPacketProc_CS_ATTACK3(st_SESSION* p_Session, char* pPacket)
 			{
 				// 1. HP를 깐다.
 				// 3. st_PACKET_SC_DAMAGE 메시지를 보낸다.
-				p_Temp_Session->chHP -= dfATTACK2_DAMAGE;
+				p_Temp_Session->chHP -= dfATTACK3_DAMAGE;
 
 #ifdef DEFAULT_LOG
 				printf_s("#Attack3 Direction:RR /  SessionID:%d -> SessionID:%d \n", p_Session->dwSessionID, p_Temp_Session->dwSessionID);

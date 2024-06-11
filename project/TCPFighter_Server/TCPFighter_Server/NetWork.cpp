@@ -382,27 +382,44 @@ void netProc_Recv(st_SESSION* pSession)
 		printf_s("Disconnect Recv 0 # SessionID: %d \n", pSession->dwSessionID);
 #endif // DEFAULT_LOG
 		PushDisconnectList(pSession);
+		return;
 	}
 	else if (Recv_Size == SOCKET_ERROR)
 	{
+		////////////////////////////////////
+		// 여기서 끊지 않아도 아래에서 강제로 끊긴다.
+		////////////////////////////////////
 		err = WSAGetLastError();
 		if (err == WSAEWOULDBLOCK)
 		{
 			// Selete로 Recv 할 수 있는 상황에서 WSAEWOULDBLOCK은 절대로 뜨면 안된다. 그러니까 중지한다. 
-			c_Save_Log.printfLog(L"Send failed with error: %ld \n", err);
-			__debugbreak();
+			// 32명 한번에 종료한뒤, 새로운 접속자가 움직인 경우 발생했음.
+			c_Save_Log.printfLog(L"Recv failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
+			printf_s("Disconnect Recv %d # SessionID: %d \n", err, pSession->dwSessionID);
+			return;
+			// __debugbreak();
 		}
 		else if (err == 10054)
 		{
-			c_Save_Log.printfLog(L"Send failed with error: %ld \n", err);
+			// 상대방이 강제로 끊었다.
+			c_Save_Log.printfLog(L"Recv failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
+			printf_s("Disconnect Recv %d # SessionID: %d \n", err, pSession->dwSessionID);
+			PushDisconnectList(pSession);
+			return;
 		}
 		else if (err == 10053)
 		{
-			c_Save_Log.printfLog(L"Send failed with error: %ld \n", err);
+			// 소프트웨어로 인해 연결이 중단됨
+			// 데이터 전송 시간 제한 또는 프로토콜 오류
+			c_Save_Log.printfLog(L"Recv failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
+			printf_s("Disconnect Recv %d # SessionID: %d \n", err, pSession->dwSessionID);
+			PushDisconnectList(pSession);
+			return;
 		}
 		else
 		{
-			c_Save_Log.printfLog(L"Srnd failed with error: %ld \n", err);
+			c_Save_Log.printfLog(L"Recv failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
+			printf_s("Disconnect Recv %d # SessionID: %d \n", err, pSession->dwSessionID);
 			__debugbreak();
 		}
 	}
@@ -478,12 +495,19 @@ void netProc_Send(st_SESSION* pSession)
 			
 			if (err == WSAEWOULDBLOCK)
 			{
-				c_Save_Log.printfLog(L"Send failed with error: %ld \n", err);
+				c_Save_Log.printfLog(L"Send failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
+				break;
+			}
+			else if (err == 10054)
+			{
+				// 현재 연결은 원격 호스트에 의해 강제로 끊겼다.
+				c_Save_Log.printfLog(L"Send failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
+				PushDisconnectList(pSession);
 				break;
 			}
 
 			// Send의 WSAEWOULDBLOCK 이 나오면 Send Buffer이 가득 찼다 -> 상대 Recv Buffer도 가득 찼다 == 그냥 연결을 끊으면 된다 
-			c_Save_Log.printfLog(L"Send failed with error: %ld \n", err);
+			c_Save_Log.printfLog(L"Send failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
 			__debugbreak();
 		}
 		pSession->SendQ.MoveFront(Send_Size);
@@ -563,10 +587,25 @@ void Disconnect()
 		// 2. 메모리를 delete로 해지한다. 
 		// 3. map 에서 지운다. 
 		// 4. g_Disconnect_List에서 Node를 지운다.
-		closesocket((*iter)->Socket);
-		delete (*iter);
-		g_Session_List.erase((*iter)->dwSessionID);
+
+
+		// 뻑난 코드
+		// 한번에 많은 close가 들어오면 g_Session_List에서 삭제가 안되는 버그가 있었다.
+		////closesocket((*iter)->Socket);
+		//// delete (*iter);
+		//g_Session_List.erase((*iter)->dwSessionID);
+		//iter = g_Disconnect_List.erase(iter);
+		//delete (*iter);
+
+
+		st_SESSION* Session = *iter;
+		SOCKET Sock = (*iter)->Socket;
+		DWORD SessionID = (*iter)->dwSessionID;
+
 		iter = g_Disconnect_List.erase(iter);
+		g_Session_List.erase(SessionID);
+		closesocket(Sock);
+		delete Session;
 	}
 	
 }

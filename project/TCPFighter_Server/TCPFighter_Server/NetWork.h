@@ -27,7 +27,7 @@ struct st_SESSION
 
 	bool			Disconnect;
 
-	st_SESSION() :Socket(INVALID_SOCKET), dwSessionID(0), RecvQ(150), SendQ(150), dwAction(-1), byDirection(-1), shX(-1), shY(-1), chHP(-1), Disconnect(false)
+	st_SESSION() :Socket(INVALID_SOCKET), dwSessionID(0), RecvQ(1500), SendQ(1500), dwAction(-1), byDirection(-1), shX(-1), shY(-1), chHP(-1), Disconnect(false)
 	{
 
 	}
