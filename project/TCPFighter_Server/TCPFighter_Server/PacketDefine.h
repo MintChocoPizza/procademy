@@ -439,10 +439,10 @@ bool netPacketProc_CS_ATTACK1(st_SESSION* p_Session, char* pPacket);
 bool netPacketProc_SC_ATTACK1(char* pHeader, char* pPacket, char Direction, __int32 ID, short X, short Y);
 
 bool netPacketProc_CS_ATTACK2(st_SESSION* p_Session, char* pPacket);
-bool netPacketProc_SC_ATTACK2(st_SESSION* p_Session, char* pHeader, char* pPacket);
+bool netPacketProc_SC_ATTACK2(char* pHeader, char* pPacket, char Direction, __int32 ID, short X, short Y);
 
 bool netPacketProc_CS_ATTACK3(st_SESSION* p_Session, char* pPacket);
-bool netPacketProc_SC_ATTACK3(st_SESSION* p_Session, char* pHeader, char* pPacket);
+bool netPacketProc_SC_ATTACK3(char* pHeader, char* pPacket, char Direction, __int32 ID, short X, short Y);
 
 bool netPacketProc_SC_DAMAGE(char* pHeader, char* pPacket, __int32 AttackID, __int32 DamageID, char HP);
 

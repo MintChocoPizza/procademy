@@ -554,17 +554,21 @@ void Disconnect()
 	}
 	
 
-	for (iter = g_Disconnect_List.begin(); iter != g_Disconnect_List.end(); ++iter)
+	for (iter = g_Disconnect_List.begin(); iter != g_Disconnect_List.end();)
 	{
 		// 모든 삭제 메시지 전송이 끝나고 나면 
 		// 저장되어 있는 모든 소켓을 삭제한다. 
 
 		// 1. 소켓을 지운다. 
-		// 2. map 에서 지운다. 
-
+		// 2. 메모리를 delete로 해지한다. 
+		// 3. map 에서 지운다. 
+		// 4. g_Disconnect_List에서 Node를 지운다.
 		closesocket((*iter)->Socket);
+		delete (*iter);
 		g_Session_List.erase((*iter)->dwSessionID);
+		iter = g_Disconnect_List.erase(iter);
 	}
+	
 }
 
 bool PacketProc(st_SESSION* pSession, BYTE byPacketType, char* pPacket)
