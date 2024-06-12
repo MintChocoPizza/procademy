@@ -218,7 +218,7 @@ void netIOProcess(void)
 	//------------------------------------------
 	while (i_Result > 0)
 	{
-		if (FD_ISSET(g_Listen_Socket, &ReadSet) && g_Session_List.size() < 64)
+		if (FD_ISSET(g_Listen_Socket, &ReadSet))
 		{
 			netProc_Accept();
 			--i_Result;
@@ -283,6 +283,17 @@ void netProc_Accept(void)
 		}
 	}
 
+	// 접속자 인원수 제한
+	// 원할한 플레이를 위하여
+	if (g_Session_List.size() > 30)
+	{
+#ifdef DEFAULT_LOG
+		printf_s("full Server Cannt not accept!!! \n");
+#endif // DEFAULT_LOG
+		closesocket(Client_Socket);
+		return;
+	}
+
 	st_New_Player = new st_SESSION;
 	init_Session(Client_Socket, st_New_Player);
 	// g_Session_List.push_back(st_New_Player);
@@ -341,7 +352,7 @@ void netProc_Accept(void)
 		///////////////////////////////
 		if (pTempSession->dwAction != dfPACKET_CS_MOVE_STOP)
 		{
-			netPacketProc_SC_MOVE_START((char*)&header_Sync_Move_SC_MOVE_START, (char*)&packet_Sync_Move_SC_MOVE_START, pTempSession->byDirection, pTempSession->dwSessionID, pTempSession->shX, pTempSession->shY);
+			netPacketProc_SC_MOVE_START((char*)&header_Sync_Move_SC_MOVE_START, (char*)&packet_Sync_Move_SC_MOVE_START, (char)pTempSession->dwAction, pTempSession->dwSessionID, pTempSession->shX, pTempSession->shY);
 			netSendUnicast(st_New_Player, (char*)&header_Sync_Move_SC_MOVE_START, (char*)&packet_Sync_Move_SC_MOVE_START, sizeof(packet_Sync_Move_SC_MOVE_START));
 		}
 	}
@@ -395,7 +406,7 @@ void netProc_Recv(st_SESSION* pSession)
 			// Selete로 Recv 할 수 있는 상황에서 WSAEWOULDBLOCK은 절대로 뜨면 안된다. 그러니까 중지한다. 
 			// 32명 한번에 종료한뒤, 새로운 접속자가 움직인 경우 발생했음.
 			c_Save_Log.printfLog(L"Recv failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
-			printf_s("Disconnect Recv %d # SessionID: %d \n", err, pSession->dwSessionID);
+			printf_s("WSAEWOULDBLOCK # Nect Frame Recv try %d # SessionID: %d \n", err, pSession->dwSessionID);
 			return;
 			// __debugbreak();
 		}
@@ -495,12 +506,20 @@ void netProc_Send(st_SESSION* pSession)
 			
 			if (err == WSAEWOULDBLOCK)
 			{
+				// Send 할 때 WSAEWOULDBLOCK이 나온다면, 다음 프레임에 데이터를 보낸다.
 				c_Save_Log.printfLog(L"Send failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
+				printf_s("WSAEWOULDBLOCK # Nect Frame Send try %d # SessionID: %d \n", err, pSession->dwSessionID);
 				break;
 			}
 			else if (err == 10054)
 			{
 				// 현재 연결은 원격 호스트에 의해 강제로 끊겼다.
+				c_Save_Log.printfLog(L"Send failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
+				PushDisconnectList(pSession);
+				break;
+			}
+			else if (err == 10053)
+			{
 				c_Save_Log.printfLog(L"Send failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
 				PushDisconnectList(pSession);
 				break;
@@ -527,6 +546,7 @@ void netSendUnicast(st_SESSION* pSession, char* header, char* packet, int Packet
 		printf_s("Disconnect Header Unicast failed with error # SessionID: %d \n", pSession->dwSessionID);
 #endif // DEFAULT_LOG
 		PushDisconnectList(pSession);
+		return ;
 	}
 
 	Ret_Packet = pSession->SendQ.Enqueue(packet, Packet_Len);
@@ -537,6 +557,7 @@ void netSendUnicast(st_SESSION* pSession, char* header, char* packet, int Packet
 		printf_s("Disconnect Packet Unicast failed with error # SessionID: %d \n", pSession->dwSessionID);
 #endif // DEFAULT_LOG
 		PushDisconnectList(pSession);
+		return;
 	}
 }
 void netSendBroadcast(st_SESSION* pSession, char* header, char* packet, int Packet_Len)

@@ -333,7 +333,7 @@ bool netPacketProc_CS_ATTACK2(st_SESSION* p_Session, char* pPacket)
 	// 공격 모션에 대한 패킷은 모두에게 보낸다.
 	pTempPacket = (st_PACKET_CS_ATTACK2*)pPacket;
 
-	netPacketProc_SC_ATTACK1((char*)&header_SC_ATTACK2, (char*)&packet_SC_ATTACK2, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
+	netPacketProc_SC_ATTACK2((char*)&header_SC_ATTACK2, (char*)&packet_SC_ATTACK2, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
 	netSendBroadcast(p_Session, (char*)&header_SC_ATTACK2, (char*)&packet_SC_ATTACK2, sizeof(packet_SC_ATTACK2));
 
 	switch (pTempPacket->Direction)
@@ -441,7 +441,7 @@ bool netPacketProc_CS_ATTACK3(st_SESSION* p_Session, char* pPacket)
 	// 공격 모션에 대한 패킷은 모두에게 보낸다.
 	pTempPacket = (st_PACKET_CS_ATTACK3*)pPacket;
 
-	netPacketProc_SC_ATTACK1((char*)&header_SC_ATTACK3, (char*)&packet_SC_ATTACK3, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
+	netPacketProc_SC_ATTACK3((char*)&header_SC_ATTACK3, (char*)&packet_SC_ATTACK3, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
 	netSendBroadcast(p_Session, (char*)&header_SC_ATTACK3, (char*)&packet_SC_ATTACK3, sizeof(packet_SC_ATTACK3));
 
 	switch (pTempPacket->Direction)

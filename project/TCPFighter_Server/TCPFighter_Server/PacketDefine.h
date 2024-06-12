@@ -37,9 +37,9 @@ constexpr int dfATTACK3_RANGE_Y = 20;
 //---------------------------------------------------------------
 // °ø°Ý·Â.
 //---------------------------------------------------------------
-constexpr int dfATTACK1_DAMAGE = 10;
-constexpr int dfATTACK2_DAMAGE = 30;
-constexpr int dfATTACK3_DAMAGE = 50;
+constexpr int dfATTACK1_DAMAGE = 5;
+constexpr int dfATTACK2_DAMAGE = 8;
+constexpr int dfATTACK3_DAMAGE = 10;
 
 
 
