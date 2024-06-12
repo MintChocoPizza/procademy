@@ -37,10 +37,14 @@ void Update()
 
 	std::map<DWORD, st_SESSION*>::iterator iter;
 	st_SESSION* pSession;
+	bool isNoX;
+	bool isNoY;
 
 	for (iter = g_Session_List.begin(); iter != g_Session_List.end(); ++iter)
 	{
 		pSession = (*iter).second;
+		isNoX = false;
+		isNoY = false;
 
 		if (pSession->Disconnect) continue;
 
@@ -53,77 +57,97 @@ void Update()
 			continue;
 		}
 
+		// 경계처리를 해야함
+		// 경계인 경우 대각선 이동을 못하게 해야한다. 
+		//if (pSession->shX = dfRANGE_MOVE_LEFT)
+		if (pSession->shX - FRAME_X_MOVEMENT < dfRANGE_MOVE_LEFT || pSession->shX + FRAME_X_MOVEMENT > dfRANGE_MOVE_RIGHT)
+		{
+			isNoX = true;
+		}
+		if (pSession->shY - FRAME_Y_MOVEMENT < dfRANGE_MOVE_TOP || pSession->shY + FRAME_Y_MOVEMENT > dfRANGE_MOVE_BOTTOM)
+		{
+			isNoY = true;
+		}
+
 		// 현재 동작에 따른 처리
 		switch (pSession->dwAction)
 		{
 		case dfPACKET_MOVE_DIR_LL:
-		{
+			if (!isNoX)
+			{
 #ifdef DEFAULT_LOG
-			printf_s("# gameRun: LL # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
+				printf_s("# gameRun: LL # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
 #endif // DEFAULT_LOG
-			pSession->shX -= FRAME_X_MOVEMENT;
+				pSession->shX -= FRAME_X_MOVEMENT;
+			}
 			break;
-		}
 		case dfPACKET_MOVE_DIR_LU:
-		{
+			if (!isNoX && !isNoY)
+			{
 #ifdef DEFAULT_LOG
-			printf_s("# gameRun: LU # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
+				printf_s("# gameRun: LU # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
 #endif // DEFAULT_LOG
-			pSession->shX -= FRAME_X_MOVEMENT;
-			pSession->shY -= FRAME_Y_MOVEMENT;
+				pSession->shX -= FRAME_X_MOVEMENT;
+				pSession->shY -= FRAME_Y_MOVEMENT;
+			}
 			break;
-		}
 		case dfPACKET_MOVE_DIR_UU:
-		{
+			if (!isNoY)
+			{
 #ifdef DEFAULT_LOG
-			printf_s("# gameRun: UU # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
+				printf_s("# gameRun: UU # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
 #endif // DEFAULT_LOG
-			pSession->shY -= FRAME_Y_MOVEMENT;
+				pSession->shY -= FRAME_Y_MOVEMENT;
+			}
 			break;
-		}
 		case dfPACKET_MOVE_DIR_RU:
-		{
+			if (!isNoX && !isNoY)
+			{
 #ifdef DEFAULT_LOG
-			printf_s("# gameRun: RU # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
+				printf_s("# gameRun: RU # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
 #endif // DEFAULT_LOG
-			pSession->shX += FRAME_X_MOVEMENT;
-			pSession->shY -= FRAME_Y_MOVEMENT;
+				pSession->shX += FRAME_X_MOVEMENT;
+				pSession->shY -= FRAME_Y_MOVEMENT;
+			}
 			break;
-		}
 		case dfPACKET_MOVE_DIR_RR:
-		{
+			if (!isNoX)
+			{
 #ifdef DEFAULT_LOG
-			printf_s("# gameRun: RR # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
+				printf_s("# gameRun: RR # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
 #endif // DEFAULT_LOG
-			pSession->shX += FRAME_X_MOVEMENT;
+				pSession->shX += FRAME_X_MOVEMENT;
+			}
 			break;
-		}
 		case dfPACKET_MOVE_DIR_RD:
-		{
+			if (!isNoX && !isNoY)
+			{
 #ifdef DEFAULT_LOG
-			printf_s("# gameRun: RD # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
+				printf_s("# gameRun: RD # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
 #endif // DEFAULT_LOG
-			pSession->shX += FRAME_X_MOVEMENT;
-			pSession->shY += FRAME_Y_MOVEMENT;
+				pSession->shX += FRAME_X_MOVEMENT;
+				pSession->shY += FRAME_Y_MOVEMENT;
+			}
 			break;
-		}
 		case dfPACKET_MOVE_DIR_DD:
-		{
+			if (!isNoY)
+			{
 #ifdef DEFAULT_LOG
-			printf_s("# gameRun: DD # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
+				printf_s("# gameRun: DD # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
 #endif // DEFAULT_LOG
-			pSession->shY += FRAME_Y_MOVEMENT;
+				pSession->shY += FRAME_Y_MOVEMENT;
+			}
 			break;
-		}
 		case dfPACKET_MOVE_DIR_LD:
-		{
+			if (!isNoX && !isNoY)
+			{
 #ifdef DEFAULT_LOG
-			printf_s("# gameRun: LD # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
+				printf_s("# gameRun: LD # SessionID: %d / X:%d / Y:%d \n", pSession->dwSessionID, pSession->shX, pSession->shY);
 #endif // DEFAULT_LOG
-			pSession->shX -= FRAME_X_MOVEMENT;
-			pSession->shY += FRAME_Y_MOVEMENT;
+				pSession->shX -= FRAME_X_MOVEMENT;
+				pSession->shY += FRAME_Y_MOVEMENT;
+			}
 			break;
-		}
 		case dfPACKET_CS_MOVE_STOP:
 		{
 			break;
@@ -136,6 +160,7 @@ void Update()
 			printf_s("dwSessionID Error # SessionID: %d \n", pSession->dwSessionID);
 #endif // DEFAULT_LOG
 			PushDisconnectList(pSession);
+			__debugbreak();
 			break;
 		}
 		}
