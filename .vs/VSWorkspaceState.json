@@ -2,11 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\Ring_Buffer\\Ring_Buffer",
-    "\\project\\TCPFighter_Server",
-    "\\project\\TCPFighter_Server\\TCPFighter_Server",
-    "\\project\\UDP_Test_Client\\hw"
+    "\\project\\OOP\\OOP"
   ],
-  "SelectedNode": "\\project\\TCPFighter_Server\\TCPFighter_Server\\NetWork.cpp",
+  "SelectedNode": "\\project",
   "PreviewInSolutionExplorer": false
 }
