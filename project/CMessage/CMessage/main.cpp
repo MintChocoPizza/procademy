@@ -10,16 +10,11 @@ int main()
 
 	char* ttt = (char*)malloc(123);
 
-	m->PutData(ttt, 123);
+	int a = 10;
 
-	printf_s("Hello World \n");
+	m << a;
 
-	int size = 12;
 
-	if (m->countFreeSize(12))
-	{
-		m << 12;
-	}
 
 	return 0;
 }
