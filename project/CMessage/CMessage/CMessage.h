@@ -1,4 +1,80 @@
 
+/*---------------------------------------------------------------
+
+	Packet.
+
+	네트워크 패킷용 클래스.
+	간편하게 패킷에 순서대로 데이타를 In, Out 한다.
+
+	- 사용법.
+
+	CPacket cPacket;  or CMessage Message;
+
+	넣기.
+	clPacket << 40030;		or	clPacket << iValue;	(int 넣기)
+	clPacket << 1.4;		or	clPacket << fValue;	(float 넣기)
+
+
+	빼기.
+	clPacket >> iValue;		(int 빼기)
+	clPacket >> byValue;		(BYTE 빼기)
+	clPacket >> fValue;		(float 빼기)
+
+	CPacket Packet2;
+
+	!.	삽입되는 데이타 FIFO 순서로 관리된다.
+		환형 큐는 아니므로, 넣기(<<).빼기(>>) 를 혼합해서 사용하지 않도록 한다
+
+
+
+	* 실제 패킷 프로시저에서의 처리
+
+	BOOL	netPacketProc_CreateMyCharacter(CPacket *clpPacket)
+	{
+		DWORD dwSessionID;
+		short shX, shY;
+		char chHP;
+		BYTE byDirection;
+
+//		*clpPacket >> dwSessionID >> byDirection >> shX >> shY >> chHP;
+
+
+		*clpPacket >> dwSessionID;
+		*clpPacket >> byDirection;
+		*clpPacket >> shX;
+		*clpPacket >> shY;
+		*clpPacket >> chHP;
+
+		...
+		...
+	}
+
+
+	* 실제 메시지(패킷) 생성부에서의 처리
+
+	CPacket MoveStart;
+	mpMoveStart(&MoveStart, dir, x, y);
+	SendPacket(&MoveStart);
+
+
+	void	mpMoveStart(CPacket *clpPacket, BYTE byDirection, short shX, short shY)
+	{
+		st_NETWORK_PACKET_HEADER	stPacketHeader;
+		stPacketHeader.byCode = dfNETWORK_PACKET_CODE;
+		stPacketHeader.bySize = 5;
+		stPacketHeader.byType = dfPACKET_CS_MOVE_START;
+
+		clpPacket->PutData((char *)&stPacketHeader, dfNETWORK_PACKET_HEADER_SIZE);
+
+		*clpPacket << byDirection;
+		*clpPacket << shX;
+		*clpPacket << shY;
+
+	}
+
+----------------------------------------------------------------*/
+
+
 #ifndef __CMESSAGE_H__
 #define __CMESSAGE_H__
 
@@ -73,6 +149,7 @@ public:
 	//int		MoveReadPos(int iSize);
 	void	MoveWritePos(int iSize) { m_chpWrite += iSize; }
 	void	MoveReadPos(int iSize) { m_chpRead += iSize; }
+	// 현재 해당 함수가 왜 사이즈를 리턴해야 하는지 정확한 이유를 모르겠다. 
 
 
 
@@ -142,9 +219,12 @@ protected:
 
 	//------------------------------------------------------------
 	// 큐 처럼 구현되는 직렬화 버퍼에서 Read(Out), Write(In)
+	// 포인터를 들고 있을 지 고민중..... 
+	// 포인터를 들고 있으면 버퍼 초기값을 호출 안해도 된다. 
+	// this 연산이 줄어든다.
 	//------------------------------------------------------------
-	char* m_chpRead;
-	char* m_chpWrite;
+	char* m_ReadPos;
+	char* m_WritePos;
 
 	//------------------------------------------------------------
 	// 버퍼 사이즈.

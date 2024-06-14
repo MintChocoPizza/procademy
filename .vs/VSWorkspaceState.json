@@ -2,8 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\OOP\\OOP"
+    "\\project\\CMessage",
+    "\\project\\CMessage\\CMessage",
+    "\\project\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\project",
+  "SelectedNode": "\\project\\CMessage\\CMessage\\CMessage.h",
   "PreviewInSolutionExplorer": false
 }
