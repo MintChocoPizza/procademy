@@ -168,7 +168,7 @@ public:
 // 
 //////////////////////////////////////////////////////////////////////////////////////////
 template <typename T>
-inline typename CList<T>::iterator CList<T>::iterator::operator++ (int)
+inline typename CList<T>::iterator CList<T>::iterator::operator++ (int)		// 후위 증가
 {
 	CList<T>::iterator iter(this->_node);
 	this->_node = this->_node->_Next;
@@ -177,7 +177,7 @@ inline typename CList<T>::iterator CList<T>::iterator::operator++ (int)
 }
 
 template <typename T>
-inline typename CList<T>::iterator& CList<T>::iterator::operator++ ()
+inline typename CList<T>::iterator& CList<T>::iterator::operator++ ()	// 전위 증가
 {
 	this->_node = this->_node->_Next;
 	return *this;
