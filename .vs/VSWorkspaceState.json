@@ -2,9 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\CMessage",
-    "\\project\\CMessage\\CMessage"
+    "\\project\\Ring_Buffer\\Ring_Buffer",
+    "\\project\\TCPFighter_Server",
+    "\\project\\TCPFighter_Server\\TCPFighter_Server"
   ],
-  "SelectedNode": "\\project\\CMessage\\CMessage\\CMessage.cpp",
+  "SelectedNode": "\\project\\TCPFighter_Server\\TCPFighter_Server\\PacketDefine.cpp",
   "PreviewInSolutionExplorer": false
 }

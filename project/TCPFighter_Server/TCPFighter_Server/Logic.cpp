@@ -11,6 +11,7 @@
 #include "CList.h"
 #include "main.h"
 #include "Logic.h"
+#include "SerializeBuffer.h"
 #include "NetWork.h"
 #include "PacketDefine.h"
 #include "Set_Log.h"

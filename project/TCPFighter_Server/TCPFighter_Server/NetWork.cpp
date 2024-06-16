@@ -7,11 +7,13 @@
 
 #pragma comment (lib, "Ws2_32.lib")
 
+#include "Set_SerializeBuffer.h"
 #include "Set_Log.h"
 #include "CList.h"
 #include "c_Save_Log.h"
 #include "C_Ring_Buffer.h"
 #include "Logic.h"
+#include "SerializeBuffer.h"
 #include "NetWork.h"
 #include "PacketDefine.h"
 #include "main.h"
@@ -320,14 +322,29 @@ void netProc_Accept(void)
 #ifdef DEFAULT_LOG
 	printf_s("# PACKET_CONNECT # SessionID: %d \n", st_New_Player->dwSessionID);
 #endif // DEFAULT_LOG
+#ifdef SERIALIZEBUFFER
+	SerializeBuffer clPacket;
+	SerializeBuffer_netPacketProc_SC_CREATE_MY_CHARACTER(st_New_Player, &clPacket);
+	SerializeBuffer_netSendUnicast(st_New_Player, &clPacket);
+#elif
 	netPacketProc_SC_CREATE_MY_CHARACTER(st_New_Player, (char*)&header_SC_CRESTE_MY_CHARACTER, (char*)&packet_SC_CRESTE_MY_CHARACTER);
 	netSendUnicast(st_New_Player, (char*)&header_SC_CRESTE_MY_CHARACTER, (char*)&packet_SC_CRESTE_MY_CHARACTER, sizeof(packet_SC_CRESTE_MY_CHARACTER));
+#endif	// SERIALIZEBUFFER
+
+
 #ifdef DEFAULT_LOG
 	printf_s("Create Character SessionID: %d    X:%d    Y:%d \n", st_New_Player->dwSessionID, st_New_Player->shX, st_New_Player->shY);
 #endif // DEFAULT_LOG
 
+#ifdef SERIALIZEBUFFER
+	SerializeBuffer clPacket2;
+	SerializeBuffer_netPacketProc_SC_CREATE_OTHER_CHARACTER(st_New_Player, &clPacket2);
+	SerializeBuffer_netSendBroadcast(st_New_Player, &clPacket2);
+#else
 	netPacketProc_SC_CREATE_OTHER_CHARACTER(st_New_Player, (char*)&header_SC_CREATE_OTHER_CHARACTER, (char*)&packet_SC_CREATE_OTHER_CHARACTER);
 	netSendBroadcast(st_New_Player, (char*)&header_SC_CREATE_OTHER_CHARACTER, (char*)&packet_SC_CREATE_OTHER_CHARACTER, sizeof(packet_SC_CREATE_OTHER_CHARACTER));
+#endif // SERIALIZEBUFFER
+
 #ifdef DETAILS_LOG
 	printf_s("Create Character SessionID : %d to Other \n", st_New_Player->dwSessionID);
 #endif // DETAILS_LOG
@@ -341,8 +358,15 @@ void netProc_Accept(void)
 		if (pTempSession->Disconnect) continue;
 
 		// 일단 그냥 생성 메시지만 보낸다.
+#ifdef SERIALIZEBUFFER
+		SerializeBuffer clPacket3;
+		SerializeBuffer_netPacketProc_SC_CREATE_OTHER_CHARACTER(pTempSession, &clPacket3);
+		SerializeBuffer_netSendUnicast(pTempSession, &clPacket3);
+#else
 		netPacketProc_SC_CREATE_OTHER_CHARACTER(pTempSession, (char*)&header_for_me_SC_CREATE_OTHER_CHARACTER, (char*)&packet_for_me_SC_CREATE_OTHER_CHARACTER);
 		netSendUnicast(st_New_Player, (char*)&header_for_me_SC_CREATE_OTHER_CHARACTER, (char*)&packet_for_me_SC_CREATE_OTHER_CHARACTER, sizeof(packet_for_me_SC_CREATE_OTHER_CHARACTER));
+#endif // SERIALIZEBUFFER
+
 
 
 		///////////////////////////////
@@ -352,8 +376,15 @@ void netProc_Accept(void)
 		///////////////////////////////
 		if (pTempSession->dwAction != dfPACKET_CS_MOVE_STOP)
 		{
+#ifdef SERIALIZEBUFFER
+			SerializeBuffer clPacket4;
+			SerializeBuffer_netPacketProc_SC_MOVE_START(&clPacket4, (char)pTempSession->dwAction, pTempSession->dwSessionID, pTempSession->shX, pTempSession->shY);
+			SerializeBuffer_netSendUnicast(st_New_Player, &clPacket4);
+#else
 			netPacketProc_SC_MOVE_START((char*)&header_Sync_Move_SC_MOVE_START, (char*)&packet_Sync_Move_SC_MOVE_START, (char)pTempSession->dwAction, pTempSession->dwSessionID, pTempSession->shX, pTempSession->shY);
 			netSendUnicast(st_New_Player, (char*)&header_Sync_Move_SC_MOVE_START, (char*)&packet_Sync_Move_SC_MOVE_START, sizeof(packet_Sync_Move_SC_MOVE_START));
+#endif // SERIALIZEBUFFER
+
 		}
 	}
 #ifdef DETAILS_LOG
@@ -384,6 +415,7 @@ void netProc_Recv(st_SESSION* pSession)
 
 	st_PACKET_HEADER header;
 	char Temp_Packet_Buffer[64];
+	SerializeBuffer Temp_Packet_SerializeBuffer;
 
 	Recv_Size = recv(pSession->Socket, pSession->RecvQ.GetRearBufferPtr(), pSession->RecvQ.DirectEnqueueSize(), 0);
 	if (Recv_Size == 0)
@@ -474,6 +506,18 @@ void netProc_Recv(st_SESSION* pSession)
 		// 메시지 완성됨 == 메시지를 꺼내서 처리한다. '
 		pSession->RecvQ.MoveFront(sizeof(st_PACKET_HEADER));
 
+#ifdef SERIALIZEBUFFER
+		Ret_Dq = pSession->RecvQ.Dequeue(Temp_Packet_SerializeBuffer.GetBufferPtr(), header.bySize);
+		if (Ret_Dq < header.bySize)
+		{
+			// 혹시 모를 에러체크, 싱글 스레드에서는 일어날 일이 없다. 
+			c_Save_Log.printfLog(L"Dequeue failed with error \n");
+			__debugbreak();
+		};
+
+
+		SerializeBuffer_PacketProc(pSession, header.byType, &Temp_Packet_SerializeBuffer);
+#else
 		Ret_Dq = pSession->RecvQ.Dequeue(Temp_Packet_Buffer, header.bySize);
 		if (Ret_Dq < header.bySize)
 		{
@@ -481,8 +525,9 @@ void netProc_Recv(st_SESSION* pSession)
 			c_Save_Log.printfLog(L"Dequeue failed with error \n");
 			__debugbreak();
 		}
-		
 		PacketProc(pSession, header.byType, Temp_Packet_Buffer);
+#endif // SERIALIZEBUFFER
+
 	}
 }
 
@@ -533,6 +578,38 @@ void netProc_Send(st_SESSION* pSession)
 	}
 }
 
+#ifdef SERIALIZEBUFFER
+void SerializeBuffer_netSendUnicast(st_SESSION* pSession, SerializeBuffer* clpPacket)
+{
+	int Ret_Packet;
+
+	Ret_Packet = pSession->SendQ.Enqueue((char*)clpPacket, clpPacket->GetDataSize());
+	if (Ret_Packet == 0)
+	{
+		c_Save_Log.printfLog(L"Packet Unicast failed with error: \n");
+#ifdef DEFAULT_LOG
+		printf_s("Disconnect Packet Unicast failed with error # SessionID: %d \n", pSession->dwSessionID);
+#endif // DEFAULT_LOG
+		PushDisconnectList(pSession);
+		return;
+	}
+}
+void SerializeBuffer_netSendBroadcast(st_SESSION* pSession, SerializeBuffer* clpPacket)
+{
+	std::map<DWORD, st_SESSION*>::iterator iter;
+	st_SESSION* p_Temp_Session;
+
+	for (iter = g_Session_List.begin(); iter != g_Session_List.end(); ++iter)
+	{
+		p_Temp_Session = (*iter).second;
+
+		if (p_Temp_Session->Disconnect) continue;
+		if (p_Temp_Session == pSession) continue;
+
+		SerializeBuffer_netSendUnicast(p_Temp_Session, clpPacket);
+	}
+}
+#else
 void netSendUnicast(st_SESSION* pSession, char* header, char* packet, int Packet_Len)
 {
 	int Ret_Header;
@@ -576,7 +653,7 @@ void netSendBroadcast(st_SESSION* pSession, char* header, char* packet, int Pack
 		netSendUnicast(p_Temp_Session, header, packet, Packet_Len);
 	}
 }
-
+#endif // SERIALIZEBUFFER
 void PushDisconnectList(st_SESSION* pSession)
 {
 	if (pSession->Disconnect) return;
@@ -590,13 +667,25 @@ void Disconnect()
 	st_SESSION* p_Session;
 	st_PACKET_SC_DELETE_CHARACTER packet_SC_DELETE;
 	st_PACKET_HEADER header_SC_DELETE;
+	SerializeBuffer clPacket;
 
+#ifdef SERIALIZEBUFFER
+	for (iter = g_Disconnect_List.begin(); iter != g_Disconnect_List.end(); ++iter)
+	{
+		p_Session = *iter;
+		SerializeBuffer_netPacketProc_SC_DELETE_CHARACTER(p_Session, &clPacket);
+		SerializeBuffer_netSendBroadcast(NULL, &clPacket);
+	}
+#else
 	for (iter = g_Disconnect_List.begin(); iter != g_Disconnect_List.end(); ++iter)
 	{
 		p_Session = *iter;
 		netPacketProc_SC_DELETE_CHARACTER(p_Session, (char*)&header_SC_DELETE, (char*)&packet_SC_DELETE);
 		netSendBroadcast(NULL, (char*)&header_SC_DELETE, (char*)&packet_SC_DELETE, sizeof(st_PACKET_SC_DELETE_CHARACTER));
 	}
+#endif // SERIALIZEBUFFER
+
+
 	
 
 	for (iter = g_Disconnect_List.begin(); iter != g_Disconnect_List.end();)
@@ -631,6 +720,65 @@ void Disconnect()
 	
 }
 
+#ifdef SERIALIZEBUFFER
+bool SerializeBuffer_PacketProc(st_SESSION* pSession, BYTE byPacketType, SerializeBuffer* clpPacket)
+{
+	switch (byPacketType)
+	{
+	case dfPACKET_CS_MOVE_START:
+	{
+#ifdef DEFAULT_LOG
+		printf_s("# PACKET_MOVE_START # SessionID:%d / Direction:%d / X:%d /Y:%d \n", pSession->dwSessionID, ((st_PACKET_CS_MOVE_START*)clpPacket->GetBufferPtr())->Direction, ((st_PACKET_CS_MOVE_START*)clpPacket->GetBufferPtr())->X, ((st_PACKET_CS_MOVE_START*)clpPacket->GetBufferPtr())->Y);
+#endif // DEFAULT_LOG
+		return SerializeBuffer_netPacketProc_CS_MOVE_START(pSession, clpPacket);
+		break;
+	}
+	case dfPACKET_CS_MOVE_STOP:
+	{
+#ifdef DEFAULT_LOG
+		printf_s("# PACKET_MOVE_STOP # SessionID:%d / Direction:%d / X:%d /Y:%d \n", pSession->dwSessionID, ((st_PACKET_CS_MOVE_STOP*)clpPacket->GetBufferPtr())->Direction, ((st_PACKET_CS_MOVE_STOP*)clpPacket->GetBufferPtr())->X, ((st_PACKET_CS_MOVE_STOP*)clpPacket->GetBufferPtr())->Y);
+#endif // DEFAULT_LOG
+		return SerializeBuffer_netPacketProc_CS_MOVE_STOP(pSession, clpPacket);
+		break;
+	}
+	case dfPACKET_CS_ATTACK1:
+	{
+#ifdef DEFAULT_LOG
+		printf_s("# PACKET_ATTACK1 # SessionID:%d / Direction:%d / X:%d /Y:%d \n", pSession->dwSessionID, ((st_PACKET_CS_ATTACK1*)clpPacket->GetBufferPtr())->Direction, ((st_PACKET_CS_ATTACK1*)clpPacket->GetBufferPtr())->X, ((st_PACKET_CS_ATTACK1*)clpPacket->GetBufferPtr())->Y);
+#endif // DEFAULT_LOG
+		return SerializeBuffer_netPacketProc_CS_ATTACK1(pSession, clpPacket);
+		break;
+	}
+	case dfPACKET_CS_ATTACK2:
+	{
+#ifdef DEFAULT_LOG
+		printf_s("# PACKET_ATTACK2 # SessionID:%d / Direction:%d / X:%d /Y:%d \n", pSession->dwSessionID, ((st_PACKET_CS_ATTACK2*)clpPacket->GetBufferPtr())->Direction, ((st_PACKET_CS_ATTACK2*)clpPacket->GetBufferPtr())->X, ((st_PACKET_CS_ATTACK2*)clpPacket->GetBufferPtr())->Y);
+#endif // DEFAULT_LOG
+		return SerializeBuffer_netPacketProc_CS_ATTACK2(pSession, clpPacket);
+		break;
+	}
+	case dfPACKET_CS_ATTACK3:
+	{
+#ifdef DEFAULT_LOG
+		printf_s("# PACKET_ATTACK3 # SessionID:%d / Direction:%d / X:%d /Y:%d \n", pSession->dwSessionID, ((st_PACKET_CS_ATTACK3*)clpPacket->GetBufferPtr())->Direction, ((st_PACKET_CS_ATTACK3*)clpPacket->GetBufferPtr())->X, ((st_PACKET_CS_ATTACK3*)clpPacket->GetBufferPtr())->Y);
+#endif // DEFAULT_LOG
+		return SerializeBuffer_netPacketProc_CS_ATTACK3(pSession, clpPacket);
+		break;
+	}
+	case dfPACKET_CS_SYNC:
+	{
+		return false;
+		break;
+	}
+	default:
+	{
+		return false;
+		break;
+	}
+	}
+
+}
+#else
 bool PacketProc(st_SESSION* pSession, BYTE byPacketType, char* pPacket)
 {
 	switch (byPacketType)
@@ -688,3 +836,5 @@ bool PacketProc(st_SESSION* pSession, BYTE byPacketType, char* pPacket)
 	}
 
 }
+#endif // SERIALIZEBUFFER
+

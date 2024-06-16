@@ -14,6 +14,7 @@
 #include "C_Ring_Buffer.h"
 #include "CList.h"
 #include "Logic.h"
+#include "SerializeBuffer.h"
 #include "NetWork.h"
 #include "PacketDefine.h"
 #include "main.h"

@@ -47,12 +47,18 @@ void init_Session(SOCKET Client_Socket, st_SESSION* st_New_Player);
 void netProc_Recv(st_SESSION* pSession);
 void netProc_Send(st_SESSION* pSession);
 
+#ifdef SERIALIZEBUFFER
+void SerializeBuffer_netSendUnicast(st_SESSION* pSession, SerializeBuffer* clpPacket);
+void SerializeBuffer_netSendBroadcast(st_SESSION* pSession, SerializeBuffer* clpPacket);
+bool SerializeBuffer_PacketProc(st_SESSION* pSession, BYTE byPacketType, SerializeBuffer* clpPacket);
+#else
 void netSendUnicast(st_SESSION* pSession, char* header, char* packet, int Packet_Len);
 void netSendBroadcast(st_SESSION* pSession, char* header, char* packet, int Packet_Len);
+bool PacketProc(st_SESSION* pSession, BYTE byPacketType, char* pPacket);
+#endif // SERIALIZEBUFFER
 
 void PushDisconnectList(st_SESSION* pSession);
 void Disconnect(void);
-bool PacketProc(st_SESSION* pSession, BYTE byPacketType, char* pPacket);
 
 
 #endif // !__NETWORK_H__

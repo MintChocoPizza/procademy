@@ -139,6 +139,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetWork.cpp" />
     <ClCompile Include="PacketDefine.cpp" />
+    <ClCompile Include="SerializeBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CList.h" />
@@ -148,7 +149,9 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="NetWork.h" />
     <ClInclude Include="PacketDefine.h" />
+    <ClInclude Include="SerializeBuffer.h" />
     <ClInclude Include="Set_Log.h" />
+    <ClInclude Include="Set_SerializeBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

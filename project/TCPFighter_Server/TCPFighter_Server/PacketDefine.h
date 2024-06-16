@@ -422,9 +422,25 @@ struct st_PACKET_SC_SYNC
 };
 #pragma pack(pop)
 
+#ifdef SERIALIZEBUFFER
+bool SerializeBuffer_netPacketProc_SC_CREATE_MY_CHARACTER(st_SESSION* p_Session, SerializeBuffer* clpPacket);
+bool SerializeBuffer_netPacketProc_SC_CREATE_OTHER_CHARACTER(st_SESSION* p_Session, SerializeBuffer* clpPacket);
 
-bool netPacketProc_SC_CREATE_MY_CHARACTER(st_SESSION* p_Session, char* pHeader ,char* pPacket);
+bool SerializeBuffer_netPacketProc_SC_DELETE_CHARACTER(st_SESSION* p_Session, SerializeBuffer* clpPacket);
 
+bool SerializeBuffer_netPacketProc_CS_MOVE_START(st_SESSION* p_Session, SerializeBuffer* clpPacket);
+bool SerializeBuffer_netPacketProc_SC_MOVE_START(SerializeBuffer* clpPacket, char Direction, __int32 ID, short X, short Y);
+
+bool SerializeBuffer_netPacketProc_CS_MOVE_STOP(st_SESSION* p_Session, SerializeBuffer* clpPacket);
+bool SerializeBuffer_netPacketProc_SC_MOVE_STOP(SerializeBuffer* clpPacket, char Direction, __int32 ID, short X, short Y);
+
+bool SerializeBuffer_netPacketProc_CS_ATTACK1(st_SESSION* p_Session, SerializeBuffer* clpPacket);
+
+bool SerializeBuffer_netPacketProc_CS_ATTACK2(st_SESSION* p_Session, SerializeBuffer* clpPacket);
+
+bool SerializeBuffer_netPacketProc_CS_ATTACK3(st_SESSION* p_Session, SerializeBuffer* clpPacket);
+#else
+bool netPacketProc_SC_CREATE_MY_CHARACTER(st_SESSION* p_Session, char* pHeader, char* pPacket);
 bool netPacketProc_SC_CREATE_OTHER_CHARACTER(st_SESSION* p_Session, char* pHeader, char* pPacket);
 
 bool netPacketProc_SC_DELETE_CHARACTER(st_SESSION* p_Session, char* pHeader, char* pPacket);
@@ -448,6 +464,13 @@ bool netPacketProc_SC_DAMAGE(char* pHeader, char* pPacket, __int32 AttackID, __i
 
 bool netPacketProc_CS_SYNC(st_SESSION* p_Session, char* pPacket);
 bool netPacketProc_SC_SYNC(st_SESSION* p_Session, char* pHeader, char* pPacket);
+#endif // SERIALIZEBUFFER
+
+
+
+
+
+
 
 
 #endif // !__PACKET_DEFINE_H__
