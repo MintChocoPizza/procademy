@@ -2,46 +2,50 @@
 #include <Windows.h>
 #include "CMessage.h"
 
-CMessage::CMessage()
+SerializeBuffer::SerializeBuffer()
 {
 	m_chpBeginPos = new char[eBUFFER_DEFAULT];
 	m_iBufferSize = eBUFFER_DEFAULT;
-	m_iDataSize = 0;
+
 	m_chpReadPos = m_chpBeginPos;
 	m_chpWritePos = m_chpBeginPos;
 	m_chpEndPos = m_chpBeginPos + eBUFFER_DEFAULT;
+	
 	m_iReSizeMaxSize = eBUFFER_ReSize_Max_Size;
 }
 
-CMessage::CMessage(int iBufferSize)
+SerializeBuffer::SerializeBuffer(int iBufferSize)
 {
 	m_chpBeginPos = new char[iBufferSize];
 	m_iBufferSize = iBufferSize;
-	m_iDataSize = 0;
-	m_chpReadPos = m_chpWritePos = m_chpBeginPos;
+
+	m_chpReadPos = m_chpBeginPos;
+	m_chpWritePos = m_chpBeginPos;
 	m_chpEndPos = m_chpBeginPos + iBufferSize;
+	
 	m_iReSizeMaxSize = eBUFFER_ReSize_Max_Size;
 }
 
-CMessage::~CMessage()
+SerializeBuffer::~SerializeBuffer()
 {
 	delete[] m_chpBeginPos;
 }
 
-CMessage& CMessage::operator=(CMessage& clSrcPacket)
+SerializeBuffer& SerializeBuffer::operator=(SerializeBuffer& clSrcPacket)
 {
 	// TODO: 여기에 return 문을 삽입합니다.
 
 	return *this;
 }
 
-CMessage& CMessage::operator<<(unsigned char byValue)
+SerializeBuffer& SerializeBuffer::operator<<(unsigned char byValue)
 {
 	// TODO: 여기에 return 문을 삽입합니다.
-	if (m_iBufferSize - m_iDataSize < sizeof(unsigned char))
+	if (m_chpEndPos - m_chpWritePos < sizeof(unsigned char))
 	{
 		ReSize();
 	}
+
 
 	memcpy(m_chpWritePos, &byValue, sizeof(unsigned char));
 	m_chpWritePos += sizeof(unsigned char);
@@ -49,10 +53,10 @@ CMessage& CMessage::operator<<(unsigned char byValue)
 	return *this;
 }
 
-CMessage& CMessage::operator<<(char chValue)
+SerializeBuffer& SerializeBuffer::operator<<(char chValue)
 {
 	// TODO: 여기에 return 문을 삽입합니다.
-	if (m_iBufferSize - m_iDataSize < sizeof(char))
+	if (m_chpEndPos - m_chpWritePos < sizeof(char))
 	{
 		ReSize();
 	}
@@ -63,10 +67,10 @@ CMessage& CMessage::operator<<(char chValue)
 	return *this;
 }
 
-CMessage& CMessage::operator<<(short shValue)
+SerializeBuffer& SerializeBuffer::operator<<(short shValue)
 {
 	// TODO: 여기에 return 문을 삽입합니다.
-	if (m_iBufferSize - m_iDataSize < sizeof(short))
+	if (m_chpEndPos - m_chpWritePos < sizeof(short))
 	{
 		ReSize();
 	}
@@ -77,10 +81,10 @@ CMessage& CMessage::operator<<(short shValue)
 	return *this;
 }
 
-CMessage& CMessage::operator<<(unsigned short wValue)
+SerializeBuffer& SerializeBuffer::operator<<(unsigned short wValue)
 {
 	// TODO: 여기에 return 문을 삽입합니다.
-	if (m_iBufferSize - m_iDataSize < sizeof(unsigned short))
+	if (m_chpEndPos - m_chpWritePos < sizeof(unsigned short))
 	{
 		ReSize();
 	}
@@ -91,10 +95,10 @@ CMessage& CMessage::operator<<(unsigned short wValue)
 	return *this;
 }
 
-CMessage& CMessage::operator<<(int iValue)
+SerializeBuffer& SerializeBuffer::operator<<(int iValue)
 {
 	// TODO: 여기에 return 문을 삽입합니다.
-	if (m_iBufferSize - m_iDataSize < sizeof(int))
+	if (m_chpEndPos - m_chpWritePos < sizeof(int))
 	{
 		ReSize();
 	}
@@ -105,24 +109,24 @@ CMessage& CMessage::operator<<(int iValue)
 	return *this;
 }
 
-CMessage& CMessage::operator<<(long lValue)
+SerializeBuffer& SerializeBuffer::operator<<(unsigned long lValue)
 {
 	// TODO: 여기에 return 문을 삽입합니다.
-	if (m_iBufferSize - m_iDataSize < sizeof(long))
+	if (m_chpEndPos - m_chpWritePos < sizeof(unsigned long))
 	{
 		ReSize();
 	}
 
-	memcpy(m_chpWritePos, &lValue, sizeof(long));
-	m_chpWritePos += sizeof(long);
+	memcpy(m_chpWritePos, &lValue, sizeof(unsigned long));
+	m_chpWritePos += sizeof(unsigned long);
 
 	return *this;
 }
 
-CMessage& CMessage::operator<<(float fValue)
+SerializeBuffer& SerializeBuffer::operator<<(float fValue)
 {
 	// TODO: 여기에 return 문을 삽입합니다.
-	if (m_iBufferSize - m_iDataSize < sizeof(float))
+	if (m_chpEndPos - m_chpWritePos < sizeof(float))
 	{
 		ReSize();
 	}
@@ -133,10 +137,10 @@ CMessage& CMessage::operator<<(float fValue)
 	return *this;
 }
 
-CMessage& CMessage::operator<<(__int64 iValue)
+SerializeBuffer& SerializeBuffer::operator<<(__int64 iValue)
 {
 	// TODO: 여기에 return 문을 삽입합니다.
-	if (m_iBufferSize - m_iDataSize < sizeof(__int64))
+	if (m_chpEndPos - m_chpWritePos < sizeof(__int64))
 	{
 		ReSize();
 	}
@@ -147,10 +151,10 @@ CMessage& CMessage::operator<<(__int64 iValue)
 	return *this;
 }
 
-CMessage& CMessage::operator<<(double dValue)
+SerializeBuffer& SerializeBuffer::operator<<(double dValue)
 {
 	// TODO: 여기에 return 문을 삽입합니다.
-	if (m_iBufferSize - m_iDataSize < sizeof(double))
+	if (m_chpEndPos - m_chpWritePos < sizeof(double))
 	{
 		ReSize();
 	}
@@ -161,73 +165,137 @@ CMessage& CMessage::operator<<(double dValue)
 	return *this;
 }
 
-CMessage& CMessage::operator>>(BYTE& byValue)
+SerializeBuffer& SerializeBuffer::operator>>(unsigned char& byValue)
 {
 	// TODO: 여기에 return 문을 삽입합니다.
-	return *this;
-}
+	if (m_chpWritePos - m_chpReadPos < sizeof(unsigned char))
+	{
+		throw;
+	}
 
-CMessage& CMessage::operator>>(char& chValue)
-{
-	// TODO: 여기에 return 문을 삽입합니다.
-	return *this;
-}
-
-CMessage& CMessage::operator>>(short& shValue)
-{
-	// TODO: 여기에 return 문을 삽입합니다.
-	return *this;
-}
-
-CMessage& CMessage::operator>>(WORD& wValue)
-{
-	// TODO: 여기에 return 문을 삽입합니다.
-	return *this;
-}
-
-CMessage& CMessage::operator>>(int& iValue)
-{
-	// TODO: 여기에 return 문을 삽입합니다.
-	return *this;
-}
-
-CMessage& CMessage::operator>>(DWORD& dwValue)
-{
-	// TODO: 여기에 return 문을 삽입합니다.
-	return *this;
-}
-
-CMessage& CMessage::operator>>(float& fValue)
-{
-	// TODO: 여기에 return 문을 삽입합니다.
-	return *this;
-}
-
-CMessage& CMessage::operator>>(__int64& iValue)
-{
-	// TODO: 여기에 return 문을 삽입합니다.
-	return *this;
-}
-
-CMessage& CMessage::operator>>(double& dValue)
-{
-	// TODO: 여기에 return 문을 삽입합니다.
+	memcpy(&byValue, m_chpReadPos, sizeof(unsigned char));
+	m_chpReadPos += sizeof(unsigned char);
 
 	return *this;
 }
 
-int CMessage::GetData(char* chpDest, size_t iSize)
+SerializeBuffer& SerializeBuffer::operator>>(char& chValue)
 {
-	if (m_iDataSize < iSize)
+	// TODO: 여기에 return 문을 삽입합니다.
+	if (m_chpWritePos - m_chpReadPos < sizeof(char))
+	{
+		throw;
+	}
+
+	memcpy(&chValue, m_chpReadPos, sizeof(char));
+	m_chpReadPos += sizeof(char);
+
+	return *this;
+}
+
+SerializeBuffer& SerializeBuffer::operator>>(short& shValue)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+	if (m_chpWritePos - m_chpReadPos < sizeof(short))
+	{
+		throw;
+	}
+
+	memcpy(&shValue, m_chpReadPos, sizeof(short));
+	m_chpReadPos += sizeof(short);
+	return *this;
+}
+
+SerializeBuffer& SerializeBuffer::operator>>(unsigned short& wValue)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+		// TODO: 여기에 return 문을 삽입합니다.
+	if (m_chpWritePos - m_chpReadPos < sizeof(unsigned short))
+	{
+		throw;
+	}
+
+	memcpy(&wValue, m_chpReadPos, sizeof(unsigned short));
+	m_chpReadPos += sizeof(unsigned short);
+	return *this;
+}
+
+SerializeBuffer& SerializeBuffer::operator>>(int& iValue)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+	if (m_chpWritePos - m_chpReadPos < sizeof(int))
+	{
+		throw;
+	}
+
+	memcpy(&iValue, m_chpReadPos, sizeof(int));
+	m_chpReadPos += sizeof(int);
+	return *this;
+}
+
+SerializeBuffer& SerializeBuffer::operator>>(unsigned long& dwValue)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+	if (m_chpWritePos - m_chpReadPos < sizeof(unsigned long))
+	{
+		throw;
+	}
+
+	memcpy(&dwValue, m_chpReadPos, sizeof(unsigned long));
+	m_chpReadPos += sizeof(unsigned long);
+	return *this;
+}
+
+SerializeBuffer& SerializeBuffer::operator>>(float& fValue)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+	if (m_chpWritePos - m_chpReadPos < sizeof(float))
+	{
+		throw;
+	}
+
+	memcpy(&fValue, m_chpReadPos, sizeof(float));
+	m_chpReadPos += sizeof(float);
+	return *this;
+}
+
+SerializeBuffer& SerializeBuffer::operator>>(__int64& iValue)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+	if (m_chpWritePos - m_chpReadPos < sizeof(__int64))
+	{
+		throw;
+	}
+
+	memcpy(&iValue, m_chpReadPos, sizeof(__int64));
+	m_chpReadPos += sizeof(__int64);
+	return *this;
+}
+
+SerializeBuffer& SerializeBuffer::operator>>(double& dValue)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+	if (m_chpWritePos - m_chpReadPos < sizeof(double))
+	{
+		throw;
+	}
+
+	memcpy(&dValue, m_chpReadPos, sizeof(double));
+	m_chpReadPos += sizeof(double);
+	return *this;
+}
+
+int SerializeBuffer::GetData(char* chpDest, size_t iSize)
+{
+	if (m_chpWritePos - m_chpReadPos < iSize)
 		return 0;
 
 	memcpy(chpDest, m_chpReadPos, iSize);
-	m_iDataSize -= iSize;
 	m_chpReadPos += iSize;
 	return iSize;
 }
 
-int CMessage::PutData(char* chpSrc, size_t iSrcSize)
+int SerializeBuffer::PutData(char* chpSrc, size_t iSrcSize)
 {
 	// 해당 함수에서 넣을 수 있는 사이즈를 계산하나 
 	// 다른 함수를 호출하여 넣을 수 있는 사이즈를 계산하나 
@@ -238,7 +306,7 @@ int CMessage::PutData(char* chpSrc, size_t iSrcSize)
 	// 저장하는데 this호출이 2번 일어나기 때문....
 	
 	// this 콜을 지역변수로 고치는거 또한 어셈블리의 수가 같다. 
-	if (m_iBufferSize - m_iDataSize < iSrcSize)
+	if(m_chpEndPos - m_chpWritePos < iSrcSize)
 	{
 		// FreeSize보다 iSrcSize가 큰 경우 리사이즈를 한다. 
 		// 그리고 직렬화 버퍼의 바이트를 로그로 남긴다. 
@@ -247,12 +315,11 @@ int CMessage::PutData(char* chpSrc, size_t iSrcSize)
 	}
 
 	memcpy(m_chpWritePos, chpSrc, iSrcSize);
-	m_iDataSize += iSrcSize;
 	m_chpWritePos += iSrcSize;
 	return iSrcSize;
 }
 
-int CMessage::ReSize()
+int SerializeBuffer::ReSize()
 {
 	size_t NewBufferSize;
 	size_t ReadPosIndex;
@@ -293,7 +360,7 @@ int CMessage::ReSize()
 	return 0;
 }
 
-int CMessage::ReSize(size_t Size)
+int SerializeBuffer::ReSize(size_t Size)
 {
 	size_t NewBufferSize;
 	size_t ReadPosIndex;

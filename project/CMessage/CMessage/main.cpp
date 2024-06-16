@@ -6,13 +6,11 @@
 
 int main()
 {
-	CMessage* m = new CMessage;
+	SerializeBuffer sb;
 
-	char* ttt = (char*)malloc(123);
+	char ttt[] = "asdfadsf";
 
-	int a = 10;
-
-	m << a;
+	sb.PutData(ttt, sizeof(ttt));
 
 
 

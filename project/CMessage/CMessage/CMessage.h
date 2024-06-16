@@ -97,10 +97,10 @@
 //		
 // 
 //------------------------------------------------------------------------------------------------------------------------------
-#ifndef __CMESSAGE_H__
-#define __CMESSAGE_H__
+#ifndef __SERIALIZEBUFFER_H__
+#define __SERIALIZEBUFFER_H__
 
-class CMessage
+class SerializeBuffer
 {
 public:
 	enum en_PACKET
@@ -114,10 +114,10 @@ public:
 	//
 	// Return:
 	//////////////////////////////////////////////////////////////////////////
-	CMessage();
-	CMessage(int iBufferSize);
+	SerializeBuffer();
+	SerializeBuffer(int iBufferSize);
 
-	virtual	~CMessage();
+	virtual	~SerializeBuffer();
 
 
 	//////////////////////////////////////////////////////////////////////////
@@ -140,14 +140,14 @@ public:
 	// Parameters: 없음.
 	// Return: (int)사용중인 데이타 사이즈.
 	//////////////////////////////////////////////////////////////////////////
-	int		GetDataSize(void) { return m_iDataSize; }
+	int		GetDataSize(void) { return m_chpWritePos - m_chpReadPos; }
 	//////////////////////////////////////////////////////////////////////////
 	// 현재 사용하지 않는 사이즈 얻기.
 	//
 	// Parameters: 없음.
 	// Return: (int)사용하지 않는 데이타 사이즈.
 	//////////////////////////////////////////////////////////////////////////
-	int		GetFreeSize(void) { return m_iBufferSize - m_iDataSize; }
+	int		GetFreeSize(void) { return m_chpEndPos - m_chpWritePos; }
 
 
 
@@ -166,10 +166,10 @@ public:
 	// Parameters: (int) 이동 사이즈.
 	// Return: (int) 이동된 사이즈.
 	//////////////////////////////////////////////////////////////////////////
-	//int		MoveWritePos(int iSize);
-	//int		MoveReadPos(int iSize);
-	void		MoveWritePos(int iSize) { m_chpReadPos += iSize; }
-	void		MoveReadPos(int iSize) { m_chpWritePos += iSize; }
+	int			RetMoveWritePos(int iSize)	{ m_chpWritePos += iSize; return iSize; }
+	int			RetMoveReadPos(int iSize)	{ m_chpReadPos += iSize; return iSize; }
+	void		MoveWritePos(int iSize)		{ m_chpWritePos += iSize; }
+	void		MoveReadPos(int iSize)		{ m_chpReadPos += iSize; }
 	// 현재 해당 함수가 왜 사이즈를 리턴해야 하는지 정확한 이유를 모르겠다. 
 
 
@@ -179,40 +179,40 @@ public:
 	/* ============================================================================= */
 	// 연산자 오버로딩
 	/* ============================================================================= */
-	CMessage& operator = (CMessage& clSrcPacket);
+	SerializeBuffer& operator = (SerializeBuffer& clSrcPacket);
 
 	//////////////////////////////////////////////////////////////////////////
 	// 넣기.	각 변수 타입마다 모두 만듬.
 	//////////////////////////////////////////////////////////////////////////
-	CMessage& operator << (unsigned char byValue);
-	CMessage& operator << (char chValue);
+	SerializeBuffer& operator << (unsigned char byValue);
+	SerializeBuffer& operator << (char chValue);
 
-	CMessage& operator << (short shValue);
-	CMessage& operator << (unsigned short wValue);
+	SerializeBuffer& operator << (short shValue);
+	SerializeBuffer& operator << (unsigned short wValue);
 
-	CMessage& operator << (int iValue);
-	CMessage& operator << (long lValue);
-	CMessage& operator << (float fValue);
+	SerializeBuffer& operator << (int iValue);
+	SerializeBuffer& operator << (unsigned long lValue);
+	SerializeBuffer& operator << (float fValue);
 
-	CMessage& operator << (__int64 iValue);
-	CMessage& operator << (double dValue);
+	SerializeBuffer& operator << (__int64 iValue);
+	SerializeBuffer& operator << (double dValue);
 
 
 	//////////////////////////////////////////////////////////////////////////
 	// 빼기.	각 변수 타입마다 모두 만듬.
 	//////////////////////////////////////////////////////////////////////////
-	CMessage& operator >> (BYTE& byValue);
-	CMessage& operator >> (char& chValue);
+	SerializeBuffer& operator >> (unsigned char& byValue);
+	SerializeBuffer& operator >> (char& chValue);
 
-	CMessage& operator >> (short& shValue);
-	CMessage& operator >> (WORD& wValue);
+	SerializeBuffer& operator >> (short& shValue);
+	SerializeBuffer& operator >> (unsigned short& wValue);
 
-	CMessage& operator >> (int& iValue);
-	CMessage& operator >> (DWORD& dwValue);
-	CMessage& operator >> (float& fValue);
+	SerializeBuffer& operator >> (int& iValue);
+	SerializeBuffer& operator >> (unsigned long& dwValue);
+	SerializeBuffer& operator >> (float& fValue);
 
-	CMessage& operator >> (__int64& iValue);
-	CMessage& operator >> (double& dValue);
+	SerializeBuffer& operator >> (__int64& iValue);
+	SerializeBuffer& operator >> (double& dValue);
 
 
 
@@ -232,6 +232,7 @@ public:
 	// Return: (int)복사한 사이즈.	데이터를 넣을 자리가 없다면  0
 	//////////////////////////////////////////////////////////////////////////
 	int		PutData(char* chpSrc, size_t iSrcSize);
+
 
 	//////////////////////////////////////////////////////////////////////////
 	// 버퍼 사이즈 리사이즈
@@ -279,9 +280,9 @@ protected:
 	size_t	m_iBufferSize;
 
 	//------------------------------------------------------------
-	// 현재 버퍼에 사용중인 사이즈.
+	// 현재 버퍼에 사용중인 사이즈. 이게 꼭 잇어야 하나???
 	//------------------------------------------------------------
-	size_t	m_iDataSize;
+	// size_t	m_iDataSize;
 
 	//------------------------------------------------------------
 	// 버퍼 리사이즈 최대 사이즈.
@@ -291,5 +292,5 @@ protected:
 
 
 
-#endif // !__CMESSAGE_H__
+#endif // !__SERIALIZEBUFFER_H__
 
