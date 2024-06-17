@@ -435,10 +435,16 @@ bool SerializeBuffer_netPacketProc_CS_MOVE_STOP(st_SESSION* p_Session, Serialize
 bool SerializeBuffer_netPacketProc_SC_MOVE_STOP(SerializeBuffer* clpPacket, char Direction, __int32 ID, short X, short Y);
 
 bool SerializeBuffer_netPacketProc_CS_ATTACK1(st_SESSION* p_Session, SerializeBuffer* clpPacket);
+bool SerializeBuffer_netPacketProc_SC_ATTACK1(SerializeBuffer* clpPacket, char Direction, __int32 ID, short X, short Y);
 
 bool SerializeBuffer_netPacketProc_CS_ATTACK2(st_SESSION* p_Session, SerializeBuffer* clpPacket);
+bool SerializeBuffer_netPacketProc_SC_ATTACK2(SerializeBuffer* clpPacket, char Direction, __int32 ID, short X, short Y);
 
 bool SerializeBuffer_netPacketProc_CS_ATTACK3(st_SESSION* p_Session, SerializeBuffer* clpPacket);
+bool SerializeBuffer_netPacketProc_SC_ATTACK3(SerializeBuffer* clpPacket, char Direction, __int32 ID, short X, short Y);
+
+bool  SerializeBuffer_netPacketProc_SC_DAMAGE(SerializeBuffer* clpPacket, __int32 AttackID, __int32 DamageID, char HP);
+
 #else
 bool netPacketProc_SC_CREATE_MY_CHARACTER(st_SESSION* p_Session, char* pHeader, char* pPacket);
 bool netPacketProc_SC_CREATE_OTHER_CHARACTER(st_SESSION* p_Session, char* pHeader, char* pPacket);

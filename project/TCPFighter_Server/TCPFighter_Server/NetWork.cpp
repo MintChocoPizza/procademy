@@ -326,7 +326,7 @@ void netProc_Accept(void)
 	SerializeBuffer clPacket;
 	SerializeBuffer_netPacketProc_SC_CREATE_MY_CHARACTER(st_New_Player, &clPacket);
 	SerializeBuffer_netSendUnicast(st_New_Player, &clPacket);
-#elif
+#else
 	netPacketProc_SC_CREATE_MY_CHARACTER(st_New_Player, (char*)&header_SC_CRESTE_MY_CHARACTER, (char*)&packet_SC_CRESTE_MY_CHARACTER);
 	netSendUnicast(st_New_Player, (char*)&header_SC_CRESTE_MY_CHARACTER, (char*)&packet_SC_CRESTE_MY_CHARACTER, sizeof(packet_SC_CRESTE_MY_CHARACTER));
 #endif	// SERIALIZEBUFFER
@@ -360,8 +360,9 @@ void netProc_Accept(void)
 		// 일단 그냥 생성 메시지만 보낸다.
 #ifdef SERIALIZEBUFFER
 		SerializeBuffer clPacket3;
+		clPacket3.Clear();
 		SerializeBuffer_netPacketProc_SC_CREATE_OTHER_CHARACTER(pTempSession, &clPacket3);
-		SerializeBuffer_netSendUnicast(pTempSession, &clPacket3);
+		SerializeBuffer_netSendUnicast(st_New_Player, &clPacket3);
 #else
 		netPacketProc_SC_CREATE_OTHER_CHARACTER(pTempSession, (char*)&header_for_me_SC_CREATE_OTHER_CHARACTER, (char*)&packet_for_me_SC_CREATE_OTHER_CHARACTER);
 		netSendUnicast(st_New_Player, (char*)&header_for_me_SC_CREATE_OTHER_CHARACTER, (char*)&packet_for_me_SC_CREATE_OTHER_CHARACTER, sizeof(packet_for_me_SC_CREATE_OTHER_CHARACTER));
@@ -583,7 +584,7 @@ void SerializeBuffer_netSendUnicast(st_SESSION* pSession, SerializeBuffer* clpPa
 {
 	int Ret_Packet;
 
-	Ret_Packet = pSession->SendQ.Enqueue((char*)clpPacket, clpPacket->GetDataSize());
+	Ret_Packet = pSession->SendQ.Enqueue(clpPacket->GetBufferPtr(), clpPacket->GetDataSize());
 	if (Ret_Packet == 0)
 	{
 		c_Save_Log.printfLog(L"Packet Unicast failed with error: \n");

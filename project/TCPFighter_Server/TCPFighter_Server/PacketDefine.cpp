@@ -32,11 +32,11 @@ bool SerializeBuffer_netPacketProc_SC_CREATE_MY_CHARACTER(st_SESSION* p_Session,
 	stPacketHeader.byType = dfPACKET_SC_CREATE_MY_CHARACTER;
 	clpPacket->PutData((char*)&stPacketHeader, sizeof(st_PACKET_HEADER));
 
-	*clpPacket << p_Session->byDirection;
-	*clpPacket << p_Session->chHP;
 	*clpPacket << p_Session->dwSessionID;
+	*clpPacket << p_Session->byDirection;
 	*clpPacket << p_Session->shX;
 	*clpPacket << p_Session->shY;
+	*clpPacket << p_Session->chHP;
 
 	return true;
 }
@@ -48,11 +48,11 @@ bool SerializeBuffer_netPacketProc_SC_CREATE_OTHER_CHARACTER(st_SESSION* p_Sessi
 	stPacketHeader.byType = dfPACKET_SC_CREATE_OTHER_CHARACTER;
 	clpPacket->PutData((char*)&stPacketHeader, sizeof(st_PACKET_HEADER));
 
-	*clpPacket << p_Session->byDirection;
-	*clpPacket << p_Session->chHP;
 	*clpPacket << p_Session->dwSessionID;
+	*clpPacket << p_Session->byDirection;
 	*clpPacket << p_Session->shX;
 	*clpPacket << p_Session->shY;
+	*clpPacket << p_Session->chHP;
 
 	return true;
 }
@@ -141,8 +141,8 @@ bool SerializeBuffer_netPacketProc_SC_MOVE_START(SerializeBuffer* clpPacket, cha
 	stPacketHeader.byType = dfPACKET_SC_MOVE_START;
 	clpPacket->PutData((char*)&stPacketHeader, sizeof(st_PACKET_HEADER));
 
-	*clpPacket << Direction;
 	*clpPacket << ID;
+	*clpPacket << Direction;
 	*clpPacket << X;
 	*clpPacket << Y;
 
@@ -153,7 +153,8 @@ bool SerializeBuffer_netPacketProc_CS_MOVE_STOP(st_SESSION* p_Session, Serialize
 {
 	st_PACKET_HEADER Header;
 	st_PACKET_SC_MOVE_STOP SendMsg;
-	st_PACKET_CS_MOVE_STOP* pMoveStop = (st_PACKET_CS_MOVE_STOP*)clpPacket;
+	st_PACKET_CS_MOVE_STOP* pMoveStop = (st_PACKET_CS_MOVE_STOP*)clpPacket->GetBufferPtr();
+	SerializeBuffer clPacket;
 
 	if (abs(p_Session->shX - pMoveStop->X) > dfERROR_RANGE ||
 		abs(p_Session->shY - pMoveStop->Y) > dfERROR_RANGE)
@@ -201,23 +202,25 @@ bool SerializeBuffer_netPacketProc_CS_MOVE_STOP(st_SESSION* p_Session, Serialize
 	//---------------------------------------------------------------------------------------------------
 	// 현재 접속중인 사용자에게 모든 패킷을 뿌린다. 당사자 제외
 	//---------------------------------------------------------------------------------------------------
-	netPacketProc_SC_MOVE_STOP((char*)&Header, (char*)&SendMsg, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
-	netSendBroadcast(p_Session, (char*)&Header, (char*)&SendMsg, sizeof(SendMsg));
+
+	SerializeBuffer_netPacketProc_SC_MOVE_STOP(&clPacket, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
+	SerializeBuffer_netSendBroadcast(p_Session, &clPacket);
 
 	return true;
 }
+
 bool SerializeBuffer_netPacketProc_SC_MOVE_STOP(SerializeBuffer* clpPacket, char Direction, __int32 ID, short X, short Y)
 {
 	st_PACKET_HEADER stPacketHeader;
 	stPacketHeader.byCode = dfNETWORK_PACKET_CODE;
 	stPacketHeader.bySize = sizeof(st_PACKET_SC_MOVE_STOP);
-	stPacketHeader.byType = dfPACKET_SC_MOVE_START;
+	stPacketHeader.byType = dfPACKET_SC_MOVE_STOP;
 	clpPacket->PutData((char*)&stPacketHeader, sizeof(st_PACKET_HEADER));
 
-	((st_PACKET_SC_MOVE_STOP*)pPacket)->Direction = Direction;
-	((st_PACKET_SC_MOVE_STOP*)pPacket)->ID = ID;
-	((st_PACKET_SC_MOVE_STOP*)pPacket)->X = X;
-	((st_PACKET_SC_MOVE_STOP*)pPacket)->Y = Y;
+	*clpPacket << ID;
+	*clpPacket << Direction;
+	*clpPacket << X;
+	*clpPacket << Y;
 	return true;
 }
 
@@ -231,16 +234,18 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK1(st_SESSION* p_Session, SerializeBu
 	st_PACKET_SC_ATTACK1 packet_SC_ATTACK1;
 	st_PACKET_SC_DAMAGE packet_SC_DAMGE;
 	std::map<DWORD, st_SESSION*>::iterator iter;
+	SerializeBuffer clPacket;
+	SerializeBuffer clPacket2;
 	short temp_X;
 	short temp_Y;
 
 
 
 	// 공격 모션에 대한 패킷은 모두에게 보낸다.
-	pTempPacket = (st_PACKET_CS_ATTACK1*)clpPacket;
+	pTempPacket = (st_PACKET_CS_ATTACK1*)clpPacket->GetBufferPtr();
 
-	netPacketProc_SC_ATTACK1((char*)&header_SC_ATTACK1, (char*)&packet_SC_ATTACK1, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
-	netSendBroadcast(p_Session, (char*)&header_SC_ATTACK1, (char*)&packet_SC_ATTACK1, sizeof(packet_SC_ATTACK1));
+	SerializeBuffer_netPacketProc_SC_ATTACK1(&clPacket, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
+	SerializeBuffer_netSendBroadcast(p_Session, &clPacket);
 
 	switch (pTempPacket->Direction)
 	{
@@ -269,8 +274,8 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK1(st_SESSION* p_Session, SerializeBu
 #ifdef DEFAULT_LOG
 				printf_s("#Attack1 Direction:RR /  SessionID:%d -> SessionID:%d \n", p_Session->dwSessionID, p_Temp_Session->dwSessionID);
 #endif
-				netPacketProc_SC_DAMAGE((char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
-				netSendBroadcast(NULL, (char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, sizeof(packet_SC_DAMGE));
+				SerializeBuffer_netPacketProc_SC_DAMAGE(&clPacket2, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
+				SerializeBuffer_netSendBroadcast(NULL, &clPacket2);
 				break;
 			}
 		}
@@ -303,8 +308,8 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK1(st_SESSION* p_Session, SerializeBu
 #ifdef DEFAULT_LOG
 				printf_s("#Attack1 Direction:LL / SessionID:%d -> SessionID:%d \n", p_Session->dwSessionID, p_Temp_Session->dwSessionID);
 #endif
-				netPacketProc_SC_DAMAGE((char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
-				netSendBroadcast(NULL, (char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, sizeof(packet_SC_DAMGE));
+				SerializeBuffer_netPacketProc_SC_DAMAGE(&clPacket2, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
+				SerializeBuffer_netSendBroadcast(NULL, &clPacket2);
 				break;
 			}
 		}
@@ -314,6 +319,21 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK1(st_SESSION* p_Session, SerializeBu
 		break;
 	}
 
+	return true;
+}
+
+bool SerializeBuffer_netPacketProc_SC_ATTACK1(SerializeBuffer* clpPacket, char Direction, __int32 ID, short X, short Y)
+{
+	st_PACKET_HEADER stPacketHeader;
+	stPacketHeader.byCode = dfNETWORK_PACKET_CODE;
+	stPacketHeader.bySize = sizeof(st_PACKET_SC_ATTACK1);
+	stPacketHeader.byType = dfPACKET_SC_ATTACK1;
+	clpPacket->PutData((char*)&stPacketHeader, sizeof(st_PACKET_HEADER));
+
+	*clpPacket << ID;
+	*clpPacket << Direction;
+	*clpPacket << X;
+	*clpPacket << Y;
 	return true;
 }
 
@@ -327,16 +347,19 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK2(st_SESSION* p_Session, SerializeBu
 	st_PACKET_SC_ATTACK2 packet_SC_ATTACK2;
 	st_PACKET_SC_DAMAGE packet_SC_DAMGE;
 	std::map<DWORD, st_SESSION*>::iterator iter;
+	SerializeBuffer clPacket;
+	SerializeBuffer clPacket2;
 	short temp_X;
 	short temp_Y;
 
 
 
 	// 공격 모션에 대한 패킷은 모두에게 보낸다.
-	pTempPacket = (st_PACKET_CS_ATTACK2*)clpPacket;
+	pTempPacket = (st_PACKET_CS_ATTACK2*)clpPacket->GetBufferPtr();
 
-	netPacketProc_SC_ATTACK2((char*)&header_SC_ATTACK2, (char*)&packet_SC_ATTACK2, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
-	netSendBroadcast(p_Session, (char*)&header_SC_ATTACK2, (char*)&packet_SC_ATTACK2, sizeof(packet_SC_ATTACK2));
+	SerializeBuffer_netPacketProc_SC_ATTACK2(&clPacket, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
+	SerializeBuffer_netSendBroadcast(p_Session, &clPacket);
+
 
 	switch (pTempPacket->Direction)
 	{
@@ -365,8 +388,8 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK2(st_SESSION* p_Session, SerializeBu
 #ifdef DEFAULT_LOG
 				printf_s("#Attack2 Direction:RR /  SessionID:%d -> SessionID:%d \n", p_Session->dwSessionID, p_Temp_Session->dwSessionID);
 #endif
-				netPacketProc_SC_DAMAGE((char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
-				netSendBroadcast(NULL, (char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, sizeof(packet_SC_DAMGE));
+				SerializeBuffer_netPacketProc_SC_DAMAGE(&clPacket2, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
+				SerializeBuffer_netSendBroadcast(NULL, &clPacket2);
 				break;
 			}
 		}
@@ -399,8 +422,8 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK2(st_SESSION* p_Session, SerializeBu
 #ifdef DEFAULT_LOG
 				printf_s("#Attack2 Direction:LL / SessionID:%d -> SessionID:%d \n", p_Session->dwSessionID, p_Temp_Session->dwSessionID);
 #endif
-				netPacketProc_SC_DAMAGE((char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
-				netSendBroadcast(NULL, (char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, sizeof(packet_SC_DAMGE));
+				SerializeBuffer_netPacketProc_SC_DAMAGE(&clPacket2, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
+				SerializeBuffer_netSendBroadcast(NULL, &clPacket2);
 				break;
 			}
 		}
@@ -413,6 +436,22 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK2(st_SESSION* p_Session, SerializeBu
 	return true;
 }
 
+bool SerializeBuffer_netPacketProc_SC_ATTACK2(SerializeBuffer* clpPacket, char Direction, __int32 ID, short X, short Y)
+{
+	st_PACKET_HEADER stPacketHeader;
+	stPacketHeader.byCode = dfNETWORK_PACKET_CODE;
+	stPacketHeader.bySize = sizeof(st_PACKET_SC_ATTACK2);
+	stPacketHeader.byType = dfPACKET_SC_ATTACK2;
+	clpPacket->PutData((char*)&stPacketHeader, sizeof(st_PACKET_HEADER));
+
+	*clpPacket << ID;
+	*clpPacket << Direction;
+	*clpPacket << X;
+	*clpPacket << Y;
+	return true;
+}
+
+
 bool SerializeBuffer_netPacketProc_CS_ATTACK3(st_SESSION* p_Session, SerializeBuffer* clpPacket)
 {
 	// 공격 하는 순간 판정까지 떨어진다.
@@ -423,16 +462,18 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK3(st_SESSION* p_Session, SerializeBu
 	st_PACKET_SC_ATTACK3 packet_SC_ATTACK3;
 	st_PACKET_SC_DAMAGE packet_SC_DAMGE;
 	std::map<DWORD, st_SESSION*>::iterator iter;
+	SerializeBuffer clPacket;
+	SerializeBuffer clPacket2;
 	short temp_X;
 	short temp_Y;
 
 
 
 	// 공격 모션에 대한 패킷은 모두에게 보낸다.
-	pTempPacket = (st_PACKET_CS_ATTACK3*)clpPacket;
+	pTempPacket = (st_PACKET_CS_ATTACK3*)clpPacket->GetBufferPtr();
 
-	netPacketProc_SC_ATTACK3((char*)&header_SC_ATTACK3, (char*)&packet_SC_ATTACK3, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
-	netSendBroadcast(p_Session, (char*)&header_SC_ATTACK3, (char*)&packet_SC_ATTACK3, sizeof(packet_SC_ATTACK3));
+	SerializeBuffer_netPacketProc_SC_ATTACK3(&clPacket, p_Session->byDirection, p_Session->dwSessionID, p_Session->shX, p_Session->shY);
+	SerializeBuffer_netSendBroadcast(p_Session, &clPacket);
 
 	switch (pTempPacket->Direction)
 	{
@@ -461,8 +502,8 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK3(st_SESSION* p_Session, SerializeBu
 #ifdef DEFAULT_LOG
 				printf_s("#Attack3 Direction:RR /  SessionID:%d -> SessionID:%d \n", p_Session->dwSessionID, p_Temp_Session->dwSessionID);
 #endif
-				netPacketProc_SC_DAMAGE((char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
-				netSendBroadcast(NULL, (char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, sizeof(packet_SC_DAMGE));
+				SerializeBuffer_netPacketProc_SC_DAMAGE(&clPacket2, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
+				SerializeBuffer_netSendBroadcast(NULL, &clPacket2);
 				break;
 			}
 		}
@@ -495,8 +536,8 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK3(st_SESSION* p_Session, SerializeBu
 #ifdef DEFAULT_LOG
 				printf_s("#Attack3 Direction:LL / SessionID:%d -> SessionID:%d \n", p_Session->dwSessionID, p_Temp_Session->dwSessionID);
 #endif
-				netPacketProc_SC_DAMAGE((char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
-				netSendBroadcast(NULL, (char*)&header_SC_DAMAGE, (char*)&packet_SC_DAMGE, sizeof(packet_SC_DAMGE));
+				SerializeBuffer_netPacketProc_SC_DAMAGE(&clPacket2, p_Session->dwSessionID, p_Temp_Session->dwSessionID, p_Temp_Session->chHP);
+				SerializeBuffer_netSendBroadcast(NULL, &clPacket2);
 				break;
 			}
 		}
@@ -508,6 +549,36 @@ bool SerializeBuffer_netPacketProc_CS_ATTACK3(st_SESSION* p_Session, SerializeBu
 
 	return true;
 }
+
+bool SerializeBuffer_netPacketProc_SC_ATTACK3(SerializeBuffer* clpPacket, char Direction, __int32 ID, short X, short Y)
+{
+	st_PACKET_HEADER stPacketHeader;
+	stPacketHeader.byCode = dfNETWORK_PACKET_CODE;
+	stPacketHeader.bySize = sizeof(st_PACKET_SC_ATTACK3);
+	stPacketHeader.byType = dfPACKET_SC_ATTACK3;
+	clpPacket->PutData((char*)&stPacketHeader, sizeof(st_PACKET_HEADER));
+
+	*clpPacket << ID;
+	*clpPacket << Direction;
+	*clpPacket << X;
+	*clpPacket << Y;
+	return true;
+}
+
+bool  SerializeBuffer_netPacketProc_SC_DAMAGE(SerializeBuffer* clpPacket, __int32 AttackID, __int32 DamageID, char HP)
+{
+	st_PACKET_HEADER stPacketHeader;
+	stPacketHeader.byCode = dfNETWORK_PACKET_CODE;
+	stPacketHeader.bySize = sizeof(st_PACKET_SC_DAMAGE);
+	stPacketHeader.byType = dfPACKET_SC_DAMAGE;
+	clpPacket->PutData((char*)&stPacketHeader, sizeof(st_PACKET_HEADER));
+
+	*clpPacket << AttackID;
+	*clpPacket << DamageID;
+	*clpPacket << HP;
+	return true;
+}
+
 
 
 #else
