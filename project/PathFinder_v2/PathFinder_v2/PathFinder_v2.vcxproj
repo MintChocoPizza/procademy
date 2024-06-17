@@ -137,6 +137,7 @@
     <ClInclude Include="Cellular_Automata.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Initstance.h" />
+    <ClInclude Include="JumpPointSearch.h" />
     <ClInclude Include="PathFinder_v2.h" />
     <ClInclude Include="RegisterClass.h" />
     <ClInclude Include="Resource.h" />
@@ -148,6 +149,7 @@
     <ClCompile Include="A_STAR.cpp" />
     <ClCompile Include="Cellular_Automata.cpp" />
     <ClCompile Include="Initstance.cpp" />
+    <ClCompile Include="JumpPointSearch.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RegisterClass.cpp" />
     <ClCompile Include="Tile.cpp" />

@@ -79,44 +79,44 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_PAINT:
     {
-        // 메모리 DC를 클리어 하고
-        PatBlt(g_hMemDC, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, WHITENESS);
+        //// 메모리 DC를 클리어 하고
+        //PatBlt(g_hMemDC, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, WHITENESS);
 
-        // RenderObstacle, RenderGrid를 메모리 DC에 출력
-        RenderObstacle(g_hMemDC);
+        //// RenderObstacle, RenderGrid를 메모리 DC에 출력
+        //RenderObstacle(g_hMemDC);
 
-
-        if (findPath == true)
-        {
-            RenderList(g_hMemDC);
-            RenderPath(g_hMemDC);
-        }
-        RenderGrid(g_hMemDC);
-        RendefUI(g_hMemDC);
-
-
-
-        // 메모리 DC에 랜더링이 끝나면, 메모리 DC -> 윈도우 DC로의 출력
-        hdc = BeginPaint(hWnd, &ps);
-        BitBlt(hdc, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, g_hMemDC, 0, 0, SRCCOPY);
-        EndPaint(hWnd, &ps);
-
-
-         //더블버퍼링 없애기
-        //InvalidateRect(hWnd, NULL, true);
-        //hdc = BeginPaint(hWnd, &ps);
 
         //if (findPath == true)
         //{
-        //    RenderList(hdc);
-        //    RenderPath(hdc);
+        //    RenderList(g_hMemDC);
+        //    RenderPath(g_hMemDC);
         //}
+        //RenderGrid(g_hMemDC);
+        //RendefUI(g_hMemDC);
 
-        //RenderObstacle(hdc);
-        //RenderGrid(hdc);
-        //RendefUI(hdc);
 
+
+        //// 메모리 DC에 랜더링이 끝나면, 메모리 DC -> 윈도우 DC로의 출력
+        //hdc = BeginPaint(hWnd, &ps);
+        //BitBlt(hdc, 0, 0, g_MemDCRect.right, g_MemDCRect.bottom, g_hMemDC, 0, 0, SRCCOPY);
         //EndPaint(hWnd, &ps);
+
+
+        //더블버퍼링 없애기
+        InvalidateRect(hWnd, NULL, true);
+        hdc = BeginPaint(hWnd, &ps);
+
+        if (findPath == true)
+        {
+            RenderList(hdc);
+            RenderPath(hdc);
+        }
+
+        RenderObstacle(hdc);
+        RenderGrid(hdc);
+        RendefUI(hdc);
+
+        EndPaint(hWnd, &ps);
 
     }
     break;

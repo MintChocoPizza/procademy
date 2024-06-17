@@ -2,10 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\Ring_Buffer\\Ring_Buffer",
-    "\\project\\TCPFighter_Server",
-    "\\project\\TCPFighter_Server\\TCPFighter_Server"
+    "\\project\\ASCII_Text_Parsing_Project",
+    "\\project\\OOP\\OOP",
+    "\\project\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\project\\TCPFighter_Server\\TCPFighter_Server\\PacketDefine.cpp",
+  "SelectedNode": "\\project\\ASCII_Text_Parsing_Project\\ASCII_Text_Parsing_Project.sln",
   "PreviewInSolutionExplorer": false
 }
