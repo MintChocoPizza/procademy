@@ -306,7 +306,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             xChangedBottom = (double)xCurBottom * (double)Percentage_Changed;
 
             // 현재 마우스의 x좌표를 기준으로 변경된 밑변을 빼서 사각형의 시작 x 좌표를 구한다.
-            xChangedStartPos = pt.x - xChangedBottom;
+            xChangedStartPos = (int)(pt.x - xChangedBottom);
 
             // 직선의 방정식으로 y좌표도 구한다.
             //yChangedStartPos = (double)(pt.y - st_RenderStart._y) / (double)(pt.x - st_RenderStart._x) 
@@ -546,7 +546,7 @@ void RenderObstacle(HDC hdc)
 	int iX = 0;
 	int iY = 0;
 	HBRUSH hOldBrush;
-	HPEN hOldPen;
+	//HPEN hOldPen;
 
 
 

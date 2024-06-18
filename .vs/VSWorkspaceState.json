@@ -3,9 +3,10 @@
     "",
     "\\project",
     "\\project\\ASCII_Text_Parsing_Project",
-    "\\project\\OOP\\OOP",
+    "\\project\\ASCII_Text_Parsing_Project\\ASCII_Text_Parsing_Project",
+    "\\project\\Ring_Buffer",
     "\\project\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\project\\ASCII_Text_Parsing_Project\\ASCII_Text_Parsing_Project.sln",
+  "SelectedNode": "\\project\\ASCII_Text_Parsing_Project\\ASCII_Text_Parsing_Project\\main.cpp",
   "PreviewInSolutionExplorer": false
 }
