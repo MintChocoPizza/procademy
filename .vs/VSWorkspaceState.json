@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\project"
+    "\\Library\\ASCII_Text_Parsing_Project\\ASCII_Text_Parsing_Project",
+    "\\project",
+    "\\project\\PathFinder",
+    "\\project\\PathFinder\\PathFinder_v2"
   ],
+  "SelectedNode": "\\project\\PathFinder\\PathFinder_v2\\JumpPointSearch.h",
   "PreviewInSolutionExplorer": false
 }
