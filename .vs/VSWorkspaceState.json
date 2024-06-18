@@ -2,11 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\ASCII_Text_Parsing_Project",
-    "\\project\\ASCII_Text_Parsing_Project\\ASCII_Text_Parsing_Project",
-    "\\project\\Ring_Buffer",
-    "\\project\\Ring_Buffer\\Ring_Buffer"
+    "\\project\\SerializeBuffer"
   ],
-  "SelectedNode": "\\project\\ASCII_Text_Parsing_Project\\ASCII_Text_Parsing_Project\\main.cpp",
+  "SelectedNode": "\\project\\SerializeBuffer\\SerializeBuffer.sln",
   "PreviewInSolutionExplorer": false
 }
