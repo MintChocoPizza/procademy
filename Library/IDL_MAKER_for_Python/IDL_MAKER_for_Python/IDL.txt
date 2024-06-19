@@ -1,0 +1,2 @@
+#PACKETNUM 12
+bool SerializeBuffer_netPacketProc_SC_CREATE_MY_CHARACTER (ID , #NOBUFF int X, int Y);
