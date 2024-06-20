@@ -4,6 +4,8 @@
 from ctypes import Array
 from parse import *
 
+KeyWordTable = ["#PACKETNUM", "#NOBUFF"]
+
 PACKETNUM : int = 0
 
 ProxyDefine : str = "OreoPizza::Proxy::"
@@ -164,13 +166,17 @@ def SetProxyDefine(FuncName : str):
 
 
 
-def SetProxyHeader(DataType, FuncName, Param : Array):
+def SetProxyHeader(DataType, FuncName, Param):
     global ProxyHeaderStr
-
+    global KeyWordTable
+    
     ProxyHeaderStr += "\t\tpublic: \t\t" + DataType + " " + FuncName + "("
 
     # 파라미터에서 키워드를 제거하여 만들어야 한다.
-
+    for subString in KeyWordTable:
+        Param = Param.replace(subString, "")
+        
+    ProxyHeaderStr += Param
 
     ProxyHeaderStr += "); \n"
 
@@ -206,7 +212,7 @@ def ParsingFunc(line : str):
 
 def main():
 
-    File = open("./IDL.conf", 'r', encoding = 'utf-8')
+    File = open("./IDL.cnf", 'r', encoding = 'utf-8')
     while True:
         line = File.readline()
         if not line: break 
