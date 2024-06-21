@@ -2,7 +2,9 @@
 #PACKETNUM 0
 
 
-bool SerializeBuffer_netPacketProc_SC_CREATE_MY_CHARACTER    (ID , #NOBUFF int X, int Y)
+bool SerializeBuffer_netPacketProc_SC_CREATE_MY_CHARACTER    (char* ID , #NOBUFF int X, int Y)
+
+bool SerializeBuffer_netPacketProc_CS_ATTACK1(st_SESSION* p_Session, SerializeBuffer* clpPacket)
 
 
 
