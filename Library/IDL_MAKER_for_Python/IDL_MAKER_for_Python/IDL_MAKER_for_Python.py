@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 ###### pip install parse ####
-from ctypes import Array
-from re import A, S, T
 from parse import *
 
 KeyWordTable = ["#PACKETNUM",  "#NOBUFF"]
