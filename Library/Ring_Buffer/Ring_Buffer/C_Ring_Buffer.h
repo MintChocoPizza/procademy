@@ -119,9 +119,9 @@ private:
 	////////////////////////////////////////////////////////////////////////
 	size_t	DirectEnqueueSize(void)
 	{
-		int Full_Size = _Full_Size;
-		int In = _In;
-		int Out = _Out;
+		size_t Full_Size = _Full_Size;
+		size_t In = _In;
+		size_t Out = _Out;
 		// Enqueue의 경우 _In 바로 다음이 _Out인 경우 꽉 찬 경우이다. 
 		// if (_Use_Size == 0) return 0;
 		if ((In + 1) % Full_Size == Out)

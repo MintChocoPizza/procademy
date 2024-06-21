@@ -3,9 +3,11 @@
 ###### pip install parse ####
 from parse import *
 
-KeyWordTable = ["#PACKETNUM",  "#NOBUFF"]
+KeyWordTable = ["#PACKETNUM",  "#NOBUFF", "#DEST"]
 
 PACKETNUM : int = 0
+
+ProxyDestStr : str          = ""
 
 ProxyCppDefine : str        = "OreoPizza::Proxy::"
 StubCppDefine : str         = "OreoPizza::Stub::"
@@ -23,9 +25,9 @@ def WritePacketDefineHeader():
     global PacketDefineHeaderStr
     ########################################################
     # ./PacketDefine.h 파일 작성 
-    PacketDefineHeader = open("./PacketDefine.h", "w", encoding="utf-16") 
-    PacketDefineHeader.write("#ifndef __PACKET_DEFINE__ \n")
-    PacketDefineHeader.write("#define __PACKET_DEFINE__ \n\n") 
+    PacketDefineHeader = open("./Protocol.h", "w", encoding="utf-16") 
+    PacketDefineHeader.write("#ifndef __PROTOCOL_H__ \n")
+    PacketDefineHeader.write("#define __PROTOCOL_H__ \n\n") 
     PacketDefineHeader.write(PacketDefineHeaderStr)
     PacketDefineHeader.write("\n#endif")
     PacketDefineHeader.close() 
@@ -164,8 +166,8 @@ def SaveFile():
 
 
 def removeKeyWord(Param):
-    retStr = "("
 
+    retStr = ""
     TempParam = Param.split(",")
     for subTempParam in TempParam:
         for subString in KeyWordTable:
@@ -173,7 +175,6 @@ def removeKeyWord(Param):
         retStr += subTempParam + ", "
     
     retStr = retStr.rstrip(', ')
-    retStr += ")"
 
     return retStr
 
@@ -226,7 +227,7 @@ def SetProxyHeader(DataType, FuncName, Param):
     ProxyHeaderStr += "\t\tpublic: \t\t" + DataType + " " + FuncName 
 
     # 파라미터에서 키워드를 제거하여 만들어야 한다.
-    ProxyHeaderStr += removeKeyWord(Param) + "; \n"
+    ProxyHeaderStr += "(" + removeKeyWord(Param) + "); \n"
 
     return
 
@@ -239,7 +240,7 @@ def SetProxyCpp(DataType, FuncName, Param) :
     ProxyCppStr += DataType + " " + ProxyCppDefine + FuncName 
 
     # 파라미터에서 키워드를 제거한다. 
-    ProxyCppStr += removeKeyWord(Param) + "\n"
+    ProxyCppStr += "(" + removeKeyWord(Param) + ") \n"
         
     ProxyCppStr += "{ \n"
 
@@ -265,7 +266,7 @@ def SetStubHeader(DataType, FuncName, Param) :
     StubHeaderStr += "\tprivate: \tvoid " + StubCoverDefine + FuncName + StubConverParam + "; \n"
     StubHeaderStr += "\tprotected: \t" + DataType + " " + FuncName 
     
-    StubHeaderStr += removeKeyWord(Param) + "; \n\n"
+    StubHeaderStr += "(" + removeKeyWord(Param) + "); \n\n"
 
     return
     
@@ -292,7 +293,7 @@ def SetStubCpp(DataType, FuncName, Param) :
     # 사용자가 실제 사용할 함수 
     StubCppStr +=  DataType + " " + StubCppDefine + FuncName 
     
-    StubCppStr += removeKeyWord(Param) + "\n"
+    StubCppStr += "(" + removeKeyWord(Param) + ") \n"
 
     StubCppStr += "{ \n"
     StubCppStr += "\t return "
