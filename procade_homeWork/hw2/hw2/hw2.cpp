@@ -71,7 +71,7 @@ int strCmp( char* c1,  char* c2)
     int ret = 0;
     while (*c1 != '\0' || *c2 != '\0')
     {
-        ret =(*c1) - (*c2);
+        ret += (*c1) - (*c2);
         c1++;
         c2++;
     }
