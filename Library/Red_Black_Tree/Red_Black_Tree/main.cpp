@@ -8,10 +8,50 @@
 #include <set>
 #include <vector>
 
+#include "Red_Black_Tree.h"
 
+using namespace OreoPizza;
 
 int main()
 {
+
+    C_RED_BLACK_TREE tr;
+
+    tr.insert(10);
+    tr.insert(12);
+    tr.insert(13);
+    tr.insert(5);
+    tr.insert(6);
+    tr.insert(8);
+    tr.insert(7);
+
+    tr.inorder();
+    std::cout << std::endl;
+
+
+    //tr.insert(12);
+    //tr.inorder();
+    //std::cout << std::endl;
+
+    //tr.insert(8);
+    //tr.inorder();
+    //std::cout << std::endl;
+
+    //tr.insert(2);
+    //tr.inorder();
+    //std::cout << std::endl;
+
+    //tr.insert(3);
+    //tr.inorder();
+    //std::cout << std::endl;
+
+    //tr.insert(1);
+    //tr.inorder();
+    //std::cout << std::endl;
+
+    //tr.insert(14);
+    //tr.inorder();
+    //std::cout << std::endl;
 
 
 

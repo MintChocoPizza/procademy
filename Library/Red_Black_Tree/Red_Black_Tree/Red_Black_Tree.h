@@ -25,7 +25,16 @@ namespace OreoPizza
 
 		int _key;
 
-		st_NODE() {};
+		st_NODE() 
+		{
+			_pParent = nullptr;
+			_pLeft = nullptr;
+			_pRight = nullptr;
+
+			_Color = RED;
+
+			_key = NULL;
+		}
 
 		st_NODE(int key, st_NODE* pNode)
 		{
@@ -54,6 +63,9 @@ namespace OreoPizza
 		void rightRotate(st_NODE* cur_Node);
 		void RBInsertFixup(st_NODE* cur_Node);
 
+		void inorder();
+		void inorderHelper(st_NODE* node, int deep);
+
 
 		st_NODE* _st_Root;
 		st_NODE _Nil;
@@ -61,9 +73,10 @@ namespace OreoPizza
 
 	OreoPizza::C_RED_BLACK_TREE::C_RED_BLACK_TREE() :_st_Root(&_Nil)
 	{
-		_Nil._pParent = nullptr;
-		_Nil._pLeft = nullptr;
-		_Nil._pRight = nullptr;
+		_Nil._pParent = &_Nil;
+		_Nil._pLeft = &_Nil;
+		_Nil._pRight = &_Nil;
+		_Nil._Color = BLACK;
 	}
 
 	OreoPizza::C_RED_BLACK_TREE::~C_RED_BLACK_TREE()
@@ -91,12 +104,13 @@ namespace OreoPizza
 		{
 			_st_Root = New_Node;
 		}
+		else if(key < parents->_key)
+		{
+			parents->_pLeft = New_Node;
+		}
 		else
 		{
-			if (key < parents->_key)
-				parents->_pLeft = New_Node;
-			else
-				parents->_pRight = New_Node;
+			parents->_pRight = New_Node;
 		}
 
 		RBInsertFixup(New_Node);
@@ -109,13 +123,14 @@ namespace OreoPizza
 
 		// y가 nil인 경우? 아니면 Null은 nil인가?
 		// 큰 의미 없다. 
-		if (y->_pLeft != nullptr)
+		if (y->_pLeft != &_Nil)
 		{
 			y->_pLeft->_pParent = x;
 		}
 
 		y->_pParent = x->_pParent;
-		if (x->_pParent == nullptr || y->_pParent == &_Nil)	// x is root 
+
+		if (x->_pParent == &_Nil)	// x is root 
 			_st_Root = y;
 		else if (x == x->_pParent->_pLeft)				// x is left child
 			x->_pParent->_pLeft = y;
@@ -131,13 +146,13 @@ namespace OreoPizza
 		st_NODE* y = x->_pLeft;
 		x->_pLeft = y->_pRight;
 
-		if (y->_pRight != nullptr)
+		if (y->_pRight != &_Nil)
 		{
 			y->_pRight->_pParent = x;
 		}
 
 		y->_pParent = x->_pParent;
-		if (x->_pParent == nullptr || y->_pParent == &_Nil)
+		if (x->_pParent == &_Nil)
 			_st_Root = y;
 		else if (x == x->_pParent->_pRight)
 			x->_pParent->_pRight= y;
@@ -166,7 +181,7 @@ namespace OreoPizza
 					z->_pParent->_pParent->_Color = RED;
 					z = z->_pParent->_pParent;
 				}
-				else	//case2 or case3
+				else
 				{
 					if (z == z->_pParent->_pRight)	//case2
 					{
@@ -206,6 +221,38 @@ namespace OreoPizza
 		_st_Root->_Color = BLACK;
 	}
 
+
+
+	inline void OreoPizza::C_RED_BLACK_TREE::inorder()
+	{
+		inorderHelper(_st_Root, 0);
+	}
+
+	inline void OreoPizza::C_RED_BLACK_TREE::inorderHelper(st_NODE* node, int deep)
+	{
+		if (node == nullptr)
+		{
+			printf("nullptr로 종료합니다. \n");
+			return;
+		}
+
+		if (node == &_Nil)
+		{
+			printf("level: %d / _Nil로 종료합니다 / Color: %s \n", deep, node->_Color == RED ? "RED" : "BLACK");
+			return;
+		}
+
+
+		inorderHelper(node->_pLeft, deep + 1);
+		printf("level: %d / key: %d / Color: %s ", deep, node->_key, node->_Color == RED ? "RED" : "BLACK");
+
+		if (node == _st_Root)
+			printf("/ Root 입니다. \n");
+		else
+			printf("\n");
+
+		inorderHelper(node->_pRight, deep + 1);
+	}
 }
 
 
