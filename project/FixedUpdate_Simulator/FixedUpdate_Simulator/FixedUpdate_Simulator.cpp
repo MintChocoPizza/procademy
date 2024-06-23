@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <mmsystem.h>
 
-#pragma comment(lib, "wimm.lib")
+#pragma comment(lib, "winmm.lib")
 
 using namespace std;
 
@@ -15,7 +15,7 @@ constexpr int TICK_PER_FRAME        =   20;         // 틱 당 프레임
 constexpr int OVERHEAD              =   900;        // 오버헤드 == 부하 
 
 // #define MAXDELTA
-// #defime PRIMT
+// #define PRINT
 
 #ifdef MAXDELTA
 INT maxDeltaTime = 4000;
@@ -28,6 +28,7 @@ int g_UpdateCounter = 0;
 
 void updateTime(int* unscaledTime, int* time)
 {
+    //-----------------------------------------------------------------------------------------------
     int unscaled_deltaTime = timeGetTime() - *unscaledTime;
     int deltaTime = unscaled_deltaTime * timeScale;
 
@@ -36,14 +37,17 @@ void updateTime(int* unscaledTime, int* time)
         deltaTime = maxDeltaTime;
 #endif // MAXDELTA
 
+
+
+    //-----------------------------------------------------------------------------------------------
+    // timeScale이 2가 되면 *time(조정된 시간)이 더 커진다.
     * unscaledTime += unscaled_deltaTime;
     *time += deltaTime;
 }
 
 
-int main()
+int OSJ_FixedUpdate(void)
 {
-
     bool timeScaleFlag = false; 
     bool overHeadFlag = true;
     timeBeginPeriod(1);
@@ -53,8 +57,10 @@ int main()
 
     srand(time(NULL));
 
-    // 1초가 지나갈때마다 표시하기 위한 변수 
     int initialTime = timeGetTime();
+
+    // 1초가 지나갈때마다 표시하기 위한 변수 
+    int timeForSecond = initialTime;
 
     // timeScale의 영향을 받지 않는 실제시간, 즉 unscaledTimeStemp
     int unscaledTime = initialTime;
@@ -70,10 +76,10 @@ int main()
     while (1)
     {
         // --- 로직 ---
-        if (GetAsyncKeyState('A') & 0x8001)
+        if (GetAsyncKeyState(VK_RSHIFT) & 0x8001)
             timeScaleFlag = !timeScaleFlag;
 
-        if (GetAsyncKeyState('S') & 0x8001)
+        if (GetAsyncKeyState(VK_CONTROL) & 0x8001)
             overHeadFlag = !overHeadFlag;
 
         if (timeScaleFlag)
@@ -85,7 +91,10 @@ int main()
         for (int i = 0; i < 10000000; ++i);
 
 
+        //--------------------------------------------------------------------------------------------
         // timeScale에 따라 조절되는 fixedUpdate 호출 주기 
+        // 기본 timeScale은 1임 --> FCI == fixedDeltaTime 같음
+        //--------------------------------------------------------------------------------------------
         int FCI = fixedDeltaTime / timeScale;
 
         updateTime(&unscaledTime, &time);
@@ -104,12 +113,58 @@ int main()
 
         // Update 수행 
         ++g_UpdateCounter;
+
+#ifdef PRINT
+        printf("UpdateCount : %d \n", g_UpdateCounter);
+#endif // PRINT
+
+        // Rendering 수행
+        ++Rendering_FPS;
+
+
+
+        // 시간 경과 및 FPS를 측정하기 위한 용도 그 이상도 이하도 아님
+        int temp = timeGetTime();
+        if (temp - timeForSecond >= TICK_PER_SECONDS)
+        {
+            int delta = (temp - timeForSecond);
+
+            // 1초 이상 밀린 경우 시간 표시자 업데이트 ex: 3500ms 밀리면 1000ms씩 3번 더해줌 
+            while (delta >= TICK_PER_SECONDS)
+            {
+                timeForSecond += TICK_PER_SECONDS;
+                delta -= TICK_PER_SECONDS;
+            }
+            updateTime(&unscaledTime, &time);
+
+            printf("FixedUpdateFPS : %2d, \
+                    UpdateFPS : %2d, \
+                    Rendering_FPS : %2d, \
+                    timeScale : %f, \
+                    time : %2d, \
+                    unscaled time : %2d \n\n\n\n", 
+                    g_FixedUpdateCounter, g_UpdateCounter, Rendering_FPS, timeScale, time / 1000, unscaledTime / 1000);
+        }
+
+
+        // 타임스케일은 프레임마다 1로 초기화 된다. 
+        timeScale = 1;
     }
 
+    timeEndPeriod(1);
+    return 0;
+}
 
+void FixedUpdate(void)
+{
 
+}
 
-    std::cout << "Hello World!\n";
+int main()
+{
+    OSJ_FixedUpdate();
+
+    std::cout << "Hello World \n";
     return 0;
 }
 

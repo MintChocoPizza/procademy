@@ -1,10 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Library",
-    "\\procade_homeWork\\change_str_upper",
-    "\\procade_homeWork\\change_str_upper\\change_str_upper"
+    "\\project",
+    "\\project\\FixedUpdate_Simulator\\FixedUpdate_Simulator",
+    "\\project\\shootingGame_project",
+    "\\project\\shootingGame_project\\shootingGame_Project_FPS"
   ],
-  "SelectedNode": "\\Library",
+  "SelectedNode": "\\project\\shootingGame_project\\shootingGame_Project_FPS\\shootingGame_Project_FPS.sln",
   "PreviewInSolutionExplorer": false
 }
