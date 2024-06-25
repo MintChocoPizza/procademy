@@ -134,12 +134,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="C_Ring_Buffer.cpp" />
+    <ClCompile Include="Field.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Session.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C_Ring_Buffer.h" />
+    <ClInclude Include="Field.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Session.h" />
+    <ClInclude Include="Set_Log.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

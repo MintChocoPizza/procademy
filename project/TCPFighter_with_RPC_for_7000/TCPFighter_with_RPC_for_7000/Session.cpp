@@ -33,7 +33,10 @@ void C_Session::netIOProcess(void)
 
 	Listen_Socket = _Listen_Socket;
 	iter = _Session.begin();
-	iCnt = 0;
+	//--------------------------------------------------------------------------------------------------------------------
+	// _Session 전부를 Select에 등록하면 while문을 종료한다. 
+	// 
+	//--------------------------------------------------------------------------------------------------------------------
 	while (iter != _Session.end())
 	{
 		FD_ZERO(&ReadSet);
@@ -46,8 +49,11 @@ void C_Session::netIOProcess(void)
 
 		//------------------------------------------
 		// 리슨소켓 및 접속중인 모든 클라이언트에 대해 SOCKET 을 체크한다. 
+		// 
+		// 마지막 _Session이거나 or _Listen_Socket 포함 64개의 소켓을 Select에 등록했다면, 반복문을 종료한다. 
 		//------------------------------------------
-		for (; iCnt < 64 && iter != _Session.end(); ++iter, ++iCnt)
+		iCnt = 0;
+		for (; iCnt < 64 - 1 && iter != _Session.end(); ++iter, ++iCnt)
 		{
 			st_pSession = iter->second;
 
@@ -61,6 +67,11 @@ void C_Session::netIOProcess(void)
 				FD_SET(st_pSession->Socket, &WriteSet);
 		}
 
+		//------------------------------------------
+		// NULL: 한개라도 응답 올 때까지 무한히 기다림
+		// 0,0: 응답올때까지 기다리지 않고 바로 끝낸다.
+		// 양수: 한개라도 응답하거나, 지정된 시간이 지나면 리턴
+		//------------------------------------------
 		Time.tv_sec = 0;
 		Time.tv_usec = 0;
 
@@ -110,7 +121,58 @@ void C_Session::netIOProcess(void)
 
 void C_Session::netProc_Accept(void)
 {
+	//---------------------------------------------------------------------------------
+	// 새로운 연결에 대하여 accept를 하고,
+	// SessionID를 할당하고, 
+	// 내 눈에 보이는 시야에 한정하여 캐릭터 생성을 보낸다. 
+	//---------------------------------------------------------------------------------
+
+	int Error;
+
+	SOCKET New_Client_Socket;
+	sockaddr_in Clinet_Addr;
+	int Client_Addr_Len;
+
+	Client_Addr_Len = sizeof(Clinet_Addr);
+	New_Client_Socket = accept(_Listen_Socket, (sockaddr*)&Clinet_Addr, &Client_Addr_Len);
+	if (New_Client_Socket == INVALID_SOCKET)
+	{
+		Error = WSAGetLastError();
+
+		if (Error == WSAEWOULDBLOCK)
+		{
+			// Seletc로 거르고 들어왔는데 WSAEWOULDBLOCK이 나오는지 모르겠다. 
+			wprintf_s(L"accept failed with error: %ld \n", Error);
+			__debugbreak();
+		}
+		else
+		{
+			wprintf_s(L"accept failed with error: %ld \n", Error);
+			WSACleanup();
+			__debugbreak();
+		}
+	}
+
 	
+	// 접속자 인원수 제한. 순간적인 피크를 포함하여 약 8000명으로 가정한다. 
+	if (_Session.size() > 8000)
+	{
+		wprintf_s(L"Full Server cannot accept!!! \n");
+		closesocket(New_Client_Socket);
+		return;
+	}
+
+
+	
+
+}
+
+void C_Session::netProc_Send(DWORD SessionID)
+{
+}
+
+void C_Session::netProc_Recv(DWORD SessionID)
+{
 }
 
 
@@ -119,6 +181,7 @@ C_Session::C_Session(void) : _SessionID(0)
 	struct addrinfo hints;
 	struct addrinfo* result = NULL;
 	SOCKET Temp_Listen_Socket = _Listen_Socket;
+	char Port[6];
 	u_long on;
 	linger Linger_Opt;
 
@@ -131,6 +194,10 @@ C_Session::C_Session(void) : _SessionID(0)
 	int Ret_listen;
 	int Ret_ioctlsocket;
 	int Ret_setsockopt;
+	errno_t Ret_itoa_s;
+
+
+	Temp_Listen_Socket = _Listen_Socket;
 
 
 	//---------------------------------------------------
@@ -154,8 +221,15 @@ C_Session::C_Session(void) : _SessionID(0)
 	//---------------------------------------------------
 	// Resolve the server address and port
 	// 서버 주소 및 포트 확인
-	char Port[6];
-	_itoa_s(dfNETWORK_PORT, Port, 6);
+	// 아래의 Port 코드는 C6054 : 'Port' 문자열이 0으로 종료되지 않을 수 있습니다. 경고를 해결하기 위하여 작성하였다. 
+	Ret_itoa_s = _itoa_s(dfNETWORK_PORT, Port, sizeof(Port), 10);
+	if (Ret_itoa_s != NULL)
+	{
+		wprintf_s(L"_itoa_s failed with error \n");
+		WSACleanup();
+		__debugbreak();
+	}
+	Port[sizeof(Port) - 1] = '\0';
 	Ret_getaddrinfo = getaddrinfo(NULL, Port, &hints, &result);
 	if (Ret_getaddrinfo != 0)
 	{

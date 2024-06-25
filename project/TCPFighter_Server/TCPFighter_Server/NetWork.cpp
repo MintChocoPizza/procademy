@@ -263,6 +263,7 @@ void netProc_Accept(void)
 	st_SESSION* pTempSession;
 	sockaddr_in Clinet_Addr;
 	int Client_Addr_Len = sizeof(Clinet_Addr);
+	int Error;
 
 	st_PACKET_HEADER header_SC_CRESTE_MY_CHARACTER;
 	st_PACKET_HEADER header_SC_CREATE_OTHER_CHARACTER;
@@ -277,9 +278,10 @@ void netProc_Accept(void)
 	Client_Socket = accept(g_Listen_Socket, (sockaddr*)&Clinet_Addr, &Client_Addr_Len);
 	if (Client_Socket == INVALID_SOCKET)
 	{
-		if (Client_Socket != WSAEWOULDBLOCK)
+		Error = WSAGetLastError();
+		if (Error != WSAEWOULDBLOCK)
 		{
-			c_Save_Log.printfLog(L"ioctlsocket failed with error: %ld \n", WSAGetLastError());
+			c_Save_Log.printfLog(L"ioctlsocket failed with error: %ld \n", Error);
 			DebugBreak();
 			__debugbreak();
 		}

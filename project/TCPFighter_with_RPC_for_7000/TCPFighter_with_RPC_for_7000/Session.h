@@ -41,9 +41,12 @@ private:
 
 private:
 	static C_Session _C_Session;
+
+	// 생성자에서 초기화 하여 0부터 사용할 때 마다 1씩 증가함. 
 	DWORD _SessionID;
 
 public:
+	// Key: UserID, Value: Session
 	std::map<DWORD, st_SESSION*> _Session;
 
 public:

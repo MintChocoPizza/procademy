@@ -14,12 +14,12 @@ int main()
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    unsigned char* a = (unsigned char*)MemoryOverflowAlloc(8000);
-    int* b = new int;
+    unsigned char* a = (unsigned char*)MemoryOverflowAlloc(300);
+    unsigned char* b = a - 4;
 
-    for (int i = 0; i < 400; ++i)
+    for (int i = 0; i < 301; ++i)
     {
-        a[i] = '0';
+        b[i] = '0';
     }
 
     MemoryOverflowFree(a);

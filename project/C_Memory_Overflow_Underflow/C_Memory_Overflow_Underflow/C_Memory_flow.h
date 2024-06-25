@@ -48,10 +48,12 @@ inline void MemoryOverflowFree(void* address)
 	const int page_Size = 4096;
 	size_t free_Address = (size_t)address & ~(page_Size-1);
 
-	printf("해지한 메모리 주소: %p \n", free_Address);
+	printf("해지한 메모리 주소: %p \n", (void*)free_Address);
 	
 	VirtualFree((void *)free_Address, 0, MEM_RELEASE);
 }
+
+
 
 
 #endif // !__C_MEMORY_FLOW_H__
