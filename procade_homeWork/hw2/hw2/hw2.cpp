@@ -53,6 +53,17 @@ int strLen(const char* c)
     return len;
 }
 
+int strLen2(const char* c)
+{
+    int len = 0;
+    while (*c != '\0')
+    {
+        len++;
+        c++;
+    }
+    return len;
+}
+
 char* strCpy(char* c1, const char* c2)
 {
     while (*c2 != '\0')
@@ -138,7 +149,8 @@ int main()
     char ch5[100];
     char ch6[100] = "hijklmniadlkjasldkf";
 
-    printf_s("문자열 길이(abcdefg): %d \n", strLen(ch1));
+    printf_s("문자열 길이: strLen(abcdefg): %d \n", strLen(ch1));
+    printf_s("문자열 길이: strLen2(abcdefg): %d \n", strLen2(ch1));
     strCpy(ch1, ch2);
     printf_s("문자열 복사: %s \n", ch1);
     printf_s("문자열 비교: %d, %d, %d \n", strCmp(ch2, ch3), strCmp(ch3, ch3), strCmp(ch2, ch5));

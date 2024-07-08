@@ -442,8 +442,8 @@ void netProc_Recv(st_SESSION* pSession)
 			// 32명 한번에 종료한뒤, 새로운 접속자가 움직인 경우 발생했음.
 			c_Save_Log.printfLog(L"Recv failed with error: %ld / SessionID:%d \n", err, pSession->dwSessionID);
 			printf_s("WSAEWOULDBLOCK # Nect Frame Recv try %d # SessionID: %d \n", err, pSession->dwSessionID);
-			return;
-			// __debugbreak();
+			//return;
+			__debugbreak();
 		}
 		else if (err == 10054)
 		{
@@ -702,15 +702,16 @@ void Disconnect()
 		// 4. g_Disconnect_List에서 Node를 지운다.
 
 
-		// 뻑난 코드
-		// 한번에 많은 close가 들어오면 g_Session_List에서 삭제가 안되는 버그가 있었다.
-		////closesocket((*iter)->Socket);
+		// //뻑난 코드
+		// //한번에 많은 close가 들어오면 g_Session_List에서 삭제가 안되는 버그가 있었다.
+		//closesocket((*iter)->Socket);
 		//// delete (*iter);
 		//g_Session_List.erase((*iter)->dwSessionID);
 		//iter = g_Disconnect_List.erase(iter);
 		//delete (*iter);
 
 
+		// 정상코드
 		st_SESSION* Session = *iter;
 		SOCKET Sock = (*iter)->Socket;
 		DWORD SessionID = (*iter)->dwSessionID;

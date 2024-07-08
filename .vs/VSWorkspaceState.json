@@ -1,9 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\project",
-    "\\project\\C_Memory_Overflow_Underflow"
+    "\\procade_homeWork",
+    "\\procade_homeWork\\fibonacci",
+    "\\procade_homeWork\\hw2",
+    "\\project\\TCPFighter_Server",
+    "\\project\\TCPFighter_Server\\TCPFighter_Server"
   ],
-  "SelectedNode": "\\project\\C_Memory_Overflow_Underflow\\C_Memory_Overflow_Underflow.sln",
+  "SelectedNode": "\\procade_homeWork\\hw2\\hw2.sln",
   "PreviewInSolutionExplorer": false
 }
