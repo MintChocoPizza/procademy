@@ -15,26 +15,8 @@
 
 
 using namespace std;
-
-class C_Field;
-
-struct st_SECTOR_POS
-{
-	int iX;
-	int iY;
-
-	st_SECTOR_POS(int X, int Y)
-	{
-		iX = X / C_Field::GetInstance()->Grid_X_Size;
-		iY = Y / C_Field::GetInstance()->Grid_Y_Size;
-	}
-};
-
-struct st_SECTOR_AROUND
-{
-	int iCount;
-	st_SECTOR_POS Around[9];
-};
+struct st_SECTOR_AROUND;
+struct st_Player;
 
 class C_Field
 {
@@ -70,3 +52,22 @@ public:
 };
 
 #endif // !__FIELD_H__
+
+struct st_SECTOR_POS
+{
+	int iX;
+	int iY;
+
+	st_SECTOR_POS(int X, int Y)
+	{
+		iX = X / C_Field::GetInstance()->Grid_X_Size;
+		iY = Y / C_Field::GetInstance()->Grid_Y_Size;
+	}
+};
+
+struct st_SECTOR_AROUND
+{
+	int iCount;
+	st_SECTOR_POS Around[9];
+};
+

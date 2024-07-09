@@ -7,8 +7,8 @@
 #include "SerializeBuffer.h"
 #include "Session.h"
 #include "Define.h"
-#include "Player.h"
 #include "Field.h"
+#include "Player.h"
 
 C_Field C_Field::_C_Field;
 
