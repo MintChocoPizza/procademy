@@ -13,15 +13,32 @@
 #ifndef __FIELD_H__
 #define __FIELD_H__
 
-constexpr int dfRANGE_MOVE_TOP = 0;
-constexpr int dfRANGE_MOVE_LEFT = 0;
-constexpr int dfRANGE_MOVE_RIGHT = 6400;
-constexpr int dfRANGE_MOVE_BOTTOM = 6400;
 
 using namespace std;
 
+class C_Field;
+
+struct st_SECTOR_POS
+{
+	int iX;
+	int iY;
+
+	st_SECTOR_POS(int X, int Y)
+	{
+		iX = X / C_Field::GetInstance()->Grid_X_Size;
+		iY = Y / C_Field::GetInstance()->Grid_Y_Size;
+	}
+};
+
+struct st_SECTOR_AROUND
+{
+	int iCount;
+	st_SECTOR_POS Around[9];
+};
+
 class C_Field
 {
+public:
 	enum
 	{
 		Grid_X_Size = 100,
@@ -33,6 +50,7 @@ public:
 
 public:
 	static C_Field* GetInstance(void);
+	void GetSectorAround(int iSectorX, int iSectorY, st_SECTOR_AROUND* pSectorAound);
 
 private:
 	C_Field();
@@ -43,7 +61,12 @@ private:
 
 public:
 	// Key: <GridY, GridX>, Value: SessionID
-	std::unordered_multimap<std::pair<int, int>, DWORD> _Grid;
+	// std::unordered_multimap<std::pair<int, int>, DWORD> _Grid;
+	// 그냥 동적할당 배열을 사용하여 섹터당 유저들을 저장한다. 
+	std::list<st_Player*>*** _Sector;
+
+	int _Sector_Max_Y;
+	int _Sector_Max_X;
 };
 
 #endif // !__FIELD_H__

@@ -1,15 +1,20 @@
 
-#include <map>
-#include <stdio.h>
-
 
 #include <WinSock2.h>
 #include <Windows.h>
 #include <WS2tcpip.h>
 #pragma comment (lib, "Ws2_32.lib")
+#include <unordered_map>
+#include "main.h"
 #include "C_Ring_Buffer.h"
+#include "SerializeBuffer.h"
+#include "Proxy.h"
 #include "Session.h"
+#include "Define.h"
+#include "Player.h"
+#include "Field.h"
 
+using namespace OreoPizza;
 
 C_Session C_Session::_C_Session;
 
@@ -18,10 +23,19 @@ C_Session* C_Session::GetInstance(void)
     return &_C_Session;
 }
 
+void ForwardDecl(int DestID, SerializeBuffer* sb)
+{
+	st_SESSION* pSession = C_Session::GetInstance()->_Session_Map.find(DestID)->second;
+
+	C_Session::GetInstance()->netProc_SendUnicast(pSession, sb);
+}
+
 void C_Session::netIOProcess(void)
 {
-	std::map<DWORD, st_SESSION*>::iterator iter;
-	std::map<DWORD, st_SESSION*>::iterator iter_FD_ISSSET;
+	//std::map<DWORD, st_SESSION*>::iterator iter;
+	//std::map<DWORD, st_SESSION*>::iterator iter_FD_ISSSET;
+	std::unordered_map<DWORD, st_SESSION*>::iterator	iter;
+	std::unordered_map<DWORD, st_SESSION*>::iterator	iter_FD_ISSET;
 	st_SESSION* st_pSession;
 	SOCKET Listen_Socket;
 	FD_SET ReadSet;	
@@ -32,12 +46,12 @@ void C_Session::netIOProcess(void)
 	int i_Result;
 
 	Listen_Socket = _Listen_Socket;
-	iter = _Session.begin();
+	iter = _Session_Map.begin();
 	//--------------------------------------------------------------------------------------------------------------------
 	// _Session 전부를 Select에 등록하면 while문을 종료한다. 
 	// 
 	//--------------------------------------------------------------------------------------------------------------------
-	while (iter != _Session.end())
+	while (iter != _Session_Map.end())
 	{
 		FD_ZERO(&ReadSet);
 		FD_ZERO(&WriteSet);
@@ -52,8 +66,7 @@ void C_Session::netIOProcess(void)
 		// 
 		// 마지막 _Session이거나 or _Listen_Socket 포함 64개의 소켓을 Select에 등록했다면, 반복문을 종료한다. 
 		//------------------------------------------
-		iCnt = 0;
-		for (; iCnt < 64 - 1 && iter != _Session.end(); ++iter, ++iCnt)
+		for (iCnt = 0; iCnt < 64 - 1 && iter != _Session_Map.end(); ++iter, ++iCnt)
 		{
 			st_pSession = iter->second;
 
@@ -63,7 +76,7 @@ void C_Session::netIOProcess(void)
 			// 해당 클라이언트 Read Set 등록 / SendQ 에 데이터가 있다면 Write Set 등록
 			//------------------------------------------
 			FD_SET(st_pSession->Socket, &ReadSet);
-			if (st_pSession->SendQ.GetUseSize() > 0)
+			if (st_pSession->SendQ->GetUseSize() > 0)
 				FD_SET(st_pSession->Socket, &WriteSet);
 		}
 
@@ -91,25 +104,26 @@ void C_Session::netIOProcess(void)
 		{
 			if (FD_ISSET(Listen_Socket, &ReadSet))
 			{
+				netProc_Accept();
 				--i_Result;
 			}
 
 			//------------------------------------------
 			// 전체 세션중 어떤 세션이 반응을 보였는지 다시 확인한다. 
 			//------------------------------------------
-			for (iter_FD_ISSSET = _Session.begin(); iter_FD_ISSSET != _Session.end(); ++iter_FD_ISSSET)
+			for (iter_FD_ISSET = _Session_Map.begin(); iter_FD_ISSET != _Session_Map.end(); ++iter_FD_ISSET)
 			{
-				st_pSession = (*iter_FD_ISSSET).second;
+				st_pSession = (*iter_FD_ISSET).second;
 
 				if (FD_ISSET(st_pSession->Socket, &ReadSet))
 				{
-					netProc_Recv(st_pSession->dwSessionID);
+					netProc_Recv(st_pSession);
 					--i_Result;
 				}
 
 				if (FD_ISSET(st_pSession->Socket, &WriteSet))
 				{
-					netProc_Send(st_pSession->dwSessionID);
+					netProc_Send(st_pSession);
 					--i_Result;
 				}
 			}
@@ -131,6 +145,8 @@ void C_Session::netProc_Accept(void)
 
 	SOCKET New_Client_Socket;
 	sockaddr_in Clinet_Addr;
+	st_SESSION* st_p_New_Session;
+	st_Player* st_p_New_Player;
 	int Client_Addr_Len;
 
 	Client_Addr_Len = sizeof(Clinet_Addr);
@@ -144,6 +160,8 @@ void C_Session::netProc_Accept(void)
 			// Seletc로 거르고 들어왔는데 WSAEWOULDBLOCK이 나오는지 모르겠다. 
 			wprintf_s(L"accept failed with error: %ld \n", Error);
 			__debugbreak();
+			// 원래는 에러로 처리하면 안된다. 
+			// continue;
 		}
 		else
 		{
@@ -155,24 +173,100 @@ void C_Session::netProc_Accept(void)
 
 	
 	// 접속자 인원수 제한. 순간적인 피크를 포함하여 약 8000명으로 가정한다. 
-	if (_Session.size() > 8000)
+	if (_Session_Map.size() > 8000)
 	{
 		wprintf_s(L"Full Server cannot accept!!! \n");
 		closesocket(New_Client_Socket);
 		return;
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 1. 새로운 세션 만들기.
+	// 2. 새로운 플레이어 만들기. 
+	// 3. 나에게 생성 메시지 보내기.
+	// 4. 주변에 나에대한 생성 메시지를 보낸다. 
+	// 5. 행동중인 플레이어가 있다면 동작을 이어서 보여준다. 
+	// 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 1.
+	st_p_New_Session = new st_SESSION(New_Client_Socket, ++_SessionID);
+	_Session_Map.insert({ _SessionID, st_p_New_Session });
+	// 2.
+	st_p_New_Player = C_Player::GetInstance()->CreateNewPlayer(_SessionID, st_p_New_Session);
+	// 3.
+	proxy.packet_SC_Create_My_Character(_SessionID, _SessionID, st_p_New_Player->_byDirection, st_p_New_Player->_X, st_p_New_Player->_Y, st_p_New_Player->_HP);
+	// 4.
+	C_Field::GetInstance()->
 
 	
-
 }
 
-void C_Session::netProc_Send(DWORD SessionID)
+void C_Session::netProc_Send(st_SESSION* pSession)
 {
+	// Send의 경우 한번에 링버퍼에 있는 모든 메시지를 전송하면 된다. 
+	// field를 기준으로 전송할 대상을 판단해야 한다. 
+	// 걍 Send 호출
+
+	int Send_Size;
+	int err;
+
+	while (1)
+	{
+		if (pSession->SendQ->GetUseSize() == 0)
+			break;
+		
+		Send_Size = send(pSession->Socket, pSession->SendQ->GetFrontBufferPtr(), (int)pSession->SendQ->DirectDequeueSize(), 0);
+
+		if (Send_Size == SOCKET_ERROR)
+		{
+			err = WSAGetLastError();
+
+			if (err == WSAEWOULDBLOCK)
+			{
+				// 비동기 Send에서 WSAEWOULDBLOCK 가 나오는 경우: 소켓 송신 버퍼가 가득차서 즉시 보낼 수 없을 때
+				// 그렇다면 그냥 다음 프레임에 전송하면 된다. 
+
+				break;
+			}
+			else if (err == 10054)
+			{
+				// 현재 연결은 원격 호스트에 의해 강제로 끊겼다.
+
+				// PushDisconnectList(pSession);
+				break;
+			}
+			else if (err == 10053)
+			{
+				// 소프트웨어로 인해 연결이 중단되었다. 
+
+
+				// PushDisconnectList(pSession);
+				break;
+			}
+
+			// 에러로그 찍기
+			__debugbreak();
+		}
+
+		pSession->SendQ->MoveFront(Send_Size);
+	}
 }
 
-void C_Session::netProc_Recv(DWORD SessionID)
+void C_Session::netProc_Recv(st_SESSION* pSession)
 {
+	
+}
+
+void C_Session::netProc_SendUnicast(st_SESSION* pSession, SerializeBuffer* clpPacket)
+{
+	size_t Ret_Packet;
+
+	Ret_Packet = pSession->SendQ->Enqueue(clpPacket->GetBufferPtr(), clpPacket->GetDataSize());
+	if (Ret_Packet == 0)
+	{
+		// Send 링버퍼에 데이터를 넣을 수 없으면 연결을 끊는다. 
+		return;
+	}
 }
 
 
@@ -311,6 +405,22 @@ C_Session::~C_Session(void)
 {
 	closesocket(_Listen_Socket);
 	WSACleanup();
+
+	// _Session_Map 순회를 돌면서 삭제해야 하는데,,,, 삭제 구조가 꼬이기 시작했다.
+	// 아마도 할당한 쪽에서 데이터에 대한 삭제를 마무리 하는게 좋아 보인다. 
+	// 여기서는 여기 클래스에서 생성된 것들만 정리하고 지워준다. 
+	// Socket, RecvQ, SendQ
+	std::unordered_map<DWORD, st_SESSION*>::iterator iter;
+	for (iter = _Session_Map.begin(); iter != _Session_Map.end(); ++iter)
+	{
+		st_SESSION* st_Temp_Player = iter->second;
+		
+		closesocket(st_Temp_Player->Socket);
+		delete st_Temp_Player->RecvQ;
+		delete st_Temp_Player->SendQ;
+	}
+	
+
 }
 
 

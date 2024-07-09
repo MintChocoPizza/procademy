@@ -137,14 +137,23 @@
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Proxy.cpp" />
+    <ClCompile Include="SerializeBuffer.cpp" />
     <ClCompile Include="Session.cpp" />
+    <ClCompile Include="Stub.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C_Ring_Buffer.h" />
+    <ClInclude Include="Define.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Protocol.h" />
+    <ClInclude Include="Proxy.h" />
+    <ClInclude Include="SerializeBuffer.h" />
     <ClInclude Include="Session.h" />
     <ClInclude Include="Set_Log.h" />
+    <ClInclude Include="Stub.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

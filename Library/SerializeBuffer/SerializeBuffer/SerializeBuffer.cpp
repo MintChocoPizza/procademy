@@ -9,6 +9,7 @@ SerializeBuffer::SerializeBuffer()
 
 	m_chpReadPos = m_chpBeginPos;
 	m_chpWritePos = m_chpBeginPos;
+	m_chpTempPos = m_chpBeginPos;
 	m_chpEndPos = m_chpBeginPos + eBUFFER_DEFAULT;
 
 	m_iReSizeMaxSize = eBUFFER_ReSize_Max_Size;
@@ -21,6 +22,7 @@ SerializeBuffer::SerializeBuffer(int iBufferSize)
 
 	m_chpReadPos = m_chpBeginPos;
 	m_chpWritePos = m_chpBeginPos;
+	m_chpTempPos = m_chpBeginPos;
 	m_chpEndPos = m_chpBeginPos + iBufferSize;
 
 	m_iReSizeMaxSize = eBUFFER_ReSize_Max_Size;
@@ -285,9 +287,9 @@ SerializeBuffer& SerializeBuffer::operator>>(double& dValue)
 	return *this;
 }
 
-int SerializeBuffer::GetData(char* chpDest, size_t iSize)
+size_t SerializeBuffer::GetData(char* chpDest, size_t iSize)
 {
-	if (m_chpWritePos - m_chpReadPos < iSize)
+	if (m_chpWritePos - m_chpReadPos < (unsigned)iSize)
 		return 0;
 
 	memcpy(chpDest, m_chpReadPos, iSize);
@@ -295,7 +297,7 @@ int SerializeBuffer::GetData(char* chpDest, size_t iSize)
 	return iSize;
 }
 
-int SerializeBuffer::PutData(char* chpSrc, size_t iSrcSize)
+size_t SerializeBuffer::PutData(char* chpSrc, size_t iSrcSize)
 {
 	// 해당 함수에서 넣을 수 있는 사이즈를 계산하나 
 	// 다른 함수를 호출하여 넣을 수 있는 사이즈를 계산하나 
@@ -306,7 +308,7 @@ int SerializeBuffer::PutData(char* chpSrc, size_t iSrcSize)
 	// 저장하는데 this호출이 2번 일어나기 때문....
 
 	// this 콜을 지역변수로 고치는거 또한 어셈블리의 수가 같다. 
-	if (m_chpEndPos - m_chpWritePos < iSrcSize)
+	if (m_chpEndPos - m_chpWritePos < (unsigned)iSrcSize)
 	{
 		// FreeSize보다 iSrcSize가 큰 경우 리사이즈를 한다. 
 		// 그리고 직렬화 버퍼의 바이트를 로그로 남긴다. 

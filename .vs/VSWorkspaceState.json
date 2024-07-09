@@ -1,12 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\procade_homeWork",
+    "\\Library",
+    "\\Library\\SerializeBuffer",
     "\\procade_homeWork\\fibonacci",
-    "\\procade_homeWork\\hw2",
-    "\\project\\TCPFighter_Server",
-    "\\project\\TCPFighter_Server\\TCPFighter_Server"
+    "\\procade_homeWork\\hw2"
   ],
-  "SelectedNode": "\\procade_homeWork\\hw2\\hw2.sln",
+  "SelectedNode": "\\Library\\SerializeBuffer\\SerializeBuffer.sln",
   "PreviewInSolutionExplorer": false
 }
