@@ -4,7 +4,7 @@ class Fork
 {
 public:
 	int mID;
-	int mOuner;
+	int mOner;
 	int mMutex;
 
 public:

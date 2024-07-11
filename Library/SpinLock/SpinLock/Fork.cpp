@@ -12,7 +12,7 @@ Fork::Fork(int id)
 {
 	mID = id;
 	mMutex = 0;
-	mOuner = -1;
+	mOner = -1;
 }
 
 Fork::~Fork()
@@ -21,8 +21,8 @@ Fork::~Fork()
 
 void Fork::printGet(int who)
 {
-	mOuner = who;
-	printf("%d th philosoper picks %d th fork \n", mOuner, mID);
+	mOner = who;
+	printf("%d th philosoper picks %d th fork \n", mOner, mID);
 }
 
 void Fork::get(int who)
@@ -39,7 +39,7 @@ bool Fork::tryGet(int who)
 
 void Fork::put(void)
 {
-	printf("%d th philosoper releases %d th fork \n", mOuner, mID);
-	mOuner = -1;
+	printf("%d th philosoper releases %d th fork \n", mOner, mID);
+	mOner = -1;
 	SpinUnlock(&mMutex);
 }

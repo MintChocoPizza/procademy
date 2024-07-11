@@ -1,4 +1,6 @@
 
+#include <vector>
+#include <thread>
 #include <Windows.h>
 #include <stdio.h>
 #include "Fork.h"

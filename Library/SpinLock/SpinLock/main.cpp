@@ -1,4 +1,6 @@
 ﻿
+#include <vector>
+#include <thread>
 #include <Windows.h>
 #include <iostream>
 
@@ -17,7 +19,9 @@ int main()
 	DiningPhilosophers* phs = new DiningPhilosophers();
 
 	phs->start();
-
-
+	phs->join();
+	
+	printf("All threads have finished.\n");
+	return 0;
 }
 

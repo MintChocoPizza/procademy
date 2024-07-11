@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Library",
-    "\\Library\\SerializeBuffer"
+    "\\Library"
   ],
-  "SelectedNode": "\\Library\\SerializeBuffer\\SerializeBuffer.sln",
+  "SelectedNode": "\\Library\\SerializeBuffer",
   "PreviewInSolutionExplorer": false
 }
