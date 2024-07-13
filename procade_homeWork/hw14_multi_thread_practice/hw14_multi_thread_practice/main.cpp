@@ -152,6 +152,7 @@ int wmain(int argc, wchar_t *argv[])
 				break;
 			}
 		}
+		Sleep(1000 - (dwEndTime - dwStartTime));
 	}
 
 	/////////////////////////////////////////////////////
@@ -208,6 +209,8 @@ unsigned _stdcall AccepThread(void*)
 unsigned _stdcall DisconnectThread(void*)
 {
 	int iRand;
+
+	srand((unsigned)time(NULL));
 
 	wprintf(L"DisconnectThread id=0x%08x - WaitForSignal %d  \n", GetCurrentThreadId(), g_Connect);
 	if (WaitForSingleObject(g_hManualResetEvent, INFINITE) == WAIT_OBJECT_0)
@@ -279,7 +282,7 @@ unsigned _stdcall UpdateThread(void*)
 #endif
 	}
 
-	wprintf(L"UpdateThread id=0x%08x - WaitForSignal %d  \n", GetCurrentThreadId(), g_Data);
+	wprintf(L"UpdateThread id=0x%08x - closethread %d  \n", GetCurrentThreadId(), g_Data);
 	return 0;
 }
 
