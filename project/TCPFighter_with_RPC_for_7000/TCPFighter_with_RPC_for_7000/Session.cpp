@@ -18,6 +18,19 @@ using namespace OreoPizza;
 
 C_Session C_Session::_C_Session;
 
+st_SESSION::st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID)
+{
+	Socket = New_Socket;
+	dwSessionID = dw_New_SessionID;
+
+	RecvQ = new C_RING_BUFFER();
+	SendQ = new C_RING_BUFFER();
+
+	dwLastRecvTime = g_End_Time;
+
+	Disconnect = false;
+}
+
 C_Session* C_Session::GetInstance(void)
 {
     return &_C_Session;

@@ -18,18 +18,7 @@ struct st_SESSION
 
 	bool				Disconnect;			// ¿¬°á ²÷±è Ã¼Å©
 
-	st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID)
-	{
-		Socket = New_Socket;
-		dwSessionID = dw_New_SessionID;
-		
-		RecvQ = new C_RING_BUFFER();
-		SendQ = new C_RING_BUFFER();
-		
-		dwLastRecvTime = g_End_Time;
-
-		Disconnect = false;
-	}
+	st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID);
 };
 
 

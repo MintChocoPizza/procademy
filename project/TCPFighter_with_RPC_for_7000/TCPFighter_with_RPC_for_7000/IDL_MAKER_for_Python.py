@@ -8,6 +8,8 @@ KeyWordTable = ["#PACKETNUM",  "#NOBUFF", "#DEST", "#struct", "#define"]
 
 PACKETNUM : int = 0
 
+DefineDisableWarning : str = "#pragma warning( disable : 4309 ) \n#pragma warning( disable : 4267 )"
+DefineHeaderSTRUCT :str = "st_PACKET_HEADER"
 DefineForwardDeclaration : str = "void ForwardDecl(int DestID, SerializeBuffer *sb);"
 DefineSessionValue : str = "SrcID"
 DefineSessionStr : str = "int " + DefineSessionValue
@@ -85,7 +87,7 @@ def WriteProxyCpp():
     ProxyCpp.write("#include \"Protocol.h\" \n")
     ProxyCpp.write("#include \"SerializeBuffer.h\" \n")
     ProxyCpp.write("#include \"proxy.h\" \n")
-    ProxyCpp.write("\n")
+    ProxyCpp.write("\n" + DefineDisableWarning + "\n\n")
     ProxyCpp.write(DefineForwardDeclaration + "\n")
     ProxyCpp.write("OreoPizza::Proxy proxy; \n")
 
@@ -208,32 +210,31 @@ def removeKeyWord(Param):
 def PushBuff(Param):
     global KeyWordTable
     global HeaderType
+    global DefineHeaderSTRUCT
 
     TempStr = "SerializeBuffer sb; \n"
-    TempStr += "\tst_PACKET_HEADER header; \n"
-    TempStr += "\tsize_t size; \n"
-    
-    TempStr += "\n"
-    TempStr += "\theader.byCode = dfPACKET_CODE; \n"
-    TempStr += "\theader.byType = " + HeaderType + "; \n"
+    TempStr += "\t" + DefineHeaderSTRUCT + " header; \n\n"
+
     ####################################################
     # 1. 직렬화 버퍼에 패킷의 헤더를 넣는다. 
     # 2. 직렬화 버퍼에 데이터를 넣는다. 
     # 3. 직렬화 버퍼에 사이즈를 헤더 사이즈 위치에 넣는다.
-    TempStr += "\n\tsb.PutData((char *)&header, sizeof(st_PACKET_HEADER)); \n"
+    TempStr += "\tsb.PutData((char *)&header, sizeof(" + DefineHeaderSTRUCT + ")); \n"
     
     TempParam = Param.split(",")
-
     TempStr += "\tsb"
     for subTempParam in TempParam:
         subTempParam = subTempParam.strip()
         if MyKeyWord(subTempParam) != -1:
             words = subTempParam.split()
             TempStr += " << " + words[-1]
-    TempStr += "; \n"
+    TempStr += "; \n\n"
+
+    TempStr += "\theader.byCode = dfPACKET_CODE; \n"
+    TempStr += "\theader.byType = " + HeaderType + "; \n"
+    TempStr += "\theader.bySize = sb.GetDataSize() - sizeof(" + DefineHeaderSTRUCT + "); \n\n"
     
-    TempStr += "\tsize = sb.GetDataSize(); \n"
-    TempStr += "\theader.bySize = size; \n"
+    
     TempStr += "\tsb.ReWrite(); \n"
     TempStr += "\tsb.PutData((char*)&header, sizeof(st_PACKET_HEADER)); \n"
     TempStr += "\tsb.ReturnPos(); \n\n "

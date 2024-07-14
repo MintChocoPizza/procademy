@@ -24,28 +24,7 @@ struct st_Player
 	// CurSector;
 	// OldSector;
 
-	st_Player(DWORD SessionID, st_SESSION* pSession)
-	{
-		_pSession = pSession;
-		_SessionID = SessionID;
-		_Disconnect = false;
-		_HP = 100;
-		_dwAction = -1;
-
-		// rand() % 최대값 + 최솟값
-		// 0 < _Y < 6401
-		// 0 < _X < 6401
-		_Y = rand() % (dfRANGE_MOVE_BOTTOM - dfRANGE_MOVE_TOP + 1) + dfRANGE_MOVE_TOP;
-		_X = rand() % (dfRANGE_MOVE_RIGHT - dfRANGE_MOVE_LEFT + 1) + dfRANGE_MOVE_LEFT;
-
-		_SectorPos = new st_SECTOR_POS(_Y, _X);
-
-		_SectorPos->iY = _Y / C_Field::GetInstance()->Grid_Y_Size;
-		_SectorPos->iX = _X / C_Field::GetInstance()->Grid_X_Size;
-		
-		_byDirection = (rand() % 8) < 4 ? 0 : 4;
-		_byModeDirection = -1;
-	}
+	st_Player(DWORD SessionID, st_SESSION* pSession);
 };
 
 class C_Player
