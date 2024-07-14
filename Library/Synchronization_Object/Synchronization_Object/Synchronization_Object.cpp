@@ -3,7 +3,6 @@
 
 #include "Synchronization_Object.h"
 
-LONG compare = 1;
 
 bool TryLock(LONG* flag)
 {
@@ -15,6 +14,8 @@ bool TryLock(LONG* flag)
 
 void Lock(LONG* flag)
 {
+	LONG compare = 1;
+
 	// 내가 드러가려고(1) 하는데 이미 누가있는경우(1) block 된다. 
 	while (InterlockedExchange(flag, 1) == 1)
 	{

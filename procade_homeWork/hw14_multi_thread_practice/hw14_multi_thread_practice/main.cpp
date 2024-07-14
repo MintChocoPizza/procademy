@@ -148,26 +148,6 @@ int wmain(int argc, wchar_t *argv[])
 	// main 함수 메인 로직
 	// 
 	/////////////////////////////////////////////////////
-	//while (1)
-	//{
-	//	dwEndTime = timeGetTime();
-	//	if (dwEndTime - dwStartTime >= 1000)
-	//	{
-	//		// 1초가 지난 경우 
-	//		wprintf(L"main thread - g_Connect: %d \n", g_Connect);
-	//		dwStartTime += 1000;
-	//		
-	//		// 20초가 지난 경우
-	//		if (dwEndTime - dwShutdownTime >= 20000)
-	//		{
-	//			g_Shutdown = true;
-	//			break;
-	//		}
-	//	}
-	//	Sleep(1000 - (dwEndTime - dwStartTime));
-	//}
-
-	LONG TempConnect;
 	while (1)
 	{
 		dwEndTime = timeGetTime();
@@ -472,3 +452,5 @@ void UnLock(LONG* flag)
 	InterlockedExchange(flag, 0);
 	WakeByAddressSingle(flag);
 }
+
+
