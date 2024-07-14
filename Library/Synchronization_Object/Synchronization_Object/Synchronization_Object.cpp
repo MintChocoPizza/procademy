@@ -25,6 +25,6 @@ void Lock(LONG* flag)
 
 void UnLock(LONG* flag)
 {
-	WakeByAddressSingle(flag);
 	InterlockedExchange(flag, 0);
+	WakeByAddressSingle(flag);
 }

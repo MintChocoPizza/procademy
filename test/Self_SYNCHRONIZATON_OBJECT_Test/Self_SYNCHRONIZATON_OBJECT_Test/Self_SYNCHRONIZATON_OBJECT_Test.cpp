@@ -20,7 +20,8 @@
 
 #define SYNCHRONIZATON_OBJECT		0
 
-constexpr int MAX_NUM = 10;
+constexpr int MAX_CNT = 10;
+constexpr int TEST_CNT = 10000;
 
 LONG g_Flag;
 CRITICAL_SECTION g_CS;
@@ -44,53 +45,72 @@ int main()
 {
 	timeBeginPeriod(1);
 
-	HANDLE hThread[MAX_NUM];
-	unsigned int threadID[MAX_NUM];
+	HANDLE hThread[MAX_CNT];
+	unsigned int threadID[MAX_CNT];
 	DWORD dwStatus;
 	int iCnt;
 
+	while (1)
+	{
 #if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
-	{
-		Initialize(&g_Flag);
-	}
+		{
+			Initialize(&g_Flag);
+		}
 #elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
-	{
-		InitializeCriticalSection(&g_CS);
-	}
+		{
+			InitializeCriticalSection(&g_CS);
+		}
 #elif SYNCHRONIZATON_OBJECT == SRW_LOCK
-	{
-		InitializeSRWLock(&g_srwlock);
-	}
+		{
+			InitializeSRWLock(&g_srwlock);
+		}
 #elif SYNCHRONIZATON_OBJECT == SPIN_LOCK
-	{
-		SpinLockInitialize(&g_SpinLockFlag);
-	}
+		{
+			SpinLockInitialize(&g_SpinLockFlag);
+		}
 #endif
-	g_Var = 0;
+		g_Var = 0;
 
-	for (iCnt = 0; iCnt < MAX_NUM; iCnt++)
-	{
-		hThread[iCnt] = (HANDLE)_beginthreadex(NULL, 0, Thread, NULL, NULL, &threadID[iCnt]);
+		for (iCnt = 0; iCnt < MAX_CNT; iCnt++)
+		{
+			hThread[iCnt] = (HANDLE)_beginthreadex(NULL, 0, Thread, NULL, NULL, &threadID[iCnt]);
+		}
+
+		dwStatus = WaitForMultipleObjects(
+			MAX_CNT,				// 커널 객체 배열의 길이
+			hThread,		// 커널 객체의 핸들로 구성된 배열의 포인터
+			TRUE,			// TRUE: 모든 커널 객체 시그널, FALSE: 커널 객체 중 하나라도 시그널
+			INFINITE		// 언제까지 block 될것인가
+		);
+
+		if (dwStatus == WAIT_OBJECT_0)
+		{
+			printf("ALL Thread normal shutdown !!!! \n");
+		}
+		else
+		{
+			printf("WaitForMultipleObject %d error \n", GetLastError());
+		}
+
+		printf("%d \n", g_Var);
+
+		int i = 0;
+
+		for (iCnt = 0; iCnt < MAX_CNT; ++iCnt)
+		{
+			CloseHandle(hThread[iCnt]);
+			++i;
+		}
+
+		printf("%d \n", i);
+
+		if (g_Var != MAX_CNT * TEST_CNT)
+		{
+			__debugbreak();
+		}
+
+		Sleep(100);
 	}
-
-	dwStatus = WaitForMultipleObjects(
-		MAX_NUM,				// 커널 객체 배열의 길이
-		hThread,		// 커널 객체의 핸들로 구성된 배열의 포인터
-		TRUE,			// TRUE: 모든 커널 객체 시그널, FALSE: 커널 객체 중 하나라도 시그널
-		INFINITE		// 언제까지 block 될것인가
-	);
-
-	if (dwStatus == WAIT_OBJECT_0)
-	{
-		printf("ALL Thread normal shutdown !!!! \n");
-	}
-	else
-	{
-		printf("WaitForMultipleObject %d error \n", GetLastError());
-	}
-
-	printf("%d \n", g_Var);
-
     std::cout << "Hello World!\n";
 	timeEndPeriod(1);
 
@@ -99,7 +119,7 @@ int main()
 unsigned _stdcall Thread(void* pArg)
 {
 	int iCnt;
-	for (iCnt = 0; iCnt < 10000; ++iCnt)
+	for (iCnt = 0; iCnt < TEST_CNT; ++iCnt)
 	{
 #if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
 		Lock(&g_Flag);
@@ -111,6 +131,7 @@ unsigned _stdcall Thread(void* pArg)
 		SpinLock(&g_SpinLockFlag);
 #endif
 		++g_Var;
+
 #if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
 		UnLock(&g_Flag);
 #elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
@@ -141,8 +162,8 @@ void Lock(LONG* flag)
 
 void UnLock(LONG* flag)
 {
-	WakeByAddressSingle(flag);
 	InterlockedExchange(flag, 0);
+	WakeByAddressSingle(flag);
 }
 
 

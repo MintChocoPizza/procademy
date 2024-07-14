@@ -276,8 +276,18 @@ int wmain(int argc, wchar_t *argv[])
 		wprintf(L"WaitForMultipleObject %d error \n", GetLastError());
 	}
 
-	wprintf(L"Hello World \n");
+	/////////////////////////////////////////////////////
+	// 사용한 모든 것들을 정리해준다.
+	/////////////////////////////////////////////////////
+	for (iCnt = 0; iCnt < 5; iCnt++)
+	{
+		CloseHandle(hThread[iCnt]);
+	}
+	CloseHandle(g_hManualResetEvent);
 	timeEndPeriod(1);
+
+
+	wprintf(L"Hello World \n");
 	return 0;
 }
 
@@ -459,6 +469,6 @@ void Lock(LONG* flag)
 
 void UnLock(LONG* flag)
 {
-	WakeByAddressSingle(flag);
 	InterlockedExchange(flag, 0);
+	WakeByAddressSingle(flag);
 }
