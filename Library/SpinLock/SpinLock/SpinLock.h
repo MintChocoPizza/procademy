@@ -3,9 +3,9 @@
 #define __SPINLOCK_H__
 
 
-
-void SpinLock(void *flag);
-void SpinUnlock(void *flag);
+void SpinLockInitialize(LONG* flag);
+void SpinLock(LONG*flag);
+void SpinUnlock(LONG*flag);
 
 #endif // !__SPINLOCK_H__
 

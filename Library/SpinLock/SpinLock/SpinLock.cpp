@@ -2,19 +2,24 @@
 #include <Windows.h>
 #include "SpinLock.h"
 
+#pragma optimize("",off)
 
-void SpinLock(void* flag)
+void SpinLockInitialize(LONG* flag)
 {
-	while (1)
+	*flag = 0;
+}
+
+void SpinLock(LONG* flag)
+{
+	while (InterlockedExchange(flag, 1) == 1)
 	{
-		if (InterlockedExchange((LONG *)flag, 1) == 0 )
-		{
-			break;
-		}
+		YieldProcessor();
 	}
 }
 
-void SpinUnlock(void* flag)
+void SpinUnlock(LONG* flag)
 {
-	*(LONG*)flag = 0;
+	//*(LONG*)flag = 0;
+	InterlockedExchange(flag, 0);
 }
+#pragma optimize("",off)

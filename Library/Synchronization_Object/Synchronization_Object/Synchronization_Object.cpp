@@ -20,7 +20,6 @@ void Lock(LONG* flag)
 	{
 		// 나는 해당 주소를 기다립니다. 
 		WaitOnAddress(flag, &compare, sizeof(LONG), INFINITE);
-		break;
 	}
 }
 
