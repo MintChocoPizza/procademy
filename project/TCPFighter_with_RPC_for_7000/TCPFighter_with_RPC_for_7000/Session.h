@@ -54,7 +54,7 @@ public:
 	// Key: UserID, Value: Session
 	//std::map<DWORD, st_SESSION*> _Session;
 
-	// Key: Socket, Value: Session
+	// Key: SessionID, Value: Session
 	std::unordered_map< DWORD, st_SESSION*> _Session_Map;
 
 public:

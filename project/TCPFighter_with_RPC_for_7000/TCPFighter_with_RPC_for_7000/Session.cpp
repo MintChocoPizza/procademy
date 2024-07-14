@@ -209,7 +209,6 @@ void C_Session::netProc_Accept(void)
 	// 3.
 	proxy.packet_SC_Create_My_Character(_SessionID, _SessionID, st_p_New_Player->_byDirection, st_p_New_Player->_X, st_p_New_Player->_Y, st_p_New_Player->_HP);
 	// 4.
-	C_Field::GetInstance()->
 
 	
 }
