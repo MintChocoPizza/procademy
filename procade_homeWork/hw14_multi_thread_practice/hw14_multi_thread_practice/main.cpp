@@ -12,7 +12,7 @@
 #define MY_SYNCHRONIZATON_OBJECT	0
 #define CRITICALSECTION				1
 #define SRW_LOCK					2
-#define SYNCHRONIZATON_OBJECT		1
+#define SYNCHRONIZATON_OBJECT		2
 
 
 /////////////////////////////////////////////////////
@@ -454,7 +454,6 @@ void Lock(LONG* flag)
 	while (InterlockedExchange(flag, 1) == 1)
 	{
 		WaitOnAddress(flag, &compare, sizeof(LONG), INFINITE);
-		break;
 	}
 }
 
