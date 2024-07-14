@@ -14,13 +14,22 @@
 #define SRW_LOCK					2
 #define SYNCHRONIZATON_OBJECT		1
 
-LONG g_Flag;
-CRITICAL_SECTION g_CS;
-SRWLOCK g_srwlock;
+
+/////////////////////////////////////////////////////
+// 동기화 객체
+//////////////////////////////////////////////////////
+LONG g_Flag_Aceep_Disc;
+LONG g_Flag_Update;
+CRITICAL_SECTION g_CS_Aceep_Disc;
+CRITICAL_SECTION g_CS_Update;
+SRWLOCK g_srwlock_Aceep_Disc;
+SRWLOCK g_srwlock_Update;
 
 LONG g_Data = 0;
 LONG g_Connect = 0;
 bool g_Shutdown = false;
+bool g_Shutdown_Aecc_Disc = false;
+bool g_Shutdown_Update = false;
 HANDLE g_hManualResetEvent = NULL;
 
 unsigned _stdcall AccepThread(void* pArg);
@@ -50,15 +59,18 @@ int wmain(int argc, wchar_t *argv[])
 	/////////////////////////////////////////////////////
 #if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
 	{
-		Initialize(&g_Flag);
+		Initialize(&g_Flag_Aceep_Disc);
+		Initialize(&g_Flag_Update);
 	}
 #elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
 	{
-		InitializeCriticalSection(&g_CS);
+		InitializeCriticalSection(&g_CS_Aceep_Disc);
+		InitializeCriticalSection(&g_CS_Update);
 	}
 #elif SYNCHRONIZATON_OBJECT == SRW_LOCK
 	{
-		InitializeSRWLock(&g_srwlock);
+		InitializeSRWLock(&g_srwlock_Aceep_Disc);
+		InitializeSRWLock(&g_srwlock_Update);
 	}
 #endif
 
@@ -136,24 +148,112 @@ int wmain(int argc, wchar_t *argv[])
 	// main 함수 메인 로직
 	// 
 	/////////////////////////////////////////////////////
+	//while (1)
+	//{
+	//	dwEndTime = timeGetTime();
+	//	if (dwEndTime - dwStartTime >= 1000)
+	//	{
+	//		// 1초가 지난 경우 
+	//		wprintf(L"main thread - g_Connect: %d \n", g_Connect);
+	//		dwStartTime += 1000;
+	//		
+	//		// 20초가 지난 경우
+	//		if (dwEndTime - dwShutdownTime >= 20000)
+	//		{
+	//			g_Shutdown = true;
+	//			break;
+	//		}
+	//	}
+	//	Sleep(1000 - (dwEndTime - dwStartTime));
+	//}
+
+	LONG TempConnect;
 	while (1)
 	{
 		dwEndTime = timeGetTime();
-		if (dwEndTime - dwStartTime >= 1000)
+
+		// 20초가 지난 경우
+		if (dwEndTime - dwShutdownTime >= 20000)
 		{
-			// 1초가 지난 경우 
-			wprintf(L"main thread - g_Connect: %d \n", g_Connect);
-			dwStartTime += 1000;
-			
-			// 20초가 지난 경우
-			if (dwEndTime - dwShutdownTime >= 20000)
-			{
-				g_Shutdown = true;
-				break;
-			}
+			g_Shutdown = true;
+			break;
 		}
-		Sleep(1000 - (dwEndTime - dwStartTime));
+
+		if (dwEndTime - dwStartTime < 1000)
+		{
+			dwStartTime += 1000;
+			Sleep(dwStartTime - dwEndTime);
+
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+			Lock(&g_Flag_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+			EnterCriticalSection(&g_CS_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+			AcquireSRWLockExclusive(&g_srwlock_Aceep_Disc);
+#endif
+			{
+				/////////////////////////////////////////////////////////////////
+				// 단순  출력
+				/////////////////////////////////////////////////////////////////
+				wprintf(L"main thread - g_Connect: %d \n", g_Connect);
+			}
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+			UnLock(&g_Flag_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+			LeaveCriticalSection(&g_CS_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+			ReleaseSRWLockExclusive(&g_srwlock_Aceep_Disc);
+#endif
+		}
+		else
+		{
+			dwStartTime += 1000;
+		}
 	}
+
+	/////////////////////////////////////////////////////
+	// 각각의 스레드의 종료 조건 변수에 대하여 
+	// 동기화를 걸고 종료를 갱신해준다. 
+	/////////////////////////////////////////////////////
+	if (g_Shutdown == true)
+	{
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+		Lock(&g_Flag_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+		EnterCriticalSection(&g_CS_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+		AcquireSRWLockExclusive(&g_srwlock_Aceep_Disc);
+#endif
+		{
+			g_Shutdown_Aecc_Disc = true;
+		}
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+		UnLock(&g_Flag_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+		LeaveCriticalSection(&g_CS_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+		ReleaseSRWLockExclusive(&g_srwlock_Aceep_Disc);
+#endif
+
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+		Lock(&g_Flag_Update);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+		EnterCriticalSection(&g_CS_Update);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+		AcquireSRWLockExclusive(&g_srwlock_Update);
+#endif
+		{
+			g_Shutdown_Update = true;
+		}
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+		UnLock(&g_Flag_Update);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+		LeaveCriticalSection(&g_CS_Update);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+		ReleaseSRWLockExclusive(&g_srwlock_Update);
+#endif
+	}
+
 
 	/////////////////////////////////////////////////////
 	// 모든 스레드 종료(시그널이 오기를) 기다린다.
@@ -187,22 +287,51 @@ unsigned _stdcall AccepThread(void*)
 
 	srand((unsigned)time(NULL));
 
-	wprintf(L"AccepThread id=0x%08x - WaitForSignal %d  \n", GetCurrentThreadId(), g_Connect);
+	wprintf(L"AccepThread id=0x%08x - WaitForSignal \n", GetCurrentThreadId());
 	if (WaitForSingleObject(g_hManualResetEvent, INFINITE) == WAIT_OBJECT_0)
 	{
-		wprintf(L"AccepThread id=0x%08x - Start %d  \n", GetCurrentThreadId(), g_Connect);
+		wprintf(L"AccepThread id=0x%08x - Start \n", GetCurrentThreadId());
 	}
 
-	while (g_Shutdown == false)
+	while (1)
 	{
+
 		// 100ms ~ 1000ms Sleep
 		iRand = rand() % (1000 - 100 + 1) + 100;
 		Sleep(iRand);
 
-		InterlockedIncrement(&g_Connect);
+
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+		Lock(&g_Flag_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+		EnterCriticalSection(&g_CS_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+		AcquireSRWLockExclusive(&g_srwlock_Aceep_Disc);
+#endif
+		if (g_Shutdown_Aecc_Disc == true)
+		{
+			wprintf(L"AccepThread id=0x%08x - closethread %d \n", GetCurrentThreadId(), g_Connect);
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+			UnLock(&g_Flag_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+			LeaveCriticalSection(&g_CS_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+			ReleaseSRWLockExclusive(&g_srwlock_Aceep_Disc);
+#endif
+			break;
+		}
+
+		++g_Connect;
+
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+		UnLock(&g_Flag_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+		LeaveCriticalSection(&g_CS_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+		ReleaseSRWLockExclusive(&g_srwlock_Aceep_Disc);
+#endif
 	}
 
-	wprintf(L"AccepThread id=0x%08x - closethread %d \n", GetCurrentThreadId(), g_Connect);
 	return 0;
 }
 
@@ -212,77 +341,105 @@ unsigned _stdcall DisconnectThread(void*)
 
 	srand((unsigned)time(NULL));
 
-	wprintf(L"DisconnectThread id=0x%08x - WaitForSignal %d  \n", GetCurrentThreadId(), g_Connect);
+	wprintf(L"DisconnectThread id=0x%08x - WaitForSignal \n", GetCurrentThreadId());
 	if (WaitForSingleObject(g_hManualResetEvent, INFINITE) == WAIT_OBJECT_0)
 	{
-		wprintf(L"DisconnectThread id=0x%08x - Start %d  \n", GetCurrentThreadId(), g_Connect);
+		wprintf(L"DisconnectThread id=0x%08x - Start \n", GetCurrentThreadId());
 	}
 
-	while (g_Shutdown == false)
+	while (1)
 	{
+
 		// 100ms ~ 1000ms Sleep
 		iRand = rand() % (1000 - 100 + 1) + 100;
 		Sleep(iRand);
 
-		InterlockedDecrement(&g_Connect);
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+		Lock(&g_Flag_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+		EnterCriticalSection(&g_CS_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+		AcquireSRWLockExclusive(&g_srwlock_Aceep_Disc);
+#endif
+
+		if (g_Shutdown_Aecc_Disc == true)
+		{
+			wprintf(L"DisconnectThread id=0x%08x - closethread %d \n", GetCurrentThreadId(), g_Connect);
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+			UnLock(&g_Flag_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+			LeaveCriticalSection(&g_CS_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+			ReleaseSRWLockExclusive(&g_srwlock_Aceep_Disc);
+#endif
+			break;
+		}
+
+		--g_Connect;
+
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+		UnLock(&g_Flag_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+		LeaveCriticalSection(&g_CS_Aceep_Disc);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+		ReleaseSRWLockExclusive(&g_srwlock_Aceep_Disc);
+#endif
 	}
 
-	wprintf(L"DisconnectThread id=0x%08x - closethread %d \n", GetCurrentThreadId(), g_Connect);
 	return 0;
 }
 
 unsigned _stdcall UpdateThread(void*)
 {
-	wprintf(L"UpdateThread id=0x%08x - WaitForSignal %d  \n", GetCurrentThreadId(), g_Data);
+	wprintf(L"UpdateThread id=0x%08x - WaitForSignal  \n", GetCurrentThreadId());
 	if (WaitForSingleObject(g_hManualResetEvent, INFINITE) == WAIT_OBJECT_0)
 	{
-		wprintf(L"UpdateThread id=0x%08x - Start %d  \n", GetCurrentThreadId(), g_Data);
+		wprintf(L"UpdateThread id=0x%08x - Start \n", GetCurrentThreadId());
 	}
 
-	while (g_Shutdown == false)
+	
+	while (1)
 	{
+
 		Sleep(10);
 
 #if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
-		{
-			Lock(&g_Flag);
-			g_Data++;
-
-			if (g_Data % 1000 == 0)
-			{
-				wprintf(L"thread id=0x%08x / g_Data: %d  \n", GetCurrentThreadId(), g_Data);
-			}
-
-			UnLock(&g_Flag);
-		}
+		Lock(&g_Flag_Update);
 #elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
-		{
-			EnterCriticalSection(&g_CS);
-			g_Data++;
-			
-			if (g_Data % 1000 == 0)
-			{
-				wprintf(L"thread id=0x%08x / g_Data: %d  \n", GetCurrentThreadId(), g_Data);
-			}
-			
-			LeaveCriticalSection(&g_CS);
-		}
+		EnterCriticalSection(&g_CS_Update);
 #elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+		AcquireSRWLockExclusive(&g_srwlock_Update);
+#endif
+		if (g_Shutdown_Update == true)
 		{
-			AcquireSRWLockExclusive(&g_srwlock);
-			g_Data++;
-
-			if (g_Data % 1000 == 0)
-			{
-				wprintf(L"thread id=0x%08x / g_Data: %d  \n", GetCurrentThreadId(), g_Data);
-			}
-
-			ReleaseSRWLockExclusive(&g_srwlock);
+			wprintf(L"UpdateThread id=0x%08x - closethread %d  \n", GetCurrentThreadId(), g_Data);
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+			UnLock(&g_Flag_Update);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+			LeaveCriticalSection(&g_CS_Update);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+			ReleaseSRWLockExclusive(&g_srwlock_Update);
+#endif
+			break;
 		}
+		
+		g_Data++;
+
+		if (g_Data % 1000 == 0)
+		{
+			wprintf(L"thread id=0x%08x / g_Data: %d  \n", GetCurrentThreadId(), g_Data);
+		}
+
+#if SYNCHRONIZATON_OBJECT == MY_SYNCHRONIZATON_OBJECT
+		UnLock(&g_Flag_Update);
+#elif SYNCHRONIZATON_OBJECT == CRITICALSECTION
+		LeaveCriticalSection(&g_CS_Update);
+#elif SYNCHRONIZATON_OBJECT == SRW_LOCK
+		ReleaseSRWLockExclusive(&g_srwlock_Update);
 #endif
 	}
 
-	wprintf(L"UpdateThread id=0x%08x - closethread %d  \n", GetCurrentThreadId(), g_Data);
+
 	return 0;
 }
 

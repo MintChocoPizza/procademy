@@ -222,7 +222,6 @@ bool FpsSkip(void)
 {
 	bool ret;
 	g_End = timeGetTime();
-
 	if (g_End - g_Start < 20)
 	{
 		g_Start += 20;
