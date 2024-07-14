@@ -8,7 +8,7 @@ KeyWordTable = ["#PACKETNUM",  "#NOBUFF", "#DEST", "#struct", "#define"]
 
 PACKETNUM : int = 0
 
-DefineDisableWarning : str = "#pragma warning( disable : 4309 ) \n#pragma warning( disable : 4267b )"
+DefineDisableWarning : str = "#pragma warning( disable : 4309 ) \n#pragma warning( disable : 4267 )"
 DefineHeaderSTRUCT :str = "st_PACKET_HEADER"
 DefineForwardDeclaration : str = "void ForwardDecl(int DestID, SerializeBuffer *sb);"
 DefineSessionValue : str = "SrcID"
