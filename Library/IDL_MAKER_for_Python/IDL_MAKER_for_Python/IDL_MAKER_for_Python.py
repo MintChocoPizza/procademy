@@ -8,6 +8,7 @@ KeyWordTable = ["#PACKETNUM",  "#NOBUFF", "#DEST", "#struct", "#define"]
 
 PACKETNUM : int = 0
 
+DefineDisableWarning : str = "#pragma warning(disable : 4309) \n#pragma warning(disable : 4267) \n"
 DefineHeaderSTRUCT :str = "st_PACKET_HEADER"
 DefineForwardDeclaration : str = "void ForwardDecl(int DestID, SerializeBuffer *sb);"
 DefineSessionValue : str = "SrcID"
@@ -74,7 +75,7 @@ def WriteProxyHeader():
 
 def WriteProxyCpp():
     global ProxyCppStr
-
+    global DefineDisableWarning
 
     ########################################################
     # ./Proxy.cpp 파일 작성
@@ -87,6 +88,7 @@ def WriteProxyCpp():
     ProxyCpp.write("#include \"SerializeBuffer.h\" \n")
     ProxyCpp.write("#include \"proxy.h\" \n")
     ProxyCpp.write("\n")
+    ProxyCpp.write(DefineDisableWarning + "\n")
     ProxyCpp.write(DefineForwardDeclaration + "\n")
     ProxyCpp.write("OreoPizza::Proxy proxy; \n")
 
