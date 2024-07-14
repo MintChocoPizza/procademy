@@ -40,7 +40,7 @@ void ForwardDecl(int DestID, SerializeBuffer* sb)
 {
 	st_SESSION* pSession = C_Session::GetInstance()->_Session_Map.find(DestID)->second;
 
-	C_Session::GetInstance()->netProc_SendUnicast(pSession, sb);
+	C_Session::GetInstance()->SendPacket_Unicast(pSession, sb);
 }
 
 void C_Session::netIOProcess(void)
@@ -269,17 +269,56 @@ void C_Session::netProc_Recv(st_SESSION* pSession)
 	
 }
 
-void C_Session::netProc_SendUnicast(st_SESSION* pSession, SerializeBuffer* clpPacket)
+void C_Session::SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* pPacket, st_SESSION* pExceptSession)
 {
+	std::list<st_Player*> *pTemp_Player_List;
+	std::list<st_Player*>::iterator iter;
+
+	pTemp_Player_List = C_Field::GetInstance()->_Sector[iSectorY][iSectorX];
+
+	for (iter = pTemp_Player_List->begin(); iter != pTemp_Player_List->end(); ++iter)
+	{
+		SendPacket_Unicast((*iter)->_pSession, pPacket);
+	}
+}
+
+void C_Session::SendPacket_Unicast(st_SESSION* pSession, SerializeBuffer* pPacket)
+{
+	// 세션에서 SendQ가 가득 차있다면 연결을 끊는다.
+
 	size_t Ret_Packet;
 
-	Ret_Packet = pSession->SendQ->Enqueue(clpPacket->GetBufferPtr(), clpPacket->GetDataSize());
+	Ret_Packet = pSession->SendQ->Enqueue(pPacket->GetBufferPtr(), pPacket->GetDataSize());
+
 	if (Ret_Packet == 0)
 	{
-		// Send 링버퍼에 데이터를 넣을 수 없으면 연결을 끊는다. 
+		// 연결을 끊는다. 
 		return;
 	}
 }
+
+void C_Session::SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, bool bSendMe)
+{
+	st_Player* pTempPlayer;
+	std::list<st_Player*>* pTemp_Player_List;
+	std::list<st_Player*>::iterator iter;
+
+	pTempPlayer = C_Player::GetInstance()->_CharacterMap.find(pSession->dwSessionID)->second;
+	
+	pTemp_Player_List = C_Field::GetInstance()->_Sector[pTempPlayer->_Y - 1][pTempPlayer->_X - 1];
+	for (iter = pTemp_Player_List->begin(); iter != pTemp_Player_List->end(); ++iter)
+	{
+		
+	}
+	
+	
+}
+
+void C_Session::SendPacket_Broadcast(st_SESSION* pSession, SerializeBuffer* pPacket)
+{
+	return;
+}
+
 
 
 C_Session::C_Session(void) : _SessionID(0)

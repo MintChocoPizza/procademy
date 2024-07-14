@@ -41,7 +41,8 @@ private:
 
 
 public:
-	std::unordered_map<DWORD, st_Player*>	_CharacterMap;
+	// Key: SessionID, Value: st_Player*
+	std::unordered_map< DWORD, st_Player*>	_CharacterMap;
 
 };
 
