@@ -13,10 +13,13 @@
 #ifndef __FIELD_H__
 #define __FIELD_H__
 
-
 using namespace std;
+
 struct st_SECTOR_AROUND;
 struct st_Player;
+
+extern int dY[];
+extern int dX[];
 
 class C_Field
 {

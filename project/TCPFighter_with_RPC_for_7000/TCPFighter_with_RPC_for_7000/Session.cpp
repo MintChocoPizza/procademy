@@ -302,22 +302,47 @@ void C_Session::SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket
 	st_Player* pTempPlayer;
 	std::list<st_Player*>* pTemp_Player_List;
 	std::list<st_Player*>::iterator iter;
+	int iCnt;
 
 	pTempPlayer = C_Player::GetInstance()->_CharacterMap.find(pSession->dwSessionID)->second;
-	
-	pTemp_Player_List = C_Field::GetInstance()->_Sector[pTempPlayer->_Y - 1][pTempPlayer->_X - 1];
-	for (iter = pTemp_Player_List->begin(); iter != pTemp_Player_List->end(); ++iter)
+
+	// 현재 위치에 메시지 전송
+	pTemp_Player_List = C_Field::GetInstance()->_Sector[pTempPlayer->_Y][pTempPlayer->_X];
+	if (bSendMe == true)
 	{
-		
+		for (iter = pTemp_Player_List->begin(); iter != pTemp_Player_List->end(); ++iter)
+		{
+			if (pTempPlayer == *iter)
+				continue;
+			SendPacket_Unicast((*iter)->_pSession, pPacket);
+		}
 	}
-	
-	
+	else
+	{
+		for (iter = pTemp_Player_List->begin(); iter != pTemp_Player_List->end(); ++iter)
+		{
+			SendPacket_Unicast((*iter)->_pSession, pPacket);
+		}
+	}
+
+
+	// 8방에 대한 반복문
+	for (iCnt = 1; iCnt < 9; ++iCnt)
+	{
+		pTemp_Player_List = C_Field::GetInstance()->_Sector[pTempPlayer->_Y + dY[iCnt]][pTempPlayer->_X + dX[iCnt]];
+		
+		for (iter = pTemp_Player_List->begin(); iter != pTemp_Player_List->end(); ++iter)
+		{
+			SendPacket_Unicast((*iter)->_pSession, pPacket);
+		}
+	}
 }
 
 void C_Session::SendPacket_Broadcast(st_SESSION* pSession, SerializeBuffer* pPacket)
 {
 	return;
 }
+
 
 
 

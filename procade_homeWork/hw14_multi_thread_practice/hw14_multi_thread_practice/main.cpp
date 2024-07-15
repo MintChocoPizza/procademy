@@ -16,6 +16,20 @@
 
 
 /////////////////////////////////////////////////////
+// 변수에 쓰기가 발생하면 해당 캐시라인이 무효화가 된다. 
+// 
+// 같은 스레드에서 같은 캐시라인에 쓰기와 읽기가 되면 상관 없지만, 
+// 
+// A 스레드에서 쓰기가 발생하면, B스레드에서 해당 캐시라인에 대하여 무효화가 발생하여 
+// 
+// 캐시 라인을 다시 읽어야 한다.
+// 
+// 
+/////////////////////////////////////////////////////
+alignas(64) LONG g_Data = 0;
+alignas(64) LONG g_Connect = 0;
+
+//////////////////////////////////////////////////////
 // 동기화 객체
 //////////////////////////////////////////////////////
 LONG g_Flag_Aceep_Disc;
@@ -25,8 +39,7 @@ CRITICAL_SECTION g_CS_Update;
 SRWLOCK g_srwlock_Aceep_Disc;
 SRWLOCK g_srwlock_Update;
 
-LONG g_Data = 0;
-LONG g_Connect = 0;
+
 bool g_Shutdown = false;
 bool g_Shutdown_Aecc_Disc = false;
 bool g_Shutdown_Update = false;

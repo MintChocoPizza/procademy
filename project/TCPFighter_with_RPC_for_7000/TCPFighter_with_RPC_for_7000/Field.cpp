@@ -12,6 +12,11 @@
 
 C_Field C_Field::_C_Field;
 
+// 현재위치 + 8방
+// 현재위치, 좌측 상단부터 우측 하단으로 순서대로
+int dY[] = { 0, -1,-1,-1,0,0,0,1,1,1 };
+int dX[] = { 0, -1,0,1, -1,1, -1,0,1 };
+
 C_Field* C_Field::GetInstance(void)
 {
     return &_C_Field;
