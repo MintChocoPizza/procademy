@@ -6,8 +6,10 @@
 #pragma comment (lib, "Ws2_32.lib")
 #include <unordered_map>
 #include "main.h"
+#include "LOG.h"
 #include "C_Ring_Buffer.h"
 #include "SerializeBuffer.h"
+#include "Protocol.h"
 #include "Proxy.h"
 #include "Session.h"
 #include "Define.h"
@@ -42,6 +44,8 @@ void ForwardDecl(int DestID, SerializeBuffer* sb)
 
 	C_Session::GetInstance()->SendPacket_Unicast(pSession, sb);
 }
+
+
 
 void C_Session::netIOProcess(void)
 {
@@ -158,6 +162,13 @@ void C_Session::netProc_Accept(void)
 
 	SOCKET New_Client_Socket;
 	sockaddr_in Clinet_Addr;
+	
+	st_PACKET_HEADER st_New_Header_MY_CHAPACTER;
+	SerializeBuffer New_Packet_MY_CHAPACTER;
+
+	st_PACKET_HEADER st_New_Header_OTHER_CHAPACTER;
+	SerializeBuffer New_Packet_OTHER_CHAPACTER;
+
 	st_SESSION* st_p_New_Session;
 	st_Player* st_p_New_Player;
 	int Client_Addr_Len;
@@ -208,7 +219,17 @@ void C_Session::netProc_Accept(void)
 	st_p_New_Player = C_Player::GetInstance()->CreateNewPlayer(_SessionID, st_p_New_Session);
 	// 3.
 	proxy.packet_SC_Create_My_Character(_SessionID, _SessionID, st_p_New_Player->_byDirection, st_p_New_Player->_X, st_p_New_Player->_Y, st_p_New_Player->_HP);
+	st_New_Header_MY_CHAPACTER.byCode = (char)dfPACKET_CODE;
+	st_New_Header_MY_CHAPACTER.byType = dfPACKET_SC_CREATE_MY_CHARACTER;
+	st_New_Header_MY_CHAPACTER.bySize = 10;
+	New_Packet_MY_CHAPACTER.PutData((char*)&st_New_Header_MY_CHAPACTER, sizeof(st_PACKET_HEADER));
+	New_Packet_MY_CHAPACTER << _SessionID << st_p_New_Player->_byDirection << st_p_New_Player->_X << st_p_New_Player->_Y << st_p_New_Player->_HP;
+	SendPacket_Unicast(st_p_New_Session, &New_Packet_MY_CHAPACTER);
 	// 4.
+	st_New_Header_OTHER_CHAPACTER.byCode = (char)dfPACKET_CODE;
+	st_New_Header_OTHER_CHAPACTER.bySize = 10;
+	st_New_Header_OTHER_CHAPACTER.byType = dfPACKET_SC_CREATE_OTHER_CHARACTER;
+	SendPacket_Around(st_p_New_Session, &New_Packet_OTHER_CHAPACTER);
 
 	
 }
@@ -307,6 +328,7 @@ void C_Session::SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket
 	pTempPlayer = C_Player::GetInstance()->_CharacterMap.find(pSession->dwSessionID)->second;
 
 	// 현재 위치에 메시지 전송
+	// goto 사용하고 싶음...
 	pTemp_Player_List = C_Field::GetInstance()->_Sector[pTempPlayer->_Y][pTempPlayer->_X];
 	if (bSendMe == true)
 	{
@@ -341,6 +363,137 @@ void C_Session::SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket
 void C_Session::SendPacket_Broadcast(st_SESSION* pSession, SerializeBuffer* pPacket)
 {
 	return;
+}
+
+bool C_Session::PacketProc(st_SESSION* pSession, unsigned char byPacketType, SerializeBuffer* pPacket)
+{
+	switch (byPacketType)
+	{
+	case dfPACKET_CS_MOVE_START:
+		break;
+	case dfPACKET_CS_MOVE_STOP:
+		break;
+	case dfPACKET_CS_ATTACK1:
+		break;
+	case dfPACKET_CS_ATTACK2:
+		break;
+	case dfPACKET_CS_ATTACK3:
+		break;
+	}
+
+	return true;
+}
+
+bool C_Session::netPacketProc_MoveStart(st_SESSION* pSession, SerializeBuffer* pPacket)
+{
+	char byDirection;
+	short X;
+	short Y;
+	st_Player* pPlayer;
+	SerializeBuffer New_Packet;
+	st_PACKET_HEADER New_Header;
+
+	*pPacket >> byDirection;
+	*pPacket >> X;
+	*pPacket >> Y;
+
+	_LOG(dfLOG_LEVEL_DEBUG, L"# MOVESTART # SessionID:%d / Direction:%d / X:%d / Y:%d", pSession->dwSessionID, byDirection, X, Y);
+
+	//---------------------------------------------------------------------------------------------------------------
+	// ID로 캐릭터를 검색한다. 
+	//---------------------------------------------------------------------------------------------------------------
+	pPlayer = C_Player::GetInstance()->_CharacterMap.find(pSession->dwSessionID)->second;
+	if (pPlayer == NULL)
+	{
+		_LOG(dfLOG_LEVEL_ERROR, L"# MOVESTART > SessionID:%d Player Not Found!", pSession->dwSessionID);
+		return false;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 서버의 위치와 받은 패킷의 위치값이 너무 큰 차이가 난다면 싱크 패킷을 보내어 좌표 보정.
+	// 
+	// 본 게임의 좌표 동기화 구조가 단순한 키보드 조작 (클라이언트의 선처리, 서버의 후 반영) 방식으로 
+	// 클라이언트의 좌표를 그대로 믿는 방식을 택하고 있음. 
+	// 실제 온라인 게임이라면 클라이언트에서 목적지를 공유하는 방식을 택해야 함
+	// 지금은 좌표에 대해서는 간단한 구현을 목적으로 하고 있으므로 
+	// 서버는 클라이언트의 좌표를 그대로 믿지만, 서버와 너무 큰 차이가 있다면 강제 좌표 동기화 하도록 함
+	//---------------------------------------------------------------------------------------------------------------
+	if (abs(pPlayer->_X - X) > dfERROR_RANGE || abs(pPlayer->_Y - Y) > dfERROR_RANGE)
+	{
+		New_Header.byCode = dfPACKET_CODE;
+		New_Header.bySize = 8;
+		New_Header.byType = dfPACKET_SC_SYNC;
+		New_Packet.PutData((char*)&New_Header, sizeof(New_Header));
+		New_Packet << pPlayer->_SessionID << pPlayer->_X << pPlayer->_Y;
+		SendPacket_Around(pSession, &New_Packet, true);
+	}
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 동작을 변경. 동작번호와, 방향값이 같다.
+	//---------------------------------------------------------------------------------------------------------------
+	pPlayer->_dwAction = byDirection;
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 방향을 변경
+	//---------------------------------------------------------------------------------------------------------------
+	switch (byDirection)
+	{
+	case dfPACKET_MOVE_DIR_LL:
+	case dfPACKET_MOVE_DIR_LU:
+	case dfPACKET_MOVE_DIR_LD:
+		pPlayer->_byDirection = dfPACKET_MOVE_DIR_LL;
+	case dfPACKET_MOVE_DIR_RU:
+	case dfPACKET_MOVE_DIR_RR:
+	case dfPACKET_MOVE_DIR_RD:
+		pPlayer->_byDirection = dfPACKET_MOVE_DIR_RR;
+		break;
+	default:
+		break;
+	}
+	pPlayer->_X = X;
+	pPlayer->_Y = Y;
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 섹터 처리
+	// 정지를 하면서 좌표가 약간 조절된 경우 섹터 업데이트를 함
+	// ?????
+	//---------------------------------------------------------------------------------------------------------------
+	if (1)
+	{
+		//---------------------------------------------------------------------------------------------------------------
+		// 섹터가 변경된 경우는 클라에게 관련 정보를 쏜다. 
+		//---------------------------------------------------------------------------------------------------------------
+	}
+	New_Header.byCode = dfPACKET_CODE;
+	New_Header.bySize = 9;
+	New_Header.byType = dfPACKET_SC_MOVE_START;
+	New_Packet.PutData((char*)&New_Header, sizeof(New_Header));
+	New_Packet << pPlayer->_SessionID << byDirection << pPlayer->_X << pPlayer->_Y;
+
+
+	SendPacket_Around(pSession, &New_Packet);
+
+	return true;
+}
+
+bool C_Session::netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket)
+{
+	return false;
+}
+
+bool C_Session::netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket)
+{
+	return false;
+}
+
+bool C_Session::netPacketProc_Attack2(st_SESSION* pSession, SerializeBuffer* pPacket)
+{
+	return false;
+}
+
+bool C_Session::netPacketProc_Attack3(st_SESSION* pSession, SerializeBuffer* pPacket)
+{
+	return false;
 }
 
 

@@ -53,6 +53,20 @@ public:
 	// 진정 브로드 캐스딩 (시스템적인 메시지 외에는 사용하지 않음)
 	void SendPacket_Broadcast(st_SESSION* pSession, SerializeBuffer* pPacket);
 
+	//----------------------------------------------------------------
+	// 패킷 처리를 종류별로 나누어서 처리한다. 
+	bool PacketProc(st_SESSION* pSession, unsigned char byPacketType, SerializeBuffer* pPacket);
+
+	//----------------------------------------------------------------
+	// 실제 패킷 처리
+	bool netPacketProc_MoveStart(st_SESSION* pSession, SerializeBuffer* pPacket);
+	bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket);
+	bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket);
+	bool netPacketProc_Attack2(st_SESSION* pSession, SerializeBuffer* pPacket);
+	bool netPacketProc_Attack3(st_SESSION* pSession, SerializeBuffer* pPacket);
+
+
+
 
 	void Disconnect(void);
 

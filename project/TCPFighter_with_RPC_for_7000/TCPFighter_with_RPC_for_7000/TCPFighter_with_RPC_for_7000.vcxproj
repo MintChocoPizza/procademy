@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="C_Ring_Buffer.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="LOG.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Proxy.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="C_Ring_Buffer.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="LOG.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Protocol.h" />

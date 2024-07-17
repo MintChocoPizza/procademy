@@ -18,7 +18,7 @@
 // 그래서 정확한 이전 값을 저장하고 싶다면 
 // Interlock을 사용해야 한다고 생각했다.
 ////////////////////////////////////////////////////////////
-#define CopyDebug 0
+#define CopyDebug 1
 
 ////////////////////////////////////////////////////////////
 // 처음에는 Interlock을 사용하였지만, 
@@ -26,7 +26,7 @@
 // 동기화가 제대로 된것이 아니기 때문에 
 // 굳이 Interlock를 사용할 필요가 없다고 생각한다.
 ////////////////////////////////////////////////////////////
-#define debug 0
+#define debug 1
 
 constexpr int MAX_THREAD = 2;
 
@@ -93,12 +93,14 @@ unsigned __stdcall Thread0(void* pParam)
 		PetersonLock_0();
 #if debug == 0
 		InterlockedExchange(&g_Interlock_Flag, 0);
+		//g_Interlock_Flag = 0;
 #endif
 
 		g_Data++;
 
 #if debug == 0
 		if (InterlockedExchange(&g_Interlock_Flag, 0) != 0)
+		//if(g_Interlock_Flag != 0)
 		{
 			printf("\
 					Current Thread : 0 \n\n \
@@ -134,15 +136,15 @@ unsigned __stdcall Thread1(void* pParam)
 		PetersonLock_1();
 
 #if debug == 0
-		//InterlockedExchange(&g_Interlock_Flag, 1);
-		g_Interlock_Flag = 1;
+		InterlockedExchange(&g_Interlock_Flag, 1);
+		//g_Interlock_Flag = 1;
 #endif
 
 		g_Data++;
 
 #if debug == 0
-		//if (InterlockedExchange(&g_Interlock_Flag, 1) != 1)
-		if(g_Interlock_Flag != 1)
+		if (InterlockedExchange(&g_Interlock_Flag, 1) != 1)
+		//if(g_Interlock_Flag != 1)
 		{
 			printf("\
 					Current Thread : 1 \n \
@@ -176,21 +178,22 @@ void PetersonLock_0(void)
 	//------------------------------------------------------------------
 	// PetersonLock_1 에서 사용된 값들을 저장하고 있다.
 	//g_Prev_Used_Lock_1_Flag = InterlockedExchange(&g_Flag[0], false);
-	g_Prev_Used_Lock_1_Turn = InterlockedExchange(&g_Turn, 1);
+	//g_Prev_Used_Lock_1_Turn = InterlockedExchange(&g_Turn, 1);
 	g_Prev_Used_Lock_1_Flag = g_Flag[0];
-	//g_Prev_Used_Lock_1_Turn = g_Turn;
+	g_Prev_Used_Lock_1_Turn = g_Turn;
 #endif
 
 	g_Flag[0] = true;
 	g_Turn = 0;
 
 	//while (g_Flag[1] == true && g_Turn == 0)
-	while(1)
+	while(g_Turn == 0 && g_Flag[1] == true)
+	//while(1)
 	{
-		if (g_Flag[1] == false)
-			break;
-		if (g_Turn != 0)
-			break;
+		//if (g_Flag[1] == false)
+		//	break;
+		//if (g_Turn != 0)
+		//	break;
 
 		// g_Flag[1] == false || g_Trun == 1
 		// 이면 루프 탈출
@@ -213,12 +216,13 @@ void PetersonLock_1(void)
 	g_Turn = 1;
 
 	//while (g_Flag[0] == true && g_Turn == 1)
-	while(1)
+	while(g_Turn == 1 && g_Flag[0] == true)
+	//while(1)
 	{
-		if (g_Flag[0] == false)
-			break;
-		if (g_Turn != 1)
-			break;
+		//if (g_Flag[0] == false)
+		//	break;
+		//if (g_Turn != 1)
+		//	break;
 
 		// g_Flag[0] == false || g_Trun == 0
 		// 이면 루프 탈출
