@@ -15,6 +15,13 @@
 #include <Windows.h>
 #include <WS2tcpip.h>
 
+#include "LOG.h"
+#include "C_Ring_Buffer.h"
+#include "SerializeBuffer.h"
+#include "Contents.h"
+#include "Session.h"
+#include "Player.h"
+
 #pragma comment (lib, "winmm.lib")
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -22,7 +29,6 @@
 // 시간 측정 변수
 //---------------------------------
 DWORD g_Start_Time;
-DWORD g_End_Time;       // 매 루프마다 timeGetTime을 호출한다.
 DWORD g_One_Second;
 
 //---------------------------------
@@ -30,10 +36,17 @@ DWORD g_One_Second;
 //---------------------------------
 bool g_bShutdown = false;
 
+//---------------------------------
+// 직렬화 버퍼, 
+// 내부에 동적할당이 존재하여
+// 전역으로 선언함
+//---------------------------------
+SerializeBuffer g_Packet;
 
+void netStartUp(void);
+void netCleanUp(void);
 void ServerControl(void);
 void Monitor(void);
-void Update(void);
 
 int wmain(int argc, wchar_t* argv[])
 {
@@ -42,10 +55,9 @@ int wmain(int argc, wchar_t* argv[])
 
     // 초기 시간을 세팅한다.
     g_Start_Time = timeGetTime();
-    g_End_Time = g_Start_Time;
 
-    // LoadData()                           // 설정 및 게임데이터, DB 데이터 로딩
-    //netStartUp()                          // 네트워크 초기화, 리슨소켓 새엇ㅇ 및 listen  But Sesstion Class 의 싱글톤 생성자가 역할을 당담한다.
+    // LoadData();                           // 설정 및 게임데이터, DB 데이터 로딩
+    netStartUp();                         // 네트워크 초기화, 리슨소켓 새엇ㅇ 및 listen  But Sesstion Class 의 싱글톤 생성자가 역할을 당담한다.
 
     while (!g_bShutdown)                               // 서버 메인 루프, 전역의 g_bShutdown 값에 의해 종료 결정   
     {
@@ -64,7 +76,7 @@ int wmain(int argc, wchar_t* argv[])
     // 서버는 함부로 종료 해도 안된다. 
     // DB에 저장할 데이터나 기타 마무리 할 일들이 모두 끝났는지 확인한 뒤에 꺼주어야 한다. 
 
-    // netCleanUp();                        // Sesstion class 싱글톤 소멸자가 메인함수 호출 뒤 atexit()에 의해 호출되어 처리된다. 
+    netCleanUp();                        // Sesstion class 싱글톤 소멸자가 메인함수 호출 뒤 atexit()에 의해 호출되어 처리된다. 
 
 
 
@@ -72,6 +84,16 @@ int wmain(int argc, wchar_t* argv[])
     return 0;
 }
 
+
+void netStartUp(void)
+{
+
+}
+
+void netCleanUp(void)
+{
+    atexit(ClearCharacterHash);
+}
 
 void ServerControl(void)
 {
@@ -82,13 +104,15 @@ void ServerControl(void)
 
     // 키보드 컨트롤 잠금, 풀림 변수 
     static bool bControlMode = false;
+    static bool bControlLog = false;
+    __wchar_t ControlKey;
 
     //-------------------------------------------------------------------
     // L: 컨트롤 Lock  / U : 컨트롤 Unlock    / Q : 서버 종료
     //-------------------------------------------------------------------
     if (_kbhit())
     {
-        __wchar_t ControlKey = _getwch();
+        ControlKey = _getwch();
 
         // 키보드 제어 허용 
         if (L'u' == ControlKey || L'U' == ControlKey)
@@ -98,6 +122,7 @@ void ServerControl(void)
             // 관련 키 도움말 출력
             wprintf(L"Control Mode : Press Q - Quit \n");
             wprintf(L"Control Mode : Press L - Key Lock \n");
+            wprintf(L"Control Mode : Press S - Log Level \n");
         }
 
         // 키보드 제어 잠금 
@@ -108,11 +133,48 @@ void ServerControl(void)
             bControlMode = false;
         }
 
-
-        // 키보드 제어 풀림 상태에서 특정 기능 
-        if ((L'q' == ControlKey || L'Q' == ControlKey) && bControlMode)
+        // 키보드 제어 풀림 상태에서 특정 기능
+        if (bControlMode == true)
         {
-            g_bShutdown = true;
+            // 서버 종료
+            if ((L'q' == ControlKey || L'Q' == ControlKey))
+            {
+                g_bShutdown = true;
+            }
+
+            // 로그 레벨 제어 허용
+            if (L's' == ControlKey || L'S' == ControlKey)
+            {
+                wprintf(L"Control Log : Press 0 - LOG_LEVEL_DEBUG \n");
+                wprintf(L"Control Log : Press 1 - LOG_LEVEL_ERROR \n");
+                wprintf(L"Control Log : Press 2 - LOG_LEVEL_SYSTEM \n");
+                bControlLog = true;
+            }
+
+            if (bControlLog == true)
+            {
+				if (L'0' == ControlKey)
+				{
+                    wprintf(L"LOG_LEVEL_DEBUG...! \n");
+					g_iLogLevel = dfLOG_LEVEL_DEBUG;
+					bControlLog = false;
+				}
+                else if (L'1' == ControlKey)
+                {
+                    wprintf(L"LOG_LEVEL_ERROR...! \n");
+                    g_iLogLevel = dfLOG_LEVEL_ERROR;
+                    bControlLog = false;
+                }
+                else if (L'2' == ControlKey)
+                {
+                    wprintf(L"LOG_LEVEL_SYSTEM...! \n");
+                    g_iLogLevel = dfLOG_LEVEL_SYSTEM;
+                    bControlLog = false;
+                }
+            }
+
+
+
         }
     }
 }
@@ -121,7 +183,5 @@ void Monitor(void)
 {
 }
 
-void Update(void)
-{
-    
-}
+
+

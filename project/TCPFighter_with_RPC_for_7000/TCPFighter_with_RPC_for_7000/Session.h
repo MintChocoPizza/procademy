@@ -2,6 +2,8 @@
 #ifndef __SESSION_H__
 #define __SESSION_H__
 
+struct st_SECTOR_AROUND;
+
 //-------------------------------------------------------------------------------
 // 네트워크 1개만 존재해야함 
 //-------------------------------------------------------------------------------
@@ -36,6 +38,7 @@ public:
 	void netProc_Send(st_SESSION* pSession);
 	void netProc_Recv(st_SESSION* pSession);
 
+
 	//----------------------------------------------------------------
 	// 특정 섹터 1개에 있는 클라이언트들 에게 메시지 보내기,
 	// 마지막 매개변수 제외하고
@@ -47,7 +50,7 @@ public:
 
 	//----------------------------------------------------------------
 	// 클라이언트 기준 주변 섹터에 메시지 보내기 (최대 9개 영역)
-	void SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, bool bSendMe = false);
+	void SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket,st_SECTOR_AROUND *pSector_Around ,bool bSendMe = false);
 
 	//----------------------------------------------------------------
 	// 진정 브로드 캐스딩 (시스템적인 메시지 외에는 사용하지 않음)
@@ -85,7 +88,7 @@ public:
 	//std::map<DWORD, st_SESSION*> _Session;
 
 	// Key: SessionID, Value: Session
-	std::unordered_map< DWORD, st_SESSION*> _Session_Map;
+	std::unordered_map< DWORD, st_SESSION*> _Session_Hash;
 
 public:
 	SOCKET _Listen_Socket;

@@ -15,11 +15,11 @@
 
 using namespace std;
 
-struct st_SECTOR_AROUND;
-struct st_Player;
-
 extern int dY[];
 extern int dX[];
+
+struct st_SECTOR_AROUND;
+struct st_Player;
 
 class C_Field
 {
@@ -35,7 +35,18 @@ public:
 
 public:
 	static C_Field* GetInstance(void);
+
+	//---------------------------------------------------------------------------------------------
+	// 특정 섹터 좌표 기준 주변 영향권 섹터 얻기
+	// SectorX, SectorY의 섹터좌표에서 주변 최대 9개의 섹터 좌표를 얻어 오는 함수
 	void GetSectorAround(int iSectorX, int iSectorY, st_SECTOR_AROUND* pSectorAound);
+	//---------------------------------------------------------------------------------------------
+	// 섹터가 변경된 것을 확인한다.
+	bool Sector_UpdateCharacter(st_Player* pPlayer);
+	//---------------------------------------------------------------------------------------------
+	// 변경된 섹터에 대해서 메시지를 보낸다. 
+	void CharacterSectorUpdatePacket(st_Player* pPlayer);
+
 
 private:
 	C_Field();
@@ -61,16 +72,15 @@ struct st_SECTOR_POS
 	int iX;
 	int iY;
 
-	st_SECTOR_POS(int X, int Y)
-	{
-		iX = X / C_Field::GetInstance()->Grid_X_Size;
-		iY = Y / C_Field::GetInstance()->Grid_Y_Size;
-	}
+	st_SECTOR_POS();
+	st_SECTOR_POS(int X, int Y);
+
 };
 
 struct st_SECTOR_AROUND
 {
 	int iCount;
 	st_SECTOR_POS Around[9];
+	st_SECTOR_AROUND();
 };
 

@@ -21,30 +21,19 @@ struct st_Player
 	bool		_Disconnect;
 
 	// 구현에 따라 다르다.
-	// CurSector;
-	// OldSector;
+	st_SECTOR_POS* _CurSector;
+	st_SECTOR_POS* _OldSector;
 
 	st_Player(DWORD SessionID, st_SESSION* pSession);
+	~st_Player();
 };
 
-class C_Player
-{
-public:
-	static C_Player* GetInstance(void);
-	st_Player* CreateNewPlayer(DWORD SessionID, st_SESSION* st_p_New_Session);
+// Key: SessionID, Value: st_Player*
+extern std::unordered_map< DWORD, st_Player*>	g_CharacterHash;
 
-private:
-	C_Player();
-	~C_Player();
-private:
-	static C_Player _C_Player;
+void ClearCharacterHash(void);
+st_Player* CreateNewPlayer(DWORD SessionID, st_SESSION* st_p_New_Session);
 
-
-public:
-	// Key: SessionID, Value: st_Player*
-	std::unordered_map< DWORD, st_Player*>	_CharacterMap;
-
-};
 
 
 #endif // !__PALYER_H__

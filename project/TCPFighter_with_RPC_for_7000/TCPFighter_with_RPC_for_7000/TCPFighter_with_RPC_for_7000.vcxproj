@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Contents.cpp" />
     <ClCompile Include="C_Ring_Buffer.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="LOG.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="Stub.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Contents.h" />
     <ClInclude Include="C_Ring_Buffer.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Field.h" />
