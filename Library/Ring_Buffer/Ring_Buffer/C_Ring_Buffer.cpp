@@ -3,6 +3,22 @@
 
 #include "C_Ring_Buffer.h"
 
+#define MULT_DEBUG 1
+
+#if MULT_DEBUG == 1
+#include <Windows.h>
+#define ENQUEUE 0
+#define DEQUEUE 1
+LONG g_Flag;
+size_t Debug_Enqueue_Full_Size;
+size_t Debug_Enqueue_UseSize;
+size_t Debug_Enqueue_In;
+
+size_t Debug_Dequeue_Use_Size;
+size_t Debug_Dequeue_Out;
+size_t Debug_Dequeue_Full_Size;
+#endif
+
 /////////////////////////////////////////////////////////////////////////
 // 기본 사이즈를 1만 Byte로 할당한다.
 /////////////////////////////////////////////////////////////////////////
@@ -31,6 +47,13 @@ C_RING_BUFFER::~C_RING_BUFFER()
 /////////////////////////////////////////////////////////////////////////
 size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 {
+#if MULT_DEBUG == 1
+	size_t Debug_Enqueue_Full_Size = _Full_Size;
+	size_t Debug_Enqueue_UseSize = _Use_Size;
+	size_t Debug_Enqueue_In = _In;
+
+	InterlockedExchange(&g_Flag, ENQUEUE);
+#endif
 	size_t Data_Chunk_Size;
 	size_t Temp_Full_Size = _Full_Size;
 	size_t Temp_In;
@@ -64,6 +87,11 @@ size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 	// 어떤 것을 유지할지 결정하지 못하였다. 
 	_Use_Size += iSize;
 
+#if MULT_DEBUG == 1
+	if (InterlockedExchange(&g_Flag, ENQUEUE) != ENQUEUE)
+		__debugbreak();
+#endif
+
 	return iSize;
 }
 
@@ -75,6 +103,13 @@ size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 /////////////////////////////////////////////////////////////////////////
 size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 {
+#if MULT_DEBUG == 1
+	size_t Debug_Dequeue_Use_Size = _Use_Size;
+	size_t Debug_Dequeue_Out = _Out;
+	size_t Debug_Dequeue_Full_Size = _Full_Size;
+
+	InterlockedExchange(&g_Flag, DEQUEUE);
+#endif
 	size_t Data_Chunk_Size;
 	size_t Temp_Use_Size = _Use_Size;
 	size_t Temp_Out;
@@ -121,6 +156,11 @@ size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 		_Out = _In;
 
 		_Use_Size = 0;
+
+#if MULT_DEBUG == 1
+		if (InterlockedExchange(&g_Flag, DEQUEUE) != DEQUEUE)
+			__debugbreak();
+#endif
 
 		return Temp_Use_Size;
 	}

@@ -1,334 +1,177 @@
 ﻿// Ring_Buffer.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
 
-#include <cstdlib>
-#include <cstdio>
-#include <cstring>
-#include <ctime>
 
-#include <stdio.h>
-#include <iostream>
-#include <time.h>
-#include <random>
+
 #include <Windows.h>
-#include <conio.h>
+#include <process.h>
+#include <iostream>
 
 #include "C_Ring_Buffer.h"
 #include "OSJ_Test.h"
 
-#define df_TEST_DEQUEUE
 
-#define _iSize 10
-#define en_BUFFER_BLANK 4
-
+#define VERSION 0
 
 using namespace std;
 
-constexpr int MAX_SIZE = 81;
+constexpr int CONSOLE_WIDTH = 237;
+char testString[] = "@234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345*!";
+size_t len;
+C_RING_BUFFER g_rb;
 
-HANDLE h_Console;
-const char* str = "1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345";// 1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345 1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345 1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345 1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345";
 
-size_t index = 0;
-size_t Str_Len;
-int En_Random;
-int ret_En;
+std::queue<char> Q;
+char TempBuf[10000 + 2];
 
-int ret_Pk;
-char Buff_Pk[100];
 
-int Dq_Random;
-int ret_Dq;
-char Buff_Dq[100];
 
-char Buffer[100];
+unsigned _stdcall QueuePush(void* pArg);
+unsigned _stdcall QueuePop(void* pArg);
 
-void test();
-void test1();
-void test2();
-
-void cs_Initial(void);
 
 int main()
 {
-
-	OSJ_test();
+#if VERSION == 0
+	HANDLE hThread[2];
+	DWORD dwStatus;
 	
+	len = strlen(testString);
+
+	hThread[0] = (HANDLE)_beginthreadex(NULL, 0, QueuePush, NULL, NULL, NULL);
+	hThread[1] = (HANDLE)_beginthreadex(NULL, 0, QueuePop, NULL, NULL, NULL);
+
+	dwStatus = WaitForMultipleObjects(2, hThread, TRUE, INFINITE);
+
+	if (dwStatus == WAIT_OBJECT_0)
+	{
+		printf("ALL Thread normal shutdown !!!!! \n");
+	}
+	else
+	{
+		wprintf(L"WaitForMultipleObject %d error \n", GetLastError());
+
+	}
+#elif VERSION == 1
+	OSJ_test();
+#elif VERSION == 2
+	len = strlen(testString);
+	while (1)
+	{
+		QueuePush(NULL);
+		QueuePop(NULL);
+	}
+#endif
 
     std::cout << "Hello World!\n";
 }
 
-void git_test()
+unsigned _stdcall QueuePush(void* pArg)
 {
-	cs_Initial();
-	srand((unsigned int)time(NULL));
-	C_RING_BUFFER* RingBuffer = new C_RING_BUFFER(100);
-	char inbuff[] = "1234567890 abcdefghijklmnopqrstuvwxyz 1234567890 abcdefghijklmnopqrstuvwxyz 12345";
 
-	char peekbuff[82];
-	char outbuff[82];
+	int RandomByteToExtract;
+	int temp;
+	int index;
+	size_t rbFreeSize;
+	size_t qSize;
+	size_t EnqueueSize;
 
-	int size;
-	int size2;
+	srand((unsigned int)GetThreadId(NULL));
 
-	int enqlen;
-	int peeklen;
-	int deqlen;
-
-	printf("GetFreeSize	%d \n", RingBuffer->GetFreeSize());
-	printf("GetUseSize	%d \n", RingBuffer->GetUseSize());
-	printf("GetSize	%d \n", RingBuffer->GetBufferSize());
-	//printf("GetUnbrokenDequeueSize	%d \n", RingBuffer->GetUnbrokenDequeueSize());
-	//printf("GetUnbrokenEnqueueSize	%d \n", RingBuffer->GetUnbrokenEnqueueSize());
-
-
-
-
-	//printf("\n\nBlank %d, Size %d \n", en_BUFFER_BLANK, _iSize);
-	//printf("Write	Read	result	result2\n");
-	//
-	//int result, result2;
-	//for (int ir = 0; ir < _iSize; ++ir)
-	//{
-	//	for (int iw = 0; iw < _iSize; ++iw)
-	//	{
-	//		if (ir > iw)
-	//		{
-	//			result = ir - (iw + en_BUFFER_BLANK);
-	//			if (result < 0)
-	//				result = 0;
-	//		}
-	//		else
-	//		{
-	//			if (ir < en_BUFFER_BLANK)
-	//			{
-	//				result = _iSize - iw - (en_BUFFER_BLANK - ir);
-	//				if (result < 0)
-	//					result = 0;
-	//			}
-	//			else
-	//				result =  _iSize - iw;
-	//		}
-
-
-	//		/////////////////
-	//		if ((iw + en_BUFFER_BLANK) % _iSize == ir)
-	//		{
-	//			result2 = 0;
-	//			printf("!");
-	//		}
-	//		else if (iw <= ((ir + _iSize - en_BUFFER_BLANK) % _iSize))
-	//		{
-	//			result2 = ((ir + _iSize - en_BUFFER_BLANK) % _iSize) - iw;
-	//			printf("@");
-	//		}
-	//		else if (iw >= ir)
-	//		{
-	//			result2 = _iSize - iw;
-	//			printf("#");
-	//		}
-	//		else
-	//		{
-	//			result2 = 0;
-	//			printf("$");
-	//		}
-
-
-	//		if (result != result2)
-	//		{
-	//			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
-	//			printf("%d	%d	%d	%d\n", iw , ir, result, result2);
-	//			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-	//		}
-	//		else
-	//			printf("%d	%d	%d	%d\n", iw, ir, result, result2);
-	//	}
-	//}
-	//printf("끝\n\n");
-
-
-	printf("\n");
-	while (1)
-	{
-		size = rand() % 81 + 1;
-		size2 = 81 - size;
-
-		enqlen = RingBuffer->Enqueue(inbuff, sizeof(inbuff));
-		enqlen = RingBuffer->Enqueue(inbuff, sizeof(inbuff));
-		////////////////////////////////////////////////////
-		// 1 임의의 크기 만큼 출력
-
-		memset(outbuff, 0, sizeof(outbuff));
-		memset(peekbuff, 0, sizeof(peekbuff));
-
-		peeklen = RingBuffer->Peek(peekbuff, size);
-		deqlen = RingBuffer->Dequeue(outbuff, size);
-
-#ifdef df_TEST_DEQUEUE
-		// peek과 dequeue 결과 비교
-		if (memcmp(peekbuff, outbuff, size) == 0)
-			printf(outbuff);
-		else
-			break;
+#if VERSION == 0
+	while (true)
+#elif VERSION == 2
 #endif
+	{
+		memset(TempBuf, 0, sizeof(TempBuf));
 
-
-
-		////////////////////////////////////////////////////
-		// 2 남은 크기 마저 출력
-
-		memset(outbuff, 0, sizeof(outbuff));
-		memset(peekbuff, 0, sizeof(peekbuff));
-
-		peeklen = RingBuffer->Peek(peekbuff, size2 + 10);	// 일부러 더 많이 뽑아보기	
-		deqlen = RingBuffer->Dequeue(outbuff, size2 + 10);
-
-#ifdef df_TEST_DEQUEUE
-		// peek과 dequeue 결과 비교
-		if (memcmp(peekbuff, outbuff, size2) == 0)
+		// 큐 size가 너무 크다면 한동안 Enqueue만 한다.
+		if (Q.size() <= 100000)
 		{
-			printf(outbuff);
+			// 큐에 문자열을 저장한다. 
+			for (int i = 0; i < len; ++i)
+			{
+				Q.push(testString[i]);
+			}
 		}
-		else
-			break;
-#elif
-		// 두번째 출력 데이터와 해당 부분인 입력 데이터 지점이 같은지 
-		if (memcmp(peekbuff, inbuff + size, size2) == 0)
-			printf(peekbuff);
-		else
-			break;
+
+		// 현재 Queue의 사이즈
+		qSize = Q.size();
+
+		// 현재 링버퍼 FreeSize
+		rbFreeSize = g_rb.GetFreeSize();
+
+		// 현재 링버퍼의 FreeSize가 0이라면 이번 루프 건너 뛴다.
+		if (rbFreeSize == 0)
+		{
+#if VERSION == 0
+			continue;
+#elif VERSION == 2
+			return 0;
 #endif
+		}
 
+		// 큐 사이즈와, 링버퍼 FreeSize 중 더 작은 값을 기준으로 랜덤한 값을 생성한다.
+		RandomByteToExtract = rand() % (qSize > rbFreeSize ? rbFreeSize : qSize) + 1;
+
+		// 큐에서 원하는 바이트 수 만큼 추출하여 임의의 버퍼에 집어넣는다.
+		index = 0;
+		temp = RandomByteToExtract;
+		while (temp > 0 && !Q.empty())
+		{
+			TempBuf[index++] = Q.front();
+			Q.pop();
+			temp--;
+		}
+
+		EnqueueSize = g_rb.Enqueue(TempBuf, RandomByteToExtract);
 	}
-	return;
+
+	return 0;
 }
 
-void test1()
+unsigned _stdcall QueuePop(void* pArg)
 {
-	cs_Initial();
-	printf("%s \n\n", str);
-	char c[100] = { 0, };
-	while (1)
+	char dequeueBuf[CONSOLE_WIDTH + 2];
+	int RandomByteToExtract;
+	size_t rbUseSize;
+	size_t DequeueSize;
+	int iCnt;
+
+
+	srand((unsigned int)GetThreadId(NULL));
+
+#if VERSION == 0
+	while (true)
+#elif VERSION == 2
+#endif
 	{
-		Str_Len = strlen(str + index)+1;
-		En_Random = rand() % Str_Len;
+		memset(dequeueBuf, 0, sizeof(dequeueBuf));
+		rbUseSize = g_rb.GetUseSize();
 
-		memcpy(c+index, str + index, En_Random);
-
-		printf("%s", c);
-
-		index += En_Random;
-
-		if (index == strlen(str))
+		// 뽑을 데이터가 없다면 넘어간다.
+		if (rbUseSize == 0)
 		{
-			printf("%s", c);
-			memset(c, 0, 100);
-			index = 0;
+#if VERSION == 0
+			continue;
+#elif VERSION == 2
+			return 0;
+#endif
 		}
 
+		// 랜덤 최대값과 링버퍼 UseSize 중 더 작은 값을 랜덤하게 뽑는다. 
+		RandomByteToExtract = rand() % (RAND_MAX > rbUseSize ? rbUseSize : RAND_MAX) + 1;
 
+		DequeueSize = g_rb.Dequeue(dequeueBuf, rand() % RAND_MAX + 1);
+		if (DequeueSize > 0)
+		{
+			for (iCnt = 0; iCnt < DequeueSize; ++iCnt)
+			{
+				printf("%c", dequeueBuf[iCnt]);
+			}
+		}
 
-		getchar();
 	}
+
+	return 0;
 }
-
-void my_test2(void)
-{
-	cs_Initial();
-	C_RING_BUFFER c_Ring_Buffer(100);
-	srand((unsigned int)time(NULL));
-
-
-	while (1)
-	{
-		memset(Buff_Pk, 0, 100);
-		memset(Buff_Dq, 0, 100);
-
-		Str_Len = strlen(str + index) + 1;
-
-		En_Random = rand() % Str_Len;
-		ret_En = c_Ring_Buffer.Enqueue(str + index, En_Random);
-		//if (ret_En != En_Random) // 넣을 수 없는경우 안넣는다.
-		//{
-		//	__debugbreak();		// 인터럽트 3번을 발생한다. 
-		//}
-		index += En_Random;
-		if (index == strlen(str))
-		{
-			index = 0;
-		}
-
-
-
-
-
-		Dq_Random = rand() % (strlen(str) + 1);
-		ret_Pk = c_Ring_Buffer.Peek(Buff_Pk, Dq_Random, true);
-		//if (ret_Pk != Dq_Random)
-		//{
-		//	__debugbreak();		// 인터럽트 3번을 발생한다. 
-		//}
-
-		ret_Dq = c_Ring_Buffer.Dequeue(Buff_Dq, Dq_Random);
-		//if (ret_Dq != Dq_Random)
-		//{
-		//	__debugbreak();		// 인터럽트 3번을 발생한다. 
-		//}
-
-		if (memcmp(Buff_Pk, Buff_Dq, 100) != 0)
-		{
-			__debugbreak();		// 인터럽트 3번을 발생한다. 
-		}
-
-		printf("%s", Buff_Dq);
-
-		//_getch();
-	}
-}
-
-// 오승진씨 코드
-void test3(void)
-{
-	
-}
-
-void cs_Initial(void)
-{
-	CONSOLE_CURSOR_INFO stConsoleCursor;
-	char cCommand[28];
-
-	//-----------------------------------------------------
-	// 화면의 커서를 안보이게끔 설정한다.
-	//-----------------------------------------------------
-	stConsoleCursor.bVisible = FALSE;
-	stConsoleCursor.dwSize = 1;				// 커서 크기
-	// 이상하게도 0이면 나온다. 1로 하면 안나온다.
-
-	//-----------------------------------------------------
-	// 콘솔화면 (스텐다드 아웃풋) 핸들을 구한다. 
-	// 
-	//-----------------------------------------------------
-	h_Console = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleCursorInfo(h_Console, &stConsoleCursor);
-
-
-	//-----------------------------------------------------
-	// 콘솔화면 크기를 설정한다.
-	//col = 가로, lines = 세로
-	// 
-	//-----------------------------------------------------
-	sprintf_s(cCommand, "mode con:cols=%d lines=%d", 81, 40);
-
-	system(cCommand);
-}
-
-// 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
-// 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
-
-// 시작을 위한 팁: 
-//   1. [솔루션 탐색기] 창을 사용하여 파일을 추가/관리합니다.
-//   2. [팀 탐색기] 창을 사용하여 소스 제어에 연결합니다.
-//   3. [출력] 창을 사용하여 빌드 출력 및 기타 메시지를 확인합니다.
-//   4. [오류 목록] 창을 사용하여 오류를 봅니다.
-//   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다.
-//   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.
