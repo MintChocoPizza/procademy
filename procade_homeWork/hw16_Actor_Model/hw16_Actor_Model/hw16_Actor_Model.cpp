@@ -1,6 +1,7 @@
 ﻿// hw16_Actor_Model.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
 
+#include <process.h>
 #include <string>
 #include <list>
 #include <Windows.h>
@@ -11,7 +12,8 @@
 
 #include "C_Ring_Buffer.h"
 
-#define MAX_THREAD      3
+#define MAX_THREAD      4
+#define MAX_MSG_TYPE    6
 
 #define dfJOB_ADD       0
 #define dfJOB_DEL       1
@@ -36,12 +38,17 @@ struct st_MSG_HEAD
     short shPayloadLen;
 };
 
+unsigned __stdcall WorkerThread(void* pArg);
+unsigned __stdcall Monitoring(void* pArg);
+
 int wmain()
 {
     HANDLE hThread[MAX_THREAD];
+    unsigned int threadIDs[MAX_THREAD];
     wchar_t c;
     int iCnt;
     DWORD dwStatus;
+    short shRandomType;
     bool b_Shutdown;
 
     timeBeginPeriod(1);
@@ -50,6 +57,27 @@ int wmain()
     srand((unsigned)time(NULL));
 
     wprintf(L"메인 스레드의 종료는 Q를 누르세요.... \n");
+
+    // 스레드 생성
+    for (iCnt = 0; iCnt < MAX_THREAD - 1; ++iCnt)
+    {
+        hThread[iCnt] = (HANDLE)_beginthreadex(NULL, 0, WorkerThread, NULL, NULL, &threadIDs[iCnt]);
+    }
+    hThread[iCnt] = (HANDLE)_beginthreadex(NULL, 0, Monitoring, NULL, NULL, &threadIDs[iCnt]);
+
+    // 생성된 스레드 에러 체크
+    for (iCnt = 0; iCnt < MAX_THREAD; ++iCnt)
+    {
+        if (!hThread[iCnt])
+        {
+            printf("thread - error creating child threads \n");
+            return -1;
+        }
+        else
+        {
+            printf("thread %d - id=0x%08x : Create!! \n", iCnt, threadIDs[iCnt]);
+        }
+    }
 
     // 메인 스레드 반복
     while (!b_Shutdown)
@@ -61,7 +89,9 @@ int wmain()
                 b_Shutdown = true;
         }
 
-        
+        // 랜덤한 메시지 타입
+        shRandomType = rand() % MAX_MSG_TYPE;
+
         
     }
 
@@ -70,7 +100,7 @@ int wmain()
     // 
     /////////////////////////////////////////////////////
     wprintf(L"Wait For All Thread!! \n");
-    dwStatus - WaitForMultipleObjects(MAX_THREAD, hThread, TRUE, INFINITE);
+    dwStatus = WaitForMultipleObjects(MAX_THREAD, hThread, TRUE, INFINITE);
     if (dwStatus == WAIT_OBJECT_0)
     {
         wprintf(L"ALL Thread normal shutdown !!!! \n");
@@ -95,13 +125,32 @@ int wmain()
     return 0;
 }
 
-// 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
-// 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
 
-// 시작을 위한 팁: 
-//   1. [솔루션 탐색기] 창을 사용하여 파일을 추가/관리합니다.
-//   2. [팀 탐색기] 창을 사용하여 소스 제어에 연결합니다.
-//   3. [출력] 창을 사용하여 빌드 출력 및 기타 메시지를 확인합니다.
-//   4. [오류 목록] 창을 사용하여 오류를 봅니다.
-//   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다.
-//   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.
+
+unsigned __stdcall WorkerThread(void* pArg)
+{
+    // 메인스레드 에서 메시지를 넣지 않았다면 블락됨
+
+    //----------------------------------------------------
+    // 스레드 시작 로그 ID 출력
+    //----------------------------------------------------
+    printf("WorketThread id=0x%08x - Start!! \n", GetCurrentThreadId());
+
+    while (1)
+    {
+        //----------------------------------------------------
+        // Lock은 필수로 걸어야 한다. 
+        // 
+        // 1. 메시지 큐에서 메시지를 뽑는다. 
+        // 2. 헤더 타입에 맞게끔 동작
+        //----------------------------------------------------
+
+    }
+
+    return 0;
+}
+
+unsigned __stdcall Monitoring(void* pArg)
+{
+    return 0;
+}

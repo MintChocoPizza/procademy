@@ -69,7 +69,7 @@ size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 	size_t Temp_Full_Size = _Full_Size;
 	size_t Temp_In;
 
-	if(Temp_Full_Size - _Use_Size < iSize)
+	if(Temp_Full_Size - _Use_Size <= iSize)
 		return 0;
 
 	// (_Buffer + _Full_Size): 마지막 버퍼 그 다음 위치

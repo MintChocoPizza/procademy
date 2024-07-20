@@ -63,7 +63,7 @@ public:
 	// Parameters: 없음.
 	// Return: (int)남은용량.
 	/////////////////////////////////////////////////////////////////////////
-	size_t	GetFreeSize(void) {	return _Full_Size - _Use_Size; }
+	size_t	GetFreeSize(void) { return _Full_Size - _Use_Size - 1; }
 
 	/////////////////////////////////////////////////////////////////////////
 	// WritePos 에 데이타 넣음.
