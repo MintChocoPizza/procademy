@@ -14,7 +14,7 @@ char peekBuf[10000 + 2];
 
 char tempBuf[10000 + 2];
 
-void printArray(int width, char* pBuf)
+void printArray(size_t width, char* pBuf)
 {
 	for (int i = 0; i < width; ++i) {
 		printf("%c", pBuf[i]);
@@ -35,7 +35,7 @@ void extractBytes(std::queue<char>& myQueue, char* buffer, int bytes)
 void OSJ_test()
 {
 	char testString[] = "@234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345*!";
-	int len = strlen(testString);
+	size_t len = strlen(testString);
 	std::queue<char> q;
 	srand((unsigned)time(nullptr));
 	while (true)
@@ -44,8 +44,8 @@ void OSJ_test()
 		memset(dequeueBuf, 0, sizeof(dequeueBuf));
 		memset(tempBuf, 0, sizeof(tempBuf));
 
-		int enqueueSize = 0;
-		int dequeueSize = 0;
+		size_t enqueueSize = 0;
+		size_t dequeueSize = 0;
 
 		// 큐에 문자열을 저장한다. 
 		for (int i = 0; i < len; ++i)
@@ -54,10 +54,10 @@ void OSJ_test()
 		}
 
 		// 현재 Queue의 사이즈
-		int qSize = q.size();
+		size_t qSize = q.size();
 
 		// 현재 링버퍼의 FreeSize
-		int rbSize = rb.GetFreeSize();
+		size_t rbSize = rb.GetFreeSize();
 		if (rbSize == 0)
 		{
 			// 링버퍼가 가득 찼다면 무조건!!!, 랜덤한 크기만큼 Dequeue를 하고, 출력한다. 

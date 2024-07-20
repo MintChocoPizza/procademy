@@ -1,35 +1,46 @@
 
 #include <string.h>
 
-#include "C_Ring_Buffer.h"
-
-#define MULT_DEBUG 1
+#define MULT_DEBUG 0
 
 #if MULT_DEBUG == 1
 #include <Windows.h>
-#define ENQUEUE 0
-#define DEQUEUE 1
-LONG g_Flag;
+#define INIT			0
+#define ENQUEUE			1
+#define DEQUEUE			2
+#define GETUSESIZE		3
+#define GETFREESIZE		4
+
+LONG g_Flag	= INIT;
 size_t Debug_Enqueue_Full_Size;
 size_t Debug_Enqueue_UseSize;
 size_t Debug_Enqueue_In;
+size_t Debug_Enqueue_Out;
 
-size_t Debug_Dequeue_Use_Size;
-size_t Debug_Dequeue_Out;
+
 size_t Debug_Dequeue_Full_Size;
+size_t Debug_Dequeue_Use_Size;
+size_t Debug_Dequeue_In;
+size_t Debug_Dequeue_Out;
 #endif
+
+#include "C_Ring_Buffer.h"
+
+
 
 /////////////////////////////////////////////////////////////////////////
 // 기본 사이즈를 1만 Byte로 할당한다.
+// 넣고 -> 증가 == 마지막 1칸을 사용하지 못한다. 
+// 고로 입력 사이즈 + 1이 실제 사이즈
 /////////////////////////////////////////////////////////////////////////
 C_RING_BUFFER::C_RING_BUFFER(void) :  _Full_Size(df_C_RING_BUFFER_DEFAULT_LEN + 1), _Use_Size(0), _In(0), _Out(0)
 {
 	_Buffer = new char[df_C_RING_BUFFER_DEFAULT_LEN + 1];
 }
 
-C_RING_BUFFER::C_RING_BUFFER(int i_Buffer_Size) : _Full_Size(i_Buffer_Size), _Use_Size(0), _In(0), _Out(0)
+C_RING_BUFFER::C_RING_BUFFER(int i_Buffer_Size) : _Full_Size(i_Buffer_Size + 1), _Use_Size(0), _In(0), _Out(0)
 {
-	_Buffer = new char[i_Buffer_Size];
+	_Buffer = new char[i_Buffer_Size + 1];
 }
 
 C_RING_BUFFER::~C_RING_BUFFER()
@@ -48,12 +59,12 @@ C_RING_BUFFER::~C_RING_BUFFER()
 size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 {
 #if MULT_DEBUG == 1
-	size_t Debug_Enqueue_Full_Size = _Full_Size;
-	size_t Debug_Enqueue_UseSize = _Use_Size;
-	size_t Debug_Enqueue_In = _In;
-
-	InterlockedExchange(&g_Flag, ENQUEUE);
+	Debug_Enqueue_Full_Size = _Full_Size;
+	Debug_Enqueue_UseSize = _Use_Size;
+	Debug_Enqueue_In = _In;
+	Debug_Enqueue_Out = _Out;
 #endif
+
 	size_t Data_Chunk_Size;
 	size_t Temp_Full_Size = _Full_Size;
 	size_t Temp_In;
@@ -87,11 +98,6 @@ size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 	// 어떤 것을 유지할지 결정하지 못하였다. 
 	_Use_Size += iSize;
 
-#if MULT_DEBUG == 1
-	if (InterlockedExchange(&g_Flag, ENQUEUE) != ENQUEUE)
-		__debugbreak();
-#endif
-
 	return iSize;
 }
 
@@ -104,12 +110,13 @@ size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 {
 #if MULT_DEBUG == 1
-	size_t Debug_Dequeue_Use_Size = _Use_Size;
-	size_t Debug_Dequeue_Out = _Out;
-	size_t Debug_Dequeue_Full_Size = _Full_Size;
+	Debug_Dequeue_Full_Size = _Full_Size;
+	Debug_Dequeue_Use_Size = _Use_Size;
+	Debug_Dequeue_In = _In;
+	Debug_Dequeue_Out = _Out;
 
-	InterlockedExchange(&g_Flag, DEQUEUE);
 #endif
+
 	size_t Data_Chunk_Size;
 	size_t Temp_Use_Size = _Use_Size;
 	size_t Temp_Out;
@@ -156,11 +163,6 @@ size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 		_Out = _In;
 
 		_Use_Size = 0;
-
-#if MULT_DEBUG == 1
-		if (InterlockedExchange(&g_Flag, DEQUEUE) != DEQUEUE)
-			__debugbreak();
-#endif
 
 		return Temp_Use_Size;
 	}

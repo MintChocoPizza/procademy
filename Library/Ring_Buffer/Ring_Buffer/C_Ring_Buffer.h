@@ -32,13 +32,15 @@ private:
 	// 이걸 기록하는 과정 -> 데이터 넣고 뺄때 마다 연산해야 함. 
 	// 연산량이 많아질거 같음
 	// 구현하다 적게 쓰는것을 메인으로 쓰기로 함.
-	size_t _Full_Size;
-	size_t _Use_Size;
+	size_t _Full_Size;	// 현재 링버퍼의 최대 사이즈
+	size_t _Use_Size;	// 현재 링버퍼가 사용하고 있는 사이즈
 	// int _Free_Size;	// 이거 매번 저장하는게 더 느리다.
 
 public:
 	/////////////////////////////////////////////////////////////////////////
 	// 기본 사이즈를 1만 Byte로 할당한다.
+	// 넣고 -> 증가 == 마지막 1칸을 사용하지 못한다. 
+	// 고로 입력 사이즈 + 1이 실제 사이즈
 	/////////////////////////////////////////////////////////////////////////
 	C_RING_BUFFER(void);
 	C_RING_BUFFER(int i_Buffer_Size);
@@ -61,7 +63,7 @@ public:
 	// Parameters: 없음.
 	// Return: (int)남은용량.
 	/////////////////////////////////////////////////////////////////////////
-	size_t	GetFreeSize(void) { return _Full_Size - _Use_Size; }
+	size_t	GetFreeSize(void) {	return _Full_Size - _Use_Size; }
 
 	/////////////////////////////////////////////////////////////////////////
 	// WritePos 에 데이타 넣음.
@@ -106,7 +108,8 @@ public:
 	// friend class CLASS 
 	// 를 사용하여 private 함수를 사용할 수 있다.
 	/////////////////////////////////////////////////////////////////////////
-private:
+//private:
+public:
 	/////////////////////////////////////////////////////////////////////////
 	// 버퍼 포인터로 외부에서 한방에 읽고, 쓸 수 있는 길이.
 	// (끊기지 않은 길이)
@@ -136,6 +139,17 @@ private:
 	}
 	size_t	DirectDequeueSize(void)
 	{
+		//size_t In = _In;
+		//size_t Out = _Out;
+		//if (In >= Out)
+		//{
+		//	return In - Out;
+		//}
+		//else
+		//{
+		//	return _Full_Size - Out;
+		//}
+
 		if (_In >= _Out)
 		{
 			return _In - _Out;
