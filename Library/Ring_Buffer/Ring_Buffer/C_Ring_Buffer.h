@@ -127,15 +127,29 @@ public:
 		size_t Out = _Out;
 		// Enqueue의 경우 _In 바로 다음이 _Out인 경우 꽉 찬 경우이다. 
 		// if (_Use_Size == 0) return 0;
+		//if ((In + 1) % Full_Size == Out)
+		//	return 0;
+
+		//if (In <= ((Out + Full_Size - 1) % Full_Size))
+		//	return ((Out + Full_Size - 1) % Full_Size) - In;
+		//else if (In >= Out)
+		//	return Full_Size - In;
+
+		//return 0;
+
+		size_t ret;
 		if ((In + 1) % Full_Size == Out)
 			return 0;
 
 		if (In <= ((Out + Full_Size - 1) % Full_Size))
-			return ((Out + Full_Size - 1) % Full_Size) - In;
+			ret = ((Out + Full_Size - 1) % Full_Size) - In;
 		else if (In >= Out)
-			return Full_Size - In;
+			ret = Full_Size - In;
 
-		return 0;
+		if (In + ret == Out)
+			__debugbreak();
+
+		return ret;
 	}
 	size_t	DirectDequeueSize(void)
 	{
