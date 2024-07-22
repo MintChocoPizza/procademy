@@ -24,6 +24,8 @@
 #define dfJOB_QUIT      5
 
 
+#define dfSPIN          1
+
 struct st_MSG_HEAD
 {
     short shType;
@@ -126,7 +128,7 @@ unsigned __stdcall WorkerThread(void* pArg)
         //----------------------------------------------------
 
 
-
+#if dfSPIN == 0 
         dwStatus = WaitForSingleObject(g_h_AutoResetEvent, INFINITE);
         if (dwStatus != WAIT_OBJECT_0)
         {
@@ -144,6 +146,16 @@ unsigned __stdcall WorkerThread(void* pArg)
             ReleaseSRWLockExclusive(&g_srwlock_G_MSGQ);
             continue;
         }
+#else
+        {
+            AcquireSRWLockExclusive(&g_srwlock_G_MSGQ);
+            if (g_msgQ.GetUseSize() == 0)
+            {
+                ReleaseSRWLockExclusive(&g_srwlock_G_MSGQ);
+                dwStatus = WaitForSingleObject(g_h_AutoResetEvent, INFINITE);
+            }
+        }
+#endif
 
         //----------------------------------------------------
         // dfJOB_OUT인 경우 메시지를 빼지 않는다. 
@@ -254,8 +266,11 @@ unsigned __stdcall WorkerThread(void* pArg)
         // 
         // 깨어난 스레드는 할 일이 있는지 없는지 판단하여 다시 블락된다.
         //----------------------------------------------------
+#if dfSPIN == 0
         SetEvent(g_h_AutoResetEvent);
+#else
 
+#endif
         //----------------------------------------------------
         // 모니터링용 로그 저장
         //----------------------------------------------------

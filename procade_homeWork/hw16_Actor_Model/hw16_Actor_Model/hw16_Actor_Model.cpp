@@ -51,7 +51,7 @@ std::list<std::wstring*> g_List;
 // 스레드 메시지 큐 (사이즈 넉넉하게 크게 4~5만 바이트)
 //-----------------------------------------------
 //C_RING_BUFFER g_msgQ(50000);
-C_RING_BUFFER g_msgQ(10000);
+C_RING_BUFFER g_msgQ(2500);
 
 //-----------------------------------------------
 // 임의의 문자열
@@ -241,11 +241,15 @@ int wmain()
         {
             b_Shutdown = true;
         }
-        else if (g_msgQ.GetUseSize() > g_msgQ.GetBufferSize() * 9 / 10)
+        else if (g_msgQ.GetUseSize() > g_msgQ.GetBufferSize() * 8 / 10)
+        {
+            g_WorkGenerationCycle = 85;
+        }
+        else if (g_msgQ.GetUseSize() > g_msgQ.GetBufferSize() * 7 / 10)
         {
             g_WorkGenerationCycle = 50;
         }
-        else if (g_msgQ.GetUseSize() > g_msgQ.GetBufferSize() * 8 / 10)
+        else if (g_msgQ.GetUseSize() > g_msgQ.GetBufferSize() * 6 / 10)
         {
             g_WorkGenerationCycle = 40;
         }
