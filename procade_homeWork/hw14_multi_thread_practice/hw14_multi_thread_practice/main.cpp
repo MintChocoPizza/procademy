@@ -147,6 +147,7 @@ int wmain(int argc, wchar_t *argv[])
 	// 이때 시간도 초기화
 	// 
 	/////////////////////////////////////////////////////
+	//Sleep(10000);
 	wprintf(L"signaling manual-reset event. \n");
 	bStatus = SetEvent(g_hManualResetEvent);
 	dwStartTime = timeGetTime();

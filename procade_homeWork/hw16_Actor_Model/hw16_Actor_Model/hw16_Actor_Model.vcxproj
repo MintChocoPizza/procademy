@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="C_Ring_Buffer.cpp" />
     <ClCompile Include="hw16_Actor_Model.cpp" />
+    <ClCompile Include="WorkerThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C_Ring_Buffer.h" />

@@ -288,9 +288,9 @@ unsigned _stdcall QueueDirectPush(void* pArg)
 			temp--;
 		}
 		
-		memcpy(g_rb.GetRearBufferPtr(), TempBuf, MinDataSize);
+		memcpy(g_rb.GetInBufferPtr(), TempBuf, MinDataSize);
 		
-		g_rb.MoveRear(MinDataSize);
+		g_rb.MoveIn(MinDataSize);
 	}
 
 	return 0;
@@ -331,14 +331,14 @@ unsigned _stdcall QueueDirectPop(void* pArg)
 		// 자꾸 0 나와서 짜증남 .....
 		RandomByteToExtract = rand() % (rbDirectDequeueSize) + 1;
 
-		memcpy(dequeueBuf, g_rb.GetFrontBufferPtr(), RandomByteToExtract);
+		memcpy(dequeueBuf, g_rb.GetOutBufferPtr(), RandomByteToExtract);
 
 		for (iCnt = 0; iCnt < RandomByteToExtract; ++iCnt)
 		{
 			printf("%c", dequeueBuf[iCnt]);
 		}
 
-		g_rb.MoveFront(RandomByteToExtract);
+		g_rb.MoveOut(RandomByteToExtract);
 	}
 
 	return 0;

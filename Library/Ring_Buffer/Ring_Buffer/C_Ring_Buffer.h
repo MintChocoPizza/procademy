@@ -126,30 +126,17 @@ public:
 		size_t In = _In;
 		size_t Out = _Out;
 		// Enqueue의 경우 _In 바로 다음이 _Out인 경우 꽉 찬 경우이다. 
-		// if (_Use_Size == 0) return 0;
-		//if ((In + 1) % Full_Size == Out)
-		//	return 0;
+		//if (_Use_Size == 0) return 0;
 
-		//if (In <= ((Out + Full_Size - 1) % Full_Size))
-		//	return ((Out + Full_Size - 1) % Full_Size) - In;
-		//else if (In >= Out)
-		//	return Full_Size - In;
-
-		//return 0;
-
-		size_t ret;
 		if ((In + 1) % Full_Size == Out)
 			return 0;
 
 		if (In <= ((Out + Full_Size - 1) % Full_Size))
-			ret = ((Out + Full_Size - 1) % Full_Size) - In;
+			return ((Out + Full_Size - 1) % Full_Size) - In;
 		else if (In >= Out)
-			ret = Full_Size - In;
+			return Full_Size - In;
 
-		if (In + ret == Out)
-			__debugbreak();
-
-		return ret;
+		return 0;
 	}
 	size_t	DirectDequeueSize(void)
 	{
@@ -180,13 +167,13 @@ public:
 	// Parameters: 없음.
 	// Return: (int)이동크기
 	/////////////////////////////////////////////////////////////////////////
-	size_t	MoveRear(size_t iSize)
+	size_t	MoveIn(size_t iSize)
 	{
 		_Use_Size += iSize;
 		_In = (_In + iSize) % _Full_Size;
 		return _In;
 	}
-	size_t	MoveFront(size_t iSize)
+	size_t	MoveOut(size_t iSize)
 	{
 		_Use_Size -= iSize;
 		_Out = (_Out + iSize) % _Full_Size;
@@ -201,7 +188,7 @@ public:
 	// Parameters: 없음.
 	// Return: (char *) 버퍼 포인터.
 	/////////////////////////////////////////////////////////////////////////
-	char* GetFrontBufferPtr(void)
+	char* GetOutBufferPtr(void)
 	{
 		return _Buffer + _Out;
 	}
@@ -213,7 +200,7 @@ public:
 	// Parameters: 없음.
 	// Return: (char *) 버퍼 포인터.
 	/////////////////////////////////////////////////////////////////////////
-	char* GetRearBufferPtr(void)
+	char* GetInBufferPtr(void)
 	{
 		return _Buffer + _In;
 	}

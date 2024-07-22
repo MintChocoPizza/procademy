@@ -3,7 +3,7 @@
 
 #include "C_Ring_Buffer.h"
 
-#define MULT_DEBUG 1
+#define MULT_DEBUG 0
 
 #if MULT_DEBUG == 1
 #include <Windows.h>
