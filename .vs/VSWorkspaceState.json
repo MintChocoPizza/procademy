@@ -1,10 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\procade_homeWork",
-    "\\procade_homeWork\\hw16_Actor_Model",
-    "\\procade_homeWork\\hw16_Actor_Model\\hw16_Actor_Model"
+    "\\Library\\Ring_Buffer\\Ring_Buffer",
+    "\\test"
   ],
-  "SelectedNode": "\\procade_homeWork\\hw16_Actor_Model\\hw16_Actor_Model\\hw16_Actor_Model.cpp",
+  "SelectedNode": "\\Library",
   "PreviewInSolutionExplorer": false
 }
