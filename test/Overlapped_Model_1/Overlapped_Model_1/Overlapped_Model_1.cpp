@@ -11,7 +11,7 @@
 #define BUFSIZE 512
 
 // 소켓 정보 저장을 위한 구조체와 변수
-struct SOCKETINFO
+struct st_SOCKETINFO
 {
 	WSAOVERLAPPED overlapped;
 	SOCKET sock;
@@ -106,11 +106,112 @@ DWORD __stdcall WorkerThread(void* arg)
 		SOCKADDR_IN clientaddr;
 
 		// 소켓 정보 구조체 할당과 초기화
-		SOCKETINFO* ptr = new SOCKETINFO;
+		st_SOCKETINFO* ptr = new st_SOCKETINFO;
 		if (ptr == NULL)
 			return 1;
 
 		ZeroMemory(&ptr->overlapped, sizeof(ptr->overlapped));
 		ptr->sock = client_sock;
+		SetEvent(hReadEvent);
+		ptr->recvbytes = ptr->sendbbytes = 0;
+		ptr->wsabuf.buf = ptr->buf;
+		ptr->wsabuf.len = BUFSIZE;
+
+		// 비동기 입출력 시작
+		DWORD recvbytes;
+		DWORD flags = 0;
+		retval = WSARecv(ptr->sock, &ptr->wsabuf, 1, &recvbytes, &flags, &ptr->overlapped, CompletionRoutine);
+
+		if (retval == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSA_IO_PENDING)
+			{
+				printf("WSARecv() \n");
+				return 1;
+			}
+		}
+	}
+
+	return 0;
+}
+
+// 아마도 콜백함수의 인자는 고정인거 같음
+void CALLBACK CompletionRoutine(DWORD dwError, DWORD cbTransferred, LPWSAOVERLAPPED lpOverlapped, DWORD dwFlags)
+{
+	int retval;
+
+	// 클라이언트 정보 얻기
+	st_SOCKETINFO* ptr = (st_SOCKETINFO*)lpOverlapped;
+	SOCKADDR_IN clientaddr;
+	int addrlen = sizeof(clientaddr);
+	getpeername(ptr->sock, (SOCKADDR*)&clientaddr, &addrlen);
+
+	// 비동기 입출력 결과 확인 
+	if (dwError != 0 || cbTransferred == 0)
+	{
+		if (dwError != 0) printf("%d \n", dwError);
+
+		closesocket(ptr->sock);
+		printf("소켓 종료 \n");
+		delete ptr;
+		return;
+	}
+
+	// 데이터 전송량 갱신
+	if (ptr->recvbytes == 0)
+	{
+		ptr->recvbytes = cbTransferred;
+		ptr->sendbbytes = 0;
+
+		// 받은 데이터 출력 
+		ptr->buf[ptr->recvbytes] = '\0';
+
+		printf("받은 데이터 출력: %s \n", ptr->buf);
+	}
+	else
+	{
+		ptr->sendbbytes += cbTransferred;
+	}
+
+	if (ptr->recvbytes > ptr->sendbbytes)
+	{	
+		// 데이터 보내기
+		ZeroMemory(&ptr->overlapped, sizeof(ptr->overlapped));
+		ptr->wsabuf.buf = ptr->buf + ptr->sendbbytes;
+		ptr->wsabuf.len = ptr->recvbytes - ptr->sendbbytes;
+
+		DWORD sendbytes;
+		retval = WSASend(ptr->sock, &ptr->wsabuf, 1, &sendbytes, 0, &ptr->overlapped, CompletionRoutine);
+
+		if (retval == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSA_IO_PENDING)
+			{
+				printf("WSASend() \n");
+				return;
+			}
+		}
+	}
+	else
+	{
+		ptr->recvbytes = 0;
+
+		// 데이터 받기
+		ZeroMemory(&ptr->overlapped, sizeof(ptr->overlapped));
+
+		ptr->wsabuf.buf = ptr->buf;
+		ptr->wsabuf.len = BUFSIZE;
+
+		DWORD recvbytes;
+		DWORD flags = 0;
+		retval = WSARecv(ptr->sock, &ptr->wsabuf, 1, &recvbytes, &flags, &ptr->overlapped, CompletionRoutine);
+		if (retval == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSA_IO_PENDING)
+			{
+				printf("WSARecv()\n");
+				return;
+			}
+		}
 	}
 }
