@@ -56,12 +56,12 @@ extern C_RING_BUFFER g_msgQ;
 //-----------------------------------------------
 // 임의의 문자열
 //-----------------------------------------------
-extern const wchar_t* strList[];
+extern const wchar_t* g_strList[];
 
 //-----------------------------------------------
 // 임의의 문자열 길이
 //-----------------------------------------------
-extern int g_strListLen;
+extern int g_strListSize;
 
 //-----------------------------------------------
 // 메인 스레드에서 일이 생성되는 주기
@@ -147,14 +147,17 @@ unsigned __stdcall WorkerThread(void* pArg)
             continue;
         }
 #else
-        {
+        while(1)
+		{
             AcquireSRWLockExclusive(&g_srwlock_G_MSGQ);
             if (g_msgQ.GetUseSize() == 0)
             {
                 ReleaseSRWLockExclusive(&g_srwlock_G_MSGQ);
                 dwStatus = WaitForSingleObject(g_h_AutoResetEvent, INFINITE);
             }
-        }
+            else
+                break;
+		}
 #endif
 
         //----------------------------------------------------

@@ -11,11 +11,13 @@
 // ==> 4 + 1 + 3 = 8
 // 단순하게 계산하면 3번 이상 접근하여 저장한다면 지역 변수에 저장하여 접근하는 것이 이득이다. 
 
+#define DEBUG 0
+
 constexpr size_t df_C_RING_BUFFER_DEFAULT_LEN = 10000;
 
 class C_RING_BUFFER
 {
-private:
+public:
 	char* _Buffer;
 
 	size_t _In;
@@ -160,8 +162,20 @@ public:
 	}
 	size_t	MoveFront(size_t iSize)
 	{
+#if DEBUG == 1
+		size_t temp_Use_size = _Use_Size;
+		size_t temp_Out = _Out;
+#endif //DEBUG
+
+
 		_Use_Size -= iSize;
 		_Out = (_Out + iSize) % _Full_Size;
+
+#if DEBUG == 1
+		if (_Use_Size > 5000)
+			__debugbreak();
+#endif
+
 		return _Out;
 	}
 

@@ -1,9 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Library\\Ring_Buffer\\Ring_Buffer",
-    "\\test"
+    "\\procade_homeWork\\hw16_Actor_Model",
+    "\\procade_homeWork\\hw16_Actor_Model\\hw16_Actor_Model",
+    "\\project",
+    "\\project\\TCPFighter_with_RPC_for_7000"
   ],
-  "SelectedNode": "\\Library",
+  "SelectedNode": "\\project\\TCPFighter_with_RPC_for_7000\\TCPFighter_with_RPC_for_7000.sln",
   "PreviewInSolutionExplorer": false
 }

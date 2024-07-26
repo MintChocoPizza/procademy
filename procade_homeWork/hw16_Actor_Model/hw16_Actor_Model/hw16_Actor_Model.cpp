@@ -51,12 +51,12 @@ std::list<std::wstring*> g_List;
 // 스레드 메시지 큐 (사이즈 넉넉하게 크게 4~5만 바이트)
 //-----------------------------------------------
 //C_RING_BUFFER g_msgQ(50000);
-C_RING_BUFFER g_msgQ(2500);
+C_RING_BUFFER g_msgQ(5000);
 
 //-----------------------------------------------
 // 임의의 문자열
 //-----------------------------------------------
-const wchar_t* strList[] = 
+const wchar_t* g_strList[] = 
 {       L"apple", L"orange", L"banana", L"grape", L"cherry",
         L"pear", L"peach", L"plum", L"apricot", L"melon",
         L"kiwi", L"mango", L"pineapple", L"blueberry", L"strawberry",
@@ -72,7 +72,7 @@ const wchar_t* strList[] =
 //-----------------------------------------------
 // 임의의 문자열 길이
 //-----------------------------------------------
-int g_strListLen;
+int g_strListSize;
 
 //-----------------------------------------------
 // 메인 스레드에서 일이 생성되는 주기
@@ -140,7 +140,7 @@ int wmain()
     g_WorkGenerationCycle = 20;
     g_b_Shutdown = false;
     b_Shutdown = false;
-    g_strListLen = sizeof(strList) / sizeof(strList[0]);        // 현재 50개
+    g_strListSize = sizeof(g_strList) / sizeof(g_strList[0]);        // 현재 50개
     srand((unsigned)time(NULL));                                // 랜덤 시드값 초기화
     InitializeSRWLock(&g_srwlock_G_LIST);                       // srwlock 초기화
     InitializeSRWLock(&g_srwlock_G_MSGQ);                       // srwlock 초기화
@@ -182,6 +182,16 @@ int wmain()
             printf("thread %d - id=0x%08x : Create!! \n", iCnt, g_ThreadIDs[iCnt]);
         }
     }
+
+    /////////////////////////////////////////////////////
+    // 메시지 생성 전 이상한 메시지가 있는지 확인한다. 
+    /////////////////////////////////////////////////////
+    for (iCnt = 0; iCnt < g_strListSize; ++iCnt)
+    {
+        if (wcslen(g_strList[iCnt]) > 10)
+            __debugbreak();
+    }
+
 
     /////////////////////////////////////////////////////
     // 메인 스레드 반복
@@ -273,26 +283,26 @@ int wmain()
         {
         case dfJOB_ADD:
             // 전달할 메시지 랜덤하게 생성한다. 
-            iMSG_Number = rand() % g_strListLen;
+            iMSG_Number = rand() % g_strListSize;
             st_Header.shType = dfJOB_ADD;
-            st_Header.shPayloadLen = (short)wcslen(strList[iMSG_Number]);
+            st_Header.shPayloadLen = (short)wcslen(g_strList[iMSG_Number]);
 
             // lock을 걸고 할 일을 넣는다. 
             AcquireSRWLockExclusive(&g_srwlock_G_MSGQ);
             g_msgQ.Enqueue((char*)&st_Header, sizeof(st_Header));
-            g_msgQ.Enqueue((char*)strList[iMSG_Number], st_Header.shPayloadLen);
+            g_msgQ.Enqueue((char*)g_strList[iMSG_Number], st_Header.shPayloadLen);
             ReleaseSRWLockExclusive(&g_srwlock_G_MSGQ);
             break;
         case dfJOB_DEL:
             // 삭제할 메시지를 랜덤하게 생성한다. 
-            iMSG_Number = rand() % g_strListLen;
+            iMSG_Number = rand() % g_strListSize;
             st_Header.shType = dfJOB_DEL;
-            st_Header.shPayloadLen = (short)wcslen(strList[iMSG_Number]);
+            st_Header.shPayloadLen = (short)wcslen(g_strList[iMSG_Number]);
 
             // lock을 걸고 할 일을 넣는다. 
             AcquireSRWLockExclusive(&g_srwlock_G_MSGQ);
             g_msgQ.Enqueue((char*)&st_Header, sizeof(st_Header));
-            g_msgQ.Enqueue((char*)strList[iMSG_Number], st_Header.shPayloadLen);
+            g_msgQ.Enqueue((char*)g_strList[iMSG_Number], st_Header.shPayloadLen);
             ReleaseSRWLockExclusive(&g_srwlock_G_MSGQ);
             break;
         case dfJOB_SORT:
@@ -306,14 +316,14 @@ int wmain()
             ReleaseSRWLockExclusive(&g_srwlock_G_MSGQ);
             break;
         case dfJOB_FIND:
-            iMSG_Number = rand() % g_strListLen;
+            iMSG_Number = rand() % g_strListSize;
             st_Header.shType = dfJOB_FIND;
-            st_Header.shPayloadLen = (short)wcslen(strList[iMSG_Number]);
+            st_Header.shPayloadLen = (short)wcslen(g_strList[iMSG_Number]);
 
             // lock을 걸고 할 일을 넣는다. 
             AcquireSRWLockExclusive(&g_srwlock_G_MSGQ);
             g_msgQ.Enqueue((char*)&st_Header, sizeof(st_Header));
-            g_msgQ.Enqueue((char*)strList[iMSG_Number], st_Header.shPayloadLen);
+            g_msgQ.Enqueue((char*)g_strList[iMSG_Number], st_Header.shPayloadLen);
             ReleaseSRWLockExclusive(&g_srwlock_G_MSGQ);
             break;
         case dfJOB_PRINT:
