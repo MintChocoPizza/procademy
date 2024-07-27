@@ -20,6 +20,9 @@ C_Field C_Field::_C_Field;
 int dY[] = { 0, -1,-1,-1,0,0,0,1,1,1 };
 int dX[] = { 0, -1,0,1, -1,1, -1,0,1 };
 
+
+
+
 st_SECTOR_POS::st_SECTOR_POS() 
 { 
     iX = NULL;
@@ -58,6 +61,10 @@ void C_Field::GetSectorAround(int iSectorX, int iSectorY, st_SECTOR_AROUND* pSec
         pSectorAound->Around[iCount].iX = nX;
         iCount++;
     }
+}
+
+void C_Field::GetUpdateSectorAround(st_Player* pCharacter, st_SECTOR_AROUND* pRemoveSector, st_SECTOR_AROUND* pAddSector)
+{
 }
 
 bool C_Field::Sector_UpdateCharacter(st_Player* pPlayer)

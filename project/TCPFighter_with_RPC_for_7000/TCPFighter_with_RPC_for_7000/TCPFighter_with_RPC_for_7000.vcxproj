@@ -148,6 +148,7 @@
     <ClInclude Include="Contents.h" />
     <ClInclude Include="C_Ring_Buffer.h" />
     <ClInclude Include="Define.h" />
+    <ClInclude Include="Disconnect.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="LOG.h" />
     <ClInclude Include="main.h" />

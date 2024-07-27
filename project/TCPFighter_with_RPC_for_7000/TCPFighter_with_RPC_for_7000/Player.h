@@ -8,6 +8,7 @@ struct st_Player
 {
 	st_SESSION* _pSession;
 	DWORD		_SessionID;
+
 	DWORD		_dwAction;
 	BYTE		_byDirection;
 	BYTE		_byModeDirection;	// 아마도 움직이던 방향
@@ -32,6 +33,7 @@ struct st_Player
 extern std::unordered_map< DWORD, st_Player*>	g_CharacterHash;
 
 void ClearCharacterHash(void);
+st_Player* FindCharacter(DWORD dwSessionID);
 st_Player* CreateNewPlayer(DWORD SessionID, st_SESSION* st_p_New_Session);
 
 

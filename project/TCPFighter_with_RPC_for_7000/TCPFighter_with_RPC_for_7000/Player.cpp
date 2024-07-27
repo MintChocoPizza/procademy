@@ -61,6 +61,11 @@ void ClearCharacterHash(void)
 	}
 }
 
+st_Player* FindCharacter(DWORD dwSessionID)
+{	
+	return g_CharacterHash.find(dwSessionID)->second;
+}
+
 st_Player* CreateNewPlayer(DWORD SessionID, st_SESSION* st_p_New_Session)
 {
 	st_Player* st_Temp_New_Player = new st_Player(SessionID, st_p_New_Session);

@@ -18,6 +18,12 @@ using namespace std;
 extern int dY[];
 extern int dX[];
 
+#define dfGRID_X_SIZE 100
+#define dfGRID_Y_SIZE 100
+
+#define dfSECTOR_MAX_Y dfRANGE_MOVE_BOTTOM / dfGRID_Y_SIZE
+#define dfSECTOR_MAX_X dfRANGE_MOVE_RIGHT  / dfGRID_X_SIZE
+
 struct st_SECTOR_AROUND;
 struct st_Player;
 
@@ -40,6 +46,11 @@ public:
 	// 특정 섹터 좌표 기준 주변 영향권 섹터 얻기
 	// SectorX, SectorY의 섹터좌표에서 주변 최대 9개의 섹터 좌표를 얻어 오는 함수
 	void GetSectorAround(int iSectorX, int iSectorY, st_SECTOR_AROUND* pSectorAound);
+
+	//---------------------------------------------------------------------------------------------
+	// 캐릭터가 섹터를 이동 한 뒤에 영향권에서 빠진 섹터, 새로 추가된 섹터의 정보 구하는 함수
+	void GetUpdateSectorAround(st_Player* pCharacter, st_SECTOR_AROUND* pRemoveSector, st_SECTOR_AROUND* pAddSector);
+
 	//---------------------------------------------------------------------------------------------
 	// 섹터가 변경된 것을 확인한다.
 	bool Sector_UpdateCharacter(st_Player* pPlayer);
@@ -60,6 +71,7 @@ public:
 	// std::unordered_multimap<std::pair<int, int>, DWORD> _Grid;
 	// 그냥 동적할당 배열을 사용하여 섹터당 유저들을 저장한다. 
 	std::list<st_Player*>*** _Sector;
+	std::list<st_Player*> g_Sector[dfSECTOR_MAX_Y][dfSECTOR_MAX_X];
 
 	int _Sector_Max_Y;
 	int _Sector_Max_X;

@@ -96,6 +96,27 @@ public:
 
 };
 
-void ForwardDecl(int DestID, SerializeBuffer* sb);
+extern SerializeBuffer g_SerializeBuffer;
 
+void ForwardDecl(int DestID, SerializeBuffer* sb);
+void netStartUp(void);
+void netCleanUp(void);
+void netIOProcess(void);
+void netProc_Accept(void);
+int netProc_Recv(st_SESSION* pSession);
+void netProc_Send(st_SESSION* pSession);
+
+void SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* pPacket, st_SESSION* pExceptSession);
+void SendPacket_Unicast(st_SESSION* pSession, SerializeBuffer* pPacket);
+void SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around, bool bSendMe = false);
+
+bool PacketProc(st_SESSION* pSession, unsigned char byPacketType, SerializeBuffer* pPacket);
+bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket);
+bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket);
+bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket);
+bool netPacketProc_Attack2(st_SESSION* pSession, SerializeBuffer* pPacket);
+bool netPacketProc_Attack3(st_SESSION* pSession, SerializeBuffer* pPacket);
+
+void mpSync(SerializeBuffer* pPacket, DWORD dwSessionID, short shX, short shY);
+void mpMoveStart(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY);
 #endif // !__SESSION_H__
