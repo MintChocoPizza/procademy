@@ -2,10 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\Library",
-    "\\Library\\Ring_Buffer",
-    "\\Library\\Ring_Buffer\\Ring_Buffer",
-    "\\test\\Completion_Port_Model\\Completion_Port_Model"
+    "\\Library\\Ring_Buffer"
   ],
-  "SelectedNode": "\\Library\\Ring_Buffer\\Ring_Buffer\\main.cpp",
+  "SelectedNode": "\\Library\\Ring_Buffer\\Ring_Buffer.sln",
   "PreviewInSolutionExplorer": false
 }

@@ -2,6 +2,7 @@
 #include <string.h>
 
 #define MULT_DEBUG 0
+#define SINGLE_DEBUG 1
 
 #if MULT_DEBUG == 1
 #include <Windows.h>
@@ -23,6 +24,10 @@ size_t Debug_Dequeue_Use_Size;
 size_t Debug_Dequeue_In;
 size_t Debug_Dequeue_Out;
 #endif
+#if SINGLE_DEBUG == 1
+	size_t g_Temp_In;
+	size_t g_Temp_Out;
+#endif
 
 #include "C_Ring_Buffer.h"
 
@@ -33,14 +38,14 @@ size_t Debug_Dequeue_Out;
 // 넣고 -> 증가 == 마지막 1칸을 사용하지 못한다. 
 // 고로 입력 사이즈 + 1이 실제 사이즈
 /////////////////////////////////////////////////////////////////////////
-C_RING_BUFFER::C_RING_BUFFER(void) :  _Full_Size(df_C_RING_BUFFER_DEFAULT_LEN + 1), _Use_Size(0), _In(0), _Out(0)
+C_RING_BUFFER::C_RING_BUFFER(void) :  _Full_Size(df_C_RING_BUFFER_DEFAULT_LEN), _In(0), _Out(0)
 {
-	_Buffer = new char[df_C_RING_BUFFER_DEFAULT_LEN + 1];
+	_Buffer = new char[df_C_RING_BUFFER_DEFAULT_LEN];
 }
 
-C_RING_BUFFER::C_RING_BUFFER(int i_Buffer_Size) : _Full_Size(i_Buffer_Size + 1), _Use_Size(0), _In(0), _Out(0)
+C_RING_BUFFER::C_RING_BUFFER(int i_Buffer_Size) : _Full_Size(i_Buffer_Size), _In(0), _Out(0)
 {
-	_Buffer = new char[i_Buffer_Size + 1];
+	_Buffer = new char[i_Buffer_Size];
 }
 
 C_RING_BUFFER::~C_RING_BUFFER()
@@ -69,7 +74,7 @@ size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 	size_t Temp_Full_Size = _Full_Size;
 	size_t Temp_In;
 
-	if(Temp_Full_Size - _Use_Size <= iSize)
+	if(Temp_Full_Size - GetUseSize() <= iSize)
 		return 0;
 
 	// (_Buffer + _Full_Size): 마지막 버퍼 그 다음 위치
@@ -91,12 +96,17 @@ size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 		memcpy(_Buffer+ Temp_In, pData, Data_Chunk_Size);
 		memcpy(_Buffer, pData + Data_Chunk_Size, iSize - Data_Chunk_Size);
 	}
+
+
+#if SINGLE_DEBUG == 1
+	g_Temp_In = _In;
+	g_Temp_Out = _Out;
+#endif
+
 	// _In = (char*)(((uintptr_t)Temp_In + iSize) % (uintptr_t)_Buffer_End);
 	_In = (Temp_In + iSize) % Temp_Full_Size;
 
-	//-----------------------------------------------------------------------
-	// 어떤 것을 유지할지 결정하지 못하였다. 
-	_Use_Size += iSize;
+
 
 	return iSize;
 }
@@ -118,7 +128,7 @@ size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 #endif
 
 	size_t Data_Chunk_Size;
-	size_t Temp_Use_Size = _Use_Size;
+	size_t Temp_Use_Size = GetUseSize();
 	size_t Temp_Out;
 
 	if (Temp_Use_Size == 0)
@@ -140,9 +150,13 @@ size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 			memcpy(chpDest + Data_Chunk_Size, _Buffer, iSize - Data_Chunk_Size);
 		}
 
+#if SINGLE_DEBUG == 1
+		g_Temp_In = _In;
+		g_Temp_Out = _Out;
+#endif
+
 		_Out = (Temp_Out + iSize) % _Full_Size;
 
-		_Use_Size = Temp_Use_Size - iSize;
 
 		return iSize;
 	}
@@ -159,10 +173,14 @@ size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 			memcpy(chpDest + Data_Chunk_Size, _Buffer, Temp_Use_Size - Data_Chunk_Size);
 		}
 
+#if SINGLE_DEBUG == 1
+		g_Temp_In = _In;
+		g_Temp_Out = _Out;
+#endif
+
 		//_Out = (Temp_Out + Temp_Use_Size) % _Full_Size;
 		_Out = _In;
 
-		_Use_Size = 0;
 
 		return Temp_Use_Size;
 	}
@@ -180,7 +198,7 @@ size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 size_t C_RING_BUFFER::Peek(char* chpDest, size_t iSize, bool flag)
 {
 	size_t Data_Chunk_Size;
-	size_t Temp_Use_Size = _Use_Size;
+	size_t Temp_Use_Size = GetUseSize();
 	size_t Temp_Out;
 
 	if (Temp_Use_Size == 0)

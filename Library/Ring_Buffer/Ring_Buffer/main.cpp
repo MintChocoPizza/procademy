@@ -16,7 +16,7 @@
 #define DIRECT_SINGLETHREAD_TEST		3
 #define DIRECT_MULTTHREAD_TEST			4
 
-#define VERSION 4
+#define VERSION 1
 
 using namespace std;
 

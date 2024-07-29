@@ -33,7 +33,7 @@ private:
 	// 연산량이 많아질거 같음
 	// 구현하다 적게 쓰는것을 메인으로 쓰기로 함.
 	size_t _Full_Size;	// 현재 링버퍼의 최대 사이즈
-	size_t _Use_Size;	// 현재 링버퍼가 사용하고 있는 사이즈
+	// size_t _Use_Size;	// 현재 링버퍼가 사용하고 있는 사이즈
 	// int _Free_Size;	// 이거 매번 저장하는게 더 느리다.
 
 public:
@@ -55,7 +55,17 @@ public:
 	// Parameters: 없음.
 	// Return: (int)사용중인 용량.
 	/////////////////////////////////////////////////////////////////////////
-	size_t	GetUseSize(void) { return _Use_Size; }
+	size_t	GetUseSize(void) 
+	{
+		if (_In - _Out >= 0)
+		{
+			return _In - _Out;
+		}
+		else
+		{
+			return _Full_Size - (_In - _Out);
+		}
+	}
 
 	/////////////////////////////////////////////////////////////////////////
 	// 현재 버퍼에 남은 용량 얻기. 
@@ -63,7 +73,7 @@ public:
 	// Parameters: 없음.
 	// Return: (int)남은용량.
 	/////////////////////////////////////////////////////////////////////////
-	size_t	GetFreeSize(void) { return _Full_Size - _Use_Size - 1; }
+	size_t	GetFreeSize(void) { return _Full_Size - GetUseSize(); }
 
 	/////////////////////////////////////////////////////////////////////////
 	// WritePos 에 데이타 넣음.
@@ -169,13 +179,11 @@ public:
 	/////////////////////////////////////////////////////////////////////////
 	size_t	MoveIn(size_t iSize)
 	{
-		_Use_Size += iSize;
 		_In = (_In + iSize) % _Full_Size;
 		return _In;
 	}
 	size_t	MoveOut(size_t iSize)
 	{
-		_Use_Size -= iSize;
 		_Out = (_Out + iSize) % _Full_Size;
 		return _Out;
 	}

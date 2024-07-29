@@ -5,6 +5,8 @@
 #include "OSJ_Test.h"
 #include "C_Ring_Buffer.h"
 
+#define OSJ_SINGLE_DEBUG 1
+
 constexpr int CONSOLE_WIDTH = 237;
 
 C_RING_BUFFER rbTemp;
@@ -13,11 +15,37 @@ char dequeueBuf[CONSOLE_WIDTH + 2];
 char peekBuf[10000 + 2];
 
 char tempBuf[10000 + 2];
+size_t g_OSJ_len;
+
+char OSJ_testString[] = "@234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345*!";
+
+
+#if OSJ_SINGLE_DEBUG == 1
+extern size_t g_Temp_In;
+extern size_t g_Temp_Out;
+size_t g_Cnt = 0;
+char g_TemptestString[] = "@234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345*!";
+
+#endif // OSJ_SINGLE_DEBUG == 1
+
 
 void printArray(size_t width, char* pBuf)
 {
-	for (int i = 0; i < width; ++i) {
+	for (int i = 0; i < width; ++i) 
+	{
 		printf("%c", pBuf[i]);
+
+#if OSJ_SINGLE_DEBUG == 1
+		if (g_Cnt == g_OSJ_len)
+			g_Cnt = 0;
+
+		if (pBuf[i] != OSJ_testString[g_Cnt])
+		{
+			__debugbreak();
+		}
+		++g_Cnt;
+
+#endif // OSJ_SINGLE_DEBUG == 1
 	}
 }
 
@@ -34,10 +62,15 @@ void extractBytes(std::queue<char>& myQueue, char* buffer, int bytes)
 
 void OSJ_test()
 {
-	char testString[] = "@234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345*!";
-	size_t len = strlen(testString);
+	g_OSJ_len = strlen(OSJ_testString);
+	size_t sz = sizeof(OSJ_testString);
 	std::queue<char> q;
 	srand((unsigned)time(nullptr));
+
+#if OSJ_SINGLE_DEBUG == 1
+#endif
+
+
 	while (true)
 	{
 		memset(peekBuf, 0, sizeof(peekBuf));
@@ -48,9 +81,9 @@ void OSJ_test()
 		size_t dequeueSize = 0;
 
 		// 큐에 문자열을 저장한다. 
-		for (int i = 0; i < len; ++i)
+		for (int i = 0; i < g_OSJ_len; ++i)
 		{
-			q.push(testString[i]);
+			q.push(OSJ_testString[i]);
 		}
 
 		// 현재 Queue의 사이즈
@@ -73,7 +106,10 @@ void OSJ_test()
 		int index = 0;
 		extractBytes(q, tempBuf, RandomByteToExtract);
 		enqueueSize = rb.Enqueue(tempBuf, RandomByteToExtract);
-		dequeueSize = rb.Dequeue(dequeueBuf, rand() % RAND_MAX + 1);
+
+		int randDqSize = rand() % RAND_MAX + 1;
+
+		dequeueSize = rb.Dequeue(dequeueBuf, randDqSize);
 		if (dequeueSize > 0)
 			printArray(dequeueSize, dequeueBuf);
 
