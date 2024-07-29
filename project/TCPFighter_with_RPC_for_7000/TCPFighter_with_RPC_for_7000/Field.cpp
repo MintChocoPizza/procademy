@@ -23,17 +23,18 @@ int dX[] = { 0, -1,0,1, -1,1, -1,0,1 };
 
 
 
-st_SECTOR_POS::st_SECTOR_POS() 
-{ 
-    iX = NULL;
-    iY = NULL;
-}
-st_SECTOR_POS::st_SECTOR_POS(int X, int Y)
-{
-    iX = X / C_Field::GetInstance()->Grid_X_Size;
-    iY = Y / C_Field::GetInstance()->Grid_Y_Size;
-}
-st_SECTOR_AROUND::st_SECTOR_AROUND() { iCount = 0; }
+//st_SECTOR_POS::st_SECTOR_POS() 
+//{ 
+//    iX = NULL;
+//    iY = NULL;
+//}
+
+//st_SECTOR_POS::st_SECTOR_POS(int X, int Y)
+//{
+//    iX = X / C_Field::GetInstance()->Grid_X_Size;
+//    iY = Y / C_Field::GetInstance()->Grid_Y_Size;
+//}
+
 
 C_Field* C_Field::GetInstance(void)
 {
@@ -61,13 +62,15 @@ void C_Field::GetSectorAround(int iSectorX, int iSectorY, st_SECTOR_AROUND* pSec
         pSectorAound->Around[iCount].iX = nX;
         iCount++;
     }
+
+    pSectorAound->iCount = iCount;
 }
 
-void C_Field::GetUpdateSectorAround(st_Player* pCharacter, st_SECTOR_AROUND* pRemoveSector, st_SECTOR_AROUND* pAddSector)
+void C_Field::GetUpdateSectorAround(st_PLAYER* pCharacter, st_SECTOR_AROUND* pRemoveSector, st_SECTOR_AROUND* pAddSector)
 {
 }
 
-bool C_Field::Sector_UpdateCharacter(st_Player* pPlayer)
+bool C_Field::Sector_UpdateCharacter(st_PLAYER* pPlayer)
 {
     int SectorY;
     int SectorX;
@@ -89,7 +92,7 @@ bool C_Field::Sector_UpdateCharacter(st_Player* pPlayer)
     return false;
 }
 
-void C_Field::CharacterSectorUpdatePacket(st_Player* pPlayer)
+void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
 {
     //--------------------------------------------
     // 8방 이동.
@@ -317,10 +320,66 @@ void C_Field::CharacterSectorUpdatePacket(st_Player* pPlayer)
     }
 }
 
+void C_Field::removeUserFromSector(DWORD dwSessionID, st_SECTOR_POS* pSector_Pos)
+{
+    g_Sector_Hash[pSector_Pos->iY][pSector_Pos->iX].erase(dwSessionID);
+}
+
+void C_Field::SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* pPacket, st_SESSION* pExceptSession)
+{
+    std::unordered_map<DWORD, st_PLAYER*> ::iterator iter;
+
+    if (pExceptSession == NULL)
+    {
+        for (iter = g_Sector_Hash[iSectorY][iSectorX].begin(); iter != g_Sector_Hash[iSectorY][iSectorX].end(); ++iter)
+        {
+            SendPacket_Unicast((*iter).second->_pSession, pPacket);
+        }
+    }
+    else
+    {
+        for (iter = g_Sector_Hash[iSectorY][iSectorX].begin(); iter != g_Sector_Hash[iSectorY][iSectorX].end(); ++iter)
+        {
+            if (pExceptSession == (*iter).second->_pSession)
+            {
+                continue;
+            }
+
+            SendPacket_Unicast((*iter).second->_pSession, pPacket);
+        }
+    }
+}
+
+void C_Field::SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around, bool bSendMe)
+{
+    int iCnt;
+
+    if (bSendMe == false)
+    {
+        for (iCnt = 0; iCnt < pSector_Around->iCount; ++iCnt)
+        {
+            SendPacket_SectorOne(pSector_Around->Around[iCnt].iX, pSector_Around->Around[iCnt].iY, pPacket, pSession);
+        }
+    }
+    else
+    {
+        for (iCnt = 0; iCnt < pSector_Around->iCount; ++iCnt)
+        {
+            SendPacket_SectorOne(pSector_Around->Around[iCnt].iX, pSector_Around->Around[iCnt].iY, pPacket, NULL);
+        }
+    }
+}
+
+void st_SECTOR_POS::Init_SECTOR_POS(int Y, int X)
+{
+    iY = Y / dfGRID_Y_SIZE;
+    iX = X / dfGRID_X_SIZE;
+}
+
 C_Field::C_Field()
 {
-    int iCntX;
-    int iCntY;
+    //int iCntX;
+    //int iCntY;
     int Sector_Max_X;
     int Sector_Max_Y;
 
@@ -331,40 +390,40 @@ C_Field::C_Field()
     // 3차원 배열: 면, 행, 열 순서
     // 2차원 배열: 행, 열 순서
     // 1차원 배열: 열 순서
-    _Sector = new std::list<st_Player*>**[Sector_Max_Y];
-    for (iCntY = 0; iCntY < Sector_Max_Y; ++iCntY)
-    {
-        _Sector[iCntY] = new std::list<st_Player*>*[Sector_Max_X];
-        for (iCntX = 0; iCntX < Sector_Max_X; ++iCntX)
-        {
-            _Sector[iCntY][iCntX] = new std::list<st_Player*>();
-        }
-    }
+    //_Sector = new std::list<st_PLAYER*>**[Sector_Max_Y];
+    //for (iCntY = 0; iCntY < Sector_Max_Y; ++iCntY)
+    //{
+    //    _Sector[iCntY] = new std::list<st_PLAYER*>*[Sector_Max_X];
+    //    for (iCntX = 0; iCntX < Sector_Max_X; ++iCntX)
+    //    {
+    //        _Sector[iCntY][iCntX] = new std::list<st_PLAYER*>();
+    //    }
+    //}
 }
 
 C_Field::~C_Field()
 {
-    int iCntY;
-    int iCntX;
+    //int iCntY;
+    //int iCntX;
     int Sector_Max_X;
     int Sector_Max_Y;
 
     Sector_Max_Y = _Sector_Max_Y;
     Sector_Max_X = _Sector_Max_X;
 
-    for (iCntY = 0; iCntY < _Sector_Max_Y; ++iCntY)
-    {
-        for (iCntX = 0; iCntX < _Sector_Max_X; ++iCntX)
-        {
-            // 동적으로 할당된 st_Player들은 Player 클래스에서 어련히 잘 알아서 메모리를 해지했다고 가정한다. 
-            // 각 std::list<st_Player*> 해제
-            delete _Sector[iCntY][iCntX];
-        }
-        // 열 배열 해제
-        delete[] _Sector[iCntY];
-    }
-    // 행 배열 해제
-    delete[] _Sector;
+    //for (iCntY = 0; iCntY < _Sector_Max_Y; ++iCntY)
+    //{
+    //    for (iCntX = 0; iCntX < _Sector_Max_X; ++iCntX)
+    //    {
+    //        // 동적으로 할당된 st_Player들은 Player 클래스에서 어련히 잘 알아서 메모리를 해지했다고 가정한다. 
+    //        // 각 std::list<st_Player*> 해제
+    //        delete _Sector[iCntY][iCntX];
+    //    }
+    //    // 열 배열 해제
+    //    delete[] _Sector[iCntY];
+    //}
+    //// 행 배열 해제
+    //delete[] _Sector;
 }
 
 

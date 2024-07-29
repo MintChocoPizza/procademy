@@ -1,18 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-<<<<<<< Updated upstream
-    "\\test",
-    "\\test\\Overlapped_Model_1",
-    "\\test\\Overlapped_Model_1\\Overlapped_Model_1"
+    "\\Library",
+    "\\Library\\Ring_Buffer",
+    "\\Library\\Ring_Buffer\\Ring_Buffer",
+    "\\test\\Completion_Port_Model\\Completion_Port_Model"
   ],
-  "SelectedNode": "\\test\\Overlapped_Model_1\\Overlapped_Model_1\\Overlapped_Model_1.cpp",
-=======
-    "\\project",
-    "\\project\\TCPFighter_with_RPC_for_7000",
-    "\\project\\TCPFighter_with_RPC_for_7000\\TCPFighter_with_RPC_for_7000"
-  ],
-  "SelectedNode": "\\project\\TCPFighter_with_RPC_for_7000\\TCPFighter_with_RPC_for_7000\\main.cpp",
->>>>>>> Stashed changes
+  "SelectedNode": "\\Library\\Ring_Buffer\\Ring_Buffer\\main.cpp",
   "PreviewInSolutionExplorer": false
 }

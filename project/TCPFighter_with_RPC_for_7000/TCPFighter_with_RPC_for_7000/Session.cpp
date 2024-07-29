@@ -4,32 +4,62 @@
 #include <Windows.h>
 #include <WS2tcpip.h>
 #pragma comment (lib, "Ws2_32.lib")
+#include <queue>
 #include <unordered_map>
 #include "LOG.h"
 #include "Protocol.h"
 #include "C_Ring_Buffer.h"
 #include "SerializeBuffer.h"
+#include "Disconnect.h"
 #include "main.h"
 #include "Protocol.h"
-#include "Proxy.h"
 #include "Session.h"
 #include "Define.h"
 #include "Player.h"
 #include "Field.h"
 
-using namespace OreoPizza;
-
+constexpr int dfMAX_SESSION = 8000;
 constexpr int dfNETWORK_PORT = 20000;
+//constexpr int dfNETWORK_PORT = 12994;
 
 std::unordered_map< DWORD, st_SESSION*> g_Session_Hash;
 WSADATA g_WsaData;
-SerializeBuffer g_SerializeBuffer;
 SOCKET g_Listen_Socket;
-DWORD g_SessionID;
+//DWORD g_SessionID;
+std::queue<DWORD> g_SessionID_Q;
+
+st_SESSION* FindSession(DWORD dwSessionID)
+{
+	return g_Session_Hash.find(dwSessionID)->second;
+}
+
+void SetSession(void)
+{
+	int iCnt;
+
+	for (iCnt = 0; iCnt < dfMAX_SESSION; ++iCnt)
+	{
+		g_SessionID_Q.push(iCnt);
+	}
+}
+
+void DeleteSession(DWORD dwSessionID)
+{
+	st_SESSION* pSession;
+	std::unordered_map<DWORD, st_SESSION*>::iterator iter;
+
+	iter = g_Session_Hash.find(dwSessionID);
+	pSession = iter->second;
+
+	delete pSession;
+	g_Session_Hash.erase(iter);
+
+	g_SessionID_Q.push(dwSessionID);
+}
 
 void netStartUp(void)
 {
-	g_SessionID = 0;
+	// g_SessionID = 0;
 
 	struct addrinfo hints;
 	struct addrinfo* result = NULL;
@@ -61,7 +91,7 @@ void netStartUp(void)
 		_LOG(0, L"WSAStartup failed with error: %d", Ret_WSAStartup);
 		__debugbreak();
 	}
-	_LOG(0, L"WSAStartup # \n");
+	_LOG(0, L"WSAStartup # ");
 
 	//---------------------------------------------------
 	// SetUp hints 
@@ -143,7 +173,8 @@ void netStartUp(void)
 		WSACleanup();
 		__debugbreak();
 	}
-	wprintf_s(L"Listen OK # \n");
+	_LOG(0, L"Listen OK # ");
+
 
 	//---------------------------------------------------
 	// 넌블로킹 소켓으로 전환
@@ -209,7 +240,8 @@ void netIOProcess(void)
 	// _Session 전부를 Select에 등록하면 while문을 종료한다. 
 	// 
 	//--------------------------------------------------------------------------------------------------------------------
-	while (iter != g_Session_Hash.end())
+	do
+	//while (iter != g_Session_Hash.end())
 	{
 		FD_ZERO(&ReadSet);
 		FD_ZERO(&WriteSet);
@@ -227,8 +259,6 @@ void netIOProcess(void)
 		for (iCnt = 0; iCnt < 64 - 1 && iter != g_Session_Hash.end(); ++iter, ++iCnt)
 		{
 			st_pSession = iter->second;
-
-			if (st_pSession->Disconnect) continue;
 
 			//------------------------------------------
 			// 해당 클라이언트 Read Set 등록 / SendQ 에 데이터가 있다면 Write Set 등록
@@ -286,7 +316,9 @@ void netIOProcess(void)
 				}
 			}
 		}
-	}
+	} while (iter != g_Session_Hash.end());
+
+	Disconnect();
 }
 
 void netProc_Accept(void)
@@ -302,15 +334,15 @@ void netProc_Accept(void)
 	SOCKET New_Client_Socket;
 	sockaddr_in Clinet_Addr;
 
-	st_PACKET_HEADER st_New_Header_MY_CHAPACTER;
-
-	st_PACKET_HEADER st_New_Header_OTHER_CHAPACTER;
-	SerializeBuffer New_Packet_OTHER_CHAPACTER;
 	st_SECTOR_AROUND st_Sector_Around;
 
 	st_SESSION* st_p_New_Session;
-	st_Player* st_p_New_Player;
+	st_PLAYER* st_p_New_Player;
+
+	DWORD SessionID;
 	int Client_Addr_Len;
+
+	char host[NI_MAXHOST];
 
 	Client_Addr_Len = sizeof(Clinet_Addr);
 	New_Client_Socket = accept(g_Listen_Socket, (sockaddr*)&Clinet_Addr, &Client_Addr_Len);
@@ -336,7 +368,7 @@ void netProc_Accept(void)
 
 
 	// 접속자 인원수 제한. 순간적인 피크를 포함하여 약 8000명으로 가정한다. 
-	if (g_Session_Hash.size() > 8000)
+	if (g_Session_Hash.size() > dfMAX_SESSION)
 	{
 		_LOG(2, L"Full Server cannot accept!!! \n");
 		closesocket(New_Client_Socket);
@@ -352,30 +384,26 @@ void netProc_Accept(void)
 	// 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 1.
-	st_p_New_Session = new st_SESSION(New_Client_Socket, ++g_SessionID);
-	g_Session_Hash.insert({ g_SessionID, st_p_New_Session });
+	SessionID = g_SessionID_Q.front();
+	g_SessionID_Q.pop();
+	st_p_New_Session = new st_SESSION(New_Client_Socket, SessionID);
+	g_Session_Hash.insert({ SessionID, st_p_New_Session });
 	// 2.
-	st_p_New_Player = CreateNewPlayer(g_SessionID, st_p_New_Session);
+	st_p_New_Player = CreateNewPlayer(SessionID, st_p_New_Session);
 	// 3.
-	st_New_Header_MY_CHAPACTER.byCode = (char)dfPACKET_CODE;
-	st_New_Header_MY_CHAPACTER.bySize = 10;
-	st_New_Header_MY_CHAPACTER.byType = dfPACKET_SC_CREATE_MY_CHARACTER;
-	g_Packet.PutData((char*)&st_New_Header_MY_CHAPACTER, sizeof(st_PACKET_HEADER));
-	g_Packet << g_SessionID << st_p_New_Player->_byDirection << st_p_New_Player->_X << st_p_New_Player->_Y << st_p_New_Player->_HP;
+
+	mpCreateMyCharacter(&g_Packet, SessionID, st_p_New_Player->_byDirection, st_p_New_Player->_X, st_p_New_Player->_Y, st_p_New_Player->_HP);
 	SendPacket_Unicast(st_p_New_Session, &g_Packet);
 	g_Packet.Clear();
 	// 4.
-	st_New_Header_OTHER_CHAPACTER.byCode = (char)dfPACKET_CODE;
-	st_New_Header_OTHER_CHAPACTER.bySize = 10;
-	st_New_Header_OTHER_CHAPACTER.byType = dfPACKET_SC_CREATE_OTHER_CHARACTER;
-	g_Packet.PutData((char*)&st_New_Header_OTHER_CHAPACTER, sizeof(st_PACKET_HEADER));
-	g_Packet << g_SessionID << st_p_New_Player->_byDirection << st_p_New_Player->_X << st_p_New_Player->_Y << st_p_New_Player->_HP;
+	mpCreateOtherCharacter(&g_Packet, SessionID, st_p_New_Player->_byDirection, st_p_New_Player->_X, st_p_New_Player->_Y, st_p_New_Player->_HP);
 	C_Field::GetInstance()->GetSectorAround(st_p_New_Player->_CurSector->iX, st_p_New_Player->_CurSector->iY, &st_Sector_Around);
-	SendPacket_Around(st_p_New_Session, &New_Packet_OTHER_CHAPACTER, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around(st_p_New_Session, &g_Packet, &st_Sector_Around);
+	g_Packet.Clear();
 	// 5. 
 
-
-
+	inet_ntop(AF_INET, &Clinet_Addr.sin_addr, host, NI_MAXHOST);
+	_c_LOG(1, "Conncet # IP:%s : Port: %d / SessionID: %d", host, ntohs(Clinet_Addr.sin_port), SessionID);
 }
 
 int netProc_Recv(st_SESSION* pSession)
@@ -394,10 +422,12 @@ int netProc_Recv(st_SESSION* pSession)
 	if (i_ret_Recv_Size == 0)
 	{
 		// 아마도 상대방의 연결 종료
-		_LOG(0, L"Disconnect recv 0 # SessionID: %d", pSession->dwSessionID);
+		_LOG(1, L"Disconnect recv 0 # SessionID: %d", pSession->dwSessionID);
 
 		// 연결 끊기
 		//
+		enqueueForDeletion(pSession->dwSessionID);
+
 		return -1;
 	}
 	else if (i_ret_Recv_Size == SOCKET_ERROR)
@@ -420,10 +450,11 @@ int netProc_Recv(st_SESSION* pSession)
 		else if (i_ret_WSAError == 10054)
 		{
 			// 상대방이 강제로 연결을 끊었다. 
-			_LOG(1, L"Disconnect Recv % d # SessionID: % d \n", i_ret_WSAError, pSession->dwSessionID);
+			_LOG(1, L"Disconnect Recv %d # SessionID: %d \n", i_ret_WSAError, pSession->dwSessionID);
 
 			// 연결 끊기
 			//
+			enqueueForDeletion(pSession->dwSessionID);
 
 			return -1;
 		}
@@ -435,6 +466,7 @@ int netProc_Recv(st_SESSION* pSession)
 
 			// 연결 끊기
 			//
+			enqueueForDeletion(pSession->dwSessionID);
 
 			return -1;
 		}
@@ -469,12 +501,14 @@ int netProc_Recv(st_SESSION* pSession)
 		ret_Peek = pSession->RecvQ->Peek((char*)&st_Header, sizeof(st_PACKET_HEADER), true);
 
 		// 기저 사례2. st_Header에서 byCode를 확인한다. 다르면 연결 끊기
-		if (st_Header.byCode != dfPACKET_CODE)
+		if (st_Header.byCode != (char)dfPACKET_CODE)
 		{
 			_LOG(1, L"Header code Error # SessionID: %d", pSession->dwSessionID);
 
 			// 연결 끊기
 			//
+			enqueueForDeletion(pSession->dwSessionID);
+
 			return -1;
 		}
 
@@ -490,48 +524,82 @@ int netProc_Recv(st_SESSION* pSession)
 		// 메시지 완성됨 -> 꺼내서 처리한다. 
 		//---------------------------------------------------
 		pSession->RecvQ->MoveFront(sizeof(st_PACKET_HEADER));
-		ret_Dq_Size = pSession->RecvQ->Dequeue(g_SerializeBuffer.GetBufferPtr(), st_Header.bySize);
+		ret_Dq_Size = pSession->RecvQ->Dequeue(g_Packet.GetBufferPtr(), st_Header.bySize);
 		
-		if (!PacketProc(pSession, st_Header.byType, &g_SerializeBuffer))
+		if (!PacketProc(pSession, st_Header.byType, &g_Packet))
 		{
+			enqueueForDeletion(pSession->dwSessionID);
+			g_Packet.Clear();
 			return -1;
 		}
 
+		g_Packet.Clear();
 		return 0;
 	}
 }
 
 void netProc_Send(st_SESSION* pSession)
 {
+	// Send의 경우 한번에 링버퍼에 있는 모든 메시지를 전송하면 된다.
 
+	int Send_Size;
+	int i_Error;
+
+	while (1)
+	{
+		if (pSession->SendQ->GetUseSize() == 0)
+			break;
+
+		Send_Size = send(pSession->Socket, pSession->SendQ->GetFrontBufferPtr(), (int)(pSession->SendQ->DirectDequeueSize()), 0);
+
+		if (Send_Size == SOCKET_ERROR)
+		{
+			i_Error = WSAGetLastError();
+
+			if (i_Error == WSAEWOULDBLOCK)
+			{
+				// Send 할 때 WSAEWOULDBLOCK이 나온다면, 다음 프레임에 데이터를 보낸다. 
+				continue;
+			}
+			else if (i_Error == 10054)
+			{
+				_LOG(1, L"Send failed with error: %ld / SessionID:%d \n", i_Error, pSession->dwSessionID);
+				enqueueForDeletion(pSession->dwSessionID);
+				break;
+			}
+			else if (i_Error == 10053)
+			{
+				_LOG(1, L"Send failed with error: %ld / SessionID:%d \n", i_Error, pSession->dwSessionID);
+				enqueueForDeletion(pSession->dwSessionID);
+				break;
+			}
+			else
+			{
+				_LOG(0, L"Send failed with error: %ld / SessionID:%d \n", i_Error, pSession->dwSessionID);
+				enqueueForDeletion(pSession->dwSessionID);
+				__debugbreak();
+			}
+		}
+
+		pSession->SendQ->MoveFront(Send_Size);
+	}
 }
 
-void SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* pPacket, st_SESSION* pExceptSession)
-{
-}
-
+//----------------------------------------------------------------
+// 특정 1명의 클라이언트 에게 메시지 보내기
 void SendPacket_Unicast(st_SESSION* pSession, SerializeBuffer* pPacket)
 {
+	size_t ret_EnQ_Size;
 
-}
+	ret_EnQ_Size = pSession->SendQ->Enqueue(pPacket->GetBufferPtr(), pPacket->GetDataSize());
 
-void SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around, bool bSendMe )
-{
-	int iCnt;
-
-	if (bSendMe == false)
+	if (ret_EnQ_Size == 0)
 	{
-		for (iCnt = 0; iCnt < pSector_Around->iCount; ++iCnt)
-		{
-			SendPacket_SectorOne(pSector_Around->Around[iCnt].iX, pSector_Around->Around[iCnt].iY, pPacket, pSession);
-		}
-	}
-	else
-	{
-		for (iCnt = 0; iCnt < pSector_Around->iCount; ++iCnt)
-		{
-			SendPacket_SectorOne(pSector_Around->Around[iCnt].iX, pSector_Around->Around[iCnt].iY, pPacket, NULL);
-		}
+		// SendQ 가득참 => SendBuff 가득참 => 클라이언트 RecvBuff 가득참 == 연결을 끊는다.
+
+		_LOG(1, L"Disconnect Packet Unicast failed with error # SessionID: %d \n", pSession->dwSessionID);
+		enqueueForDeletion(pSession->dwSessionID);
+		return;
 	}
 }
 
@@ -559,12 +627,13 @@ bool PacketProc(st_SESSION* pSession, unsigned char byPacketType, SerializeBuffe
 
 	return true;
 }
+
 bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket)
 {
 	char byDirection;
 	short shX;
 	short shY;
-	st_Player* pPlayer;
+	st_PLAYER* pPlayer;
 	st_SECTOR_AROUND st_Sector_Around;
 
 	*pPacket >> byDirection;
@@ -597,7 +666,7 @@ bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket)
 	{
 		mpSync(pPacket, pPlayer->_SessionID, pPlayer->_X, pPlayer->_Y);
 		C_Field::GetInstance()->GetSectorAround(pPlayer->_CurSector->iX, pPlayer->_CurSector->iY, &st_Sector_Around);
-		SendPacket_Around(pSession, pPacket, &st_Sector_Around, true);
+		C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around, true);
 
 		shX = pPlayer->_X;
 		shY = pPlayer->_Y;
@@ -661,11 +730,12 @@ bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket)
 	// 현재 접속주인 사용자에게 모든 패킷을 뿌린다. (섹터 단위 패킷 전송 함수)
 	//---------------------------------------------------------------------------------------------------------------
 	C_Field::GetInstance()->GetSectorAround(pPlayer->_CurSector->iX, pPlayer->_CurSector->iY, &st_Sector_Around);
-	SendPacket_Around(pSession, pPacket, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around);
 	pPacket->Clear();
 
 	return true;
 }
+
 bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket)
 {
 	return false;
@@ -710,6 +780,30 @@ void mpMoveStart(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, 
 	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
 	(*pPacket) << dwSessionID << shX << shY;
 }
+void mpCreateMyCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP)
+{
+	st_PACKET_HEADER New_Header;
+
+	New_Header.byCode = (char)dfPACKET_CODE;
+	New_Header.bySize = 10;
+	New_Header.byType = (char)dfPACKET_SC_CREATE_MY_CHARACTER;
+
+	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
+
+	(*pPacket) << dwSessionID << byDirection << shX << shY << HP;
+}
+void mpCreateOtherCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP)
+{
+	st_PACKET_HEADER New_Header;
+
+	New_Header.byCode = (char)dfPACKET_CODE;
+	New_Header.bySize = 10;
+	New_Header.byType = (char)dfPACKET_SC_CREATE_OTHER_CHARACTER;
+
+	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
+
+	(*pPacket) << dwSessionID << byDirection << shX << shY << HP;
+}
 
 
 
@@ -724,9 +818,7 @@ void mpMoveStart(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, 
 
 
 
-
-
-C_Session C_Session::_C_Session;
+//C_Session C_Session::_C_Session;
 
 st_SESSION::st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID)
 {
@@ -743,7 +835,8 @@ st_SESSION::st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID)
 
 C_Session* C_Session::GetInstance(void)
 {
-    return &_C_Session;
+    //return &_C_Session;
+	return NULL;
 }
 
 void ForwardDecl(int DestID, SerializeBuffer* sb)
@@ -752,6 +845,8 @@ void ForwardDecl(int DestID, SerializeBuffer* sb)
 
 	C_Session::GetInstance()->SendPacket_Unicast(pSession, sb);
 }
+
+
 
 
 
@@ -876,7 +971,7 @@ void C_Session::netProc_Accept(void)
 	st_SECTOR_AROUND st_Sector_Around;
 
 	st_SESSION* st_p_New_Session;
-	st_Player* st_p_New_Player;
+	st_PLAYER* st_p_New_Player;
 	int Client_Addr_Len;
 
 	Client_Addr_Len = sizeof(Clinet_Addr);
@@ -1003,29 +1098,29 @@ void C_Session::netProc_Recv(st_SESSION* pSession)
 
 void C_Session::SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* pPacket, st_SESSION* pExceptSession)
 {
-	std::list<st_Player*> *pTemp_Player_List;
-	std::list<st_Player*>::iterator iter;
+	//std::list<st_PLAYER*> *pTemp_Player_List;
+	//std::list<st_PLAYER*>::iterator iter;
 
 	//if(iSectorX< dfRANGE_MOVE_LEFT || dfRANGE_MO)
 
-	pTemp_Player_List = C_Field::GetInstance()->_Sector[iSectorY][iSectorX];
+	//pTemp_Player_List = C_Field::GetInstance()->_Sector[iSectorY][iSectorX];
 
-	if (pExceptSession == NULL)
-	{
-		for (iter = pTemp_Player_List->begin(); iter != pTemp_Player_List->end(); ++iter)
-		{
-			SendPacket_Unicast((*iter)->_pSession, pPacket);
-		}
-	}
-	else
-	{
-		for (iter = pTemp_Player_List->begin(); iter != pTemp_Player_List->end(); ++iter)
-		{
-			if (pExceptSession == (*iter)->_pSession)
-				continue;
-			SendPacket_Unicast((*iter)->_pSession, pPacket);
-		}
-	}
+	//if (pExceptSession == NULL)
+	//{
+	//	for (iter = pTemp_Player_List->begin(); iter != pTemp_Player_List->end(); ++iter)
+	//	{
+	//		SendPacket_Unicast((*iter)->_pSession, pPacket);
+	//	}
+	//}
+	//else
+	//{
+	//	for (iter = pTemp_Player_List->begin(); iter != pTemp_Player_List->end(); ++iter)
+	//	{
+	//		if (pExceptSession == (*iter)->_pSession)
+	//			continue;
+	//		SendPacket_Unicast((*iter)->_pSession, pPacket);
+	//	}
+	//}
 }
 
 void C_Session::SendPacket_Unicast(st_SESSION* pSession, SerializeBuffer* pPacket)
@@ -1092,7 +1187,7 @@ bool C_Session::netPacketProc_MoveStart(st_SESSION* pSession, SerializeBuffer* p
 	char byDirection;
 	short X;
 	short Y;
-	st_Player* pPlayer;
+	st_PLAYER* pPlayer;
 	st_PACKET_HEADER New_Header;
 	st_SECTOR_AROUND st_Sector_Around;
 

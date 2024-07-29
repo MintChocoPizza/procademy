@@ -11,8 +11,8 @@
 #pragma comment (lib, "Ws2_32.lib")
 
 #define DEFAULT_IP "127.0.0.1"
-#define DEFAULT_PORT "59812"
-#define DEFAULT_BUFF_LEN 512
+#define DEFAULT_PORT "9000"
+#define DEFAULT_BUFF_LEN 25
 
 // 사용자 정의 데이터 수신 함수
 int recvn(SOCKET s, char* buf, int len, int fags);

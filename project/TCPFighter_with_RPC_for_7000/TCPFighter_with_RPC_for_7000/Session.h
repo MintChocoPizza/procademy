@@ -71,8 +71,6 @@ public:
 
 
 
-	void Disconnect(void);
-
 private:
 	C_Session(void);
 	~C_Session(void);
@@ -96,9 +94,13 @@ public:
 
 };
 
-extern SerializeBuffer g_SerializeBuffer;
-
 void ForwardDecl(int DestID, SerializeBuffer* sb);
+
+void SetSession(void);
+
+st_SESSION* FindSession(DWORD dwSessionID);
+void DeleteSession(DWORD dwSessionID);
+
 void netStartUp(void);
 void netCleanUp(void);
 void netIOProcess(void);
@@ -106,9 +108,7 @@ void netProc_Accept(void);
 int netProc_Recv(st_SESSION* pSession);
 void netProc_Send(st_SESSION* pSession);
 
-void SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* pPacket, st_SESSION* pExceptSession);
 void SendPacket_Unicast(st_SESSION* pSession, SerializeBuffer* pPacket);
-void SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around, bool bSendMe = false);
 
 bool PacketProc(st_SESSION* pSession, unsigned char byPacketType, SerializeBuffer* pPacket);
 bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket);
@@ -119,4 +119,8 @@ bool netPacketProc_Attack3(st_SESSION* pSession, SerializeBuffer* pPacket);
 
 void mpSync(SerializeBuffer* pPacket, DWORD dwSessionID, short shX, short shY);
 void mpMoveStart(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY);
+void mpCreateMyCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP);
+void mpCreateOtherCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP);
+
+
 #endif // !__SESSION_H__

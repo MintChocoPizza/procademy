@@ -18,7 +18,7 @@
 #define SRW_LOCK					2
 #define SPIN_LOCK					3
 
-#define SYNCHRONIZATON_OBJECT		0
+#define SYNCHRONIZATON_OBJECT		1
 
 constexpr int MAX_CNT = 10;
 constexpr int TEST_CNT = 10000;

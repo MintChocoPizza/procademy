@@ -135,14 +135,13 @@
   <ItemGroup>
     <ClCompile Include="Contents.cpp" />
     <ClCompile Include="C_Ring_Buffer.cpp" />
+    <ClCompile Include="Disconnect.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="LOG.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Proxy.cpp" />
     <ClCompile Include="SerializeBuffer.cpp" />
     <ClCompile Include="Session.cpp" />
-    <ClCompile Include="Stub.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Contents.h" />
@@ -154,11 +153,9 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Protocol.h" />
-    <ClInclude Include="Proxy.h" />
     <ClInclude Include="SerializeBuffer.h" />
     <ClInclude Include="Session.h" />
     <ClInclude Include="Set_Log.h" />
-    <ClInclude Include="Stub.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

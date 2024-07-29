@@ -4,7 +4,7 @@
 
 struct st_SECTOR_POS;
 
-struct st_Player
+struct st_PLAYER
 {
 	st_SESSION* _pSession;
 	DWORD		_SessionID;
@@ -25,16 +25,17 @@ struct st_Player
 	st_SECTOR_POS* _CurSector;
 	st_SECTOR_POS* _OldSector;
 
-	st_Player(DWORD SessionID, st_SESSION* pSession);
-	~st_Player();
+	st_PLAYER(DWORD SessionID, st_SESSION* pSession);
+	~st_PLAYER();
 };
 
 // Key: SessionID, Value: st_Player*
-extern std::unordered_map< DWORD, st_Player*>	g_CharacterHash;
+extern std::unordered_map< DWORD, st_PLAYER*>	g_CharacterHash;
 
 void ClearCharacterHash(void);
-st_Player* FindCharacter(DWORD dwSessionID);
-st_Player* CreateNewPlayer(DWORD SessionID, st_SESSION* st_p_New_Session);
+st_PLAYER* FindCharacter(DWORD dwSessionID);
+st_PLAYER* CreateNewPlayer(DWORD SessionID, st_SESSION* st_p_New_Session);
+void DeleteCharacter(DWORD dwSessionID);
 
 
 

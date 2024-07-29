@@ -43,6 +43,7 @@ bool g_bShutdown = false;
 //---------------------------------
 SerializeBuffer g_Packet;
 
+void LoadData(void);
 void ServerControl(void);
 void Monitor(void);
 
@@ -54,12 +55,13 @@ int wmain(int argc, wchar_t* argv[])
     // 초기 시간을 세팅한다.
     g_Start_Time = timeGetTime();
 
-    // LoadData();                          // 설정 및 게임데이터, DB 데이터 로딩
+    LoadData();                          // 설정 및 게임데이터, DB 데이터 로딩
     netStartUp();                           // 네트워크 초기화, 리슨소켓 새엇ㅇ 및 listen  But Sesstion Class 의 싱글톤 생성자가 역할을 당담한다.
 
     while (!g_bShutdown)                               // 서버 메인 루프, 전역의 g_bShutdown 값에 의해 종료 결정   
     {
         // 네트워크 처리 함수()             // 네트워크 송수신 처리
+        netIOProcess();
 
         // 업데이트는 게임의 로직 (월드, 캐릭터, 몬스터, 이벤트 등...)
         // 실제 게임에서 돌아가야 하는 로직을 처리 한다. 
@@ -83,7 +85,10 @@ int wmain(int argc, wchar_t* argv[])
 }
 
 
-
+void LoadData(void)
+{
+    SetSession();
+}
 //void netCleanUp(void)
 //{
 //    atexit(ClearCharacterHash);

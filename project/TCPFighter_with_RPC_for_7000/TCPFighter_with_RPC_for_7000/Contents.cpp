@@ -7,17 +7,18 @@
 #include "Contents.h"
 #include "Define.h"
 #include "SerializeBuffer.h"
+#include "Disconnect.h"
 #include "main.h"
 #include "Protocol.h"
 #include "C_Ring_Buffer.h"
-#include "Field.h"
 #include "Session.h"
+#include "Field.h"
 #include "Player.h"
 
 void Update(void)
 {
-	st_Player* st_p_Player;
-	std::unordered_map<DWORD, st_Player*>::iterator iter;
+	st_PLAYER* st_p_Player;
+	std::unordered_map<DWORD, st_PLAYER*>::iterator iter;
 	DWORD dwCurrentTick;
 
 	/////////////////////////////////////////////////////////////////////////
@@ -41,19 +42,20 @@ void Update(void)
 		st_p_Player = iter->second;
 		iter++;
 
-		if (st_p_Player->_Disconnect == true) continue;
 
 		if (0 >= st_p_Player->_HP)
 		{
 			// 사망처리
+			enqueueForDeletion(st_p_Player->_SessionID);
 			continue;
 		}
 
 		// 일정 시간동안 수신이 없으면 종료 처리
-		if (dwCurrentTick - st_p_Player->_pSession->dwLastRecvTime > dfNETWORK_PACKET_RECV_TIMEOUT)
-		{
-			continue;
-		}
+		//if (dwCurrentTick - st_p_Player->_pSession->dwLastRecvTime > dfNETWORK_PACKET_RECV_TIMEOUT)
+		//{
+		//	enqueueForDeletion(st_p_Player->_SessionID);
+		//	continue;
+		//}
 
 		//--------------------------------------------------------------------------------------
 		// 현재 동작에 따른 처리

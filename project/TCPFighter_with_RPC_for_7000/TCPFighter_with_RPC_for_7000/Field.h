@@ -24,8 +24,9 @@ extern int dX[];
 #define dfSECTOR_MAX_Y dfRANGE_MOVE_BOTTOM / dfGRID_Y_SIZE
 #define dfSECTOR_MAX_X dfRANGE_MOVE_RIGHT  / dfGRID_X_SIZE
 
+struct st_SECTOR_POS;
 struct st_SECTOR_AROUND;
-struct st_Player;
+struct st_PLAYER;
 
 class C_Field
 {
@@ -49,14 +50,28 @@ public:
 
 	//---------------------------------------------------------------------------------------------
 	// 캐릭터가 섹터를 이동 한 뒤에 영향권에서 빠진 섹터, 새로 추가된 섹터의 정보 구하는 함수
-	void GetUpdateSectorAround(st_Player* pCharacter, st_SECTOR_AROUND* pRemoveSector, st_SECTOR_AROUND* pAddSector);
+	void GetUpdateSectorAround(st_PLAYER* pCharacter, st_SECTOR_AROUND* pRemoveSector, st_SECTOR_AROUND* pAddSector);
 
 	//---------------------------------------------------------------------------------------------
 	// 섹터가 변경된 것을 확인한다.
-	bool Sector_UpdateCharacter(st_Player* pPlayer);
+	bool Sector_UpdateCharacter(st_PLAYER* pPlayer);
+
 	//---------------------------------------------------------------------------------------------
 	// 변경된 섹터에 대해서 메시지를 보낸다. 
-	void CharacterSectorUpdatePacket(st_Player* pPlayer);
+	void CharacterSectorUpdatePacket(st_PLAYER* pPlayer);
+
+	//---------------------------------------------------------------------------------------------
+	// 
+	void removeUserFromSector(DWORD dwSessionID, st_SECTOR_POS* pSector_Pos);
+
+	//---------------------------------------------------------------------------------------------
+	// 특정 섹터 1개에 있는 클라이언트들 에게 메시지 보내기,
+	// 마지막 매개변수 세션을 제외하고
+	void SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* pPacket, st_SESSION* pExceptSession);
+
+	//----------------------------------------------------------------
+	// 클라이언트 기준 주변 섹터에 메시지 보내기 (최대 9개 영역)
+	void SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around, bool bSendMe = false);
 
 
 private:
@@ -70,8 +85,11 @@ public:
 	// Key: <GridY, GridX>, Value: SessionID
 	// std::unordered_multimap<std::pair<int, int>, DWORD> _Grid;
 	// 그냥 동적할당 배열을 사용하여 섹터당 유저들을 저장한다. 
-	std::list<st_Player*>*** _Sector;
-	std::list<st_Player*> g_Sector[dfSECTOR_MAX_Y][dfSECTOR_MAX_X];
+	//std::list<st_PLAYER*>*** _Sector;
+	//std::list<st_PLAYER*> g_Sector_List[dfSECTOR_MAX_Y][dfSECTOR_MAX_X];
+
+	// 삭제할 때, 순회하기 싫어서 해쉬 사용
+	std::unordered_map<DWORD, st_PLAYER*> g_Sector_Hash[dfSECTOR_MAX_Y][dfSECTOR_MAX_X];
 
 	int _Sector_Max_Y;
 	int _Sector_Max_X;
@@ -84,15 +102,17 @@ struct st_SECTOR_POS
 	int iX;
 	int iY;
 
-	st_SECTOR_POS();
-	st_SECTOR_POS(int X, int Y);
-
+	//st_SECTOR_POS();
+	//st_SECTOR_POS(int X, int Y);
+	//----------------------------------------------------------------
+	// st_SECTOR_POS 초기화
+	void Init_SECTOR_POS(int Y, int X);
 };
 
 struct st_SECTOR_AROUND
 {
 	int iCount;
 	st_SECTOR_POS Around[9];
-	st_SECTOR_AROUND();
 };
+
 
