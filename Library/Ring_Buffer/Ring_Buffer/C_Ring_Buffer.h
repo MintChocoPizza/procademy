@@ -57,15 +57,29 @@ public:
 	/////////////////////////////////////////////////////////////////////////
 	size_t	GetUseSize(void) 
 	{
-		if (_In - _Out >= 0)
+		// unsigned 변수를 - 연산 함부로 하면 안된다.
+		if (_In >= _Out)
 		{
 			return _In - _Out;
 		}
 		else
 		{
-			return _Full_Size - (_In - _Out);
+			return _Full_Size - (_Out - _In);
 		}
 	}
+private:
+	size_t	GetUseSize(size_t In, size_t Out)
+	{
+		if (In >= Out)
+		{
+			return In - Out;
+		}
+		else
+		{
+			return _Full_Size - (Out - In);
+		}
+	}
+public:
 
 	/////////////////////////////////////////////////////////////////////////
 	// 현재 버퍼에 남은 용량 얻기. 
@@ -73,7 +87,14 @@ public:
 	// Parameters: 없음.
 	// Return: (int)남은용량.
 	/////////////////////////////////////////////////////////////////////////
-	size_t	GetFreeSize(void) { return _Full_Size - GetUseSize(); }
+	size_t	GetFreeSize(void) 
+	{
+		return _Full_Size - GetUseSize();
+
+		size_t i = _Full_Size - GetUseSize(_In, _Out);
+
+		return i;
+	}
 
 	/////////////////////////////////////////////////////////////////////////
 	// WritePos 에 데이타 넣음.

@@ -1,8 +1,7 @@
 
 #include <string.h>
 
-#define MULT_DEBUG 0
-#define SINGLE_DEBUG 1
+#define MULT_DEBUG 1
 
 #if MULT_DEBUG == 1
 #include <Windows.h>
@@ -14,20 +13,23 @@
 
 LONG g_Flag	= INIT;
 size_t Debug_Enqueue_Full_Size;
-size_t Debug_Enqueue_UseSize;
 size_t Debug_Enqueue_In;
 size_t Debug_Enqueue_Out;
+size_t Debug_Enqueue_iSize;
+char* Debug_Enqueue_Data;
 
 
 size_t Debug_Dequeue_Full_Size;
-size_t Debug_Dequeue_Use_Size;
 size_t Debug_Dequeue_In;
 size_t Debug_Dequeue_Out;
+size_t Debug_Dequeue_iSize;
+char* Debug_Dequeue_Data;
+
 #endif
-#if SINGLE_DEBUG == 1
-	size_t g_Temp_In;
-	size_t g_Temp_Out;
-#endif
+
+
+
+
 
 #include "C_Ring_Buffer.h"
 
@@ -64,10 +66,13 @@ C_RING_BUFFER::~C_RING_BUFFER()
 size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 {
 #if MULT_DEBUG == 1
+	free(Debug_Dequeue_Data);
 	Debug_Enqueue_Full_Size = _Full_Size;
-	Debug_Enqueue_UseSize = _Use_Size;
 	Debug_Enqueue_In = _In;
 	Debug_Enqueue_Out = _Out;
+	Debug_Enqueue_iSize = iSize;
+	Debug_Enqueue_Data = (char*)malloc(iSize);
+	memcpy(Debug_Enqueue_Data, pData, iSize);
 #endif
 
 	size_t Data_Chunk_Size;
@@ -98,10 +103,6 @@ size_t C_RING_BUFFER::Enqueue(const char* pData, size_t iSize)
 	}
 
 
-#if SINGLE_DEBUG == 1
-	g_Temp_In = _In;
-	g_Temp_Out = _Out;
-#endif
 
 	// _In = (char*)(((uintptr_t)Temp_In + iSize) % (uintptr_t)_Buffer_End);
 	_In = (Temp_In + iSize) % Temp_Full_Size;
@@ -121,11 +122,15 @@ size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 {
 #if MULT_DEBUG == 1
 	Debug_Dequeue_Full_Size = _Full_Size;
-	Debug_Dequeue_Use_Size = _Use_Size;
 	Debug_Dequeue_In = _In;
 	Debug_Dequeue_Out = _Out;
+	Debug_Dequeue_iSize = iSize;
+	Debug_Dequeue_Data = (char*)malloc(iSize);
+
 
 #endif
+
+
 
 	size_t Data_Chunk_Size;
 	size_t Temp_Use_Size = GetUseSize();
@@ -150,10 +155,6 @@ size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 			memcpy(chpDest + Data_Chunk_Size, _Buffer, iSize - Data_Chunk_Size);
 		}
 
-#if SINGLE_DEBUG == 1
-		g_Temp_In = _In;
-		g_Temp_Out = _Out;
-#endif
 
 		_Out = (Temp_Out + iSize) % _Full_Size;
 
@@ -173,10 +174,6 @@ size_t C_RING_BUFFER::Dequeue(char* chpDest, size_t iSize)
 			memcpy(chpDest + Data_Chunk_Size, _Buffer, Temp_Use_Size - Data_Chunk_Size);
 		}
 
-#if SINGLE_DEBUG == 1
-		g_Temp_In = _In;
-		g_Temp_Out = _Out;
-#endif
 
 		//_Out = (Temp_Out + Temp_Use_Size) % _Full_Size;
 		_Out = _In;

@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\Library",
-    "\\Library\\Ring_Buffer"
+    "\\Library\\Ring_Buffer",
+    "\\Library\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\Library\\Ring_Buffer\\Ring_Buffer.sln",
+  "SelectedNode": "\\Library\\Ring_Buffer\\Ring_Buffer\\C_Ring_Buffer.h",
   "PreviewInSolutionExplorer": false
 }

@@ -21,10 +21,22 @@ char OSJ_testString[] = "@234567890123456789012345678901234567890123456789012345
 
 
 #if OSJ_SINGLE_DEBUG == 1
-extern size_t g_Temp_In;
-extern size_t g_Temp_Out;
+
 size_t g_Cnt = 0;
 char g_TemptestString[] = "@234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345*!";
+
+extern size_t Debug_Enqueue_Full_Size;
+extern  size_t Debug_Enqueue_In;
+extern size_t Debug_Enqueue_Out;
+extern size_t Debug_Enqueue_iSize;
+extern char* Debug_Enqueue_Data;
+
+
+extern size_t Debug_Dequeue_Full_Size;
+extern size_t Debug_Dequeue_In;
+extern size_t Debug_Dequeue_Out;
+extern size_t Debug_Dequeue_iSize;
+extern char* Debug_Dequeue_Data;
 
 #endif // OSJ_SINGLE_DEBUG == 1
 
