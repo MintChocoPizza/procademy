@@ -2,6 +2,9 @@
 #ifndef __C_RING_BUFFER_H__
 #define __C_RING_BUFFER_H__
 
+
+
+
 // TMI: 클래스 포인터 멤버 변수 -> 지역변수에 저장하여 접근하는 방식 
 //	직접 접근: 매 순간 어셈블리 2줄 + 값 저장하는 1줄 == 총 3줄 
 //	지역 변수: 지역 변수에 저장 3줄 + 값 저장하는 1줄 == 총 4줄 
@@ -133,6 +136,16 @@ public:
 
 
 
+	size_t	DirectEnqueueSize(void);
+
+	size_t	DirectDequeueSize(void);
+
+	size_t	MoveIn(size_t iSize);
+	size_t	MoveOut(size_t iSize);
+	char* GetOutBufferPtr(void);
+	char* GetInBufferPtr(void);
+
+	char* GetBeginBufferPtr(void);
 
 
 	/////////////////////////////////////////////////////////////////////////
@@ -151,88 +164,104 @@ public:
 	// Parameters: 없음.
 	// Return: (int)사용가능 용량.
 	////////////////////////////////////////////////////////////////////////
-	size_t	DirectEnqueueSize(void)
-	{
-		size_t Full_Size = _Full_Size;
-		size_t In = _In;
-		size_t Out = _Out;
-		// Enqueue의 경우 _In 바로 다음이 _Out인 경우 꽉 찬 경우이다. 
-		//if (_Use_Size == 0) return 0;
+	//size_t	DirectEnqueueSize(void)
+	//{
+	//	size_t Full_Size = _Full_Size;
+	//	size_t In = _In;
+	//	size_t Out = _Out;
+	//	// Enqueue의 경우 _In 바로 다음이 _Out인 경우 꽉 찬 경우이다. 
+	//	//if (_Use_Size == 0) return 0;
 
-		if ((In + 1) % Full_Size == Out)
-			return 0;
+	//	if ((In + 1) % Full_Size == Out)
+	//		return 0;
 
-		if (In <= ((Out + Full_Size - 1) % Full_Size))
-			return ((Out + Full_Size - 1) % Full_Size) - In;
-		else if (In >= Out)
-			return Full_Size - In;
+	//	if (In <= ((Out + Full_Size - 1) % Full_Size))
+	//		return ((Out + Full_Size - 1) % Full_Size) - In;
+	//	else if (In >= Out)
+	//		return Full_Size - In;
 
-		return 0;
-	}
-	size_t	DirectDequeueSize(void)
-	{
-		//size_t In = _In;
-		//size_t Out = _Out;
-		//if (In >= Out)
-		//{
-		//	return In - Out;
-		//}
-		//else
-		//{
-		//	return _Full_Size - Out;
-		//}
+	//	return 0;
+	//}
+	//size_t	DirectDequeueSize(void)
+	//{
+	//	size_t In = _In;
+	//	size_t Out = _Out;
 
-		if (_In >= _Out)
-		{
-			return _In - _Out;
-		}
-		else
-		{
-			return _Full_Size - _Out;
-		}
-	}
+	//	
 
-	/////////////////////////////////////////////////////////////////////////
-	// 원하는 길이만큼 읽기위치 에서 삭제 / 쓰기 위치 이동
-	//
-	// Parameters: 없음.
-	// Return: (int)이동크기
-	/////////////////////////////////////////////////////////////////////////
-	size_t	MoveIn(size_t iSize)
-	{
-		_In = (_In + iSize) % _Full_Size;
-		return _In;
-	}
-	size_t	MoveOut(size_t iSize)
-	{
-		_Out = (_Out + iSize) % _Full_Size;
-		return _Out;
-	}
+	//	if (In >= Out)
+	//	{
+	//		return In - Out;
+	//	}
+	//	else
+	//	{
+	//		return _Full_Size - Out;
+	//	}
 
+	//	//if (_In >= _Out)
+	//	//{
+	//	//	return _In - _Out;
+	//	//}
+	//	//else
+	//	//{
+	//	//	return _Full_Size - _Out;
+	//	//}
+	//}
 
-
-	/////////////////////////////////////////////////////////////////////////
-	// 버퍼의 Front, _Out 포인터 얻음.
-	//
-	// Parameters: 없음.
-	// Return: (char *) 버퍼 포인터.
-	/////////////////////////////////////////////////////////////////////////
-	char* GetOutBufferPtr(void)
-	{
-		return _Buffer + _Out;
-	}
+	///////////////////////////////////////////////////////////////////////////
+	//// 원하는 길이만큼 읽기위치 에서 삭제 / 쓰기 위치 이동
+	////
+	//// Parameters: 없음.
+	//// Return: (int)이동크기
+	///////////////////////////////////////////////////////////////////////////
+	//size_t	MoveIn(size_t iSize)
+	//{
+	//	_In = (_In + iSize) % _Full_Size;
+	//	return _In;
+	//}
+	//size_t	MoveOut(size_t iSize)
+	//{
+	//	_Out = (_Out + iSize) % _Full_Size;
+	//	return _Out;
+	//}
 
 
-	/////////////////////////////////////////////////////////////////////////
-	// 버퍼의 RearPos, _In 포인터 얻음.
-	//
-	// Parameters: 없음.
-	// Return: (char *) 버퍼 포인터.
-	/////////////////////////////////////////////////////////////////////////
-	char* GetInBufferPtr(void)
-	{
-		return _Buffer + _In;
-	}
+
+	///////////////////////////////////////////////////////////////////////////
+	//// 버퍼의 Front, _Out 포인터 얻음.
+	////
+	//// Parameters: 없음.
+	//// Return: (char *) 버퍼 포인터.
+	///////////////////////////////////////////////////////////////////////////
+	//char* GetOutBufferPtr(void)
+	//{
+	//	return _Buffer + _Out;
+	//}
+
+
+	///////////////////////////////////////////////////////////////////////////
+	//// 버퍼의 RearPos, _In 포인터 얻음.
+	////
+	//// Parameters: 없음.
+	//// Return: (char *) 버퍼 포인터.
+	///////////////////////////////////////////////////////////////////////////
+	//char* GetInBufferPtr(void)
+	//{
+	//	return _Buffer + _In;
+	//}
+
+	///////////////////////////////////////////////////////////////////////////
+	//// 버퍼의 _Begin 포인터 얻음.
+	////
+	//// Parameters: 없음.
+	//// Return: (char *) 버퍼 시작 포인터.
+	///////////////////////////////////////////////////////////////////////////
+	//char* GetBeginBufferPtr(void)
+	//{
+	//	return _Buffer;
+	//}
+
+
 
 };
 

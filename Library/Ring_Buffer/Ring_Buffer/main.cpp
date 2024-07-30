@@ -16,9 +16,33 @@
 #define DIRECT_SINGLETHREAD_TEST		3
 #define DIRECT_MULTTHREAD_TEST			4
 
-#define VERSION 1
+#define VERSION 4
 
 using namespace std;
+
+#define MAIN_DEBUG 1
+#if MAIN_DEBUG == 1
+extern size_t Debug_Enqueue_Full_Size;
+extern size_t Debug_Enqueue_In;
+extern size_t Debug_Enqueue_Out;
+extern size_t Debug_Enqueue_iSize;
+extern char* Debug_Enqueue_Data;
+
+
+extern size_t Debug_Dequeue_Full_Size;
+extern size_t Debug_Dequeue_In;
+extern size_t Debug_Dequeue_Out;
+extern size_t Debug_Dequeue_iSize;
+extern char* Debug_Dequeue_Data;
+
+
+extern size_t Debug_DirectEnqueueSize_In;
+extern size_t Debug_DirectEnqueueSize_Out;
+
+extern size_t Debug_DirectDequeueSize_In;
+extern size_t Debug_DirectDequeueSize_Out;
+#endif // MAIN_DEBUG == 1
+
 
 constexpr int CONSOLE_WIDTH = 237;
 char testString[] = "@234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345*!";
@@ -34,8 +58,6 @@ char TempBuf[10000 + 2];
 unsigned _stdcall QueuePush(void* pArg);
 unsigned _stdcall QueuePop(void* pArg);
 
-void DirectPush(char* Data, char* pBuff, size_t DataSize, size_t DirectSize);	// 데이터를 넣는다?
-void DirectPop(char* pBuff, size_t len);				// 데이터를 빼서 출력?
 unsigned _stdcall QueueDirectPush(void* pArg);
 unsigned _stdcall QueueDirectPop(void* pArg);
 
