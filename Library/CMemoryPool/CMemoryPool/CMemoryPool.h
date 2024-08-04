@@ -14,12 +14,16 @@
 
 	MemPool.Free(pData);
 
-
+	할당하는 객체 내부 생성자에서 동적 할당이 있다면, 메모리를 할당할 때,
+	생성자를 호출하여 내부의 동적할당 까지 마무리 한다. 
 ----------------------------------------------------------------*/
 #ifndef __CMEMORY_POOL_H__
 #define __CMEMORY_POOL_H__
 
 #include <stdio.h>
+#include <stddef.h>
+#include <new>
+
 
 namespace OreoPizza
 {
@@ -51,6 +55,7 @@ namespace OreoPizza
 		// Return:
 		//////////////////////////////////////////////////////////////////////////
 		CMemoryPool(int iBlockNum, bool bPlacementNew = false);
+		CMemoryPool(int iBlockNum, int ArrSize = 1, bool bPlacementNew = false);
 		virtual	~CMemoryPool();
 
 
@@ -103,6 +108,7 @@ namespace OreoPizza
 	private:
 		int		m_iCapacity;		// 현재 리스트에 연결된 메모리 갯수
 		int		m_iUseCount;		// 현재 사용되고 있는 메모리의 갯수
+		int 	m_bArrSize;			// 링버퍼에서 사용하기 위하여 배열을 할당할 수 있게 만들었다.   근데 처음부터 배열로 만들면 문제가 있나?
 		bool	m_bPlacementNew;
 	};
 
@@ -110,7 +116,7 @@ namespace OreoPizza
 
 	template<class DATA>
 	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) :
-		m_iCapacity(iBlockNum), m_iUseCount(0), m_bPlacementNew(bPlacementNew)
+		m_iCapacity(iBlockNum), m_iUseCount(0), m_bPlacementNew(bPlacementNew), m_bArrSize(0)
 	{
 		int iCnt;
 		_pFreeNode.pNext = NULL;
@@ -131,81 +137,67 @@ namespace OreoPizza
 			pNewNode->allocationRecord = (void*)this;
 #endif // _DEBUG
 
+			// 위에서 _pFreeNode.pNext = NULL; 초기화
 			(*pNewNode).pNext = _pFreeNode.pNext;
 			_pFreeNode.pNext = pNewNode;
 		}
 	}
-	// 의외로 어셈블리 똑같음
-//	template<class DATA>
-//	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) :
-//		m_iCapacity(iBlockNum), m_iUseCount(0), m_bPlacementNew(bPlacementNew)
-//	{
-//		int iCnt;
-//		st_BLOCK_NODE<DATA >* p_Head_Node = &_pFreeNode;
-//
-//		p_Head_Node->pNext = NULL;
-//
-//		for (iCnt = 0; iCnt < iBlockNum; ++iCnt)
-//		{
-//			st_BLOCK_NODE<DATA>* pNewNode = new st_BLOCK_NODE<DATA>;
-//
-//
-//			// 흔적 남기기, 주소 저장
-//#ifdef _DEBUG
-//			pNewNode->allocationRecord = (void*)this;
-//#endif // _DEBUG
-//
-//			//(*pNewNode).pNext = _pFreeNode.pNext;
-//			//_pFreeNode.pNext = pNewNode;
-//			(*pNewNode).pNext = p_Head_Node->pNext;
-//			p_Head_Node->pNext = pNewNode;
-//		}
-//	}
-//	template<class DATA>
-//	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, bool bPlacementNew) :
-//		m_iCapacity(iBlockNum), m_iUseCount(0), m_bPlacementNew(bPlacementNew)
-//	{
-//		int iCnt;
-//		st_BLOCK_NODE<DATA>** p_Head_Next = &(_pFreeNode.pNext);
-//		p_Head_Next = NULL;
-//
-//		for (iCnt = 0; iCnt < iBlockNum; ++iCnt)
-//		{
-//			st_BLOCK_NODE<DATA>* pNewNode = new st_BLOCK_NODE<DATA>;
-//
-//
-//			// 흔적 남기기, 주소 저장
-//#ifdef _DEBUG
-//			pNewNode->allocationRecord = (void*)this;
-//#endif // _DEBUG
-//
-//			//(*pNewNode).pNext = _pFreeNode.pNext;
-//			//_pFreeNode.pNext = pNewNode;
-//
-//			(*pNewNode).pNext = *p_Head_Next;
-//			*p_Head_Next = pNewNode;
-//		}
-//	}
 
+	template<class DATA>
+	inline CMemoryPool<DATA>::CMemoryPool(int iBlockNum, int ArrSize, bool bPlacementNew) :
+		m_iCapacity(iBlockNum), m_iUseCount(0), m_bPlacementNew(bPlacementNew), m_bArrSize(ArrSize)
 
+	{
+		int iCnt;
+		_pFreeNode.pNext = NULL;
 
+		for (iCnt = 0; iCnt < iBlockNum; ++iCnt)
+		{
+			st_BLOCK_NODE<DATA>* pNewNode = new st_BLOCK_NODE<DATA>[ArrSize];
+
+			// 흔적 남기기, 주소 저장
+#ifdef _DEBUG
+			pNewNode->allocationRecord = (void*)this;
+#endif // _DEBUG
+			(*pNewNode).pNext = _pFreeNode.pNext;
+			_pFreeNode.pNext = pNewNode;
+		}
+	}
 
 	template<class DATA>
 	inline CMemoryPool<DATA>::~CMemoryPool()
 	{
 		st_BLOCK_NODE<DATA>* deleteNode;
 
-		for (deleteNode = _pFreeNode.pNext; deleteNode != NULL; deleteNode = _pFreeNode.pNext)
+		if (m_bArrSize == 0)
 		{
-			_pFreeNode.pNext = deleteNode->pNext;
+			for (deleteNode = _pFreeNode.pNext; deleteNode != NULL; deleteNode = _pFreeNode.pNext)
+			{
+				_pFreeNode.pNext = deleteNode->pNext;
 
-			// 기존 코드: call소멸자 call 메모리 해지 -> call이 2번 일어난다.
-			//(deleteNode->data).~DATA();
-			////(_pFreeNode.data).~DATA();
-			//free(deleteNode);
-			delete deleteNode;
+				// 기존 코드: call소멸자 call 메모리 해지 -> call이 2번 일어난다.
+				//(deleteNode->data).~DATA();
+				////(_pFreeNode.data).~DATA();
+				//free(deleteNode);
+				delete deleteNode;
 
-			--m_iCapacity;
+				--m_iCapacity;
+			}
+		}
+		else
+		{
+			for (deleteNode = _pFreeNode.pNext; deleteNode != NULL; deleteNode = _pFreeNode.pNext)
+			{
+				_pFreeNode.pNext = deleteNode->pNext;
+
+				// 기존 코드: call소멸자 call 메모리 해지 -> call이 2번 일어난다.
+				//(deleteNode->data).~DATA();
+				////(_pFreeNode.data).~DATA();
+				//free(deleteNode);
+				delete[] deleteNode;
+
+				--m_iCapacity;
+			}
 		}
 	}
 
@@ -222,7 +214,10 @@ namespace OreoPizza
 			//	throw;
 			//// 생성자 호출
 			//new(&(pTempNode->data)) DATA();
-			pTempNode = new st_BLOCK_NODE<DATA>;
+			if (m_bArrSize == 0)
+				pTempNode = new st_BLOCK_NODE<DATA>;
+			else
+				pTempNode = new st_BLOCK_NODE<DATA>[m_bArrSize];
 
 #ifdef _DEBUG
 			pTempNode->allocationRecord = this;
