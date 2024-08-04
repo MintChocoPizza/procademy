@@ -6,6 +6,7 @@
 #pragma comment (lib, "Ws2_32.lib")
 #include <queue>
 #include <unordered_map>
+#include <new>
 #include "LOG.h"
 #include "Protocol.h"
 #include "C_Ring_Buffer.h"
@@ -14,9 +15,11 @@
 #include "main.h"
 #include "Protocol.h"
 #include "Session.h"
+#include "CMemoryPool.h"
 #include "Define.h"
 #include "Player.h"
 #include "Field.h"
+
 
 constexpr int dfMAX_SESSION = 8000;
 constexpr int dfNETWORK_PORT = 20000;
@@ -25,12 +28,47 @@ constexpr int dfNETWORK_PORT = 20000;
 std::unordered_map< DWORD, st_SESSION*> g_Session_Hash;
 WSADATA g_WsaData;
 SOCKET g_Listen_Socket;
-//DWORD g_SessionID;
 std::queue<DWORD> g_SessionID_Q;
+
+ OreoPizza::CMemoryPool<st_SESSION> st_SESSION_MemPool(8000, FALSE);
+
 
 st_SESSION* FindSession(DWORD dwSessionID)
 {
 	return g_Session_Hash.find(dwSessionID)->second;
+}
+
+#pragma warning(disable : 26495)
+st_SESSION::st_SESSION()
+{
+	RecvQ = new C_RING_BUFFER();
+	SendQ = new C_RING_BUFFER();
+}
+#pragma warning(default: 26495)
+
+st_SESSION::st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID)
+{
+	Socket = New_Socket;
+	dwSessionID = dw_New_SessionID;
+
+	RecvQ = new C_RING_BUFFER();
+	SendQ = new C_RING_BUFFER();
+
+	dwLastRecvTime = g_Start_Time;
+
+	Disconnect = false;
+}
+void st_SESSION::Init(SOCKET New_Socket, DWORD dw_New_SessionID)
+{
+	Socket = New_Socket;
+	dwSessionID = dw_New_SessionID;
+
+	RecvQ->ClearBuffer();
+	SendQ->ClearBuffer();
+
+	dwLastRecvTime = g_Start_Time;
+
+	Disconnect = false;
 }
 
 void SetSession(void)
@@ -51,7 +89,8 @@ void DeleteSession(DWORD dwSessionID)
 	iter = g_Session_Hash.find(dwSessionID);
 	pSession = iter->second;
 
-	delete pSession;
+	//delete pSession;
+	st_SESSION_MemPool.Free(pSession);
 	g_Session_Hash.erase(iter);
 
 	g_SessionID_Q.push(dwSessionID);
@@ -212,7 +251,8 @@ void netCleanUp(void)
 		closesocket(st_Temp_Session->Socket);
 		delete st_Temp_Session->RecvQ;
 		delete st_Temp_Session->SendQ;
-		delete st_Temp_Session;
+		//delete st_Temp_Session;
+		st_SESSION_MemPool.Free(st_Temp_Session);
 
 		iter = g_Session_Hash.erase(iter);
 	}
@@ -386,7 +426,12 @@ void netProc_Accept(void)
 	// 1.
 	SessionID = g_SessionID_Q.front();
 	g_SessionID_Q.pop();
-	st_p_New_Session = new st_SESSION(New_Client_Socket, SessionID);
+	// st_p_New_Session = new st_SESSION(New_Client_Socket, SessionID);
+	st_p_New_Session = st_SESSION_MemPool.Alloc();
+	st_p_New_Session->Init(New_Client_Socket, SessionID);
+	//st_p_New_Session->Init(New_Client_Socket, SessionID);
+	//new(st_p_New_Session) st_SESSION(New_Client_Socket, SessionID);
+
 	g_Session_Hash.insert({ SessionID, st_p_New_Session });
 	// 2.
 	st_p_New_Player = CreateNewPlayer(SessionID, st_p_New_Session);
@@ -418,7 +463,7 @@ int netProc_Recv(st_SESSION* pSession)
 	size_t ret_Dq_Size;
 
 
-	i_ret_Recv_Size = recv(pSession->Socket, pSession->RecvQ->GetRearBufferPtr(), (int)pSession->RecvQ->DirectEnqueueSize(), 0);
+	i_ret_Recv_Size = recv(pSession->Socket, pSession->RecvQ->GetInBufferPtr(), (int)pSession->RecvQ->DirectEnqueueSize(), 0);
 	if (i_ret_Recv_Size == 0)
 	{
 		// 아마도 상대방의 연결 종료
@@ -479,7 +524,7 @@ int netProc_Recv(st_SESSION* pSession)
 			__debugbreak();
 		}
 	}
-	pSession->RecvQ->MoveRear(i_ret_Recv_Size);
+	pSession->RecvQ->MoveIn(i_ret_Recv_Size);
 
 	//////////////////////////////////////////////////////////////////
 	// * 완료 패킷 처리부
@@ -523,11 +568,15 @@ int netProc_Recv(st_SESSION* pSession)
 		//---------------------------------------------------
 		// 메시지 완성됨 -> 꺼내서 처리한다. 
 		//---------------------------------------------------
-		pSession->RecvQ->MoveFront(sizeof(st_PACKET_HEADER));
-		ret_Dq_Size = pSession->RecvQ->Dequeue(g_Packet.GetBufferPtr(), st_Header.bySize);
+		pSession->RecvQ->MoveOut(sizeof(st_PACKET_HEADER));
+		ret_Dq_Size = pSession->RecvQ->Dequeue(g_Packet.GetBufferWritePtr(), st_Header.bySize);
+		g_Packet.MoveWritePos(ret_Dq_Size);
 		
+		_LOG(0, L"netProc_Recv - Recd Byte:%d", ret_Peek + ret_Dq_Size);
+
 		if (!PacketProc(pSession, st_Header.byType, &g_Packet))
 		{
+			_LOG(0, L"PacketProc Fail # SessionID:%d", pSession->dwSessionID);
 			enqueueForDeletion(pSession->dwSessionID);
 			g_Packet.Clear();
 			return -1;
@@ -550,7 +599,7 @@ void netProc_Send(st_SESSION* pSession)
 		if (pSession->SendQ->GetUseSize() == 0)
 			break;
 
-		Send_Size = send(pSession->Socket, pSession->SendQ->GetFrontBufferPtr(), (int)(pSession->SendQ->DirectDequeueSize()), 0);
+		Send_Size = send(pSession->Socket, pSession->SendQ->GetOutBufferPtr(), (int)(pSession->SendQ->DirectDequeueSize()), 0);
 
 		if (Send_Size == SOCKET_ERROR)
 		{
@@ -581,7 +630,7 @@ void netProc_Send(st_SESSION* pSession)
 			}
 		}
 
-		pSession->SendQ->MoveFront(Send_Size);
+		pSession->SendQ->MoveOut(Send_Size);
 	}
 }
 
@@ -622,6 +671,9 @@ bool PacketProc(st_SESSION* pSession, unsigned char byPacketType, SerializeBuffe
 		break;
 	case dfPACKET_CS_ATTACK3:
 		return netPacketProc_Attack3(pSession, pPacket);
+		break;
+	case dfPACKET_CS_ECHO:
+		return netPacketProc_Echo(pSession, pPacket);
 		break;
 	}
 
@@ -676,7 +728,6 @@ bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket)
 		//---------------------------------------------------------------------------------------------------------------
 		// 좌표가 틀어진 이유를 찾아야 한다.
 		//---------------------------------------------------------------------------------------------------------------
-
 	}
 
 	//---------------------------------------------------------------------------------------------------------------
@@ -735,25 +786,192 @@ bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket)
 
 	return true;
 }
-
 bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket)
 {
-	return false;
+	char byDirection;
+	short shX;
+	short shY;
+	st_PLAYER* pPlayer;
+	st_SECTOR_AROUND st_Sector_Around;
+
+	*pPacket >> byDirection;
+	*pPacket >> shX;
+	*pPacket >> shY;
+	pPacket->Clear();
+
+	_LOG(0, L"# MOVESTOP # SessionID:%d / Direction:%d / X:%d / Y:%d", pSession->dwSessionID, byDirection, shX, shY);
+
+	//---------------------------------------------------------------------------------------------------------------
+	// ID로 캐릭터를 검색한다. 
+	//---------------------------------------------------------------------------------------------------------------
+	pPlayer = FindCharacter(pSession->dwSessionID);
+	if (pPlayer == NULL)
+	{
+		_LOG(dfLOG_LEVEL_ERROR, L"# MOVESTART > SessionID:%d Player Not Found!", pSession->dwSessionID);
+		return false;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------
+// 서버의 위치와 받은 패킷의 위치값이 너무 큰 차이가 난다면 싱크 패킷을 보내어 좌표 보정.
+// 
+// 본 게임의 좌표 동기화 구조가 단순한 키보드 조작 (클라이언트의 선처리, 서버의 후 반영) 방식으로 
+// 클라이언트의 좌표를 그대로 믿는 방식을 택하고 있음. 
+// 실제 온라인 게임이라면 클라이언트에서 목적지를 공유하는 방식을 택해야 함
+// 지금은 좌표에 대해서는 간단한 구현을 목적으로 하고 있으므로 
+// 서버는 클라이언트의 좌표를 그대로 믿지만, 서버와 너무 큰 차이가 있다면 강제 좌표 동기화 하도록 함
+//---------------------------------------------------------------------------------------------------------------
+	if (abs(pPlayer->_X - shX) > dfERROR_RANGE || abs(pPlayer->_Y - shY) > dfERROR_RANGE)
+	{
+		mpSync(pPacket, pPlayer->_SessionID, pPlayer->_X, pPlayer->_Y);
+		C_Field::GetInstance()->GetSectorAround(pPlayer->_CurSector->iX, pPlayer->_CurSector->iY, &st_Sector_Around);
+		C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around, true);
+
+		shX = pPlayer->_X;
+		shY = pPlayer->_Y;
+
+		pPacket->Clear();
+
+		//---------------------------------------------------------------------------------------------------------------
+		// 좌표가 틀어진 이유를 찾아야 한다.
+		//---------------------------------------------------------------------------------------------------------------
+	}
+	
+	//---------------------------------------------------------------------------------------------------------------
+	// 동작을 변경. 동작번호와, 방향값이 같다.
+	//---------------------------------------------------------------------------------------------------------------
+	pPlayer->_dwAction = byDirection;
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 단순 방향표시용 byDirection (LL, RR)과 
+	// 이동시 8방향 (LL, LU, UU, RU, RR, RD, DD, LD) 용 MoveDirecion 이 있음
+	//---------------------------------------------------------------------------------------------------------------
+	pPlayer->_byModeDirection = byDirection;
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 방향을 변경
+	//---------------------------------------------------------------------------------------------------------------
+	switch (byDirection)
+	{
+	case dfPACKET_MOVE_DIR_LL:
+	case dfPACKET_MOVE_DIR_LU:
+	case dfPACKET_MOVE_DIR_LD:
+		pPlayer->_byDirection = dfPACKET_MOVE_DIR_LL;
+	case dfPACKET_MOVE_DIR_RU:
+	case dfPACKET_MOVE_DIR_RR:
+	case dfPACKET_MOVE_DIR_RD:
+		pPlayer->_byDirection = dfPACKET_MOVE_DIR_RR;
+		break;
+	default:
+		break;
+	}
+	pPlayer->_X = shX;
+	pPlayer->_Y = shY;
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 섹터 처리
+	// 정지를 하면서 좌표가 약간 조절된 경우 섹터 업데이트를 함
+	// 위에서 좌표를 변경하였으면 섹터도 다시 재설정 해야한다. 
+	//---------------------------------------------------------------------------------------------------------------
+	if (C_Field::GetInstance()->Sector_UpdateCharacter(pPlayer))
+	{
+		//---------------------------------------------------------------------------------------------------------------
+		// 섹터가 변경된 경우는 클라에게 관련 정보를 쏜다. 
+		//---------------------------------------------------------------------------------------------------------------
+		C_Field::GetInstance()->CharacterSectorUpdatePacket(pPlayer);
+	}
+
+	mpMoveStop(pPacket, pSession->dwSessionID, byDirection, pPlayer->_X, pPlayer->_Y);
+
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 현재 접속주인 사용자에게 모든 패킷을 뿌린다. (섹터 단위 패킷 전송 함수)
+	//---------------------------------------------------------------------------------------------------------------
+	C_Field::GetInstance()->GetSectorAround(pPlayer->_CurSector->iX, pPlayer->_CurSector->iY, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around);
+	pPacket->Clear();
+
+	return true;
 
 }
 bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket)
 {
-	return false;
+	// 공격 하는 순간 판정까지 떨어진다. 
+	char byDirection;
+	short shX;
+	short shY;
+	st_PLAYER* pPlayer;
+	st_SECTOR_AROUND st_Sector_Around;
+
+
+	*pPacket >> byDirection;
+	*pPacket >> shX;
+	*pPacket >> shY;
+	pPacket->Clear();
+
+	_LOG(dfLOG_LEVEL_DEBUG, L"# Attack1 # SessionID:%d / Direction:%d / X:%d / Y:%d", pSession->dwSessionID, byDirection, shX, shY);
+
+	//---------------------------------------------------------------------------------------------------------------
+	// ID로 캐릭터를 검색한다. 
+	//---------------------------------------------------------------------------------------------------------------
+	pPlayer = FindCharacter(pSession->dwSessionID);
+	if (pPlayer == NULL)
+	{
+		_LOG(dfLOG_LEVEL_ERROR, L"# MOVESTART > SessionID:%d Player Not Found!", pSession->dwSessionID);
+		return false;
+	}
+
+
+	// 공격 모션에 대한 패킷은 해당 플레이어가 보이는 모든 세션에게 보내야 한다. 
+	mpAttack1(pPacket, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y);
+	C_Field::GetInstance()->GetSectorAround(pPlayer->_X, pPlayer->_Y, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around);
+
+
+
+
+	return true;
 }
 bool netPacketProc_Attack2(st_SESSION* pSession, SerializeBuffer* pPacket)
 {
-	return false;
+	// 공격 하는 순간 판정까지 떨어진다. 
+	char byDirection;
+	short shX;
+	short shY;
+
+	*pPacket >> byDirection;
+	*pPacket >> shX;
+	*pPacket >> shY;
+	pPacket->Clear();
+
+	// 공격 모션에 대한 패킷은 해당 플레이어가 보이는 모든 세션에게 보내야 한다. 
+	
+
+	return true;
 
 }
 bool netPacketProc_Attack3(st_SESSION* pSession, SerializeBuffer* pPacket)
 {
-	return false;
+	return true;
 
+}
+bool netPacketProc_Echo(st_SESSION* pSession, SerializeBuffer* pPacket)
+{
+	DWORD Time;
+
+	*pPacket >> Time;
+	pPacket->Clear();
+
+	_LOG(0, L"# ECHO # SessionID:%d / Time:%d", pSession->dwSessionID, Time);
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 에코 패킷이 오면 받아서 바로 해당 유저에게 전달해준다.
+	//---------------------------------------------------------------------------------------------------------------
+	mpEcho(pPacket, Time);
+
+	SendPacket_Unicast(pSession, pPacket);
+	pPacket->Clear();
+
+	return true;
 }
 
 void mpSync(SerializeBuffer* pPacket, DWORD dwSessionID, short shX, short shY)
@@ -778,7 +996,18 @@ void mpMoveStart(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, 
 	//pPacket->Clear();
 
 	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
-	(*pPacket) << dwSessionID << shX << shY;
+	(*pPacket) << dwSessionID << byDirection << shX << shY;
+}
+void mpMoveStop(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY)
+{
+	st_PACKET_HEADER New_Header;
+
+	New_Header.byCode = (char)dfPACKET_CODE;
+	New_Header.bySize = 9;
+	New_Header.byType = (char)dfPACKET_SC_MOVE_STOP;
+
+	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
+	(*pPacket) << dwSessionID << byDirection << shX << shY;
 }
 void mpCreateMyCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP)
 {
@@ -804,10 +1033,28 @@ void mpCreateOtherCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char by
 
 	(*pPacket) << dwSessionID << byDirection << shX << shY << HP;
 }
+void mpEcho(SerializeBuffer* pPacket, DWORD Time)
+{
+	st_PACKET_HEADER New_Header;
 
+	New_Header.byCode = (char)dfPACKET_CODE;
+	New_Header.bySize = 4;
+	New_Header.byType = (char)dfPACKET_SC_ECHO;
 
+	pPacket->PutData((char*)&New_Header, sizeof(st_PACKET_HEADER));
+	(*pPacket) << Time;
+}
+void mpAttack1(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY)
+{
+	st_PACKET_HEADER New_Header;
 
+	New_Header.byCode = (char)dfPACKET_CODE;
+	New_Header.bySize = 9;
+	New_Header.byType = (char)dfPAKCET_SC_ATTACK1;
 
+	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
+	(*pPacket) << dwSessionID << byDirection << shX << shY;
+}
 
 
 
@@ -819,36 +1066,18 @@ void mpCreateOtherCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char by
 
 
 //C_Session C_Session::_C_Session;
-
-st_SESSION::st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID)
-{
-	Socket = New_Socket;
-	dwSessionID = dw_New_SessionID;
-
-	RecvQ = new C_RING_BUFFER();
-	SendQ = new C_RING_BUFFER();
-
-	dwLastRecvTime = g_Start_Time;
-
-	Disconnect = false;
-}
-
-C_Session* C_Session::GetInstance(void)
-{
-    //return &_C_Session;
-	return NULL;
-}
-
 void ForwardDecl(int DestID, SerializeBuffer* sb)
 {
-	st_SESSION* pSession = C_Session::GetInstance()->_Session_Hash.find(DestID)->second;
+	//st_SESSION* pSession = C_Session::GetInstance()->_Session_Hash.find(DestID)->second;
 
-	C_Session::GetInstance()->SendPacket_Unicast(pSession, sb);
+	//C_Session::GetInstance()->SendPacket_Unicast(pSession, sb);
 }
-
-
-
-
+#if C_SESSION == 1
+C_Session* C_Session::GetInstance(void)
+{
+	//return &_C_Session;
+	return NULL;
+}
 
 void C_Session::netIOProcess(void)
 {
@@ -1014,7 +1243,9 @@ void C_Session::netProc_Accept(void)
 	// 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 1.
-	st_p_New_Session = new st_SESSION(New_Client_Socket, ++_SessionID);
+	// st_p_New_Session = new st_SESSION(New_Client_Socket, ++_SessionID);
+	st_p_New_Session = st_SESSION_MemPool.Alloc();
+	st_p_New_Session->Init(New_Client_Socket, ++_SessionID);
 	_Session_Hash.insert({ _SessionID, st_p_New_Session });
 	// 2.
 	st_p_New_Player = CreateNewPlayer(_SessionID, st_p_New_Session);
@@ -1458,4 +1689,4 @@ C_Session::~C_Session(void)
 	_LOG(0, L"CleanUp Session_Hash # \n");
 }
 
-
+#endif

@@ -81,7 +81,11 @@ bool C_Field::Sector_UpdateCharacter(st_PLAYER* pPlayer)
     // 실제 섹터와 저장되어 있는 섹터가 다르다면, 갱신한다. 
     if (pPlayer->_CurSector->iX != SectorX || pPlayer->_CurSector->iY != SectorY)
     {
-        pPlayer->_OldSector = pPlayer->_CurSector;
+        //----------------------------------------------------------------
+        // 이런식으로 동적할당 된 변수를 '=' 연산하면 문제가 발생함
+        // pPlayer->_OldSector = pPlayer->_CurSector;
+        pPlayer->_OldSector->iY = pPlayer->_CurSector->iY;
+        pPlayer->_OldSector->iX = pPlayer->_CurSector->iY;
 
         pPlayer->_CurSector->iY = SectorY;
         pPlayer->_CurSector->iX = SectorX;
@@ -111,9 +115,9 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 4;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
 
         // 생성하는 메시지 전송
@@ -122,9 +126,9 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 10;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID << pPlayer->_byDirection << pPlayer->_X << pPlayer->_Y << pPlayer->_HP;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
         g_Packet.Clear();
     }
     // 아래 방향 이동
@@ -136,9 +140,9 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 4;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
         g_Packet.Clear();
 
         // 생성하는 메시지 전송
@@ -147,9 +151,9 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 10;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID << pPlayer->_byDirection << pPlayer->_X << pPlayer->_Y << pPlayer->_HP;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
     }
     // 왼쪽 방향 이동
@@ -161,9 +165,9 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 4;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
 
         // 생성하는 메시지 전송
@@ -172,9 +176,9 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 10;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID << pPlayer->_byDirection << pPlayer->_X << pPlayer->_Y << pPlayer->_HP;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
     }
     // 오른쪽 방향 이동
@@ -186,9 +190,9 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 4;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
 
         // 생성하는 메시지 전송
@@ -197,9 +201,9 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 10;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID << pPlayer->_byDirection << pPlayer->_X << pPlayer->_Y << pPlayer->_HP;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
     }
     // 좌측 상단
@@ -211,11 +215,11 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 4;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
 
         // 생성하는 메시지 전송
@@ -224,11 +228,11 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 10;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID << pPlayer->_byDirection << pPlayer->_X << pPlayer->_Y << pPlayer->_HP;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
     }
     // 우측 상단
@@ -240,11 +244,11 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 4;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
 
         // 생성하는 메시지 전송
@@ -253,11 +257,11 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 10;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID << pPlayer->_byDirection << pPlayer->_X << pPlayer->_Y << pPlayer->_HP;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
     }
     // 좌측 하단 
@@ -269,11 +273,11 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 4;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
 
         // 생성하는 메시지 전송
@@ -282,11 +286,11 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 10;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID << pPlayer->_byDirection << pPlayer->_X << pPlayer->_Y << pPlayer->_HP;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
     }
     // 우측 하단
@@ -298,11 +302,11 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 4;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
 
         // 생성하는 메시지 전송
@@ -311,11 +315,11 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
         st_Header.bySize = 10;
         g_Packet.PutData((char*)&st_Header, sizeof(st_Header));
         g_Packet << pPlayer->_SessionID << pPlayer->_byDirection << pPlayer->_X << pPlayer->_Y << pPlayer->_HP;
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1, &g_Packet, NULL);
-        C_Session::GetInstance()->SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1, &g_Packet, NULL);
+        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, NULL);
         g_Packet.Clear();
     }
 }
@@ -328,6 +332,10 @@ void C_Field::removeUserFromSector(DWORD dwSessionID, st_SECTOR_POS* pSector_Pos
 void C_Field::SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* pPacket, st_SESSION* pExceptSession)
 {
     std::unordered_map<DWORD, st_PLAYER*> ::iterator iter;
+
+    // 섹터에 대한 예외 처리
+    if (!Check_Sector_CoordinateRange(iSectorX, iSectorY))
+        return;
 
     if (pExceptSession == NULL)
     {
@@ -368,6 +376,13 @@ void C_Field::SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, 
             SendPacket_SectorOne(pSector_Around->Around[iCnt].iX, pSector_Around->Around[iCnt].iY, pPacket, NULL);
         }
     }
+}
+
+bool C_Field::Check_Sector_CoordinateRange(int iSectorX, int iSectorY)
+{
+    if (iSectorX < 0 || iSectorY < 0 || iSectorX > _Sector_Max_X || iSectorY > _Sector_Max_Y)
+        return false;
+    return true;
 }
 
 void st_SECTOR_POS::Init_SECTOR_POS(int Y, int X)

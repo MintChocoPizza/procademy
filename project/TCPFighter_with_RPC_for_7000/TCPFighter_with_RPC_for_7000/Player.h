@@ -13,7 +13,6 @@ struct st_PLAYER
 	BYTE		_byDirection;
 	BYTE		_byModeDirection;	// 아마도 움직이던 방향
 
-	st_SECTOR_POS* _SectorPos;
 
 	short		_X;
 	short		_Y;
@@ -25,6 +24,7 @@ struct st_PLAYER
 	st_SECTOR_POS* _CurSector;
 	st_SECTOR_POS* _OldSector;
 
+	st_PLAYER();
 	st_PLAYER(DWORD SessionID, st_SESSION* pSession);
 	~st_PLAYER();
 };

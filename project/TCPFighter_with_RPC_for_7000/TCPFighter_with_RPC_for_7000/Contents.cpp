@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <Windows.h>
 
-
+#include "LOG.h"
 #include "Contents.h"
 #include "Define.h"
 #include "SerializeBuffer.h"
@@ -14,6 +14,7 @@
 #include "Session.h"
 #include "Field.h"
 #include "Player.h"
+
 
 void Update(void)
 {
@@ -46,6 +47,7 @@ void Update(void)
 		if (0 >= st_p_Player->_HP)
 		{
 			// »ç¸ÁÃ³¸®
+			_LOG(0, L"Player HP Zero # SessionID:%d", st_p_Player->_SessionID);
 			enqueueForDeletion(st_p_Player->_SessionID);
 			continue;
 		}

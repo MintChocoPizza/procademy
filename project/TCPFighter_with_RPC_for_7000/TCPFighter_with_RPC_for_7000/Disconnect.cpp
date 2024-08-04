@@ -13,6 +13,7 @@
 #include "Protocol.h"
 #include "main.h"
 
+
 std::list<DWORD> g_Disconnect_List;
 
 void enqueueForDeletion(DWORD dwSessionID)
@@ -47,9 +48,11 @@ void Disconnect(void)
 		C_Field::GetInstance()->SendPacket_Around(pSession, &g_Packet, &st_Sector_Around);
 		g_Packet.Clear();
 
+		// st_p_Player는 포인터 변수이기 때문에 delete를 하기 전에 사용해야 한다.
+		C_Field::GetInstance()->removeUserFromSector(dwSessionID, st_p_Player->_CurSector);
+		// 동적 할당된 변수를 함부로 '=' 연산을 하면 오류가 생긴다.
 		DeleteCharacter(dwSessionID);
 		DeleteSession(dwSessionID);
-		C_Field::GetInstance()->removeUserFromSector(dwSessionID, st_p_Player->_CurSector);
 
 		iter = g_Disconnect_List.erase(iter);
 	}

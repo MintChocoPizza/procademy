@@ -15,9 +15,6 @@
 
 using namespace std;
 
-extern int dY[];
-extern int dX[];
-
 #define dfGRID_X_SIZE 100
 #define dfGRID_Y_SIZE 100
 
@@ -27,6 +24,9 @@ extern int dX[];
 struct st_SECTOR_POS;
 struct st_SECTOR_AROUND;
 struct st_PLAYER;
+
+extern int dY[];
+extern int dX[];
 
 class C_Field
 {
@@ -72,6 +72,10 @@ public:
 	//----------------------------------------------------------------
 	// 클라이언트 기준 주변 섹터에 메시지 보내기 (최대 9개 영역)
 	void SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around, bool bSendMe = false);
+
+	//----------------------------------------------------------------
+	// 섹터에 대한 범위 예외 처리를 한다. 
+	bool Check_Sector_CoordinateRange(int iSectorX, int iSectorY);
 
 
 private:

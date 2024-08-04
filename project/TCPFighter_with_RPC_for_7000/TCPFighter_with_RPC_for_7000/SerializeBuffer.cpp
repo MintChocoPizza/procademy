@@ -289,7 +289,7 @@ SerializeBuffer& SerializeBuffer::operator>>(double& dValue)
 
 size_t SerializeBuffer::GetData(char* chpDest, size_t iSize)
 {
-	if (m_chpWritePos - m_chpReadPos < (unsigned)iSize)
+	if (m_chpWritePos - m_chpReadPos < (signed)iSize)
 		return 0;
 
 	memcpy(chpDest, m_chpReadPos, iSize);
@@ -308,7 +308,7 @@ size_t SerializeBuffer::PutData(char* chpSrc, size_t iSrcSize)
 	// 저장하는데 this호출이 2번 일어나기 때문....
 
 	// this 콜을 지역변수로 고치는거 또한 어셈블리의 수가 같다. 
-	if (m_chpEndPos - m_chpWritePos < (unsigned)iSrcSize)
+	if (m_chpEndPos - m_chpWritePos < (signed)iSrcSize)
 	{
 		// FreeSize보다 iSrcSize가 큰 경우 리사이즈를 한다. 
 		// 그리고 직렬화 버퍼의 바이트를 로그로 남긴다. 

@@ -20,13 +20,49 @@ struct st_SESSION
 
 	bool				Disconnect;			// 연결 끊김 체크
 
+	st_SESSION();
 	st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID);
+	void Init(SOCKET New_Socket, DWORD dw_New_SessionID);
 };
 
+void ForwardDecl(int DestID, SerializeBuffer* sb);
 
+void SetSession(void);
+
+st_SESSION* FindSession(DWORD dwSessionID);
+void DeleteSession(DWORD dwSessionID);
+
+void netStartUp(void);
+void netCleanUp(void);
+void netIOProcess(void);
+void netProc_Accept(void);
+int netProc_Recv(st_SESSION* pSession);
+void netProc_Send(st_SESSION* pSession);
+
+void SendPacket_Unicast(st_SESSION* pSession, SerializeBuffer* pPacket);
+
+bool PacketProc(st_SESSION* pSession, unsigned char byPacketType, SerializeBuffer* pPacket);
+bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket);
+bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket);
+bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket);
+bool netPacketProc_Attack2(st_SESSION* pSession, SerializeBuffer* pPacket);
+bool netPacketProc_Attack3(st_SESSION* pSession, SerializeBuffer* pPacket);
+bool netPacketProc_Echo(st_SESSION* pSession, SerializeBuffer* pPacket);
+
+void mpSync(SerializeBuffer* pPacket, DWORD dwSessionID, short shX, short shY);
+void mpMoveStart(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY);
+void mpMoveStop(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY);
+void mpCreateMyCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP);
+void mpCreateOtherCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP);
+void mpEcho(SerializeBuffer* pPacket, DWORD Time);
+void mpAttack1(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP);
+
+
+
+#if C_SESSION == 1
 class C_Session
 {
-	enum 
+	enum
 	{
 		dfNETWORK_PORT = 20000
 	};
@@ -50,7 +86,7 @@ public:
 
 	//----------------------------------------------------------------
 	// 클라이언트 기준 주변 섹터에 메시지 보내기 (최대 9개 영역)
-	void SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket,st_SECTOR_AROUND *pSector_Around ,bool bSendMe = false);
+	void SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around, bool bSendMe = false);
 
 	//----------------------------------------------------------------
 	// 진정 브로드 캐스딩 (시스템적인 메시지 외에는 사용하지 않음)
@@ -93,34 +129,6 @@ public:
 	WSADATA _WsaData;
 
 };
-
-void ForwardDecl(int DestID, SerializeBuffer* sb);
-
-void SetSession(void);
-
-st_SESSION* FindSession(DWORD dwSessionID);
-void DeleteSession(DWORD dwSessionID);
-
-void netStartUp(void);
-void netCleanUp(void);
-void netIOProcess(void);
-void netProc_Accept(void);
-int netProc_Recv(st_SESSION* pSession);
-void netProc_Send(st_SESSION* pSession);
-
-void SendPacket_Unicast(st_SESSION* pSession, SerializeBuffer* pPacket);
-
-bool PacketProc(st_SESSION* pSession, unsigned char byPacketType, SerializeBuffer* pPacket);
-bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket);
-bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket);
-bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket);
-bool netPacketProc_Attack2(st_SESSION* pSession, SerializeBuffer* pPacket);
-bool netPacketProc_Attack3(st_SESSION* pSession, SerializeBuffer* pPacket);
-
-void mpSync(SerializeBuffer* pPacket, DWORD dwSessionID, short shX, short shY);
-void mpMoveStart(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY);
-void mpCreateMyCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP);
-void mpCreateOtherCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP);
-
+#endif
 
 #endif // !__SESSION_H__

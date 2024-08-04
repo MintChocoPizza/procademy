@@ -1,6 +1,9 @@
 
 #include <string.h>
 
+#include "CMemoryPool.h"
+
+
 #define MULT_DEBUG 0
 
 #if MULT_DEBUG == 1
@@ -33,7 +36,12 @@ size_t Debug_DirectDequeueSize_In;
 size_t Debug_DirectDequeueSize_Out;
 #endif
 
+
+
+
+
 #include "C_Ring_Buffer.h"
+
 
 
 /////////////////////////////////////////////////////////////////////////
