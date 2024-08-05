@@ -1,10 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\project",
-    "\\project\\TCPFighter_with_RPC_for_7000",
-    "\\project\\TCPFighter_with_RPC_for_7000\\TCPFighter_with_RPC_for_7000"
+    "\\Library",
+    "\\Library\\Ring_Buffer",
+    "\\Library\\Ring_Buffer\\Ring_Buffer"
   ],
-  "SelectedNode": "\\project\\TCPFighter_with_RPC_for_7000\\TCPFighter_with_RPC_for_7000\\Session.cpp",
+  "SelectedNode": "\\Library\\Ring_Buffer\\Ring_Buffer\\C_Ring_Buffer.h",
   "PreviewInSolutionExplorer": false
 }

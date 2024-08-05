@@ -27,7 +27,9 @@ struct st_SESSION
 };
 
 DWORD g_SessionID = 0;
+HANDLE g_hCp;
 
+bool netStartUp(SOCKET* listen_sock, WSADATA* wsa);
 unsigned __stdcall AcceptThread(void* pArg);
 unsigned __stdcall WorkerThread(void* pArg);
 
@@ -38,7 +40,6 @@ int main()
     WSADATA wsa;
     SOCKET listen_sock;
 
-    HANDLE hCp;
 
     SYSTEM_INFO si;
 
@@ -67,20 +68,21 @@ int main()
 
     //---------------------------------------------------
     // Create IOCP
-    hCp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-    if (hCp == NULL) return 1;
+    g_hCp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+    if (g_hCp == NULL) return 1;
 
     //---------------------------------------------------
     // CPU Count
     GetSystemInfo(&si);
 
     //---------------------------------------------------
-    // Create Worker Thread (CPU * 2)
-    iCreateThreadNum = (int)si.dwNumberOfProcessors * 2;
-    for (iCnt = 0; iCnt < iCreateThreadNum; ++iCnt)
+    // Create Worker Thread (CPU * 2) + AcceptThread
+    iCreateThreadNum = (int)si.dwNumberOfProcessors * 2 + 1;
+    for (iCnt = 0; iCnt < iCreateThreadNum - 1; ++iCnt)
     {
         hThread[iCnt] = (HANDLE)_beginthreadex(NULL, 0, WorkerThread, NULL, NULL, NULL);
     }
+    hThread[iCnt] = (HANDLE)_beginthreadex(NULL, 0, AcceptThread, NULL, NULL, NULL);
     // Create Thread error check
     for (iCnt = 0; iCnt < iCreateThreadNum; ++iCnt)
     {
@@ -96,89 +98,11 @@ int main()
     }
 
     //---------------------------------------------------
-    // main loop
+    // 모든 스레드 들의 종료를 기다린다. 
     while (1)
     {
-        //---------------------------------------------------
-        // accept()
-        Client_Addr_Len = sizeof(Client_Addr);
-        New_Client_Socket = accept(listen_sock, (sockaddr*)&Client_Addr, &Client_Addr_Len);
-        if (New_Client_Socket == INVALID_SOCKET)
-        {
-            Ret_Accept_Error = WSAGetLastError();
-            _LOG(0, L"accept() - error: %d", Ret_Accept_Error);
-            break;
-        }
-
-        //---------------------------------------------------
-        // printf Client info
-        if (getnameinfo((sockaddr*)&Client_Addr, sizeof(Client_Addr), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0)
-        {
-            _c_LOG(0, "host: %d - sercive: %d Aeccept", host, service);
-        }
-        else
-        {
-            inet_ntop(AF_INET, &Client_Addr.sin_addr, host, NI_MAXHOST);
-            _c_LOG(0, "%s : %d Aeccept", host, ntohs(Client_Addr.sin_port));
-        }
-        
-        //---------------------------------------------------
-        // Session struct new
-        st_SESSION* pSession = new st_SESSION;
-        if (pSession == NULL)
-        {
-            _LOG(0, L"pSession new error");
-            return -1;
-        }
-        ZeroMemory(&(pSession->Recv_Overlapped), sizeof(pSession->Recv_Overlapped));
-        ZeroMemory(&(pSession->Send_Overlapped), sizeof(pSession->Send_Overlapped));
-        pSession->socket = New_Client_Socket;
-        pSession->SessionID++;
-
-        //---------------------------------------------------
-        // link Client_Socket to IOCP
-        CreateIoCompletionPort((HANDLE)New_Client_Socket, hCp, (ULONG_PTR) & pSession, 0);
-
-        //---------------------------------------------------
-        // wsabuf Setting
-        // 커널에 copy 하기 때문에 지역으로 설정하고? , 따로 보관하지 않았다. 
-        wsaBuf[0].buf = pSession->RecvQ->GetInBufferPtr();
-        wsaBuf[0].len = pSession->RecvQ->DirectEnqueueSize();
-        wsaBuf[1].buf = pSession->RecvQ->GetBeginBufferPtr();
-        wsaBuf[1].len = pSession->RecvQ->GetFreeSize() - pSession->RecvQ->DirectEnqueueSize();
-        if (wsaBuf[1].len > pSession->RecvQ->GetBufferSize())
-            __debugbreak();
-
-
-        //---------------------------------------------------
-        // 비동기 입출력 시작
-        flags = 0;
-        Ret_WSARecv = WSARecv(New_Client_Socket, wsaBuf, 2, NULL, &flags, &pSession->Recv_Overlapped, NULL);
-        if (Ret_WSARecv == SOCKET_ERROR)
-        {
-            Ret_WSARecv_Error = WSAGetLastError();
-
-            if (Ret_WSARecv_Error == ERROR_IO_PENDING)
-            {
-                continue;
-            }
-            else if (Ret_WSARecv_Error == 10054)
-            {
-                
-            }
-            else if (Ret_WSARecv_Error == 10053)
-            {
-
-            }
-            else
-            {
-                _LOG(0, L"WSARecv Error : %d", Ret_WSARecv_Error);
-                __debugbreak();
-            }
-        }
 
     }
-
 
     printf("Hello World!\n");
 }
@@ -313,3 +237,175 @@ bool netStartUp(SOCKET* listen_sock, WSADATA* wsa)
     *listen_sock = Temp_Listen_Socket;
 }
 
+unsigned __stdcall AcceptThread(void* pArg)
+{
+    int Client_Addr_Len;
+    sockaddr_in Client_Addr;
+    SOCKET listen_sock;
+    SOCKET New_Client_Socket;
+    int Ret_Accept_Error;
+
+    char host[NI_MAXHOST];
+    char service[NI_MAXSERV];
+
+    WSABUF wsaBuf[2];
+    DWORD flags;
+    int Ret_WSARecv;
+    int Ret_WSARecv_Error;
+
+    listen_sock = *(SOCKET*)pArg;
+
+    while (1)
+    {
+        //---------------------------------------------------
+        // accept()
+        Client_Addr_Len = sizeof(Client_Addr);
+        New_Client_Socket = accept(listen_sock, (sockaddr*)&Client_Addr, &Client_Addr_Len);
+        if (New_Client_Socket == INVALID_SOCKET)
+        {
+            Ret_Accept_Error = WSAGetLastError();
+            _LOG(0, L"accept() - error: %d", Ret_Accept_Error);
+            break;
+        }
+
+        //---------------------------------------------------
+        // printf Client info
+        if (getnameinfo((sockaddr*)&Client_Addr, sizeof(Client_Addr), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0)
+        {
+            _c_LOG(0, "host: %d - sercive: %d Aeccept", host, service);
+        }
+        else
+        {
+            inet_ntop(AF_INET, &Client_Addr.sin_addr, host, NI_MAXHOST);
+            _c_LOG(0, "%s : %d Aeccept", host, ntohs(Client_Addr.sin_port));
+        }
+
+        //---------------------------------------------------
+		// Session struct new
+        st_SESSION* pSession = new st_SESSION;
+        if (pSession == NULL)
+        {
+            _LOG(0, L"pSession new error");
+            return -1;
+        }
+        ZeroMemory(&(pSession->Recv_Overlapped), sizeof(pSession->Recv_Overlapped));
+        ZeroMemory(&(pSession->Send_Overlapped), sizeof(pSession->Send_Overlapped));
+        pSession->RecvQ = new C_RING_BUFFER();
+        pSession->SendQ = new C_RING_BUFFER();
+        pSession->socket = New_Client_Socket;
+        pSession->SessionID++;
+
+        //---------------------------------------------------
+		// link Client_Socket to IOCP
+        CreateIoCompletionPort((HANDLE)New_Client_Socket, g_hCp, (ULONG_PTR)&pSession, 0);
+
+        //---------------------------------------------------
+		// wsabuf Setting
+		// 커널에 copy 하기 때문에 지역으로 설정하고? , 따로 보관하지 않았다. 
+
+        // 링버퍼 락 거는 코드 필요하다. 
+        // ? 여기서 처음 만들었는데 다른데서 접근할 일 없다. 
+        wsaBuf[0].buf = pSession->RecvQ->GetInBufferPtr();
+        wsaBuf[0].len = pSession->RecvQ->DirectEnqueueSize();
+        wsaBuf[1].buf = pSession->RecvQ->GetBeginBufferPtr();
+        wsaBuf[1].len = pSession->RecvQ->GetFreeSize() - pSession->RecvQ->DirectEnqueueSize();
+        if (wsaBuf[1].len > pSession->RecvQ->GetBufferSize())
+            __debugbreak();
+
+        //---------------------------------------------------
+        // 비동기 입출력 시작
+        flags = 0;
+        Ret_WSARecv = WSARecv(New_Client_Socket, wsaBuf, 2, NULL, &flags, &pSession->Recv_Overlapped, NULL);
+        if (Ret_WSARecv == SOCKET_ERROR)
+        {
+            Ret_WSARecv_Error = WSAGetLastError();
+
+            if (Ret_WSARecv_Error == ERROR_IO_PENDING)
+            {
+                continue;
+            }
+            else if (Ret_WSARecv_Error == 10054)
+            {
+                delete pSession->RecvQ;
+                delete pSession->SendQ;
+                delete pSession;
+            }
+            else if (Ret_WSARecv_Error == 10053)
+            {
+                delete pSession->RecvQ;
+                delete pSession->SendQ;
+                delete pSession;
+            }
+            else
+            {
+                _LOG(0, L"WSARecv Error : %d", Ret_WSARecv_Error);
+                __debugbreak();
+            }
+        }
+    }
+
+    return 0;
+}
+
+unsigned __stdcall WorkerThread(void* pArg)
+{
+    DWORD dwTransgerred;
+    st_SESSION* pSession;
+    OVERLAPPED* lpOverlapped;
+
+    //---------------------------------------------------------------
+    // return Value
+    bool Ret_GQCS;
+
+    while (1)
+    {
+        dwTransgerred = NULL;
+        pSession = NULL;
+        lpOverlapped = NULL;
+
+
+
+        Ret_GQCS = GetQueuedCompletionStatus(g_hCp, &dwTransgerred, (ULONG_PTR*)&pSession, &lpOverlapped, INFINITE);
+
+        //-----------------------------------------------------------------------------------------------------------------------------------
+        // 예외처리
+        // Ret_GQCS == true : I/O & IOCP 성공
+        // Ret_GQCs == false
+        // Recv_Overlapped == NULL인 경우: 1. GQCS() 뻑남 == 핸들값 에러, 2. 타임아웃_INFINITE가 아닌경우 타임아웃됨
+        //  
+        // Recv_Overlapped != NULL인 경우: I/O 가 실패함
+        //
+        // 1. 0,0,0 인경우 GQCS뻑남 || 스레드 종료
+        //
+        // 2. send, recv 실패에 대한 예외처리를 하지 않는다. 어짜피 다음 Send, Recv 시도할 때 에러가 발생한다. 
+        // 
+        // 3. 
+
+        //-----------------------------------------------------------------------------------------------------------------------------------
+        // 스레드 종료
+        if (dwTransgerred == NULL && pSession == NULL && lpOverlapped == NULL)
+        {
+
+        }
+
+        //-----------------------------------------------------------------------------------------------------------------------------------
+        // GQCS가 뻑이 난 경우
+        if(lpOverlapped == NULL)
+        {
+            
+        }
+
+
+
+        // 리시브인지 확인
+        if (&pSession->Recv_Overlapped == lpOverlapped)
+
+        
+
+
+
+    }
+
+
+    return 0;
+}
