@@ -49,6 +49,10 @@ public:
 	void GetSectorAround(int iSectorX, int iSectorY, st_SECTOR_AROUND* pSectorAound);
 
 	//---------------------------------------------------------------------------------------------
+	// 주어진 좌표와 공격 범위를 기준으로 공격 범위에 있는 섹터 얻기 
+	void GetAttackSectorAround(int iCurSectorX, int iCurSectorY, int iX, int iY, char byDirection, int i_Attack_Range_X, int i_Attack_Range_Y, st_SECTOR_AROUND* pSectorAound);
+
+	//---------------------------------------------------------------------------------------------
 	// 캐릭터가 섹터를 이동 한 뒤에 영향권에서 빠진 섹터, 새로 추가된 섹터의 정보 구하는 함수
 	void GetUpdateSectorAround(st_PLAYER* pCharacter, st_SECTOR_AROUND* pRemoveSector, st_SECTOR_AROUND* pAddSector);
 
@@ -77,6 +81,10 @@ public:
 	// 섹터에 대한 범위 예외 처리를 한다. 
 	bool Check_Sector_CoordinateRange(int iSectorX, int iSectorY);
 
+	//----------------------------------------------------------------
+	// 해당 섹터에 대한 플레이어들의 목록을 반환한다. 
+	st_PLAYER* GetPlayerInSector(int iSectorX, int iSectorY);
+
 
 private:
 	C_Field();
@@ -93,7 +101,8 @@ public:
 	//std::list<st_PLAYER*> g_Sector_List[dfSECTOR_MAX_Y][dfSECTOR_MAX_X];
 
 	// 삭제할 때, 순회하기 싫어서 해쉬 사용
-	std::unordered_map<DWORD, st_PLAYER*> g_Sector_Hash[dfSECTOR_MAX_Y][dfSECTOR_MAX_X];
+	// 잘못되었다.......
+	// std::unordered_map<DWORD, st_PLAYER*> g_Sector_Hash[dfSECTOR_MAX_Y][dfSECTOR_MAX_X];
 
 	int _Sector_Max_Y;
 	int _Sector_Max_X;

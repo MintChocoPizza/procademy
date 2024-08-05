@@ -110,7 +110,15 @@ public:
 	// iter = It.end();
 	// 
 	//-----------------------------------------------------
-	inline CList::iterator end(void);
+	inline iterator end(void);
+
+	//-----------------------------------------------------
+	// 맨 마지막의 원소의 다음을 가리키는 iterator를 반환한다. 
+	// 
+	// ex) list<int>::iterator iter;
+	// iter = It.end();
+	// 
+	//-----------------------------------------------------
 
 	// 앞쪽으로 원소 data를 삽입한다.
 	inline void push_front(const T& data);
@@ -120,7 +128,6 @@ public:
 	inline void pop_back(void);
 	// 맨 첫번째 원소를 제거한다.
 	inline void pop_front(void);
-
 
 	// 원소가 비어있는지 확인 
 	inline bool empty(void);
@@ -336,6 +343,21 @@ void CList<T>::printAll(void)
 #endif // _DEBUG
 
 
+
+template<typename T>
+inline T& CList<T>::front(void)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+	return _head._Next->_data;
+}
+
+template<typename T>
+inline T& CList<T>::back(void)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+	return _tail._Prev->_data;
+
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // 이 함수들은 원래 list에서도 인라인으로 선언되어 있다. 

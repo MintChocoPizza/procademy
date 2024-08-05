@@ -66,6 +66,143 @@ void C_Field::GetSectorAround(int iSectorX, int iSectorY, st_SECTOR_AROUND* pSec
     pSectorAound->iCount = iCount;
 }
 
+void C_Field::GetAttackSectorAround(int iCurSectorX, int iCurSectorY, int iX, int iY, char byDirection, int i_Attack_Range_X, int i_Attack_Range_Y, st_SECTOR_AROUND* pSectorAound)
+{
+    int nY;
+    int nX;
+    int iCnt;
+    int iSectorY;
+    int iSectorX;
+
+    //------------------------------------------------------------
+    // 자신이 있던 섹터는 무조건 공격 범위 섹터에 포함된다.
+    pSectorAound->Around[0].iY = iCurSectorY;
+    pSectorAound->Around[0].iX = iCurSectorX;
+    iCnt = 1;
+
+    if (byDirection == dfPACKET_MOVE_DIR_LL)
+    {
+        // 왼쪽 방향 공격
+
+        // 왼쪽 방향 섹터 검색
+        iSectorX = (iX - i_Attack_Range_X) / Grid_X_Size;
+        if (iCurSectorX != iSectorX)
+        {
+            pSectorAound->Around[iCnt].iX = iSectorX;
+            pSectorAound->Around[iCnt].iY = iCurSectorY;
+            ++iCnt;
+
+            // 왼쪽 방향 섹터 확정/ 위 아래 섹터 확인
+            iSectorY = (iY + i_Attack_Range_Y) / Grid_Y_Size;
+            if (iCurSectorY != iSectorY)
+            {
+                pSectorAound->Around[iCnt].iX = iCurSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt;
+
+                // 2중 if() 문으로 대각선에 위치한 섹터 구함
+                pSectorAound->Around[iCnt].iX = iSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt;
+            }
+
+            iSectorY = (iY - i_Attack_Range_Y) / Grid_Y_Size;
+            if (iCurSectorY != iSectorY)
+            {
+                pSectorAound->Around[iCnt].iX = iCurSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt;
+
+                // 2중 if() 문으로 대각선에 위치한 섹터 구함
+                pSectorAound->Around[iCnt].iX = iSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt;
+            }
+        }
+        else
+        {
+            // 오른쪽 방향이 다른 섹터로 넘어가지 않는다면, 위 아래 방향의 섹터만 탐색해보면 된다.
+            iSectorY = (iY + i_Attack_Range_Y) / Grid_Y_Size;
+            if (iCurSectorY != iSectorY)
+            {
+                pSectorAound->Around[iCnt].iX = iCurSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt;
+            }
+
+            iSectorY = (iY - i_Attack_Range_Y) / Grid_Y_Size;
+            if (iCurSectorY != iSectorY)
+            {
+                pSectorAound->Around[iCnt].iX = iCurSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt;
+            }
+        }
+    }
+    else
+    {
+        // 오른쪽 방향 공격
+        
+        // 오른쪽 방향 섹터 검색
+        iSectorX = (iX + i_Attack_Range_X) / Grid_X_Size;
+        if (iCurSectorX != iSectorX)
+        {
+            pSectorAound->Around[iCnt].iX = iSectorX;
+            pSectorAound->Around[iCnt].iY = iCurSectorY;
+            ++iCnt;
+
+            // 오른쪽 방향 섹터를 탐색해야 하는 상태에서 위쪽 혹은 아랫쪽 섹터도 탐색해야 하는지 확인
+            iSectorY = (iY + i_Attack_Range_Y) / Grid_Y_Size;
+            if (iCurSectorY != iSectorY)
+            {
+                pSectorAound->Around[iCnt].iX = iCurSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt; 
+
+                // 2중 if() 문으로 대각선에 위치한 섹터 구함
+                pSectorAound->Around[iCnt].iX = iSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt;
+            }
+
+            iSectorY = (iY - i_Attack_Range_Y) / Grid_Y_Size;
+            if(iCurSectorY != iSectorY)
+            {
+                pSectorAound->Around[iCnt].iX = iCurSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt;
+
+                // 2중 if() 문으로 대각선에 위치한 섹터 구함
+                pSectorAound->Around[iCnt].iX = iSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt;
+            }
+        }
+        else
+        {
+            // 오른쪽 방향이 다른 섹터로 넘어가지 않는다면, 위 아래 방향의 섹터만 탐색해보면 된다.
+            iSectorY = (iY + i_Attack_Range_Y) / Grid_Y_Size;
+            if (iCurSectorY != iSectorY)
+            {
+                pSectorAound->Around[iCnt].iX = iCurSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt;
+            }
+
+            iSectorY = (iY - i_Attack_Range_Y) / Grid_Y_Size;
+            if (iCurSectorY != iSectorY)
+            {
+                pSectorAound->Around[iCnt].iX = iCurSectorX;
+                pSectorAound->Around[iCnt].iY = iSectorY;
+                ++iCnt;
+            }
+        }
+    }
+
+    pSectorAound->iCount = iCnt
+
+}
+
 void C_Field::GetUpdateSectorAround(st_PLAYER* pCharacter, st_SECTOR_AROUND* pRemoveSector, st_SECTOR_AROUND* pAddSector)
 {
 }
@@ -383,6 +520,11 @@ bool C_Field::Check_Sector_CoordinateRange(int iSectorX, int iSectorY)
     if (iSectorX < 0 || iSectorY < 0 || iSectorX > _Sector_Max_X || iSectorY > _Sector_Max_Y)
         return false;
     return true;
+}
+
+st_PLAYER* C_Field::GetPlayerInSector(int iSectorX, int iSectorY)
+{
+    // 현재 섹터 해쉬가 잘못된거 같음. 하나의 플레이어 포인터만을 저장하고 있다.
 }
 
 void st_SECTOR_POS::Init_SECTOR_POS(int Y, int X)

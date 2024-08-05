@@ -17,18 +17,19 @@ public:
 
 int main()
 {
-	CList<A> c_li;
+	CList<A*> c_li[10][20];
 
-	A a;
-	a.a = 10;
+	CList<int> aaa;
 
-	c_li.push_back(a);
+	aaa.push_back(10);
+	aaa.push_back(20);
 
-	CList<A>::iterator T;
+	int a = aaa.front();
+	int b = aaa.back();
+	
+	printf("%d, %d \n", a, b);
 
-	T = c_li.begin();
 
-	cout << T._node->_data.a << endl;
 
 	return 0;
 }

@@ -901,6 +901,7 @@ bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket)
 	short shY;
 	st_PLAYER* pPlayer;
 	st_SECTOR_AROUND st_Sector_Around;
+	int iCnt;
 
 
 	*pPacket >> byDirection;
@@ -921,10 +922,30 @@ bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket)
 	}
 
 
+
+
 	// 공격 모션에 대한 패킷은 해당 플레이어가 보이는 모든 세션에게 보내야 한다. 
 	mpAttack1(pPacket, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y);
 	C_Field::GetInstance()->GetSectorAround(pPlayer->_X, pPlayer->_Y, &st_Sector_Around);
 	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around);
+	pPacket->Clear();
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 데미지에 대한 처리
+	// 
+	// 바라보는 방향을 기준으로 0 ~ _dfATTACK1_RANGE_X 범위의 섹터를 계산
+	// 공격 범위 또한 계산해야 한다. 
+	// 
+	// 1. 같은 섹터에서 검색한다. 
+	// 2. 섹터를 넘어간다면 다른 섹터에서도 계산한다.
+	// 3. 3개의 섹터에 걸치는 경우도 있다. 따라서 모든 섹터를 계산하여, 가장 가까이 있는 플레이어를 탐색해야 한다? 
+	//---------------------------------------------------------------------------------------------------------------
+	C_Field::GetInstance()->GetAttackSectorAround(pPlayer->_CurSector->iX, pPlayer->_CurSector->iY, pPlayer->_X, pPlayer->_Y, pPlayer->_byDirection, dfATTACK1_RANGE_X, dfATTACK1_RANGE_Y, &st_Sector_Around);
+	for (iCnt = 0; iCnt < st_Sector_Around.iCount; ++iCnt)
+	{
+		
+	}
+
 
 
 
