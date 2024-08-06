@@ -1,10 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Library",
-    "\\Library\\List_Project",
-    "\\Library\\Ring_Buffer\\Ring_Buffer"
+    "\\project",
+    "\\project\\TCPFighter_with_RPC_for_7000\\TCPFighter_with_RPC_for_7000",
+    "\\test"
   ],
-  "SelectedNode": "\\Library\\List_Project\\List_Project.sln",
+  "SelectedNode": "\\test",
   "PreviewInSolutionExplorer": false
 }

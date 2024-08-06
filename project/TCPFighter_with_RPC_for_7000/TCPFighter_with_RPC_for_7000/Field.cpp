@@ -8,6 +8,7 @@
 #include "main.h"
 #include "Session.h"
 #include "Define.h"
+#include "CList.h"
 #include "Field.h"
 #include "Player.h"
 
@@ -66,13 +67,16 @@ void C_Field::GetSectorAround(int iSectorX, int iSectorY, st_SECTOR_AROUND* pSec
     pSectorAound->iCount = iCount;
 }
 
-void C_Field::GetAttackSectorAround(int iCurSectorX, int iCurSectorY, int iX, int iY, char byDirection, int i_Attack_Range_X, int i_Attack_Range_Y, st_SECTOR_AROUND* pSectorAound)
+void C_Field::GetAttackSectorAround(short shX, short shY, char byDirection, int i_Attack_Range_X, int i_Attack_Range_Y, st_SECTOR_AROUND* pSectorAound)
 {
-    int nY;
-    int nX;
     int iCnt;
+    int iCurSectorY;
+    int iCurSectorX;
     int iSectorY;
     int iSectorX;
+
+    iCurSectorY = shY / dfGRID_Y_SIZE;
+    iCurSectorX = shX / dfGRID_X_SIZE;
 
     //------------------------------------------------------------
     // 자신이 있던 섹터는 무조건 공격 범위 섹터에 포함된다.
@@ -85,16 +89,16 @@ void C_Field::GetAttackSectorAround(int iCurSectorX, int iCurSectorY, int iX, in
         // 왼쪽 방향 공격
 
         // 왼쪽 방향 섹터 검색
-        iSectorX = (iX - i_Attack_Range_X) / Grid_X_Size;
-        if (iCurSectorX != iSectorX)
+        iSectorX = (shX - i_Attack_Range_X) / dfGRID_X_SIZE;
+        if (Check_Sector_CoordinateRange(iSectorX, iCurSectorY)  && iCurSectorX != iSectorX)
         {
             pSectorAound->Around[iCnt].iX = iSectorX;
             pSectorAound->Around[iCnt].iY = iCurSectorY;
             ++iCnt;
 
             // 왼쪽 방향 섹터 확정/ 위 아래 섹터 확인
-            iSectorY = (iY + i_Attack_Range_Y) / Grid_Y_Size;
-            if (iCurSectorY != iSectorY)
+            iSectorY = (shY + i_Attack_Range_Y) / dfGRID_Y_SIZE;
+            if (Check_Sector_CoordinateRange(iCurSectorX, iSectorY) && iCurSectorY != iSectorY)
             {
                 pSectorAound->Around[iCnt].iX = iCurSectorX;
                 pSectorAound->Around[iCnt].iY = iSectorY;
@@ -106,8 +110,8 @@ void C_Field::GetAttackSectorAround(int iCurSectorX, int iCurSectorY, int iX, in
                 ++iCnt;
             }
 
-            iSectorY = (iY - i_Attack_Range_Y) / Grid_Y_Size;
-            if (iCurSectorY != iSectorY)
+            iSectorY = (shY - i_Attack_Range_Y) / dfGRID_Y_SIZE;
+            if (Check_Sector_CoordinateRange(iCurSectorX, iSectorY) && iCurSectorY != iSectorY)
             {
                 pSectorAound->Around[iCnt].iX = iCurSectorX;
                 pSectorAound->Around[iCnt].iY = iSectorY;
@@ -122,16 +126,16 @@ void C_Field::GetAttackSectorAround(int iCurSectorX, int iCurSectorY, int iX, in
         else
         {
             // 오른쪽 방향이 다른 섹터로 넘어가지 않는다면, 위 아래 방향의 섹터만 탐색해보면 된다.
-            iSectorY = (iY + i_Attack_Range_Y) / Grid_Y_Size;
-            if (iCurSectorY != iSectorY)
+            iSectorY = (shY + i_Attack_Range_Y) / dfGRID_Y_SIZE;
+            if (Check_Sector_CoordinateRange(iCurSectorX, iSectorY) && iCurSectorY != iSectorY)
             {
                 pSectorAound->Around[iCnt].iX = iCurSectorX;
                 pSectorAound->Around[iCnt].iY = iSectorY;
                 ++iCnt;
             }
 
-            iSectorY = (iY - i_Attack_Range_Y) / Grid_Y_Size;
-            if (iCurSectorY != iSectorY)
+            iSectorY = (shY - i_Attack_Range_Y) / dfGRID_Y_SIZE;
+            if (Check_Sector_CoordinateRange(iCurSectorX, iSectorY) && iCurSectorY != iSectorY)
             {
                 pSectorAound->Around[iCnt].iX = iCurSectorX;
                 pSectorAound->Around[iCnt].iY = iSectorY;
@@ -144,16 +148,16 @@ void C_Field::GetAttackSectorAround(int iCurSectorX, int iCurSectorY, int iX, in
         // 오른쪽 방향 공격
         
         // 오른쪽 방향 섹터 검색
-        iSectorX = (iX + i_Attack_Range_X) / Grid_X_Size;
-        if (iCurSectorX != iSectorX)
+        iSectorX = (shX + i_Attack_Range_X) / dfGRID_X_SIZE;
+        if (Check_Sector_CoordinateRange(iSectorX, iCurSectorY) && iCurSectorX != iSectorX)
         {
             pSectorAound->Around[iCnt].iX = iSectorX;
             pSectorAound->Around[iCnt].iY = iCurSectorY;
             ++iCnt;
 
             // 오른쪽 방향 섹터를 탐색해야 하는 상태에서 위쪽 혹은 아랫쪽 섹터도 탐색해야 하는지 확인
-            iSectorY = (iY + i_Attack_Range_Y) / Grid_Y_Size;
-            if (iCurSectorY != iSectorY)
+            iSectorY = (shY + i_Attack_Range_Y) / dfGRID_Y_SIZE;
+            if (Check_Sector_CoordinateRange(iCurSectorX, iSectorY) && iCurSectorY != iSectorY)
             {
                 pSectorAound->Around[iCnt].iX = iCurSectorX;
                 pSectorAound->Around[iCnt].iY = iSectorY;
@@ -165,8 +169,8 @@ void C_Field::GetAttackSectorAround(int iCurSectorX, int iCurSectorY, int iX, in
                 ++iCnt;
             }
 
-            iSectorY = (iY - i_Attack_Range_Y) / Grid_Y_Size;
-            if(iCurSectorY != iSectorY)
+            iSectorY = (shY - i_Attack_Range_Y) / dfGRID_Y_SIZE;
+            if(Check_Sector_CoordinateRange(iCurSectorX, iSectorY) && iCurSectorY != iSectorY)
             {
                 pSectorAound->Around[iCnt].iX = iCurSectorX;
                 pSectorAound->Around[iCnt].iY = iSectorY;
@@ -181,16 +185,16 @@ void C_Field::GetAttackSectorAround(int iCurSectorX, int iCurSectorY, int iX, in
         else
         {
             // 오른쪽 방향이 다른 섹터로 넘어가지 않는다면, 위 아래 방향의 섹터만 탐색해보면 된다.
-            iSectorY = (iY + i_Attack_Range_Y) / Grid_Y_Size;
-            if (iCurSectorY != iSectorY)
+            iSectorY = (shY + i_Attack_Range_Y) / dfGRID_Y_SIZE;
+            if (Check_Sector_CoordinateRange(iCurSectorX, iSectorY) && iCurSectorY != iSectorY)
             {
                 pSectorAound->Around[iCnt].iX = iCurSectorX;
                 pSectorAound->Around[iCnt].iY = iSectorY;
                 ++iCnt;
             }
 
-            iSectorY = (iY - i_Attack_Range_Y) / Grid_Y_Size;
-            if (iCurSectorY != iSectorY)
+            iSectorY = (shY - i_Attack_Range_Y) / dfGRID_Y_SIZE;
+            if (Check_Sector_CoordinateRange(iCurSectorX, iSectorY) && iCurSectorY != iSectorY)
             {
                 pSectorAound->Around[iCnt].iX = iCurSectorX;
                 pSectorAound->Around[iCnt].iY = iSectorY;
@@ -199,7 +203,7 @@ void C_Field::GetAttackSectorAround(int iCurSectorX, int iCurSectorY, int iX, in
         }
     }
 
-    pSectorAound->iCount = iCnt
+    pSectorAound->iCount = iCnt;
 
 }
 
@@ -212,8 +216,8 @@ bool C_Field::Sector_UpdateCharacter(st_PLAYER* pPlayer)
     int SectorY;
     int SectorX;
 
-    SectorY = pPlayer->_Y / Grid_Y_Size;
-    SectorX = pPlayer->_X / Grid_X_Size;
+    SectorY = pPlayer->_Y / dfGRID_Y_SIZE;
+    SectorX = pPlayer->_X / dfGRID_X_SIZE;
 
     // 실제 섹터와 저장되어 있는 섹터가 다르다면, 갱신한다. 
     if (pPlayer->_CurSector->iX != SectorX || pPlayer->_CurSector->iY != SectorY)
@@ -461,14 +465,15 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
     }
 }
 
-void C_Field::removeUserFromSector(DWORD dwSessionID, st_SECTOR_POS* pSector_Pos)
+void C_Field::removeUserFromSector(st_PLAYER* pPlayer)
 {
-    g_Sector_Hash[pSector_Pos->iY][pSector_Pos->iX].erase(dwSessionID);
+    g_Sector_CList[pPlayer->_CurSector->iY][pPlayer->_CurSector->iX].remove(pPlayer);
 }
 
 void C_Field::SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* pPacket, st_SESSION* pExceptSession)
 {
-    std::unordered_map<DWORD, st_PLAYER*> ::iterator iter;
+    //std::unordered_map<DWORD, st_PLAYER*> ::iterator iter;
+    CList<st_PLAYER*>::iterator iter;
 
     // 섹터에 대한 예외 처리
     if (!Check_Sector_CoordinateRange(iSectorX, iSectorY))
@@ -476,21 +481,21 @@ void C_Field::SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* 
 
     if (pExceptSession == NULL)
     {
-        for (iter = g_Sector_Hash[iSectorY][iSectorX].begin(); iter != g_Sector_Hash[iSectorY][iSectorX].end(); ++iter)
+        for (iter = g_Sector_CList[iSectorY][iSectorX].begin(); iter != g_Sector_CList[iSectorY][iSectorX].end(); ++iter)
         {
-            SendPacket_Unicast((*iter).second->_pSession, pPacket);
+            SendPacket_Unicast((*iter)->_pSession, pPacket);
         }
     }
     else
     {
-        for (iter = g_Sector_Hash[iSectorY][iSectorX].begin(); iter != g_Sector_Hash[iSectorY][iSectorX].end(); ++iter)
+        for (iter = g_Sector_CList[iSectorY][iSectorX].begin(); iter != g_Sector_CList[iSectorY][iSectorX].end(); ++iter)
         {
-            if (pExceptSession == (*iter).second->_pSession)
+            if (pExceptSession == (*iter)->_pSession)
             {
                 continue;
             }
 
-            SendPacket_Unicast((*iter).second->_pSession, pPacket);
+            SendPacket_Unicast((*iter)->_pSession, pPacket);
         }
     }
 }
@@ -517,14 +522,14 @@ void C_Field::SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, 
 
 bool C_Field::Check_Sector_CoordinateRange(int iSectorX, int iSectorY)
 {
-    if (iSectorX < 0 || iSectorY < 0 || iSectorX > _Sector_Max_X || iSectorY > _Sector_Max_Y)
+    if (iSectorX < 0 || iSectorY < 0 || iSectorX > dfSECTOR_MAX_X || iSectorY > dfSECTOR_MAX_Y)
         return false;
     return true;
 }
 
-st_PLAYER* C_Field::GetPlayerInSector(int iSectorX, int iSectorY)
+CList<st_PLAYER*>* C_Field::GetPlayerInSectorCList(int iSectorX, int iSectorY)
 {
-    // 현재 섹터 해쉬가 잘못된거 같음. 하나의 플레이어 포인터만을 저장하고 있다.
+    return &g_Sector_CList[iSectorY][iSectorX];
 }
 
 void st_SECTOR_POS::Init_SECTOR_POS(int Y, int X)
@@ -533,15 +538,21 @@ void st_SECTOR_POS::Init_SECTOR_POS(int Y, int X)
     iX = X / dfGRID_X_SIZE;
 }
 
-C_Field::C_Field()
+C_Field::C_Field() : _MemPool(8000), g_Sector_CList()
 {
-    //int iCntX;
-    //int iCntY;
-    int Sector_Max_X;
-    int Sector_Max_Y;
+    int iCntY;
+    int iCntX;
 
-    _Sector_Max_Y = Sector_Max_Y = dfRANGE_MOVE_BOTTOM / Grid_Y_Size;
-    _Sector_Max_X = Sector_Max_X = dfRANGE_MOVE_RIGHT / Grid_X_Size;
+    //_Sector_Max_Y = Sector_Max_Y = dfRANGE_MOVE_BOTTOM / dfGRID_Y_SIZE;
+    //_Sector_Max_X = Sector_Max_X = dfRANGE_MOVE_RIGHT / dfGRID_X_SIZE;
+
+    for (iCntY = 0; iCntY < dfSECTOR_MAX_Y; ++iCntY)
+    {
+        for (iCntX = 0; iCntX < dfSECTOR_MAX_X; ++iCntX)
+        {
+            g_Sector_CList[iCntY][iCntX].InitCList(_MemPool);
+        }
+    }
 
 
     // 3차원 배열: 면, 행, 열 순서
@@ -560,27 +571,22 @@ C_Field::C_Field()
 
 C_Field::~C_Field()
 {
-    //int iCntY;
-    //int iCntX;
-    int Sector_Max_X;
-    int Sector_Max_Y;
+    int iCntY;
+    int iCntX;
+    CList<st_PLAYER*>::iterator iter;
 
-    Sector_Max_Y = _Sector_Max_Y;
-    Sector_Max_X = _Sector_Max_X;
-
-    //for (iCntY = 0; iCntY < _Sector_Max_Y; ++iCntY)
-    //{
-    //    for (iCntX = 0; iCntX < _Sector_Max_X; ++iCntX)
-    //    {
-    //        // 동적으로 할당된 st_Player들은 Player 클래스에서 어련히 잘 알아서 메모리를 해지했다고 가정한다. 
-    //        // 각 std::list<st_Player*> 해제
-    //        delete _Sector[iCntY][iCntX];
-    //    }
-    //    // 열 배열 해제
-    //    delete[] _Sector[iCntY];
-    //}
-    //// 행 배열 해제
-    //delete[] _Sector;
+    // 1차 해지 == 메모리풀 메모리 반환하기
+    // 물론 또 CList 소멸자가 호출되지만, 상관 없다. 
+    for (iCntY = 0; iCntY < dfSECTOR_MAX_Y; ++iCntY)
+    {
+        for (iCntX = 0; iCntX < dfSECTOR_MAX_X; ++iCntX)
+        {
+            for (iter = g_Sector_CList[iCntY][iCntX].begin(); iter != g_Sector_CList[iCntY][iCntX].end(); )
+            {
+                iter = g_Sector_CList[iCntY][iCntX].erase(iter);
+            }
+        }
+    }
 }
 
 

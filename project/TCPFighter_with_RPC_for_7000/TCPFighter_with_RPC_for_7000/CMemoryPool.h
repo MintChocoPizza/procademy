@@ -54,7 +54,7 @@ namespace OreoPizza
 		// Return:
 		//////////////////////////////////////////////////////////////////////////
 		CMemoryPool();
-		CMemoryPool(int iBlockNum, bool bPlacementNew);
+		CMemoryPool(int iBlockNum, bool bPlacementNew = false);
 		CMemoryPool(int iBlockNum, int ArrSize, bool bPlacementNew);
 		virtual	~CMemoryPool();
 

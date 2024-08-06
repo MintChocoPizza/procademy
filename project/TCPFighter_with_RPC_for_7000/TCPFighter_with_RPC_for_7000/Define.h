@@ -18,4 +18,8 @@ constexpr int dfATTACK1_RANGE_Y = 10;
 constexpr int dfATTACK2_RANGE_Y = 10;
 constexpr int dfATTACK3_RANGE_Y = 20;
 
-constexpr int dfNETWORK_PACKET_RECV_TIMEOUT = 3000;
+constexpr int dfNETWORK_PACKET_RECV_TIMEOUT = 30000;
+
+constexpr int dfATTACK1_DAMAGE = 5;
+constexpr int dfATTACK2_DAMAGE = 10;
+constexpr int dfATTACK3_DAMAGE = 15;

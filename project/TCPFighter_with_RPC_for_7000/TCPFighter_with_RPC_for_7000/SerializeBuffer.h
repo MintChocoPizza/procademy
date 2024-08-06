@@ -184,10 +184,10 @@ public:
 	// Parameters: (int) 이동 사이즈.
 	// Return: (int) 이동된 사이즈.
 	//////////////////////////////////////////////////////////////////////////
-	int			RetMoveWritePos(int iSize) { m_chpWritePos += iSize; return iSize; }
-	int			RetMoveReadPos(int iSize) { m_chpReadPos += iSize; return iSize; }
-	void		MoveWritePos(int iSize) { m_chpWritePos += iSize; }
-	void		MoveReadPos(int iSize) { m_chpReadPos += iSize; }
+	size_t			RetMoveWritePos(size_t iSize) { m_chpWritePos += iSize; return iSize; }
+	size_t			RetMoveReadPos(size_t iSize) { m_chpReadPos += iSize; return iSize; }
+	void		MoveWritePos(size_t iSize) { m_chpWritePos += iSize; }
+	void		MoveReadPos(size_t iSize) { m_chpReadPos += iSize; }
 	// 현재 해당 함수가 왜 사이즈를 리턴해야 하는지 정확한 이유를 모르겠다. 
 
 

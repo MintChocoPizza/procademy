@@ -12,6 +12,7 @@
 #include "Protocol.h"
 #include "C_Ring_Buffer.h"
 #include "Session.h"
+#include "CList.h"
 #include "Field.h"
 #include "Player.h"
 

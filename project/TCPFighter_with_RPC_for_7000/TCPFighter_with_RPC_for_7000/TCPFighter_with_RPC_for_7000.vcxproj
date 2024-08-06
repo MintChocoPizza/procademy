@@ -144,6 +144,7 @@
     <ClCompile Include="Session.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CList.h" />
     <ClInclude Include="CMemoryPool.h" />
     <ClInclude Include="Contents.h" />
     <ClInclude Include="C_Ring_Buffer.h" />

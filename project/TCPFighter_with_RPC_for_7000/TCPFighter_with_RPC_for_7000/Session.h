@@ -21,7 +21,8 @@ struct st_SESSION
 	bool				Disconnect;			// ¿¬°á ²÷±è Ã¼Å©
 
 	st_SESSION();
-	st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID);
+	~st_SESSION();
+	//st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID);
 	void Init(SOCKET New_Socket, DWORD dw_New_SessionID);
 };
 
@@ -55,8 +56,8 @@ void mpMoveStop(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, s
 void mpCreateMyCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP);
 void mpCreateOtherCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP);
 void mpEcho(SerializeBuffer* pPacket, DWORD Time);
-void mpAttack1(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP);
-
+void mpAttack1(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY);
+void mpDamge(SerializeBuffer* pPacket, DWORD dwAttackID, DWORD dwDamageID, char DamageHP);
 
 
 #if C_SESSION == 1

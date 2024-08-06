@@ -11,6 +11,12 @@
 #define __CLIST_H__
 
 #include <new>
+#include "CMemoryPool.h"
+
+template <typename T>
+class CList;
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // 템플릿 클래스의 경우 정의부와 선언부를 분리할 수 없다. 
@@ -72,10 +78,14 @@ private:
 	int _size = 0;
 	Node _head;
 	Node _tail;
+	//OreoPizza::CMemoryPool<Node>& _MemPool;
+	OreoPizza::CMemoryPool<Node>* _MemPool;
 
 public:
 	CList();
+	CList(OreoPizza::CMemoryPool<Node>& MemPool);
 	~CList();
+	void InitCList(OreoPizza::CMemoryPool<Node>& MemPool);
 
 	// 모든 요소를 순회하면 출력한다.
 	void printAll(void);
@@ -263,6 +273,17 @@ inline T& CList<T>::iterator::operator*()
 // CList 클래스
 //////////////////////////////////////////////////////////////////////////////////////////
 
+template<typename T>
+inline CList<T>::CList() : _size(0)
+{
+	_MemPool = NULL;
+	_head._Prev = NULL;
+	_head._Next = &_tail;
+
+	_tail._Next = NULL;
+	_tail._Prev = &_head;
+}
+
 //----------------------------------------------------------------------------------------
 // 생성자, 소멸자
 // 
@@ -272,7 +293,7 @@ inline T& CList<T>::iterator::operator*()
 // 단, malloc, free 를 사용하여 동적 할당을 할 경우 생성자와 소멸자가 동작하지 않는다.
 //----------------------------------------------------------------------------------------
 template <typename T>
-CList<T>::CList() : _size(0)
+CList<T>::CList(OreoPizza::CMemoryPool<Node>& MemPool) : _size(0), _MemPool(&MemPool)
 {
 	_head._Prev = NULL;
 	_head._Next = &_tail;
@@ -306,12 +327,20 @@ inline CList<T>::~CList()
 		Prev->_Next = Next;
 		Next->_Prev = Prev;
 
-		free(temp);
+		//free(temp);
+		//*_MemPool.Free(temp);
+		(*_MemPool).Free(temp);
 		temp = Next;
 	}
 
 	// printf_s("소멸자 동작함? \n");
 	// 동작한다.
+}
+
+template<typename T>
+inline void CList<T>::InitCList(OreoPizza::CMemoryPool<Node>& MemPool)
+{
+	_MemPool = &MemPool;
 }
 
 //----------------------------------------------------------------------------------------
@@ -383,9 +412,11 @@ typename CList<T>::iterator CList<T>::end(void)
 template <typename T>
 inline void CList<T>::push_front(const T& data)
 {
-	Node* pNewNode = (Node*)malloc(sizeof(Node));
-	if (pNewNode == NULL)
-		return;
+	//Node* pNewNode = (Node*)malloc(sizeof(Node));
+	//if (pNewNode == NULL)
+	//	return;
+
+	Node* pNewNode = _MemPool->Alloc();
 
 	pNewNode->_data = data;
 	pNewNode->_Next = _head._Next;
@@ -400,9 +431,11 @@ inline void CList<T>::push_front(const T& data)
 template <typename T>
 void CList<T>::push_back(const T& data)
 {
-	Node* pNewNode = (Node*)malloc(sizeof(Node));
-	if (pNewNode == NULL)
-		return;
+	//Node* pNewNode = (Node*)malloc(sizeof(Node));
+	//if (pNewNode == NULL)
+	//	return;
+
+	Node* pNewNode = _MemPool->Alloc();
 
 	pNewNode->_data = data;
 	pNewNode->_Next = &_tail;
@@ -477,7 +510,8 @@ typename CList<T>::iterator CList<T>::erase(const iterator _Where)
 	// 메모리 누수탐지 new 오버로딩에서
 	// 메모리 관리를 실패해 이상한 값이 나옴
 	//---------------------------------------------
-	free(CurNode);
+	//free(CurNode);
+	_MemPool->Free(CurNode);
 	return CList<T>::iterator(NextNode);
 }
 

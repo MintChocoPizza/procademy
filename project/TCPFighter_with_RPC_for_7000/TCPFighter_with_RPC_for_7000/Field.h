@@ -15,11 +15,13 @@
 
 using namespace std;
 
-#define dfGRID_X_SIZE 100
-#define dfGRID_Y_SIZE 100
+#define dfGRID_X_SIZE 160
+#define dfGRID_Y_SIZE 120
 
-#define dfSECTOR_MAX_Y dfRANGE_MOVE_BOTTOM / dfGRID_Y_SIZE
-#define dfSECTOR_MAX_X dfRANGE_MOVE_RIGHT  / dfGRID_X_SIZE
+//#define dfSECTOR_MAX_Y dfRANGE_MOVE_BOTTOM / dfGRID_Y_SIZE
+//#define dfSECTOR_MAX_X dfRANGE_MOVE_RIGHT  / dfGRID_X_SIZE
+//constexpr int dfSECTOR_MAX_Y = dfRANGE_MOVE_BOTTOM / dfGRID_Y_SIZE;
+//constexpr int dfSECTOR_MAX_X = dfRANGE_MOVE_RIGHT / dfGRID_X_SIZE;
 
 struct st_SECTOR_POS;
 struct st_SECTOR_AROUND;
@@ -33,8 +35,10 @@ class C_Field
 public:
 	enum
 	{
-		Grid_X_Size = 100,
-		Grid_Y_Size = 100
+		//Grid_X_Size = 100,
+		//Grid_Y_Size = 100
+		dfSECTOR_MAX_Y = dfRANGE_MOVE_BOTTOM / dfGRID_Y_SIZE,
+		dfSECTOR_MAX_X = dfRANGE_MOVE_RIGHT / dfGRID_X_SIZE
 	};
 
 public:
@@ -50,7 +54,7 @@ public:
 
 	//---------------------------------------------------------------------------------------------
 	// 주어진 좌표와 공격 범위를 기준으로 공격 범위에 있는 섹터 얻기 
-	void GetAttackSectorAround(int iCurSectorX, int iCurSectorY, int iX, int iY, char byDirection, int i_Attack_Range_X, int i_Attack_Range_Y, st_SECTOR_AROUND* pSectorAound);
+	void GetAttackSectorAround(short shX, short shY, char byDirection, int i_Attack_Range_X, int i_Attack_Range_Y, st_SECTOR_AROUND* pSectorAound);
 
 	//---------------------------------------------------------------------------------------------
 	// 캐릭터가 섹터를 이동 한 뒤에 영향권에서 빠진 섹터, 새로 추가된 섹터의 정보 구하는 함수
@@ -65,8 +69,8 @@ public:
 	void CharacterSectorUpdatePacket(st_PLAYER* pPlayer);
 
 	//---------------------------------------------------------------------------------------------
-	// 
-	void removeUserFromSector(DWORD dwSessionID, st_SECTOR_POS* pSector_Pos);
+	// g_Sector_CList 에서 플레이어를 지운다. 
+	void removeUserFromSector(st_PLAYER* pPlayer);
 
 	//---------------------------------------------------------------------------------------------
 	// 특정 섹터 1개에 있는 클라이언트들 에게 메시지 보내기,
@@ -83,7 +87,7 @@ public:
 
 	//----------------------------------------------------------------
 	// 해당 섹터에 대한 플레이어들의 목록을 반환한다. 
-	st_PLAYER* GetPlayerInSector(int iSectorX, int iSectorY);
+	CList<st_PLAYER*>* GetPlayerInSectorCList(int iSectorX, int iSectorY);
 
 
 private:
@@ -94,6 +98,13 @@ private:
 	static C_Field _C_Field;
 
 public:
+
+	//----------------------------------------------------------------------------------------------
+	// C_Field()의 소멸자가 동작해야 CList() 소멸자가 동작하고,
+	// 그래야 할당받은 메모리를 메모리 풀에 돌려준다. 
+	// 그렇다면 무조건 CList()의 소멸자가 먼저 동작해야 한다. 
+	OreoPizza::CMemoryPool<CList<st_PLAYER*>::Node> _MemPool;
+
 	// Key: <GridY, GridX>, Value: SessionID
 	// std::unordered_multimap<std::pair<int, int>, DWORD> _Grid;
 	// 그냥 동적할당 배열을 사용하여 섹터당 유저들을 저장한다. 
@@ -104,8 +115,12 @@ public:
 	// 잘못되었다.......
 	// std::unordered_map<DWORD, st_PLAYER*> g_Sector_Hash[dfSECTOR_MAX_Y][dfSECTOR_MAX_X];
 
-	int _Sector_Max_Y;
-	int _Sector_Max_X;
+	//----------------------------------------------------------------------------------------------
+	// 최종
+	// 플레이어가 이동함에 따라 해쉬테이블에 캐릭터를 넣을 때 마다 동적할당이 발생하게 된다. 
+	// 이에대한 오버헤드가 더 클것으로 판단됨[
+	CList<st_PLAYER*> g_Sector_CList[dfSECTOR_MAX_Y][dfSECTOR_MAX_X];
+
 };
 
 #endif // !__FIELD_H__

@@ -9,6 +9,7 @@
 #include "Session.h"
 #include "Player.h"
 #include "Define.h"
+#include "CList.h"
 #include "Field.h"
 #include "Protocol.h"
 #include "main.h"
@@ -49,7 +50,7 @@ void Disconnect(void)
 		g_Packet.Clear();
 
 		// st_p_Player는 포인터 변수이기 때문에 delete를 하기 전에 사용해야 한다.
-		C_Field::GetInstance()->removeUserFromSector(dwSessionID, st_p_Player->_CurSector);
+		C_Field::GetInstance()->removeUserFromSector(st_p_Player);
 		// 동적 할당된 변수를 함부로 '=' 연산을 하면 오류가 생긴다.
 		DeleteCharacter(dwSessionID);
 		DeleteSession(dwSessionID);

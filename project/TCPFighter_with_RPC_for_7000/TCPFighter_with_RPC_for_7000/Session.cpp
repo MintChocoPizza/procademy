@@ -7,6 +7,8 @@
 #include <queue>
 #include <unordered_map>
 #include <new>
+#include <cmath>
+
 #include "LOG.h"
 #include "Protocol.h"
 #include "C_Ring_Buffer.h"
@@ -18,6 +20,7 @@
 #include "CMemoryPool.h"
 #include "Define.h"
 #include "Player.h"
+#include "CList.h"
 #include "Field.h"
 
 
@@ -44,20 +47,27 @@ st_SESSION::st_SESSION()
 	RecvQ = new C_RING_BUFFER();
 	SendQ = new C_RING_BUFFER();
 }
+st_SESSION::~st_SESSION()
+{
+	delete RecvQ;
+	delete SendQ;
+}
 #pragma warning(default: 26495)
 
-st_SESSION::st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID)
-{
-	Socket = New_Socket;
-	dwSessionID = dw_New_SessionID;
-
-	RecvQ = new C_RING_BUFFER();
-	SendQ = new C_RING_BUFFER();
-
-	dwLastRecvTime = g_Start_Time;
-
-	Disconnect = false;
-}
+// 따로 초기화를 한다. 
+// 메모리풀을 사용하기 때문에
+//st_SESSION::st_SESSION(SOCKET New_Socket, DWORD dw_New_SessionID)
+//{
+//	Socket = New_Socket;
+//	dwSessionID = dw_New_SessionID;
+//
+//	RecvQ = new C_RING_BUFFER();
+//	SendQ = new C_RING_BUFFER();
+//
+//	dwLastRecvTime = g_Start_Time;
+//
+//	Disconnect = false;
+//}
 void st_SESSION::Init(SOCKET New_Socket, DWORD dw_New_SessionID)
 {
 	Socket = New_Socket;
@@ -572,7 +582,7 @@ int netProc_Recv(st_SESSION* pSession)
 		ret_Dq_Size = pSession->RecvQ->Dequeue(g_Packet.GetBufferWritePtr(), st_Header.bySize);
 		g_Packet.MoveWritePos(ret_Dq_Size);
 		
-		_LOG(0, L"netProc_Recv - Recd Byte:%d", ret_Peek + ret_Dq_Size);
+		_LOG(0, L"netProc_Recv - Recd Byte:%Iu", (ret_Peek + ret_Dq_Size));
 
 		if (!PacketProc(pSession, st_Header.byType, &g_Packet))
 		{
@@ -899,8 +909,13 @@ bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket)
 	char byDirection;
 	short shX;
 	short shY;
-	st_PLAYER* pPlayer;
+	double MinDist;
+	double TempDist;
+	st_PLAYER* pHitPlayer;
+	st_PLAYER* pTempHitPlayer;
 	st_SECTOR_AROUND st_Sector_Around;
+	CList<st_PLAYER*>* pCList;
+	CList<st_PLAYER*>::iterator iter;
 	int iCnt;
 
 
@@ -911,22 +926,22 @@ bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket)
 
 	_LOG(dfLOG_LEVEL_DEBUG, L"# Attack1 # SessionID:%d / Direction:%d / X:%d / Y:%d", pSession->dwSessionID, byDirection, shX, shY);
 
-	//---------------------------------------------------------------------------------------------------------------
-	// ID로 캐릭터를 검색한다. 
-	//---------------------------------------------------------------------------------------------------------------
-	pPlayer = FindCharacter(pSession->dwSessionID);
-	if (pPlayer == NULL)
-	{
-		_LOG(dfLOG_LEVEL_ERROR, L"# MOVESTART > SessionID:%d Player Not Found!", pSession->dwSessionID);
-		return false;
-	}
+	////---------------------------------------------------------------------------------------------------------------
+	//// ID로 캐릭터를 검색한다. 
+	////---------------------------------------------------------------------------------------------------------------
+	//pPlayer = FindCharacter(pSession->dwSessionID);
+	//if (pPlayer == NULL)
+	//{
+	//	_LOG(dfLOG_LEVEL_ERROR, L"# MOVESTART > SessionID:%d Player Not Found!", pSession->dwSessionID);
+	//	return false;
+	//}
 
 
 
 
 	// 공격 모션에 대한 패킷은 해당 플레이어가 보이는 모든 세션에게 보내야 한다. 
-	mpAttack1(pPacket, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y);
-	C_Field::GetInstance()->GetSectorAround(pPlayer->_X, pPlayer->_Y, &st_Sector_Around);
+	mpAttack1(pPacket, pSession->dwSessionID, byDirection, shX, shY);
+	C_Field::GetInstance()->GetSectorAround(shX/dfGRID_Y_SIZE, shY/dfGRID_Y_SIZE, &st_Sector_Around);
 	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around);
 	pPacket->Clear();
 
@@ -938,15 +953,48 @@ bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket)
 	// 
 	// 1. 같은 섹터에서 검색한다. 
 	// 2. 섹터를 넘어간다면 다른 섹터에서도 계산한다.
-	// 3. 3개의 섹터에 걸치는 경우도 있다. 따라서 모든 섹터를 계산하여, 가장 가까이 있는 플레이어를 탐색해야 한다? 
+	// 3. 3개의 섹터에 걸치는 경우도 있다.
+	// 4. 공격 범위에 있는 섹터를 구했다면, 가장 가까이 있는 플레이어를 구한다.
+	// 5. 해당 플레이어의 HP를 깍고
+	// 6. 피격자 기준으로 섹터를 계산하여 메시지를 보낸다. 
 	//---------------------------------------------------------------------------------------------------------------
-	C_Field::GetInstance()->GetAttackSectorAround(pPlayer->_CurSector->iX, pPlayer->_CurSector->iY, pPlayer->_X, pPlayer->_Y, pPlayer->_byDirection, dfATTACK1_RANGE_X, dfATTACK1_RANGE_Y, &st_Sector_Around);
+	pHitPlayer = NULL;
+	MinDist = sqrt(pow(dfATTACK1_RANGE_X,2) + pow(dfATTACK1_RANGE_Y, 2));	// 공격 받을 수 있는 최대 유클리드 거리
+	C_Field::GetInstance()->GetAttackSectorAround(shX, shY, byDirection, dfATTACK1_RANGE_X, dfATTACK1_RANGE_Y, &st_Sector_Around);
 	for (iCnt = 0; iCnt < st_Sector_Around.iCount; ++iCnt)
 	{
-		
+		pCList = C_Field::GetInstance()->GetPlayerInSectorCList(st_Sector_Around.Around[iCnt].iX, st_Sector_Around.Around[iCnt].iY);
+
+		for (iter = (*pCList).begin(); iter != (*pCList).end(); ++iter)
+		{
+			pTempHitPlayer = (*iter);
+			
+			// 타격자와 피격자가 같으면 넘어간다. 
+			if (pSession->dwSessionID == pTempHitPlayer->_SessionID) continue;
+
+			// 타격자와 피격자의 유클리드 거리를 구하여, 피격자와의 거리가 더 가까우면 데이터를 갱신한다.
+			TempDist = sqrt(pow(shX - pTempHitPlayer->_X, 2) + pow(shY - pTempHitPlayer->_Y, 2));
+			if (MinDist >= TempDist)
+			{
+				MinDist = TempDist;
+				pHitPlayer = pTempHitPlayer;
+			}
+		}
 	}
 
+	if (pHitPlayer == NULL)
+		return true;
 
+	_LOG(0, L"#Attack1 Direction:%d / SessionID:%d -> SessionID:%d", byDirection, pSession->dwSessionID, pHitPlayer->_SessionID);
+
+	//---------------------------------------------------------------------------------------------------------------
+	// HP를 깍고, 
+	// 피격자 기준으로 섹터를 계산하여 메시지를 보낸다.
+	pHitPlayer->_HP -= dfATTACK1_DAMAGE;
+	mpDamge(pPacket, pSession->dwSessionID, pHitPlayer->_SessionID, pHitPlayer->_HP);
+	C_Field::GetInstance()->GetSectorAround(pHitPlayer->_CurSector->iX, pHitPlayer->_CurSector->iY, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around);
+	pPacket->Clear();
 
 
 
@@ -1076,7 +1124,17 @@ void mpAttack1(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, sh
 	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
 	(*pPacket) << dwSessionID << byDirection << shX << shY;
 }
+void mpDamge(SerializeBuffer* pPacket, DWORD dwAttackID, DWORD dwDamageID, char DamageHP)
+{
+	st_PACKET_HEADER New_Header;
 
+	New_Header.byCode = (char)dfPACKET_CODE;
+	New_Header.bySize = 9;
+	New_Header.byType = (char)dfPACKET_SC_DAMAGE;
+
+	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
+	(*pPacket) << dwAttackID << dwDamageID << DamageHP;
+}
 
 
 

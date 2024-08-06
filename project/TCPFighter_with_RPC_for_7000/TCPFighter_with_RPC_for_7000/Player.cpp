@@ -10,6 +10,7 @@
 #include "Session.h"
 #include "Define.h"
 #include "Player.h"
+#include "CList.h"
 #include "Field.h"
 
 
@@ -25,6 +26,7 @@ st_PLAYER::st_PLAYER()
 }
 #pragma warning( default : 26495 )
 
+#pragma warning( disable : 26495 )
 st_PLAYER::st_PLAYER(DWORD SessionID, st_SESSION* pSession)
 {
 	//_pSession = pSession;
@@ -49,6 +51,8 @@ st_PLAYER::st_PLAYER(DWORD SessionID, st_SESSION* pSession)
 	//_byDirection = (rand() % 8) < 4 ? 0 : 4;
 	//_byModeDirection = -1;
 }
+#pragma warning( default : 26495 )
+
 st_PLAYER::~st_PLAYER()
 {
 	//--------------------------------------
@@ -103,8 +107,15 @@ st_PLAYER* CreateNewPlayer(DWORD SessionID, st_SESSION* st_p_New_Session)
 	st_Temp_New_Player->_HP = 100;
 	st_Temp_New_Player->_dwAction = -1;
 
+#ifdef _DEBUG
+	st_Temp_New_Player->_Y = 50;
+	st_Temp_New_Player->_X = 50;
+#else
 	st_Temp_New_Player->_Y = rand() % (dfRANGE_MOVE_BOTTOM - dfRANGE_MOVE_TOP + 1) + dfRANGE_MOVE_TOP;
 	st_Temp_New_Player->_X = rand() % (dfRANGE_MOVE_RIGHT - dfRANGE_MOVE_LEFT + 1) + dfRANGE_MOVE_LEFT;
+#endif // _DEBUG
+
+
 
 	st_Temp_New_Player->_CurSector->Init_SECTOR_POS(st_Temp_New_Player->_Y, st_Temp_New_Player->_X);
 	st_Temp_New_Player->_OldSector->Init_SECTOR_POS(st_Temp_New_Player->_Y, st_Temp_New_Player->_X);
