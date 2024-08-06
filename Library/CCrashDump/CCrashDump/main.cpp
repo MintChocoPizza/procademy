@@ -1,12 +1,25 @@
 ﻿// CCrashDump.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
 
-#include <iostream>
+#include "CCrashDump.h"
+
+LONG OreoPizza::CCrashDump::_DumpCount = 0;
+OreoPizza::CCrashDump crashDump;
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    // 덤프 핸들러를 설정하고, 클래스 인스턴스를 생성합니다.
+
+    // 프로그램 로직 작성
+    // ...
+
+    // 테스트를 위해 강제로 크래시를 발생시킵니다.
+    crashDump.Crash();
+
+    return 0;
 }
+
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
 // 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
