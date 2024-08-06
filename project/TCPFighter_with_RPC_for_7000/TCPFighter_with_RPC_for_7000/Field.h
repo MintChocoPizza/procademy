@@ -61,7 +61,7 @@ public:
 	void GetUpdateSectorAround(st_PLAYER* pCharacter, st_SECTOR_AROUND* pRemoveSector, st_SECTOR_AROUND* pAddSector);
 
 	//---------------------------------------------------------------------------------------------
-	// 섹터가 변경된 것을 확인한다.
+	// 섹터가 변경된 것을 확인한다. 그리고 변경되었다면 g_Sector_CList에 반영한다.
 	bool Sector_UpdateCharacter(st_PLAYER* pPlayer);
 
 	//---------------------------------------------------------------------------------------------
@@ -89,6 +89,9 @@ public:
 	// 해당 섹터에 대한 플레이어들의 목록을 반환한다. 
 	CList<st_PLAYER*>* GetPlayerInSectorCList(int iSectorX, int iSectorY);
 
+	//----------------------------------------------------------------
+	// 처음 생성한 플레이어를 섹터에 등록한다. 
+	void AddPlayerToSector(st_PLAYER* pPlayer);
 
 private:
 	C_Field();

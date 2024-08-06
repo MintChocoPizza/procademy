@@ -445,6 +445,7 @@ void netProc_Accept(void)
 	g_Session_Hash.insert({ SessionID, st_p_New_Session });
 	// 2.
 	st_p_New_Player = CreateNewPlayer(SessionID, st_p_New_Session);
+	C_Field::GetInstance()->AddPlayerToSector(st_p_New_Player);
 	// 3.
 
 	mpCreateMyCharacter(&g_Packet, SessionID, st_p_New_Player->_byDirection, st_p_New_Player->_X, st_p_New_Player->_Y, st_p_New_Player->_HP);

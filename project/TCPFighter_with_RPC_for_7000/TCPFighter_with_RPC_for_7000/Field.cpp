@@ -231,6 +231,9 @@ bool C_Field::Sector_UpdateCharacter(st_PLAYER* pPlayer)
         pPlayer->_CurSector->iY = SectorY;
         pPlayer->_CurSector->iX = SectorX;
 
+        g_Sector_CList[pPlayer->_OldSector->iY][pPlayer->_OldSector->iX].remove(pPlayer);
+        g_Sector_CList[SectorY][SectorX].push_back(pPlayer);
+
         return true;
     }
 
@@ -536,6 +539,11 @@ void st_SECTOR_POS::Init_SECTOR_POS(int Y, int X)
 {
     iY = Y / dfGRID_Y_SIZE;
     iX = X / dfGRID_X_SIZE;
+}
+
+void C_Field::AddPlayerToSector(st_PLAYER* pPlayer)
+{
+    g_Sector_CList[pPlayer->_CurSector->iY][pPlayer->_CurSector->iX].push_back(pPlayer);
 }
 
 C_Field::C_Field() : _MemPool(8000), g_Sector_CList()

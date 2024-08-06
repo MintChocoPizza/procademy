@@ -2,9 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\project",
-    "\\project\\TCPFighter_with_RPC_for_7000\\TCPFighter_with_RPC_for_7000",
-    "\\test"
+    "\\project\\TCPFighter_with_RPC_for_7000",
+    "\\project\\TCPFighter_with_RPC_for_7000\\TCPFighter_with_RPC_for_7000"
   ],
-  "SelectedNode": "\\test",
+  "SelectedNode": "\\project\\TCPFighter_with_RPC_for_7000\\TCPFighter_with_RPC_for_7000\\Field.cpp",
   "PreviewInSolutionExplorer": false
 }
