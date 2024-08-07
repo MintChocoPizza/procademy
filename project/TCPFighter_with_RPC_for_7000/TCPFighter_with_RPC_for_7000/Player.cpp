@@ -105,7 +105,7 @@ st_PLAYER* CreateNewPlayer(DWORD SessionID, st_SESSION* st_p_New_Session)
 	st_Temp_New_Player->_SessionID = SessionID;
 	st_Temp_New_Player->_Disconnect = false;
 	st_Temp_New_Player->_HP = 100;
-	st_Temp_New_Player->_dwAction = -1;
+	st_Temp_New_Player->_dwAction = dfPACKET_CS_MOVE_STOP;
 
 #ifdef _DEBUG
 	st_Temp_New_Player->_Y = 50;
@@ -121,7 +121,7 @@ st_PLAYER* CreateNewPlayer(DWORD SessionID, st_SESSION* st_p_New_Session)
 	st_Temp_New_Player->_OldSector->Init_SECTOR_POS(st_Temp_New_Player->_Y, st_Temp_New_Player->_X);
 
 	st_Temp_New_Player->_byDirection = (rand() % 8) < 4 ? 0 : 4;
-	st_Temp_New_Player->_byModeDirection = -1;
+	st_Temp_New_Player->_byMoveDirection = -1;
 
 	g_CharacterHash.insert({ SessionID, st_Temp_New_Player });
 

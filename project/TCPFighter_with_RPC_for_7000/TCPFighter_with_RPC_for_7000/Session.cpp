@@ -100,10 +100,12 @@ void DeleteSession(DWORD dwSessionID)
 	pSession = iter->second;
 
 	//delete pSession;
+	closesocket(pSession->Socket);
 	st_SESSION_MemPool.Free(pSession);
 	g_Session_Hash.erase(iter);
 
 	g_SessionID_Q.push(dwSessionID);
+	
 }
 
 void netStartUp(void)
@@ -457,6 +459,7 @@ void netProc_Accept(void)
 	C_Field::GetInstance()->SendPacket_Around(st_p_New_Session, &g_Packet, &st_Sector_Around);
 	g_Packet.Clear();
 	// 5. 
+	C_Field::GetInstance()->SendPacket_Around_To_Session(st_p_New_Session, &g_Packet, &st_Sector_Around);
 
 	inet_ntop(AF_INET, &Clinet_Addr.sin_addr, host, NI_MAXHOST);
 	_c_LOG(1, "Conncet # IP:%s : Port: %d / SessionID: %d", host, ntohs(Clinet_Addr.sin_port), SessionID);
@@ -704,8 +707,6 @@ bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket)
 	*pPacket >> shY;
 	pPacket->Clear();
 
-	_LOG(dfLOG_LEVEL_DEBUG, L"# MOVESTART # SessionID:%d / Direction:%d / X:%d / Y:%d", pSession->dwSessionID, byDirection, shX, shY);
-
 	//---------------------------------------------------------------------------------------------------------------
 	// ID로 캐릭터를 검색한다. 
 	//---------------------------------------------------------------------------------------------------------------
@@ -715,6 +716,10 @@ bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket)
 		_LOG(dfLOG_LEVEL_ERROR, L"# MOVESTART > SessionID:%d Player Not Found!", pSession->dwSessionID);
 		return false;
 	}
+
+	_LOG(dfLOG_LEVEL_DEBUG, L"# MOVESTART # SessionID:%d / Direction:%d / X:%d / Y:%d _ Server X:%d / Server Y:%d", 
+		pSession->dwSessionID, byDirection, shX, shY, pPlayer->_X, pPlayer->_Y);
+
 
 	//---------------------------------------------------------------------------------------------------------------
 	// 서버의 위치와 받은 패킷의 위치값이 너무 큰 차이가 난다면 싱크 패킷을 보내어 좌표 보정.
@@ -750,7 +755,7 @@ bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket)
 	// 단순 방향표시용 byDirection (LL, RR)과 
 	// 이동시 8방향 (LL, LU, UU, RU, RR, RD, DD, LD) 용 MoveDirecion 이 있음
 	//---------------------------------------------------------------------------------------------------------------
-	pPlayer->_byModeDirection = byDirection;
+	pPlayer->_byMoveDirection = byDirection;
 
 	//---------------------------------------------------------------------------------------------------------------
 	// 방향을 변경
@@ -810,8 +815,6 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket)
 	*pPacket >> shY;
 	pPacket->Clear();
 
-	_LOG(0, L"# MOVESTOP # SessionID:%d / Direction:%d / X:%d / Y:%d", pSession->dwSessionID, byDirection, shX, shY);
-
 	//---------------------------------------------------------------------------------------------------------------
 	// ID로 캐릭터를 검색한다. 
 	//---------------------------------------------------------------------------------------------------------------
@@ -822,15 +825,19 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket)
 		return false;
 	}
 
+	_LOG(0, L"# MOVESTOP # SessionID:%d / Direction:%d / X:%d / Y:%d  _ Server X:%d / Server Y:%d", 
+		pSession->dwSessionID, byDirection, shX, shY, pPlayer->_X, pPlayer->_Y);
+
+
 	//---------------------------------------------------------------------------------------------------------------
-// 서버의 위치와 받은 패킷의 위치값이 너무 큰 차이가 난다면 싱크 패킷을 보내어 좌표 보정.
-// 
-// 본 게임의 좌표 동기화 구조가 단순한 키보드 조작 (클라이언트의 선처리, 서버의 후 반영) 방식으로 
-// 클라이언트의 좌표를 그대로 믿는 방식을 택하고 있음. 
-// 실제 온라인 게임이라면 클라이언트에서 목적지를 공유하는 방식을 택해야 함
-// 지금은 좌표에 대해서는 간단한 구현을 목적으로 하고 있으므로 
-// 서버는 클라이언트의 좌표를 그대로 믿지만, 서버와 너무 큰 차이가 있다면 강제 좌표 동기화 하도록 함
-//---------------------------------------------------------------------------------------------------------------
+	// 서버의 위치와 받은 패킷의 위치값이 너무 큰 차이가 난다면 싱크 패킷을 보내어 좌표 보정.
+	// 
+	// 본 게임의 좌표 동기화 구조가 단순한 키보드 조작 (클라이언트의 선처리, 서버의 후 반영) 방식으로 
+	// 클라이언트의 좌표를 그대로 믿는 방식을 택하고 있음. 
+	// 실제 온라인 게임이라면 클라이언트에서 목적지를 공유하는 방식을 택해야 함
+	// 지금은 좌표에 대해서는 간단한 구현을 목적으로 하고 있으므로 
+	// 서버는 클라이언트의 좌표를 그대로 믿지만, 서버와 너무 큰 차이가 있다면 강제 좌표 동기화 하도록 함
+	//---------------------------------------------------------------------------------------------------------------
 	if (abs(pPlayer->_X - shX) > dfERROR_RANGE || abs(pPlayer->_Y - shY) > dfERROR_RANGE)
 	{
 		mpSync(pPacket, pPlayer->_SessionID, pPlayer->_X, pPlayer->_Y);
@@ -850,13 +857,13 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket)
 	//---------------------------------------------------------------------------------------------------------------
 	// 동작을 변경. 동작번호와, 방향값이 같다.
 	//---------------------------------------------------------------------------------------------------------------
-	pPlayer->_dwAction = byDirection;
+	pPlayer->_dwAction = dfPACKET_CS_MOVE_STOP;
 
 	//---------------------------------------------------------------------------------------------------------------
 	// 단순 방향표시용 byDirection (LL, RR)과 
 	// 이동시 8방향 (LL, LU, UU, RU, RR, RD, DD, LD) 용 MoveDirecion 이 있음
 	//---------------------------------------------------------------------------------------------------------------
-	pPlayer->_byModeDirection = byDirection;
+	pPlayer->_byMoveDirection = byDirection;
 
 	//---------------------------------------------------------------------------------------------------------------
 	// 방향을 변경
@@ -943,7 +950,7 @@ bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket)
 	// 공격 모션에 대한 패킷은 해당 플레이어가 보이는 모든 세션에게 보내야 한다. 
 	mpAttack1(pPacket, pSession->dwSessionID, byDirection, shX, shY);
 	C_Field::GetInstance()->GetSectorAround(shX/dfGRID_Y_SIZE, shY/dfGRID_Y_SIZE, &st_Sector_Around);
-	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around, true);
 	pPacket->Clear();
 
 	//---------------------------------------------------------------------------------------------------------------
@@ -1043,7 +1050,6 @@ bool netPacketProc_Echo(st_SESSION* pSession, SerializeBuffer* pPacket)
 
 	return true;
 }
-
 void mpSync(SerializeBuffer* pPacket, DWORD dwSessionID, short shX, short shY)
 {
 	st_PACKET_HEADER New_Header;
@@ -1136,7 +1142,16 @@ void mpDamge(SerializeBuffer* pPacket, DWORD dwAttackID, DWORD dwDamageID, char 
 	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
 	(*pPacket) << dwAttackID << dwDamageID << DamageHP;
 }
+void mpDeleteCharacter(SerializeBuffer* pPacket, DWORD dwSessionID)
+{
+	st_PACKET_HEADER New_Header;
 
+	New_Header.byCode = (char)dfPACKET_CODE;
+	New_Header.bySize = 4;
+	New_Header.byType = (char)dfPACKET_SC_DELETE_CHATACTER;
+	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
+	(*pPacket) << dwSessionID;
+}
 
 
 

@@ -49,6 +49,8 @@ void Monitor(void);
 
 int wmain(int argc, wchar_t* argv[])
 {
+    DWORD dwTime;
+
     timeBeginPeriod(1);
     srand((unsigned int)time(NULL));
 
@@ -65,9 +67,12 @@ int wmain(int argc, wchar_t* argv[])
 
         // 업데이트는 게임의 로직 (월드, 캐릭터, 몬스터, 이벤트 등...)
         // 실제 게임에서 돌아가야 하는 로직을 처리 한다. 
-
-        Update();                           // 게임 로직 업데이트 
-
+        dwTime = timeGetTime();
+        if (dwTime - g_Start_Time >= 20)
+        {
+            Update();                           // 게임 로직 업데이트 
+            g_Start_Time += 20;
+        }
         ServerControl();                    // 키보드 입력을 통해서 서버를 제어할 경우 사용 
         Monitor();                          // 모니터링 정보를 표시, 저장, 전송하는 경우 사용
     }

@@ -63,72 +63,72 @@ unsigned _stdcall QueueDirectPop(void* pArg);
 
 int main()
 {
-#if VERSION == MULTTHREAD_TEST
-	{
-		HANDLE hThread[2];
-		DWORD dwStatus;
-
-		len = strlen(testString);
-
-		hThread[0] = (HANDLE)_beginthreadex(NULL, 0, QueuePush, NULL, NULL, NULL);
-		hThread[1] = (HANDLE)_beginthreadex(NULL, 0, QueuePop, NULL, NULL, NULL);
-
-		dwStatus = WaitForMultipleObjects(2, hThread, TRUE, INFINITE);
-
-		if (dwStatus == WAIT_OBJECT_0)
-		{
-			printf("ALL Thread normal shutdown !!!!! \n");
-		}
-		else
-		{
-			wprintf(L"WaitForMultipleObject %d error \n", GetLastError());
-
-		}
-	}
-#elif VERSION == OBJ_TEST
-	{
-		OSJ_test();
-	}
-#elif VERSION == SINGLETHREAD_TEST
-	{
-		len = strlen(testString);
-		while (1)
-		{
-			QueuePush(NULL);
-			QueuePop(NULL);
-		}
-	}
-#elif VERSION == DIRECT_SINGLETHREAD_TEST
-	{
-		len = strlen(testString);
-		while (1)
-		{
-			QueueDirectPush(NULL);
-			QueueDirectPop(NULL);
-		}
-	}
-#elif VERSION == DIRECT_MULTTHREAD_TEST
-	{
-		HANDLE hThread[2];
-		DWORD dwStatus;
-
-		len = strlen(testString);
-
-		hThread[0] = (HANDLE)_beginthreadex(NULL, 0, QueueDirectPush, NULL, NULL, NULL);
-		hThread[1] = (HANDLE)_beginthreadex(NULL, 0, QueueDirectPop, NULL, NULL, NULL);
-
-		dwStatus = WaitForMultipleObjects(2, hThread, TRUE, INFINITE);
-
-		if (dwStatus == WAIT_OBJECT_0)
-		{
-			printf("ALL Thread normal shutdown !!!!! \n");
-		}
-		else
-		{
-			wprintf(L"WaitForMultipleObject %d error \n", GetLastError());
-		}
-	}
-#endif
+//#if VERSION == MULTTHREAD_TEST
+//	{
+//		HANDLE hThread[2];
+//		DWORD dwStatus;
+//
+//		len = strlen(testString);
+//
+//		hThread[0] = (HANDLE)_beginthreadex(NULL, 0, QueuePush, NULL, NULL, NULL);
+//		hThread[1] = (HANDLE)_beginthreadex(NULL, 0, QueuePop, NULL, NULL, NULL);
+//
+//		dwStatus = WaitForMultipleObjects(2, hThread, TRUE, INFINITE);
+//
+//		if (dwStatus == WAIT_OBJECT_0)
+//		{
+//			printf("ALL Thread normal shutdown !!!!! \n");
+//		}
+//		else
+//		{
+//			wprintf(L"WaitForMultipleObject %d error \n", GetLastError());
+//
+//		}
+//	}
+//#elif VERSION == OBJ_TEST
+//	{
+//		OSJ_test();
+//	}
+//#elif VERSION == SINGLETHREAD_TEST
+//	{
+//		len = strlen(testString);
+//		while (1)
+//		{
+//			QueuePush(NULL);
+//			QueuePop(NULL);
+//		}
+//	}
+//#elif VERSION == DIRECT_SINGLETHREAD_TEST
+//	{
+//		len = strlen(testString);
+//		while (1)
+//		{
+//			QueueDirectPush(NULL);
+//			QueueDirectPop(NULL);
+//		}
+//	}
+//#elif VERSION == DIRECT_MULTTHREAD_TEST
+//	{
+//		HANDLE hThread[2];
+//		DWORD dwStatus;
+//
+//		len = strlen(testString);
+//
+//		hThread[0] = (HANDLE)_beginthreadex(NULL, 0, QueueDirectPush, NULL, NULL, NULL);
+//		hThread[1] = (HANDLE)_beginthreadex(NULL, 0, QueueDirectPop, NULL, NULL, NULL);
+//
+//		dwStatus = WaitForMultipleObjects(2, hThread, TRUE, INFINITE);
+//
+//		if (dwStatus == WAIT_OBJECT_0)
+//		{
+//			printf("ALL Thread normal shutdown !!!!! \n");
+//		}
+//		else
+//		{
+//			wprintf(L"WaitForMultipleObject %d error \n", GetLastError());
+//		}
+//	}
+//#endif
 
 	//printf("%d \n", g_rb.DirectEnqueueSize());
 

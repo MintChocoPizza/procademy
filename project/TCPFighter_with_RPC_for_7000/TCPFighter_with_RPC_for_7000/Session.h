@@ -58,6 +58,7 @@ void mpCreateOtherCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char by
 void mpEcho(SerializeBuffer* pPacket, DWORD Time);
 void mpAttack1(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY);
 void mpDamge(SerializeBuffer* pPacket, DWORD dwAttackID, DWORD dwDamageID, char DamageHP);
+void mpDeleteCharacter(SerializeBuffer* pPacket, DWORD dwSessionID);
 
 
 #if C_SESSION == 1

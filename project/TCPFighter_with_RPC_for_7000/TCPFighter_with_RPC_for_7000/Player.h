@@ -11,7 +11,7 @@ struct st_PLAYER
 
 	DWORD		_dwAction;
 	BYTE		_byDirection;
-	BYTE		_byModeDirection;	// 아마도 움직이던 방향
+	BYTE		_byMoveDirection;	// 아마도 움직이던 방향
 
 
 	short		_X;
