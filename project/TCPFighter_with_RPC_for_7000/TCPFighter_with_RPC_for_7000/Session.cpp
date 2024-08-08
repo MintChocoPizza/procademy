@@ -308,9 +308,18 @@ void netIOProcess(void)
 		// 
 		// 마지막 _Session이거나 or _Listen_Socket 포함 64개의 소켓을 Select에 등록했다면, 반복문을 종료한다. 
 		//------------------------------------------
-		for (iCnt = 0; iCnt < 64 - 1 && iter != g_Session_Hash.end(); ++iter, ++iCnt)
+		for (iCnt = 0; iCnt < 64 - 1 && iter != g_Session_Hash.end(); ++iter)
 		{
 			st_pSession = iter->second;
+
+			//---------------------------------
+			// 하트비트 체크
+			if (st_pSession->dwLastRecvTime + 30000 < g_Start_Time)
+			{
+				_LOG(0, L"# Heartbeat Over / SessionID:%d", st_pSession->dwSessionID);
+				enqueueForDeletion(st_pSession->dwSessionID);
+				continue;
+			}
 
 			//------------------------------------------
 			// 해당 클라이언트 Read Set 등록 / SendQ 에 데이터가 있다면 Write Set 등록
@@ -318,6 +327,7 @@ void netIOProcess(void)
 			FD_SET(st_pSession->Socket, &ReadSet);
 			if (st_pSession->SendQ->GetUseSize() > 0)
 				FD_SET(st_pSession->Socket, &WriteSet);
+			++iCnt;
 		}
 
 		//------------------------------------------
@@ -358,6 +368,10 @@ void netIOProcess(void)
 				if (FD_ISSET(st_pSession->Socket, &ReadSet))
 				{
 					netProc_Recv(st_pSession);
+
+					//----------------------------
+					// 하트비트 업데이트
+					st_pSession->dwLastRecvTime = g_Start_Time;
 					--i_Result;
 				}
 
@@ -459,7 +473,7 @@ void netProc_Accept(void)
 	C_Field::GetInstance()->SendPacket_Around(st_p_New_Session, &g_Packet, &st_Sector_Around);
 	g_Packet.Clear();
 	// 5. 
-	C_Field::GetInstance()->SendPacket_Around_To_Session(st_p_New_Session, &g_Packet, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around_To_Session_CreateCharacter(st_p_New_Session, &g_Packet, &st_Sector_Around);
 
 	inet_ntop(AF_INET, &Clinet_Addr.sin_addr, host, NI_MAXHOST);
 	_c_LOG(1, "Conncet # IP:%s : Port: %d / SessionID: %d", host, ntohs(Clinet_Addr.sin_port), SessionID);
@@ -863,7 +877,7 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket)
 	// 단순 방향표시용 byDirection (LL, RR)과 
 	// 이동시 8방향 (LL, LU, UU, RU, RR, RD, DD, LD) 용 MoveDirecion 이 있음
 	//---------------------------------------------------------------------------------------------------------------
-	pPlayer->_byMoveDirection = byDirection;
+	pPlayer->_byMoveDirection = dfPACKET_CS_MOVE_STOP;
 
 	//---------------------------------------------------------------------------------------------------------------
 	// 방향을 변경
@@ -945,8 +959,6 @@ bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket)
 	//}
 
 
-
-
 	// 공격 모션에 대한 패킷은 해당 플레이어가 보이는 모든 세션에게 보내야 한다. 
 	mpAttack1(pPacket, pSession->dwSessionID, byDirection, shX, shY);
 	C_Field::GetInstance()->GetSectorAround(shX/dfGRID_Y_SIZE, shY/dfGRID_Y_SIZE, &st_Sector_Around);
@@ -989,11 +1001,11 @@ bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket)
 			}
 		}
 	}
-
+	// 공격 범위 내에 플레이어가 없다.
 	if (pHitPlayer == NULL)
 		return true;
 
-	_LOG(0, L"#Attack1 Direction:%d / SessionID:%d -> SessionID:%d", byDirection, pSession->dwSessionID, pHitPlayer->_SessionID);
+	_LOG(0, L"#Attack3 Direction:%d / SessionID:%d -> SessionID:%d", byDirection, pSession->dwSessionID, pHitPlayer->_SessionID);
 
 	//---------------------------------------------------------------------------------------------------------------
 	// HP를 깍고, 
@@ -1001,9 +1013,8 @@ bool netPacketProc_Attack1(st_SESSION* pSession, SerializeBuffer* pPacket)
 	pHitPlayer->_HP -= dfATTACK1_DAMAGE;
 	mpDamge(pPacket, pSession->dwSessionID, pHitPlayer->_SessionID, pHitPlayer->_HP);
 	C_Field::GetInstance()->GetSectorAround(pHitPlayer->_CurSector->iX, pHitPlayer->_CurSector->iY, &st_Sector_Around);
-	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around, true);
 	pPacket->Clear();
-
 
 
 	return true;
@@ -1014,22 +1025,163 @@ bool netPacketProc_Attack2(st_SESSION* pSession, SerializeBuffer* pPacket)
 	char byDirection;
 	short shX;
 	short shY;
+	double MinDist;
+	double TempDist;
+	st_PLAYER* pHitPlayer;
+	st_PLAYER* pTempHitPlayer;
+	st_SECTOR_AROUND st_Sector_Around;
+	CList<st_PLAYER*>* pCList;
+	CList<st_PLAYER*>::iterator iter;
+	int iCnt;
 
 	*pPacket >> byDirection;
 	*pPacket >> shX;
 	*pPacket >> shY;
 	pPacket->Clear();
 
-	// 공격 모션에 대한 패킷은 해당 플레이어가 보이는 모든 세션에게 보내야 한다. 
+	_LOG(dfLOG_LEVEL_DEBUG, L"# Attack2 # SessionID:%d / Direction:%d / X:%d / Y:%d", pSession->dwSessionID, byDirection, shX, shY);
 	
+	// 공격 모션에 대한 패킷은 해당 플레이어가 보이는 모든 세션에게 보내야 한다. 
+	mpAttack2(pPacket, pSession->dwSessionID, byDirection, shX, shY);
+	C_Field::GetInstance()->GetSectorAround(shX / dfGRID_Y_SIZE, shY / dfGRID_Y_SIZE, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around, true);
+	pPacket->Clear();
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 데미지에 대한 처리
+	// 
+	// 바라보는 방향을 기준으로 0 ~ _dfATTACK1_RANGE_X 범위의 섹터를 계산
+	// 공격 범위 또한 계산해야 한다. 
+	// 
+	// 1. 같은 섹터에서 검색한다. 
+	// 2. 섹터를 넘어간다면 다른 섹터에서도 계산한다.
+	// 3. 3개의 섹터에 걸치는 경우도 있다.
+	// 4. 공격 범위에 있는 섹터를 구했다면, 가장 가까이 있는 플레이어를 구한다.
+	// 5. 해당 플레이어의 HP를 깍고
+	// 6. 피격자 기준으로 섹터를 계산하여 메시지를 보낸다. 
+	//---------------------------------------------------------------------------------------------------------------
+	pHitPlayer = NULL;
+	MinDist = sqrt(pow(dfATTACK2_RANGE_X, 2) + pow(dfATTACK2_RANGE_Y, 2));	// 공격 받을 수 있는 최대 유클리드 거리
+	C_Field::GetInstance()->GetAttackSectorAround(shX, shY, byDirection, dfATTACK2_RANGE_X, dfATTACK2_RANGE_Y, &st_Sector_Around);
+	for (iCnt = 0; iCnt < st_Sector_Around.iCount; ++iCnt)
+	{
+		pCList = C_Field::GetInstance()->GetPlayerInSectorCList(st_Sector_Around.Around[iCnt].iX, st_Sector_Around.Around[iCnt].iY);
+
+		for (iter = (*pCList).begin(); iter != (*pCList).end(); ++iter)
+		{
+			pTempHitPlayer = (*iter);
+
+			// 타격자와 피격자가 같으면 넘어간다. 
+			if (pSession->dwSessionID == pTempHitPlayer->_SessionID) continue;
+
+			// 타격자와 피격자의 유클리드 거리를 구하여, 피격자와의 거리가 더 가까우면 데이터를 갱신한다.
+			TempDist = sqrt(pow(shX - pTempHitPlayer->_X, 2) + pow(shY - pTempHitPlayer->_Y, 2));
+			if (MinDist >= TempDist)
+			{
+				MinDist = TempDist;
+				pHitPlayer = pTempHitPlayer;
+			}
+		}
+	}
+	// 공격 범위 내에 플레이어가 없다.
+	if (pHitPlayer == NULL)
+		return true;
+
+	_LOG(0, L"#Attack2 Direction:%d / SessionID:%d -> SessionID:%d", byDirection, pSession->dwSessionID, pHitPlayer->_SessionID);
+
+	//---------------------------------------------------------------------------------------------------------------
+	// HP를 깍고, 
+	// 피격자 기준으로 섹터를 계산하여 메시지를 보낸다.
+	pHitPlayer->_HP -= dfATTACK2_DAMAGE;
+	mpDamge(pPacket, pSession->dwSessionID, pHitPlayer->_SessionID, pHitPlayer->_HP);
+	C_Field::GetInstance()->GetSectorAround(pHitPlayer->_CurSector->iX, pHitPlayer->_CurSector->iY, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around, true);
+	pPacket->Clear();
+
 
 	return true;
-
 }
 bool netPacketProc_Attack3(st_SESSION* pSession, SerializeBuffer* pPacket)
 {
-	return true;
+	// 공격 하는 순간 판정까지 떨어진다. 
+	char byDirection;
+	short shX;
+	short shY;
+	double MinDist;
+	double TempDist;
+	st_PLAYER* pHitPlayer;
+	st_PLAYER* pTempHitPlayer;
+	st_SECTOR_AROUND st_Sector_Around;
+	CList<st_PLAYER*>* pCList;
+	CList<st_PLAYER*>::iterator iter;
+	int iCnt;
 
+	*pPacket >> byDirection;
+	*pPacket >> shX;
+	*pPacket >> shY;
+	pPacket->Clear();
+
+	_LOG(dfLOG_LEVEL_DEBUG, L"# Attack3 # SessionID:%d / Direction:%d / X:%d / Y:%d", pSession->dwSessionID, byDirection, shX, shY);
+
+	// 공격 모션에 대한 패킷은 해당 플레이어가 보이는 모든 세션에게 보내야 한다. 
+	mpAttack3(pPacket, pSession->dwSessionID, byDirection, shX, shY);
+	C_Field::GetInstance()->GetSectorAround(shX / dfGRID_Y_SIZE, shY / dfGRID_Y_SIZE, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around, true);
+	pPacket->Clear();
+
+	//---------------------------------------------------------------------------------------------------------------
+	// 데미지에 대한 처리
+	// 
+	// 바라보는 방향을 기준으로 0 ~ _dfATTACK1_RANGE_X 범위의 섹터를 계산
+	// 공격 범위 또한 계산해야 한다. 
+	// 
+	// 1. 같은 섹터에서 검색한다. 
+	// 2. 섹터를 넘어간다면 다른 섹터에서도 계산한다.
+	// 3. 3개의 섹터에 걸치는 경우도 있다.
+	// 4. 공격 범위에 있는 섹터를 구했다면, 가장 가까이 있는 플레이어를 구한다.
+	// 5. 해당 플레이어의 HP를 깍고
+	// 6. 피격자 기준으로 섹터를 계산하여 메시지를 보낸다. 
+	//---------------------------------------------------------------------------------------------------------------
+	pHitPlayer = NULL;
+	MinDist = sqrt(pow(dfATTACK3_RANGE_X, 2) + pow(dfATTACK3_RANGE_Y, 2));	// 공격 받을 수 있는 최대 유클리드 거리
+	C_Field::GetInstance()->GetAttackSectorAround(shX, shY, byDirection, dfATTACK3_RANGE_X, dfATTACK3_RANGE_Y, &st_Sector_Around);
+	for (iCnt = 0; iCnt < st_Sector_Around.iCount; ++iCnt)
+	{
+		pCList = C_Field::GetInstance()->GetPlayerInSectorCList(st_Sector_Around.Around[iCnt].iX, st_Sector_Around.Around[iCnt].iY);
+
+		for (iter = (*pCList).begin(); iter != (*pCList).end(); ++iter)
+		{
+			pTempHitPlayer = (*iter);
+
+			// 타격자와 피격자가 같으면 넘어간다. 
+			if (pSession->dwSessionID == pTempHitPlayer->_SessionID) continue;
+
+			// 타격자와 피격자의 유클리드 거리를 구하여, 피격자와의 거리가 더 가까우면 데이터를 갱신한다.
+			TempDist = sqrt(pow(shX - pTempHitPlayer->_X, 2) + pow(shY - pTempHitPlayer->_Y, 2));
+			if (MinDist >= TempDist)
+			{
+				MinDist = TempDist;
+				pHitPlayer = pTempHitPlayer;
+			}
+		}
+	}
+	// 공격 범위 내에 플레이어가 없다.
+	if (pHitPlayer == NULL)
+		return true;
+
+	_LOG(0, L"#Attack3 Direction:%d / SessionID:%d -> SessionID:%d", byDirection, pSession->dwSessionID, pHitPlayer->_SessionID);
+
+	//---------------------------------------------------------------------------------------------------------------
+	// HP를 깍고, 
+	// 피격자 기준으로 섹터를 계산하여 메시지를 보낸다.
+	pHitPlayer->_HP -= dfATTACK3_DAMAGE;
+	mpDamge(pPacket, pSession->dwSessionID, pHitPlayer->_SessionID, pHitPlayer->_HP);
+	C_Field::GetInstance()->GetSectorAround(pHitPlayer->_CurSector->iX, pHitPlayer->_CurSector->iY, &st_Sector_Around);
+	C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around, true);
+	pPacket->Clear();
+
+
+	return true;
 }
 bool netPacketProc_Echo(st_SESSION* pSession, SerializeBuffer* pPacket)
 {
@@ -1131,6 +1283,29 @@ void mpAttack1(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, sh
 	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
 	(*pPacket) << dwSessionID << byDirection << shX << shY;
 }
+void mpAttack2(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY)
+{
+	st_PACKET_HEADER New_Header;
+
+	New_Header.byCode = (char)dfPACKET_CODE;
+	New_Header.bySize = 9;
+	New_Header.byType = (char)dfPAKCET_SC_ATTACK2;
+
+	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
+	(*pPacket) << dwSessionID << byDirection << shX << shY;
+}
+void mpAttack3(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY)
+{
+	st_PACKET_HEADER New_Header;
+
+	New_Header.byCode = (char)dfPACKET_CODE;
+	New_Header.bySize = 9;
+	New_Header.byType = (char)dfPAKCET_SC_ATTACK3;
+
+	(*pPacket).PutData((char*)&New_Header, sizeof(New_Header));
+	(*pPacket) << dwSessionID << byDirection << shX << shY;
+}
+
 void mpDamge(SerializeBuffer* pPacket, DWORD dwAttackID, DWORD dwDamageID, char DamageHP)
 {
 	st_PACKET_HEADER New_Header;

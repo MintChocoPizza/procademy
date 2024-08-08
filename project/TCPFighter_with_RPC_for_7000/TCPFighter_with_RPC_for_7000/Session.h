@@ -57,6 +57,8 @@ void mpCreateMyCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDir
 void mpCreateOtherCharacter(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY, char HP);
 void mpEcho(SerializeBuffer* pPacket, DWORD Time);
 void mpAttack1(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY);
+void mpAttack2(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY);
+void mpAttack3(SerializeBuffer* pPacket, DWORD dwSessionID, char byDirection, short shX, short shY);
 void mpDamge(SerializeBuffer* pPacket, DWORD dwAttackID, DWORD dwDamageID, char DamageHP);
 void mpDeleteCharacter(SerializeBuffer* pPacket, DWORD dwSessionID);
 

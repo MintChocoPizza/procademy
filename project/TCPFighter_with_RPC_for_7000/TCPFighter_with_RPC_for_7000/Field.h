@@ -82,8 +82,12 @@ public:
 	void SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around, bool bSendMe = false);
 
 	//----------------------------------------------------------------
-	// 클라이언트 기준 주변 섹터에서 클라이언트에게 메시지 보내기(최대 9개 영역)
-	void SendPacket_Around_To_Session(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around);
+	// 클라이언트 기준 주변 섹터에서 클라이언트에게 플레이어 생성 메시지 보내기(최대 9개 영역)
+	void SendPacket_Around_To_Session_CreateCharacter(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around);
+
+	//----------------------------------------------------------------
+	// 클라이언트 기준 주변 섹터에서 클라이언트에게 플레이어 삭제 메시지 보내기 (최대 9개 영역)
+	void SendPacket_Around_To_Session_DeleteCharater(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around);
 
 	//----------------------------------------------------------------
 	// 섹터에 대한 범위 예외 처리를 한다. 

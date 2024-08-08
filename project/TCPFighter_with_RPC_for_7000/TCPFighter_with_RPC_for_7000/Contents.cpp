@@ -17,6 +17,8 @@
 #include "Player.h"
 
 
+//#define UPDATE_DEBUG
+
 void Update(void)
 {
 	st_PLAYER* st_p_Player;
@@ -38,10 +40,6 @@ void Update(void)
 	//}
 	//g_Start_Time += 20;
 	
-#ifdef _DEBUG
-	int iOldX;
-	int iOldY;
-#endif // _DEBUG
 
 
 
@@ -59,10 +57,6 @@ void Update(void)
 			continue;
 		}
 
-#ifdef _DEBUG
-		iOldX = st_p_Player->_X;
-		iOldY = st_p_Player->_Y;
-#endif // _DEBUG
 
 		// 일정 시간동안 수신이 없으면 종료 처리
 		//if (dwCurrentTick - st_p_Player->_pSession->dwLastRecvTime > dfNETWORK_PACKET_RECV_TIMEOUT)
@@ -80,9 +74,9 @@ void Update(void)
 				if (CharacterMoveCheck(st_p_Player->_X - dfSPEED_PLAYER_X, st_p_Player->_Y))
 				{
 					st_p_Player->_X -= dfSPEED_PLAYER_X;
-#ifdef _DEBUG
-					_LOG(0, L"# SessionID:%d / OldX:%d / OldY:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, iOldX, iOldY, st_p_Player->_X, st_p_Player->_Y);
-#endif // _DEBUG
+#ifdef UPDATE_DEBUG
+					_LOG(0, L"# SessionID:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, st_p_Player->_X, st_p_Player->_Y);
+#endif // UPDATE_DEBUG
 				}
 				break;
 			case dfPACKET_MOVE_DIR_LU:
@@ -90,19 +84,19 @@ void Update(void)
 				{
 					st_p_Player->_X -= dfSPEED_PLAYER_X;
 					st_p_Player->_Y -= dfSPEED_PLAYER_Y;
-#ifdef _DEBUG
-					_LOG(0, L"# SessionID:%d / OldX:%d / OldY:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, iOldX, iOldY, st_p_Player->_X, st_p_Player->_Y);
+#ifdef UPDATE_DEBUG
+					_LOG(0, L"# SessionID:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, st_p_Player->_X, st_p_Player->_Y);
 
-#endif // _DEBUG
+#endif // UPDATE_DEBUG
 				}
 				break;
 			case dfPACKET_MOVE_DIR_UU:
 				if (CharacterMoveCheck(st_p_Player->_X, st_p_Player->_Y - dfSPEED_PLAYER_Y))
 				{
 					st_p_Player->_Y -= dfSPEED_PLAYER_Y;
-#ifdef _DEBUG
-					_LOG(0, L"# SessionID:%d / OldX:%d / OldY:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, iOldX, iOldY, st_p_Player->_X, st_p_Player->_Y);
-#endif // _DEBUG
+#ifdef UPDATE_DEBUG
+					_LOG(0, L"# SessionID:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, st_p_Player->_X, st_p_Player->_Y);
+#endif // UPDATE_DEBUG
 				}
 				break;
 			case dfPACKET_MOVE_DIR_RU:
@@ -110,20 +104,20 @@ void Update(void)
 				{
 					st_p_Player->_X += dfSPEED_PLAYER_X;
 					st_p_Player->_Y -= dfSPEED_PLAYER_Y;
-#ifdef _DEBUG
-					_LOG(0, L"# SessionID:%d / OldX:%d / OldY:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, iOldX, iOldY, st_p_Player->_X, st_p_Player->_Y);
+#ifdef UPDATE_DEBUG
+					_LOG(0, L"# SessionID:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, st_p_Player->_X, st_p_Player->_Y);
 
-#endif // _DEBUG
+#endif // UPDATE_DEBUG
 				}
 				break;
 			case dfPACKET_MOVE_DIR_RR:
 				if (CharacterMoveCheck(st_p_Player->_X + dfSPEED_PLAYER_X, st_p_Player->_Y))
 				{
 					st_p_Player->_X += dfSPEED_PLAYER_X;
-#ifdef _DEBUG
-					_LOG(0, L"# SessionID:%d / OldX:%d / OldY:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, iOldX, iOldY, st_p_Player->_X, st_p_Player->_Y);
+#ifdef UPDATE_DEBUG
+					_LOG(0, L"# SessionID:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, st_p_Player->_X, st_p_Player->_Y);
 
-#endif // _DEBUG
+#endif // UPDATE_DEBUG
 				}
 				break;
 			case dfPACKET_MOVE_DIR_RD:
@@ -131,20 +125,20 @@ void Update(void)
 				{
 					st_p_Player->_X += dfSPEED_PLAYER_X;
 					st_p_Player->_Y += dfSPEED_PLAYER_Y;
-#ifdef _DEBUG
-					_LOG(0, L"# SessionID:%d / OldX:%d / OldY:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, iOldX, iOldY, st_p_Player->_X, st_p_Player->_Y);
+#ifdef UPDATE_DEBUG
+					_LOG(0, L"# SessionID:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, st_p_Player->_X, st_p_Player->_Y);
 
-#endif // _DEBUG
+#endif // UPDATE_DEBUG
 				}
 				break;
 			case dfPACKET_MOVE_DIR_DD:
 				if (CharacterMoveCheck(st_p_Player->_X, st_p_Player->_Y + dfSPEED_PLAYER_Y))
 				{
 					st_p_Player->_Y += dfSPEED_PLAYER_Y;
-#ifdef _DEBUG
-					_LOG(0, L"# SessionID:%d / OldX:%d / OldY:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, iOldX, iOldY, st_p_Player->_X, st_p_Player->_Y);
+#ifdef UPDATE_DEBUG
+					_LOG(0, L"# SessionID:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, st_p_Player->_X, st_p_Player->_Y);
 
-#endif // _DEBUG
+#endif // UPDATE_DEBUG
 				}
 				break;
 			case dfPACKET_MOVE_DIR_LD:
@@ -152,10 +146,10 @@ void Update(void)
 				{
 					st_p_Player->_X -= dfSPEED_PLAYER_X;
 					st_p_Player->_Y += dfSPEED_PLAYER_Y;
-#ifdef _DEBUG
-					_LOG(0, L"# SessionID:%d / OldX:%d / OldY:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, iOldX, iOldY, st_p_Player->_X, st_p_Player->_Y);
+#ifdef UPDATE_DEBUG
+					_LOG(0, L"# SessionID:%d / CurX:%d / CurY:%d", st_p_Player->_SessionID, st_p_Player->_X, st_p_Player->_Y);
 
-#endif // _DEBUG
+#endif // UPDATE_DEBUG
 				}
 				break;
 			case dfPACKET_CS_MOVE_STOP:

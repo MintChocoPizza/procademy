@@ -211,6 +211,463 @@ void C_Field::GetAttackSectorAround(short shX, short shY, char byDirection, int 
 
 void C_Field::GetUpdateSectorAround(st_PLAYER* pCharacter, st_SECTOR_AROUND* pRemoveSector, st_SECTOR_AROUND* pAddSector)
 {
+    //--------------------------------------------
+       // 8방 이동.
+       // But 대각선 이동은, 수평이동 + 수직이동 임.
+       // 
+       // 나(pPlayer) 빼고 전송해야 한다.
+       //--------------------------------------------
+    int iRemoveCount = 0;
+    int iAddCount = 0;
+    st_SECTOR_POS* st_Old_Sector = pCharacter->_OldSector;
+    st_SECTOR_POS* st_Cur_Sector = pCharacter->_CurSector;
+
+    _LOG(0, L"# SectorUpdate # SessionID:%d / Old_Sector: X:%d / Y:%d - Cur_Sector: X:%d / Y:%d",pCharacter->_SessionID, st_Old_Sector->iX, st_Old_Sector->iY, st_Cur_Sector->iX, st_Cur_Sector->iY);
+
+    // 위 방향 이동
+    if (st_Old_Sector->iY > st_Cur_Sector->iY && st_Old_Sector->iX == st_Cur_Sector->iX)
+    {
+        // 기존 영향권에서 빠지는 섹터
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }   
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 0;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+
+        // 새로 들어온 섹터 영향권
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 0;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
+        }        
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
+        }
+    }
+    // 아래 방향 이동
+    else if (st_Old_Sector->iY < st_Cur_Sector->iY && st_Old_Sector->iX == st_Cur_Sector->iX)
+    {
+        // 기존 영향권에서 빠지는 섹터
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 0;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+
+        // 새로 들어온 섹터 영향권
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 0;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
+        }
+
+    }
+    // 왼쪽 방향 이동
+    else if (st_Old_Sector->iY == st_Cur_Sector->iY && st_Old_Sector->iX > st_Cur_Sector->iX)
+    {
+        // 기존 영향권에서 빠지는 섹터
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 0;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+
+        // 새로 들어온 섹터 영향권
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 0;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
+        }
+    }
+    // 오른쪽 방향 이동
+    else if (st_Old_Sector->iY == st_Cur_Sector->iY && st_Old_Sector->iX < st_Cur_Sector->iX)
+    {
+        // 기존 영향권에서 빠지는 섹터 
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 0;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+
+        // 새로 들어온 섹터 영향권
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 0;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
+        }
+
+    }
+    // 좌측 상단
+    else if (st_Old_Sector->iY < st_Cur_Sector->iY && st_Old_Sector->iX > st_Cur_Sector->iX)
+    {
+        // 기존 영향권에서 빠지는 섹터
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 0;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 0;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+
+        // 새로 들어온 섹터 영향권
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 0;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 0;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
+        }
+    }
+    // 우측 상단
+    else if (st_Old_Sector->iY < st_Cur_Sector->iY && st_Old_Sector->iX < st_Cur_Sector->iX)
+    {
+        // 기존 영향권에서 빠지는 섹터
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 0;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 0;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+
+        // 새로 들어온 섹터 영향권
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 0;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 0;
+            ++iAddCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1))
+        {
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
+        }
+    }
+    // 좌측 하단 
+    else if (st_Old_Sector->iY > st_Cur_Sector->iY && st_Old_Sector->iX > st_Cur_Sector->iX)
+    {
+        // 기존 영향권에서 빠지는 섹터
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 0;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 0;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+
+        // 새로 들어온 섹터 영향권
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 0;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 0;
+            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+    }
+    // 우측 하단
+    else if (st_Old_Sector->iY > st_Cur_Sector->iY && st_Old_Sector->iX < st_Cur_Sector->iX)
+    {
+        // 기존 영향권에서 빠지는 섹터 
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX + 0;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 0;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Old_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Old_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+
+        // 새로 들어온 섹터 영향권 
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY - 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 0;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 0;
+            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+        if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1))
+        {
+            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX - 1;
+            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
+            ++iRemoveCount;
+        }
+    }
+    pRemoveSector->iCount = iRemoveCount;
+    pAddSector->iCount = iAddCount;
 }
 
 bool C_Field::Sector_UpdateCharacter(st_PLAYER* pPlayer)
@@ -250,163 +707,65 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
     // 
     // 나(pPlayer) 빼고 전송해야 한다.
     //--------------------------------------------
-    st_SECTOR_POS* st_Old_Sector = pPlayer->_OldSector;
-    st_SECTOR_POS* st_Cur_Sector = pPlayer->_CurSector;
+    st_SECTOR_AROUND st_RemoveSector_Around;
+    st_SECTOR_AROUND st_AddSector_Around;
+    CList<st_PLAYER*>::iterator iter;
+    int iCnt;
 
-    _LOG(0, L"# SectorUpdate # Old_Sector: X:%d / Y:%d - Cur_Sector: X:%d / Y:%d", st_Old_Sector->iX, st_Old_Sector->iY, st_Cur_Sector->iX, st_Cur_Sector->iY);
+    GetUpdateSectorAround(pPlayer, &st_RemoveSector_Around, &st_AddSector_Around);
 
-    // 위 방향 이동
-         if (st_Old_Sector->iY > st_Cur_Sector->iY && st_Old_Sector->iX == st_Cur_Sector->iX)
+    //------------------------------------------------------------------------------------------
+    // 기존 영향권에서 빠지는 섹터에 대해서, 서로 삭제 메시지를 보내야 한다.
+    // pPlayer의 삭제 메시지를 기존 영향권에서 빠지는 섹터에 보낸다. 
+    mpDeleteCharacter(&g_Packet, pPlayer->_SessionID);
+    for (iCnt = 0; iCnt < st_RemoveSector_Around.iCount; ++iCnt)
     {
-        // 삭제하는 메시지 전송
-        mpDeleteCharacter(&g_Packet, pPlayer->_SessionID);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
-
-        // 생성하는 메시지 전송
-        mpCreateOtherCharacter(&g_Packet, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y, pPlayer->_HP);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
+        SendPacket_SectorOne(st_RemoveSector_Around.Around[iCnt].iX, st_RemoveSector_Around.Around[iCnt].iY, &g_Packet, pPlayer->_pSession);
     }
-    // 아래 방향 이동
-    else if (st_Old_Sector->iY < st_Cur_Sector->iY && st_Old_Sector->iX == st_Cur_Sector->iX)
+    g_Packet.Clear();
+    // pPlayer에게 기존 영향권에서 빠지는 섹터의 플레이어의 삭제 메시지를 보낸다.
+    SendPacket_Around_To_Session_DeleteCharater(pPlayer->_pSession, &g_Packet, &st_RemoveSector_Around);
+
+
+    //------------------------------------------------------------------------------------------
+    // 새로 들어온 영향권에 대해서 서로 생성 메시지를 보내야 한다.
+    // 또한 액션을 취하는 중이라면, 해당 동작 또한 이어서 보내야 한다. 
+    mpCreateOtherCharacter(&g_Packet, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y, pPlayer->_HP);
+    for (iCnt = 0; iCnt < st_AddSector_Around.iCount; ++iCnt)
     {
-        // 삭제하는 메시지 전송
-        mpDeleteCharacter(&g_Packet, pPlayer->_SessionID);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
-
-        // 생성하는 메시지 전송
-        mpCreateOtherCharacter(&g_Packet, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y, pPlayer->_HP);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
+        SendPacket_SectorOne(st_AddSector_Around.Around[iCnt].iX, st_AddSector_Around.Around[iCnt].iY, &g_Packet, pPlayer->_pSession);
     }
-    // 왼쪽 방향 이동
-    else if (st_Old_Sector->iY == st_Cur_Sector->iY && st_Old_Sector->iX > st_Cur_Sector->iX)
+    g_Packet.Clear();
+    // pPlayer가 액션 중이라면 해당 액션을 이어서 보여줘야한다. 
+    switch (pPlayer->_dwAction)
     {
-        // 삭제하는 메시지 전송
-        mpDeleteCharacter(&g_Packet, pPlayer->_SessionID);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
+    case dfPACKET_MOVE_DIR_LL:
+    case dfPACKET_MOVE_DIR_LU:
+    case dfPACKET_MOVE_DIR_UU:
+    case dfPACKET_MOVE_DIR_RU:
+    case dfPACKET_MOVE_DIR_RR:
+    case dfPACKET_MOVE_DIR_RD:
+    case dfPACKET_MOVE_DIR_DD:
+    case dfPACKET_MOVE_DIR_LD:
+        mpMoveStart(&g_Packet, pPlayer->_SessionID, pPlayer->_dwAction, pPlayer->_X, pPlayer->_Y);
+        for (iCnt = 0; iCnt < st_AddSector_Around.iCount; ++iCnt)
+        {
+            SendPacket_SectorOne(st_AddSector_Around.Around[iCnt].iX, st_AddSector_Around.Around[iCnt].iY, &g_Packet, pPlayer->_pSession);
+        }
         g_Packet.Clear();
+        break;
+    case dfPACKET_CS_MOVE_STOP:
+        break;
 
-        // 생성하는 메시지 전송
-        mpCreateOtherCharacter(&g_Packet, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y, pPlayer->_HP);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
+    default:
+        // 이상함 유저의 연결을 끊는다.
+        _LOG(0, L"# CharacterSectorUpdatePacket # error SessionID:%d", pPlayer->_SessionID);
+        enqueueForDeletion(pPlayer->_SessionID);
+        break;
     }
-    // 오른쪽 방향 이동
-    else if (st_Old_Sector->iY == st_Cur_Sector->iY && st_Old_Sector->iX < st_Cur_Sector->iX)
-    {
-        // 삭제하는 메시지 전송
-        mpDeleteCharacter(&g_Packet, pPlayer->_SessionID);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
 
-        // 생성하는 메시지 전송
-        mpCreateOtherCharacter(&g_Packet, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y, pPlayer->_HP);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
-    }
-    // 좌측 상단
-    else if (st_Old_Sector->iY < st_Cur_Sector->iY && st_Old_Sector->iX > st_Cur_Sector->iX) 
-    {
-        // 삭제하는 메시지 전송
-        mpDeleteCharacter(&g_Packet, pPlayer->_SessionID);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
-
-        // 생성하는 메시지 전송
-        mpCreateOtherCharacter(&g_Packet, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y, pPlayer->_HP);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
-    }
-    // 우측 상단
-    else if (st_Old_Sector->iY < st_Cur_Sector->iY && st_Old_Sector->iX < st_Cur_Sector->iX)
-    {
-        // 삭제하는 메시지 전송
-        mpDeleteCharacter(&g_Packet, pPlayer->_SessionID);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
-
-        // 생성하는 메시지 전송
-        mpCreateOtherCharacter(&g_Packet, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y, pPlayer->_HP);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
-    }
-    // 좌측 하단 
-    else if (st_Old_Sector->iY > st_Cur_Sector->iY && st_Old_Sector->iX > st_Cur_Sector->iX)
-    {
-        // 삭제하는 메시지 전송
-        mpDeleteCharacter(&g_Packet, pPlayer->_SessionID);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
-
-        // 생성하는 메시지 전송
-        mpCreateOtherCharacter(&g_Packet, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y, pPlayer->_HP);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
-    }
-    // 우측 하단
-    else if (st_Old_Sector->iY > st_Cur_Sector->iY && st_Old_Sector->iX < st_Cur_Sector->iX)
-    {
-        // 삭제하는 메시지 전송
-        mpDeleteCharacter(&g_Packet, pPlayer->_SessionID);
-        SendPacket_SectorOne(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX + 0, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Old_Sector->iX - 1, st_Old_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
-
-        // 생성하는 메시지 전송
-        mpCreateOtherCharacter(&g_Packet, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y, pPlayer->_HP);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        SendPacket_SectorOne(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1, &g_Packet, pPlayer->_pSession);
-        g_Packet.Clear();
-    }
+    // 주변 섹터의 플레이어들의 정보를 pPlayer에게 전달해준다.
+    SendPacket_Around_To_Session_CreateCharacter(pPlayer->_pSession, &g_Packet, &st_AddSector_Around);
 }
 
 void C_Field::removeUserFromSector(st_PLAYER* pPlayer)
@@ -419,9 +778,12 @@ void C_Field::SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* 
     //std::unordered_map<DWORD, st_PLAYER*> ::iterator iter;
     CList<st_PLAYER*>::iterator iter;
 
+#ifdef _DEBUG
     // 섹터에 대한 예외 처리
     if (!Check_Sector_CoordinateRange(iSectorX, iSectorY))
-        return;
+        __debugbreak();
+#endif // _DEBUG
+
 
     if (pExceptSession == NULL)
     {
@@ -464,7 +826,7 @@ void C_Field::SendPacket_Around(st_SESSION* pSession, SerializeBuffer* pPacket, 
     }
 }
 
-void C_Field::SendPacket_Around_To_Session(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around)
+void C_Field::SendPacket_Around_To_Session_CreateCharacter(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around)
 {
     int iCnt;
     CList<st_PLAYER*>::iterator iter;
@@ -472,7 +834,6 @@ void C_Field::SendPacket_Around_To_Session(st_SESSION* pSession, SerializeBuffer
 
     for (iCnt = 0; iCnt < pSector_Around->iCount; ++iCnt)
     {
-        if (!Check_Sector_CoordinateRange(pSector_Around->Around[iCnt].iX, pSector_Around->Around[iCnt].iY)) continue;
         for(iter = g_Sector_CList[pSector_Around->Around[iCnt].iY][pSector_Around->Around[iCnt].iX].begin(); iter != g_Sector_CList[pSector_Around->Around[iCnt].iY][pSector_Around->Around[iCnt].iX].end(); ++iter)
         {
             pPlayer = *iter;
@@ -494,7 +855,7 @@ void C_Field::SendPacket_Around_To_Session(st_SESSION* pSession, SerializeBuffer
 			case dfPACKET_MOVE_DIR_RD:
 			case dfPACKET_MOVE_DIR_DD:
 			case dfPACKET_MOVE_DIR_LD:
-                mpMoveStart(pPacket, pPlayer->_SessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y);
+                mpMoveStart(pPacket, pPlayer->_SessionID, pPlayer->_byMoveDirection, pPlayer->_X, pPlayer->_Y);
                 SendPacket_Unicast(pSession, pPacket);
                 pPacket->Clear();
                 break;
@@ -508,6 +869,26 @@ void C_Field::SendPacket_Around_To_Session(st_SESSION* pSession, SerializeBuffer
 			}
         }
     }
+}
+
+void C_Field::SendPacket_Around_To_Session_DeleteCharater(st_SESSION* pSession, SerializeBuffer* pPacket, st_SECTOR_AROUND* pSector_Around)
+{
+    int iCnt;
+    CList<st_PLAYER*>::iterator iter;
+    st_PLAYER* pPlayer;
+
+    for (iCnt = 0; iCnt < pSector_Around->iCount; ++iCnt)
+    {
+        for(iter = g_Sector_CList[pSector_Around->Around[iCnt].iY][pSector_Around->Around[iCnt].iX].begin(); iter != g_Sector_CList[pSector_Around->Around[iCnt].iY][pSector_Around->Around[iCnt].iX].end(); ++iter)
+        {
+            pPlayer = *iter;
+
+            mpDeleteCharacter(pPacket, pPlayer->_SessionID);
+            SendPacket_Unicast(pSession, pPacket);
+            pPacket->Clear();
+        }
+    }
+
 }
 
 bool C_Field::Check_Sector_CoordinateRange(int iSectorX, int iSectorY)
