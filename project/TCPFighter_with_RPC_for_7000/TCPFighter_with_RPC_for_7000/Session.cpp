@@ -139,10 +139,10 @@ void netStartUp(void)
 	Ret_WSAStartup = WSAStartup(MAKEWORD(2, 2), &g_WsaData);
 	if (Ret_WSAStartup != 0)
 	{
-		_LOG(0, L"WSAStartup failed with error: %d", Ret_WSAStartup);
+		_LOG(dfLOG_LEVEL_SYSTEM, L"WSAStartup failed with error: %d", Ret_WSAStartup);
 		__debugbreak();
 	}
-	_LOG(0, L"WSAStartup # ");
+	_LOG(dfLOG_LEVEL_SYSTEM, L"WSAStartup # ");
 
 	//---------------------------------------------------
 	// SetUp hints 
@@ -159,7 +159,7 @@ void netStartUp(void)
 	Ret_itoa_s = _itoa_s(dfNETWORK_PORT, Port, sizeof(Port), 10);
 	if (Ret_itoa_s != NULL)
 	{
-		_LOG(0, L"_itoa_s failed with error");
+		_LOG(dfLOG_LEVEL_SYSTEM, L"_itoa_s failed with error");
 		WSACleanup();
 		__debugbreak();
 	}
@@ -167,7 +167,7 @@ void netStartUp(void)
 	Ret_getaddrinfo = getaddrinfo(NULL, Port, &hints, &result);
 	if (Ret_getaddrinfo != 0)
 	{
-		_LOG(0, L"getaddrinfo failed with error: %d", Ret_getaddrinfo);
+		_LOG(dfLOG_LEVEL_SYSTEM, L"getaddrinfo failed with error: %d", Ret_getaddrinfo);
 		WSACleanup();
 		__debugbreak();
 	}
@@ -178,7 +178,7 @@ void netStartUp(void)
 	Temp_Listen_Socket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 	if (Temp_Listen_Socket == INVALID_SOCKET)
 	{
-		_LOG(0, L"socket failed with error : %ld", WSAGetLastError());
+		_LOG(dfLOG_LEVEL_SYSTEM, L"socket failed with error : %ld", WSAGetLastError());
 		freeaddrinfo(result);
 		WSACleanup();
 		__debugbreak();
@@ -191,7 +191,7 @@ void netStartUp(void)
 	Ret_setsockopt = setsockopt(Temp_Listen_Socket, SOL_SOCKET, SO_LINGER, (char*)&Linger_Opt, sizeof(Linger_Opt));
 	if (Ret_setsockopt == SOCKET_ERROR)
 	{
-		_LOG(0, L"setsockopt failed with error: %ld", WSAGetLastError());
+		_LOG(dfLOG_LEVEL_SYSTEM, L"setsockopt failed with error: %ld", WSAGetLastError());
 		closesocket(Temp_Listen_Socket);
 		WSACleanup();
 		__debugbreak();
@@ -203,13 +203,13 @@ void netStartUp(void)
 	Ret_bind = bind(Temp_Listen_Socket, result->ai_addr, (int)result->ai_addrlen);
 	if (Ret_bind == SOCKET_ERROR)
 	{
-		_LOG(0, L"bind failed with error: %d", WSAGetLastError());
+		_LOG(dfLOG_LEVEL_SYSTEM, L"bind failed with error: %d", WSAGetLastError());
 		freeaddrinfo(result);
 		closesocket(Temp_Listen_Socket);
 		WSACleanup();
 		__debugbreak();
 	}
-	_LOG(0, L"Bind OK # Port: %d", dfNETWORK_PORT);
+	_LOG(dfLOG_LEVEL_SYSTEM, L"Bind OK # Port: %d", dfNETWORK_PORT);
 
 	freeaddrinfo(result);
 
@@ -219,12 +219,12 @@ void netStartUp(void)
 	//i_Result = listen(Temp_Listen_Socket, SOMAXCONN_HINT(65535));	// 양수 ~200 -> 기본 200개, 200~ 갯수 적용,    
 	if (Ret_listen == SOCKET_ERROR)
 	{
-		_LOG(0, L"listen failed with error: %d", WSAGetLastError());
+		_LOG(dfLOG_LEVEL_SYSTEM, L"listen failed with error: %d", WSAGetLastError());
 		closesocket(Temp_Listen_Socket);
 		WSACleanup();
 		__debugbreak();
 	}
-	_LOG(0, L"Listen OK # ");
+	_LOG(dfLOG_LEVEL_SYSTEM, L"Listen OK # ");
 
 
 	//---------------------------------------------------
@@ -233,7 +233,7 @@ void netStartUp(void)
 	Ret_ioctlsocket = ioctlsocket(Temp_Listen_Socket, FIONBIO, &on);
 	if (Ret_ioctlsocket == SOCKET_ERROR)
 	{
-		_LOG(0, L"ioctlsocket failed with error: %ld", WSAGetLastError());
+		_LOG(dfLOG_LEVEL_SYSTEM, L"ioctlsocket failed with error: %ld", WSAGetLastError());
 		closesocket(Temp_Listen_Socket);
 		WSACleanup();
 		__debugbreak();
@@ -312,6 +312,7 @@ void netIOProcess(void)
 		{
 			st_pSession = iter->second;
 
+#ifndef _DEBUG
 			//---------------------------------
 			// 하트비트 체크
 			if (st_pSession->dwLastRecvTime + 30000 < g_Start_Time)
@@ -320,6 +321,8 @@ void netIOProcess(void)
 				enqueueForDeletion(st_pSession->dwSessionID);
 				continue;
 			}
+
+#endif // !_DEBUG
 
 			//------------------------------------------
 			// 해당 클라이언트 Read Set 등록 / SendQ 에 데이터가 있다면 Write Set 등록
@@ -746,6 +749,7 @@ bool netPacketProc_Movestart(st_SESSION* pSession, SerializeBuffer* pPacket)
 	//---------------------------------------------------------------------------------------------------------------
 	if (abs(pPlayer->_X - shX) > dfERROR_RANGE || abs(pPlayer->_Y - shY) > dfERROR_RANGE)
 	{
+		_LOG(1, L"# MOVESTART SYNC # SessionID:%d / Server(X:%d, Y:%d) / Client(X:%d, Y:%d)", pPlayer->_SessionID, pPlayer->_X, pPlayer->_Y, shX, shY);
 		mpSync(pPacket, pPlayer->_SessionID, pPlayer->_X, pPlayer->_Y);
 		C_Field::GetInstance()->GetSectorAround(pPlayer->_CurSector->iX, pPlayer->_CurSector->iY, &st_Sector_Around);
 		C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around, true);
@@ -854,6 +858,7 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket)
 	//---------------------------------------------------------------------------------------------------------------
 	if (abs(pPlayer->_X - shX) > dfERROR_RANGE || abs(pPlayer->_Y - shY) > dfERROR_RANGE)
 	{
+		_LOG(1, L"# MOVESTART SYNC # SessionID:%d / Server(X:%d, Y:%d) / Client(X:%d, Y:%d)", pPlayer->_SessionID, pPlayer->_X, pPlayer->_Y, shX, shY);
 		mpSync(pPacket, pPlayer->_SessionID, pPlayer->_X, pPlayer->_Y);
 		C_Field::GetInstance()->GetSectorAround(pPlayer->_CurSector->iX, pPlayer->_CurSector->iY, &st_Sector_Around);
 		C_Field::GetInstance()->SendPacket_Around(pSession, pPacket, &st_Sector_Around, true);
@@ -866,6 +871,9 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket)
 		//---------------------------------------------------------------------------------------------------------------
 		// 좌표가 틀어진 이유를 찾아야 한다.
 		//---------------------------------------------------------------------------------------------------------------
+#ifdef _DEBUG
+		//__debugbreak();
+#endif // DEBUG
 	}
 	
 	//---------------------------------------------------------------------------------------------------------------
@@ -888,6 +896,7 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket)
 	case dfPACKET_MOVE_DIR_LU:
 	case dfPACKET_MOVE_DIR_LD:
 		pPlayer->_byDirection = dfPACKET_MOVE_DIR_LL;
+		break;
 	case dfPACKET_MOVE_DIR_RU:
 	case dfPACKET_MOVE_DIR_RR:
 	case dfPACKET_MOVE_DIR_RD:
@@ -912,7 +921,7 @@ bool netPacketProc_MoveStop(st_SESSION* pSession, SerializeBuffer* pPacket)
 		C_Field::GetInstance()->CharacterSectorUpdatePacket(pPlayer);
 	}
 
-	mpMoveStop(pPacket, pSession->dwSessionID, byDirection, pPlayer->_X, pPlayer->_Y);
+	mpMoveStop(pPacket, pSession->dwSessionID, pPlayer->_byDirection, pPlayer->_X, pPlayer->_Y);
 
 
 	//---------------------------------------------------------------------------------------------------------------
@@ -1190,7 +1199,7 @@ bool netPacketProc_Echo(st_SESSION* pSession, SerializeBuffer* pPacket)
 	*pPacket >> Time;
 	pPacket->Clear();
 
-	_LOG(0, L"# ECHO # SessionID:%d / Time:%d", pSession->dwSessionID, Time);
+	 // _LOG(0, L"# ECHO # SessionID:%d / Time:%d", pSession->dwSessionID, Time);
 
 	//---------------------------------------------------------------------------------------------------------------
 	// 에코 패킷이 오면 받아서 바로 해당 유저에게 전달해준다.

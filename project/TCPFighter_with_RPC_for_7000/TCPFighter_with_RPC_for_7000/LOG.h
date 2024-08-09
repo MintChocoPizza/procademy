@@ -13,7 +13,7 @@ void c_Log(char* szString, int iLogLevel);
 
 #define _LOG(LogLevel, fmt, ...)									\
 do {																\
-		if(g_iLogLevel >= LogLevel)									\
+		if(g_iLogLevel <= LogLevel)									\
 		{															\
 			wsprintf(g_szLogBuff, fmt, ##__VA_ARGS__);				\
 			Log(g_szLogBuff, LogLevel);								\
@@ -24,7 +24,7 @@ do {																\
 
 #define _c_LOG(LogLevel, fmt, ...)									\
 do {																\
-		if(g_iLogLevel >= LogLevel)									\
+		if(g_iLogLevel <= LogLevel)									\
 		{															\
 			sprintf_s(g_sz_c_LogBuff, fmt, ##__VA_ARGS__);			\
 			c_Log(g_sz_c_LogBuff, LogLevel);						\

@@ -6,7 +6,7 @@
 
 
 
-int g_iLogLevel = 1;
+int g_iLogLevel = 0;
 wchar_t g_szLogBuff[1024];
 char g_sz_c_LogBuff[1024];
 

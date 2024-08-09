@@ -17,7 +17,7 @@
 #include "Player.h"
 
 
-//#define UPDATE_DEBUG
+// #define UPDATE_DEBUG
 
 void Update(void)
 {
@@ -156,9 +156,12 @@ void Update(void)
 				break;
 
 			default:
-			// 이상함 유저의 연결을 끊는다.
-			enqueueForDeletion(st_p_Player->_SessionID);
-			return;
+			{
+				// 이상함 유저의 연결을 끊는다.
+				_LOG(dfLOG_LEVEL_SYSTEM, L"#Update error!!! Delete - SessionID:%d", st_p_Player->_SessionID);
+				enqueueForDeletion(st_p_Player->_SessionID);
+				return;
+			}
 		}
 
 		//--------------------------------------------------------------------------------------
@@ -180,9 +183,9 @@ void Update(void)
 
 }
 
-bool CharacterMoveCheck(int X, int Y)
+bool CharacterMoveCheck(int SectorX, int SectorY)
 {
-	if (X < dfRANGE_MOVE_LEFT || dfRANGE_MOVE_RIGHT < X || Y < dfRANGE_MOVE_TOP || dfRANGE_MOVE_BOTTOM < Y)
+	if (SectorX < dfRANGE_MOVE_LEFT || dfRANGE_MOVE_RIGHT < SectorX || SectorY < dfRANGE_MOVE_TOP || dfRANGE_MOVE_BOTTOM < SectorY)
 		return false;
 
 	return true;

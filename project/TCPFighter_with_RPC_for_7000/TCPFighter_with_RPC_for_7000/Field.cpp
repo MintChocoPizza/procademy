@@ -20,8 +20,8 @@ C_Field C_Field::_C_Field;
 // 현재위치 + 8방
 // 현재위치, 좌측 상단부터 우측 하단으로 순서대로
 //--------------------------------------------
-int dY[] = { 0, -1,-1,-1,0,0,0,1,1,1 };
-int dX[] = { 0, -1,0,1, -1,1, -1,0,1 };
+int dY[] = { 0, -1,-1,-1,  0, 0,  1,1,1 };
+int dX[] = { 0, -1, 0, 1, -1, 1, -1,0,1 };
 
 
 
@@ -747,7 +747,7 @@ void C_Field::CharacterSectorUpdatePacket(st_PLAYER* pPlayer)
     case dfPACKET_MOVE_DIR_RD:
     case dfPACKET_MOVE_DIR_DD:
     case dfPACKET_MOVE_DIR_LD:
-        mpMoveStart(&g_Packet, pPlayer->_SessionID, pPlayer->_dwAction, pPlayer->_X, pPlayer->_Y);
+        mpMoveStart(&g_Packet, pPlayer->_SessionID, pPlayer->_byMoveDirection, pPlayer->_X, pPlayer->_Y);
         for (iCnt = 0; iCnt < st_AddSector_Around.iCount; ++iCnt)
         {
             SendPacket_SectorOne(st_AddSector_Around.Around[iCnt].iX, st_AddSector_Around.Around[iCnt].iY, &g_Packet, pPlayer->_pSession);
@@ -777,13 +777,6 @@ void C_Field::SendPacket_SectorOne(int iSectorX, int iSectorY, SerializeBuffer* 
 {
     //std::unordered_map<DWORD, st_PLAYER*> ::iterator iter;
     CList<st_PLAYER*>::iterator iter;
-
-#ifdef _DEBUG
-    // 섹터에 대한 예외 처리
-    if (!Check_Sector_CoordinateRange(iSectorX, iSectorY))
-        __debugbreak();
-#endif // _DEBUG
-
 
     if (pExceptSession == NULL)
     {

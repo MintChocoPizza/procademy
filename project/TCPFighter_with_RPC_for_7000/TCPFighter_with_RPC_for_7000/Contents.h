@@ -2,4 +2,4 @@
 
 void Update(void);
 
-bool CharacterMoveCheck(int X, int Y);
+bool CharacterMoveCheck(int SectorX, int SectorY);
