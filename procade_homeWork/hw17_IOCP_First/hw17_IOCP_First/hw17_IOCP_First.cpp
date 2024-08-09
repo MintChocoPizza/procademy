@@ -22,6 +22,9 @@ struct st_SESSION
     C_RING_BUFFER* RecvQ;
     C_RING_BUFFER* SendQ;
 
+    LONG RecvCheck;
+    LONG SendCheck;
+
     OVERLAPPED Recv_Overlapped;
     OVERLAPPED Send_Overlapped;
 };
@@ -294,6 +297,8 @@ unsigned __stdcall AcceptThread(void* pArg)
         pSession->SendQ = new C_RING_BUFFER();
         pSession->socket = New_Client_Socket;
         pSession->SessionID++;
+        pSession->SendCheck = 0;
+        pSession->RecvCheck = 0;
 
         //---------------------------------------------------
 		// link Client_Socket to IOCP
@@ -312,8 +317,8 @@ unsigned __stdcall AcceptThread(void* pArg)
         if (wsaBuf[1].len > pSession->RecvQ->GetBufferSize())
             __debugbreak();
 
-        //---------------------------------------------------
-        // 비동기 입출력 시작
+        //--------------------------------------------------------
+        // 비동기 입출력 시작, 해당 소켓을 비동기IO에 등록한다. 
         flags = 0;
         Ret_WSARecv = WSARecv(New_Client_Socket, wsaBuf, 2, NULL, &flags, &pSession->Recv_Overlapped, NULL);
         if (Ret_WSARecv == SOCKET_ERROR)
@@ -329,12 +334,14 @@ unsigned __stdcall AcceptThread(void* pArg)
                 delete pSession->RecvQ;
                 delete pSession->SendQ;
                 delete pSession;
+                closesocket(pSession->socket);
             }
             else if (Ret_WSARecv_Error == 10053)
             {
                 delete pSession->RecvQ;
                 delete pSession->SendQ;
                 delete pSession;
+                closesocket(pSession->socket);
             }
             else
             {
@@ -352,10 +359,16 @@ unsigned __stdcall WorkerThread(void* pArg)
     DWORD dwTransgerred;
     st_SESSION* pSession;
     OVERLAPPED* lpOverlapped;
+    WSABUF wsaBuf[2];
+    DWORD flags;
 
     //---------------------------------------------------------------
     // return Value
     bool Ret_GQCS;
+    int Ret_WSASend;
+    int Ret_WSARecv;
+    int Ret_WSASend_Error;
+    int Ret_WSARecv_Error;
 
     while (1)
     {
@@ -373,7 +386,7 @@ unsigned __stdcall WorkerThread(void* pArg)
         // Ret_GQCs == false
         // Recv_Overlapped == NULL인 경우: 1. GQCS() 뻑남 == 핸들값 에러, 2. 타임아웃_INFINITE가 아닌경우 타임아웃됨
         //  
-        // Recv_Overlapped != NULL인 경우: I/O 가 실패함
+        // Recv_Overlapped != NULL인 경우: I/O 가 실패함, 매개변수 3개에 실패 정보를 저장한다. 
         //
         // 1. 0,0,0 인경우 GQCS뻑남 || 스레드 종료
         //
@@ -395,12 +408,83 @@ unsigned __stdcall WorkerThread(void* pArg)
             
         }
 
+        //-----------------------------------------------------------------------------------------------------------------------------------
+        // 
 
-
+        //-----------------------------------------------------------------------------------------------------------------------------------
         // 리시브인지 확인
         if (&pSession->Recv_Overlapped == lpOverlapped)
+        {
+            //-----------------------------------------------------------------------------------------------------------------------------------
+            // 여기에 진입했다는 것은 WSARecv 요청이 완료되었다.
+            InterlockedExchange(&pSession->RecvCheck, true);
 
-        
+            //-----------------------------------------------------------------------------------------------------------------------------------
+            // 0Byte를 수신했다면 Session에 대한 연결을 종료한다. / 바로 연결을 종료하면 안됨.
+            if (dwTransgerred == NULL)
+            {
+                break;
+            }
+
+            pSession->RecvQ->Lock();
+
+            // in 위치 이동후, 온 메시지 출력
+            pSession->RecvQ->MoveIn(dwTransgerred);
+            memcpy(pSession->RecvQ->GetInBufferPtr(), '\0', 1);
+            wprintf(L"socket:%d / str: %s \n", pSession->socket, pSession->RecvQ->GetOutBufferPtr());
+
+            // SendQ에 복사
+            pSession->SendQ->Enqueue(pSession->RecvQ->GetOutBufferPtr(), dwTransgerred);
+
+            wsaBuf[0].buf = pSession->SendQ->GetOutBufferPtr();
+            wsaBuf[0].len = pSession->SendQ->DirectDequeueSize();
+            wsaBuf[1].buf = pSession->SendQ->GetBeginBufferPtr();
+            wsaBuf[1].len = pSession->SendQ->GetUseSize() - pSession->SendQ->DirectDequeueSize();
+
+            // 비동기 send 걸기
+            flags = 0;
+            Ret_WSASend = WSASend(pSession->socket, wsaBuf, 2, NULL, flags, &pSession->Send_Overlapped, NULL);
+            if (Ret_WSASend == SOCKET_ERROR)
+            {
+                Ret_WSASend_Error = WSAGetLastError();
+
+                if (Ret_WSARecv_Error == ERROR_IO_PENDING)
+                {
+                    continue;
+                }
+                else if (Ret_WSARecv_Error == 10054)
+                {
+
+
+                    delete pSession->SendQ;
+                    delete pSession->RecvQ;
+                    delete pSession;
+
+                    closesocket(pSession->socket);
+                }
+                else if (Ret_WSARecv_Error == 10053)
+                {
+                    delete pSession->SendQ;
+                    delete pSession->RecvQ;
+                    delete pSession;
+
+                    closesocket(pSession->socket);
+                }
+                else
+                {
+                    _LOG(2, L"WSASend Error : %d", Ret_WSARecv_Error);
+                    __debugbreak();
+                }
+            }
+            pSession->RecvQ->UnLock();
+        }
+
+        //-----------------------------------------------------------------------------------------------------------------------------------
+        // 센드인지 확인
+        if (&pSession->Send_Overlapped == lpOverlapped)
+        {
+            
+        }
 
 
 

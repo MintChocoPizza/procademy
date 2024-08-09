@@ -18,18 +18,18 @@
     <ClCompile Include="hw17_IOCP_First.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="C_Ring_Buffer.cpp">
+    <ClCompile Include="LOG.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="LOG.cpp">
+    <ClCompile Include="C_Ring_Buffer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C_Ring_Buffer.h">
+    <ClInclude Include="LOG.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="LOG.h">
+    <ClInclude Include="C_Ring_Buffer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

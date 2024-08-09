@@ -1,10 +1,9 @@
 
 #include <string.h>
 
-#define MULT_DEBUG 1
+#define MULT_DEBUG 0
 
 #if MULT_DEBUG == 1
-#include <Windows.h>
 #define INIT			0
 #define ENQUEUE			1
 #define DEQUEUE			2
@@ -49,13 +48,13 @@ size_t Debug_DirectDequeueSize_Out;
 C_RING_BUFFER::C_RING_BUFFER(void) :  _Full_Size(df_C_RING_BUFFER_DEFAULT_LEN), _In(0), _Out(0)
 {
 	_Buffer = new char[df_C_RING_BUFFER_DEFAULT_LEN];
-	//InitializeSRWLock(&_srwlock);
+	InitializeSRWLock(&_srwlock);
 }
 
 C_RING_BUFFER::C_RING_BUFFER(int i_Buffer_Size) : _Full_Size(i_Buffer_Size), _In(0), _Out(0)
 {
 	_Buffer = new char[i_Buffer_Size];
-	//InitializeSRWLock(&_srwlock);
+	InitializeSRWLock(&_srwlock);
 }
 
 C_RING_BUFFER::~C_RING_BUFFER()

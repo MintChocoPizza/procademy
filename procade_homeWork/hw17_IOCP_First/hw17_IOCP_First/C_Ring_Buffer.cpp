@@ -1,10 +1,9 @@
 
 #include <string.h>
 
-#define MULT_DEBUG 1
+#define MULT_DEBUG 0
 
 #if MULT_DEBUG == 1
-#include <Windows.h>
 #define INIT			0
 #define ENQUEUE			1
 #define DEQUEUE			2
@@ -25,6 +24,12 @@ size_t Debug_Dequeue_Out;
 size_t Debug_Dequeue_iSize;
 char* Debug_Dequeue_Data;
 
+
+size_t Debug_DirectEnqueueSize_In;
+size_t Debug_DirectEnqueueSize_Out;
+
+size_t Debug_DirectDequeueSize_In;
+size_t Debug_DirectDequeueSize_Out;
 #endif
 
 
@@ -43,11 +48,13 @@ char* Debug_Dequeue_Data;
 C_RING_BUFFER::C_RING_BUFFER(void) :  _Full_Size(df_C_RING_BUFFER_DEFAULT_LEN), _In(0), _Out(0)
 {
 	_Buffer = new char[df_C_RING_BUFFER_DEFAULT_LEN];
+	InitializeSRWLock(&_srwlock);
 }
 
 C_RING_BUFFER::C_RING_BUFFER(int i_Buffer_Size) : _Full_Size(i_Buffer_Size), _In(0), _Out(0)
 {
 	_Buffer = new char[i_Buffer_Size];
+	InitializeSRWLock(&_srwlock);
 }
 
 C_RING_BUFFER::~C_RING_BUFFER()
@@ -238,4 +245,140 @@ size_t C_RING_BUFFER::Peek(char* chpDest, size_t iSize, bool flag)
 	return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////
+// 버퍼 포인터로 외부에서 한방에 읽고, 쓸 수 있는 길이.
+// (끊기지 않은 길이)
+//
+// 원형 큐의 구조상 버퍼의 끝단에 있는 데이터는 끝 -> 처음으로 돌아가서
+// 2번에 데이터를 얻거나 넣을 수 있음. 이 부분에서 끊어지지 않은 길이를 의미
+//
+// Parameters: 없음.
+// Return: (int)사용가능 용량.
+////////////////////////////////////////////////////////////////////////
+size_t	C_RING_BUFFER::DirectEnqueueSize(void)
+{
+#if MULT_DEBUG == 1
+	Debug_DirectEnqueueSize_In = _In;
+	Debug_DirectEnqueueSize_Out = _Out;
+#endif
+
+
+	size_t Full_Size = _Full_Size;
+	size_t In = _In;
+	size_t Out = _Out;
+	// Enqueue의 경우 _In 바로 다음이 _Out인 경우 꽉 찬 경우이다. 
+	//if (_Use_Size == 0) return 0;
+
+	if ((In + 1) % Full_Size == Out)
+		return 0;
+
+	if (In <= ((Out + Full_Size - 1) % Full_Size))
+		return ((Out + Full_Size - 1) % Full_Size) - In;
+	else if (In >= Out)
+		return Full_Size - In;
+
+	return 0;
+}
+size_t	C_RING_BUFFER::DirectDequeueSize(void)
+{
+#if MULT_DEBUG == 1
+	Debug_DirectDequeueSize_In = _In;
+	Debug_DirectDequeueSize_Out = _Out;
+#endif
+
+
+	size_t In = _In;
+	size_t Out = _Out;
+
+
+
+	if (In >= Out)
+	{
+		return In - Out;
+	}
+	else
+	{
+		return _Full_Size - Out;
+	}
+
+	//if (_In >= _Out)
+	//{
+	//	return _In - _Out;
+	//}
+	//else
+	//{
+	//	return _Full_Size - _Out;
+	//}
+}
+
+/////////////////////////////////////////////////////////////////////////
+// 원하는 길이만큼 읽기위치 에서 삭제 / 쓰기 위치 이동
+//
+// Parameters: 없음.
+// Return: (int)이동크기
+/////////////////////////////////////////////////////////////////////////
+size_t	C_RING_BUFFER::MoveIn(size_t iSize)
+{
+	_In = (_In + iSize) % _Full_Size;
+	return _In;
+}
+size_t	C_RING_BUFFER::MoveOut(size_t iSize)
+{
+	_Out = (_Out + iSize) % _Full_Size;
+	return _Out;
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////
+// 버퍼의 Front, _Out 포인터 얻음.
+//
+// Parameters: 없음.
+// Return: (char *) 버퍼 포인터.
+/////////////////////////////////////////////////////////////////////////
+char* C_RING_BUFFER::GetOutBufferPtr(void)
+{
+	return _Buffer + _Out;
+}
+
+
+/////////////////////////////////////////////////////////////////////////
+// 버퍼의 RearPos, _In 포인터 얻음.
+//
+// Parameters: 없음.
+// Return: (char *) 버퍼 포인터.
+/////////////////////////////////////////////////////////////////////////
+char* C_RING_BUFFER::GetInBufferPtr(void)
+{
+	return _Buffer + _In;
+}
+
+/////////////////////////////////////////////////////////////////////////
+// 버퍼의 _Begin 포인터 얻음.
+//
+// Parameters: 없음.
+// Return: (char *) 버퍼 시작 포인터.
+/////////////////////////////////////////////////////////////////////////
+char* C_RING_BUFFER::GetBeginBufferPtr(void)
+{
+	return _Buffer;
+}
 

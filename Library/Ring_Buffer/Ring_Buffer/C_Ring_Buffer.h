@@ -3,6 +3,7 @@
 #define __C_RING_BUFFER_H__
 
 
+#include <Windows.h>
 
 
 // TMI: 클래스 포인터 멤버 변수 -> 지역변수에 저장하여 접근하는 방식 
@@ -42,7 +43,7 @@ private:
 	//-----------------------------------------------------------------------
 	// 링버퍼 락용 srwlock 
 	// 병합이 발생하면 임계영역 으로 변경
-	//SRWLOCK _srwlock;
+	SRWLOCK _srwlock;
 
 public:
 	/////////////////////////////////////////////////////////////////////////
@@ -144,14 +145,14 @@ public:
 	//// Parameters: 없음.
 	//// Return: 없음.
 	///////////////////////////////////////////////////////////////////////////
-	//void Lock(void) 
-	//{
-	//	AcquireSRWLockExclusive(&_srwlock);
-	//}
-	//void UnLock(void)
-	//{
-	//	ReleaseSRWLockExclusive(&_srwlock);
-	//}
+	void Lock(void) 
+	{
+		AcquireSRWLockExclusive(&_srwlock);
+	}
+	void UnLock(void)
+	{
+		ReleaseSRWLockExclusive(&_srwlock);
+	}
 
 
 	size_t	DirectEnqueueSize(void);
