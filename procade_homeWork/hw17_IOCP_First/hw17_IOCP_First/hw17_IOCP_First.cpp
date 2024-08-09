@@ -1,4 +1,4 @@
-﻿
+
 //--------------------------------------------------------------------------------------------------------------------------------------
 // 네트워크
 #include <WinSock2.h>
@@ -361,6 +361,7 @@ unsigned __stdcall WorkerThread(void* pArg)
     OVERLAPPED* lpOverlapped;
     WSABUF wsaBuf[2];
     DWORD flags;
+    bool bDisconnetSession;
 
     //---------------------------------------------------------------
     // return Value
@@ -375,7 +376,7 @@ unsigned __stdcall WorkerThread(void* pArg)
         dwTransgerred = NULL;
         pSession = NULL;
         lpOverlapped = NULL;
-
+        bDisconnetSession = false;
 
 
         Ret_GQCS = GetQueuedCompletionStatus(g_hCp, &dwTransgerred, (ULONG_PTR*)&pSession, &lpOverlapped, INFINITE);
@@ -423,6 +424,7 @@ unsigned __stdcall WorkerThread(void* pArg)
             // 0Byte를 수신했다면 Session에 대한 연결을 종료한다. / 바로 연결을 종료하면 안됨.
             if (dwTransgerred == NULL)
             {
+                bDisconnectSession = true;
                 break;
             }
 
@@ -450,31 +452,26 @@ unsigned __stdcall WorkerThread(void* pArg)
 
                 if (Ret_WSARecv_Error == ERROR_IO_PENDING)
                 {
+                    InterlockedExchange(pSession->SendCheck, false);
                     continue;
                 }
                 else if (Ret_WSARecv_Error == 10054)
                 {
-
-
-                    delete pSession->SendQ;
-                    delete pSession->RecvQ;
-                    delete pSession;
-
-                    closesocket(pSession->socket);
+                    bDisconnectSession = true;
                 }
                 else if (Ret_WSARecv_Error == 10053)
                 {
-                    delete pSession->SendQ;
-                    delete pSession->RecvQ;
-                    delete pSession;
-
-                    closesocket(pSession->socket);
+                   bDisconnectSession = true;
                 }
                 else
                 {
                     _LOG(2, L"WSASend Error : %d", Ret_WSARecv_Error);
                     __debugbreak();
                 }
+            }
+            else
+            {
+                InterlockedExchange(pSession->SendCheck, false);
             }
             pSession->RecvQ->UnLock();
         }
@@ -487,6 +484,19 @@ unsigned __stdcall WorkerThread(void* pArg)
         }
 
 
+        if (bDisconnectSession == true)
+        {
+            //-----------------------------------------------------------------------------------------------------------------------------------
+            // 여기에 락을 사용하지 않은 이유는 
+            // 상대방이 먼저 연결을 끊은 경우: 송수신 시도시 에러 나옴 => 체크 변경 안됨
+            // i/o 에러: 송수신 시도시 에러 나옴
+            if (pSession->RecvCheck == true && pSession->SendCheck == true)
+            {
+                delete pSession->SendQ;
+                delete pSessiin->RecvQ;
+                delete pSession;
+            }
+        }
 
     }
 
