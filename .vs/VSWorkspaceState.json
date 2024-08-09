@@ -2,10 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\procade_homeWork",
-    "\\procade_homeWork\\hw12_echoClient",
-    "\\procade_homeWork\\hw12_echoClient\\hw12_echoClient",
+    "\\procade_homeWork\\hw17_IOCP_First",
     "\\procade_homeWork\\hw17_IOCP_First\\hw17_IOCP_First"
   ],
-  "SelectedNode": "\\procade_homeWork\\hw12_echoClient\\hw12_echoClient\\hw12_echoClient.cpp",
+  "SelectedNode": "\\procade_homeWork\\hw17_IOCP_First\\hw17_IOCP_First\\C_Ring_Buffer.h",
   "PreviewInSolutionExplorer": false
 }

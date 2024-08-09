@@ -37,8 +37,8 @@ public:
 	{
 		//Grid_X_Size = 100,
 		//Grid_Y_Size = 100
-		dfSECTOR_MAX_Y = dfRANGE_MOVE_BOTTOM / dfGRID_Y_SIZE,
-		dfSECTOR_MAX_X = dfRANGE_MOVE_RIGHT / dfGRID_X_SIZE
+		dfSECTOR_MAX_Y = (dfRANGE_MOVE_BOTTOM / dfGRID_Y_SIZE) + 1,
+		dfSECTOR_MAX_X = (dfRANGE_MOVE_RIGHT / dfGRID_X_SIZE) + 1
 	};
 
 public:

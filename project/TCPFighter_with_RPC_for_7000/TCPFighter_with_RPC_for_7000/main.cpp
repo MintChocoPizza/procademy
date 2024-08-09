@@ -10,6 +10,8 @@
 #include <time.h>
 #include <conio.h>
 
+#include <crtdbg.h>
+
 #include <unordered_map>
 #include <WinSock2.h>
 #include <Windows.h>
@@ -18,12 +20,15 @@
 #include "LOG.h"
 #include "C_Ring_Buffer.h"
 #include "SerializeBuffer.h"
+#include "Disconnect.h"
 #include "Contents.h"
 #include "Session.h"
 #include "Player.h"
 
 #pragma comment (lib, "winmm.lib")
 #pragma comment (lib, "Ws2_32.lib")
+
+#define _CRTDBG_MAP_ALLOC
 
 //---------------------------------
 // 시간 측정 변수
@@ -53,6 +58,8 @@ int wmain(int argc, wchar_t* argv[])
     DWORD dwUpdateFPS;
     DWORD dwNetFPS;
     DWORD dwCheckFPS;
+
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     timeBeginPeriod(1);
     srand((unsigned int)time(NULL));
@@ -87,7 +94,7 @@ int wmain(int argc, wchar_t* argv[])
         if (dwCurTime - dwCheckFPS >= 1000)
         {
             dwCheckFPS += 1000;
-            // _LOG(dfLOG_LEVEL_SYSTEM, L"NetFPS:%d / UpdateFPS:%d", dwNetFPS, dwUpdateFPS);
+            _LOG(dfLOG_LEVEL_SYSTEM, L"NetFPS:%d / UpdateFPS:%d", dwNetFPS, dwUpdateFPS);
 
             dwNetFPS = 0;
             dwUpdateFPS = 0;
@@ -114,6 +121,7 @@ void LoadData(void)
 {
     _LOG(dfLOG_LEVEL_SYSTEM, L"Control Mode Key : Press U......");
     SetSession();
+    InitCheckDisconnectSessionIds();
 }
 //void netCleanUp(void)
 //{

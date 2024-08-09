@@ -47,23 +47,23 @@ C_Field* C_Field::GetInstance(void)
 void C_Field::GetSectorAround(int iSectorX, int iSectorY, st_SECTOR_AROUND* pSectorAound)
 {
     int iCnt;
-    int nY;
-    int nX; 
+    int nSectorY;
+    int nSectorX; 
     int iCount;
 
     iCount = 0;
 
     for (iCnt = 0; iCnt < 9; ++iCnt)
     {
-        nY = iSectorY + dY[iCnt];
-        nX = iSectorX + dX[iCnt];
+        nSectorY = iSectorY + dY[iCnt];
+        nSectorX = iSectorX + dX[iCnt];
 
-        if (nY < dfRANGE_MOVE_TOP || dfRANGE_MOVE_BOTTOM < nY || nX < dfRANGE_MOVE_LEFT || dfRANGE_MOVE_RIGHT < nX)
-            continue;
-        
-        pSectorAound->Around[iCount].iY = nY;
-        pSectorAound->Around[iCount].iX = nX;
-        iCount++;
+        if (Check_Sector_CoordinateRange(nSectorX, nSectorY))
+        {
+            pSectorAound->Around[iCount].iY = nSectorY;
+            pSectorAound->Around[iCount].iX = nSectorX;
+            iCount++;
+        }
     }
 
     pSectorAound->iCount = iCount;
@@ -399,7 +399,7 @@ void C_Field::GetUpdateSectorAround(st_PLAYER* pCharacter, st_SECTOR_AROUND* pRe
 
     }
     // 좌측 상단
-    else if (st_Old_Sector->iY < st_Cur_Sector->iY && st_Old_Sector->iX > st_Cur_Sector->iX)
+    else if (st_Old_Sector->iY > st_Cur_Sector->iY && st_Old_Sector->iX > st_Cur_Sector->iX)
     {
         // 기존 영향권에서 빠지는 섹터
         if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1))
@@ -466,7 +466,7 @@ void C_Field::GetUpdateSectorAround(st_PLAYER* pCharacter, st_SECTOR_AROUND* pRe
         }
     }
     // 우측 상단
-    else if (st_Old_Sector->iY < st_Cur_Sector->iY && st_Old_Sector->iX < st_Cur_Sector->iX)
+    else if (st_Old_Sector->iY > st_Cur_Sector->iY && st_Old_Sector->iX < st_Cur_Sector->iX)
     {
         // 기존 영향권에서 빠지는 섹터
         if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1))
@@ -533,7 +533,7 @@ void C_Field::GetUpdateSectorAround(st_PLAYER* pCharacter, st_SECTOR_AROUND* pRe
         }
     }
     // 좌측 하단 
-    else if (st_Old_Sector->iY > st_Cur_Sector->iY && st_Old_Sector->iX > st_Cur_Sector->iX)
+    else if (st_Old_Sector->iY < st_Cur_Sector->iY && st_Old_Sector->iX > st_Cur_Sector->iX)
     {
         // 기존 영향권에서 빠지는 섹터
         if (Check_Sector_CoordinateRange(st_Old_Sector->iX - 1, st_Old_Sector->iY - 1))
@@ -570,37 +570,37 @@ void C_Field::GetUpdateSectorAround(st_PLAYER* pCharacter, st_SECTOR_AROUND* pRe
         // 새로 들어온 섹터 영향권
         if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY - 1))
         {
-            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX - 1;
-            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY - 1;
-            ++iRemoveCount;
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
         }
         if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 0))
         {
-            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX - 1;
-            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 0;
-            ++iRemoveCount;
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 0;
+            ++iAddCount;
         }
         if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1))
         {
-            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX - 1;
-            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
-            ++iRemoveCount;
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
         }
         if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1))
         {
-            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 0;
-            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
-            ++iRemoveCount;
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 0;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
         }
         if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1))
         {
-            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 1;
-            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
-            ++iRemoveCount;
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
         }
     }
     // 우측 하단
-    else if (st_Old_Sector->iY > st_Cur_Sector->iY && st_Old_Sector->iX < st_Cur_Sector->iX)
+    else if (st_Old_Sector->iY < st_Cur_Sector->iY && st_Old_Sector->iX < st_Cur_Sector->iX)
     {
         // 기존 영향권에서 빠지는 섹터 
         if (Check_Sector_CoordinateRange(st_Old_Sector->iX + 1, st_Old_Sector->iY - 1))
@@ -637,37 +637,52 @@ void C_Field::GetUpdateSectorAround(st_PLAYER* pCharacter, st_SECTOR_AROUND* pRe
         // 새로 들어온 섹터 영향권 
         if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY - 1))
         {
-            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 1;
-            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY - 1;
-            ++iRemoveCount;
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY - 1;
+            ++iAddCount;
         }
         if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 0))
         {
-            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 1;
-            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 0;
-            ++iRemoveCount;
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 0;
+            ++iAddCount;
         }
         if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 1, st_Cur_Sector->iY + 1))
         {
-            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 1;
-            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
-            ++iRemoveCount;
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
         }
         if (Check_Sector_CoordinateRange(st_Cur_Sector->iX + 0, st_Cur_Sector->iY + 1))
         {
-            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX + 0;
-            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
-            ++iRemoveCount;
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX + 0;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
         }
         if (Check_Sector_CoordinateRange(st_Cur_Sector->iX - 1, st_Cur_Sector->iY + 1))
         {
-            pRemoveSector->Around[iRemoveCount].iX = st_Cur_Sector->iX - 1;
-            pRemoveSector->Around[iRemoveCount].iY = st_Cur_Sector->iY + 1;
-            ++iRemoveCount;
+            pAddSector->Around[iAddCount].iX = st_Cur_Sector->iX - 1;
+            pAddSector->Around[iAddCount].iY = st_Cur_Sector->iY + 1;
+            ++iAddCount;
         }
     }
     pRemoveSector->iCount = iRemoveCount;
     pAddSector->iCount = iAddCount;
+
+    for (int i = 0; i < pRemoveSector->iCount; ++i)
+    {
+        if (pRemoveSector->Around[i].iX < 0 || 300 < pRemoveSector->Around[i].iX)
+            __debugbreak();
+        if (pRemoveSector->Around[i].iY < 0 || 300 < pRemoveSector->Around[i].iY)
+            __debugbreak();
+    }
+    for (int i = 0; i < pAddSector->iCount; ++i)
+    {
+        if (pAddSector->Around[i].iX < 0 || 300 < pAddSector->Around[i].iX)
+            __debugbreak();
+        if (pAddSector->Around[i].iY < 0 || 300 < pAddSector->Around[i].iY)
+            __debugbreak();
+    }
 }
 
 bool C_Field::Sector_UpdateCharacter(st_PLAYER* pPlayer)
@@ -886,7 +901,7 @@ void C_Field::SendPacket_Around_To_Session_DeleteCharater(st_SESSION* pSession, 
 
 bool C_Field::Check_Sector_CoordinateRange(int iSectorX, int iSectorY)
 {
-    if (iSectorX < 0 || iSectorY < 0 || iSectorX > dfSECTOR_MAX_X || iSectorY > dfSECTOR_MAX_Y)
+    if (iSectorX < 0 || iSectorY < 0 || iSectorX >= dfSECTOR_MAX_X || iSectorY >= dfSECTOR_MAX_Y)
         return false;
     return true;
 }
@@ -898,8 +913,8 @@ CList<st_PLAYER*>* C_Field::GetPlayerInSectorCList(int iSectorX, int iSectorY)
 
 void st_SECTOR_POS::Init_SECTOR_POS(int Y, int X)
 {
-    iY = Y / dfGRID_Y_SIZE;
-    iX = X / dfGRID_X_SIZE;
+    iY = Y / (dfGRID_Y_SIZE);
+    iX = X / (dfGRID_X_SIZE);
 }
 
 void C_Field::AddPlayerToSector(st_PLAYER* pPlayer)

@@ -17,9 +17,20 @@
 
 std::list<DWORD> g_Disconnect_List;
 
+bool g_bCheckDisconnectSessionIds[8000];
+
+void InitCheckDisconnectSessionIds(void)
+{
+	ZeroMemory(g_bCheckDisconnectSessionIds, 8000);
+}
+
 void enqueueForDeletion(DWORD dwSessionID)
 {
-	g_Disconnect_List.push_back(dwSessionID);
+	if (g_bCheckDisconnectSessionIds[dwSessionID] == false)
+	{
+		g_Disconnect_List.push_back(dwSessionID);
+		g_bCheckDisconnectSessionIds[dwSessionID] = true;
+	}
 }
 
 void Disconnect(void)
@@ -56,6 +67,7 @@ void Disconnect(void)
 		DeleteSession(dwSessionID);
 
 		iter = g_Disconnect_List.erase(iter);
+		g_bCheckDisconnectSessionIds[dwSessionID] = false;
 	}
 
 }

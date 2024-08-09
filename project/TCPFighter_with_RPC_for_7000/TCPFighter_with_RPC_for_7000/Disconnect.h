@@ -16,4 +16,5 @@
 void enqueueForDeletion(DWORD dwSessionID);
 void Disconnect(void);
 void mpDelete(SerializeBuffer* pPacket, DWORD dwSessionID);
+void InitCheckDisconnectSessionIds(void);
 
