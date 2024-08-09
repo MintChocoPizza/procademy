@@ -4,6 +4,7 @@
 
 
 #include <Windows.h>
+#pragma comment(lib, "Synchronization.lib")
 
 
 // TMI: 클래스 포인터 멤버 변수 -> 지역변수에 저장하여 접근하는 방식 

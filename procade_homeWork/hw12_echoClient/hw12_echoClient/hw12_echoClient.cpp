@@ -13,7 +13,7 @@
 //#define DEFAULT_IP "211.51.91.75"
 #define DEFAULT_IP "127.0.0.1"
 //#define DEFAULT_IP "192.168.10.14"
-#define DEFAULT_PORT "9000"
+#define DEFAULT_PORT "12345"
 #define DEFAULT_BUFLEN 512
 
 // 사용자 정의 데이터 수신 함수

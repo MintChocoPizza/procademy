@@ -85,7 +85,7 @@ int main()
     {
         hThread[iCnt] = (HANDLE)_beginthreadex(NULL, 0, WorkerThread, NULL, NULL, NULL);
     }
-    hThread[iCnt] = (HANDLE)_beginthreadex(NULL, 0, AcceptThread, NULL, NULL, NULL);
+    hThread[iCnt] = (HANDLE)_beginthreadex(NULL, 0, AcceptThread, &listen_sock, NULL, NULL);
     // Create Thread error check
     for (iCnt = 0; iCnt < iCreateThreadNum; ++iCnt)
     {
@@ -275,7 +275,7 @@ unsigned __stdcall AcceptThread(void* pArg)
         // printf Client info
         if (getnameinfo((sockaddr*)&Client_Addr, sizeof(Client_Addr), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0)
         {
-            _c_LOG(0, "host: %d - sercive: %d Aeccept", host, service);
+            _c_LOG(0, "host: %s - sercive: %s Aeccept", host, service);
         }
         else
         {
@@ -302,7 +302,7 @@ unsigned __stdcall AcceptThread(void* pArg)
 
         //---------------------------------------------------
 		// link Client_Socket to IOCP
-        CreateIoCompletionPort((HANDLE)New_Client_Socket, g_hCp, (ULONG_PTR)&pSession, 0);
+        CreateIoCompletionPort((HANDLE)New_Client_Socket, g_hCp, (ULONG_PTR)pSession, 0);
 
         //---------------------------------------------------
 		// wsabuf Setting
@@ -361,7 +361,8 @@ unsigned __stdcall WorkerThread(void* pArg)
     OVERLAPPED* lpOverlapped;
     WSABUF wsaBuf[2];
     DWORD flags;
-    bool bDisconnetSession;
+    bool bDisconnectSession;
+    int wsaBufSize;
 
     //---------------------------------------------------------------
     // return Value
@@ -376,7 +377,7 @@ unsigned __stdcall WorkerThread(void* pArg)
         dwTransgerred = NULL;
         pSession = NULL;
         lpOverlapped = NULL;
-        bDisconnetSession = false;
+        bDisconnectSession = false;
 
 
         Ret_GQCS = GetQueuedCompletionStatus(g_hCp, &dwTransgerred, (ULONG_PTR*)&pSession, &lpOverlapped, INFINITE);
@@ -432,27 +433,80 @@ unsigned __stdcall WorkerThread(void* pArg)
 
             // in 위치 이동후, 온 메시지 출력
             pSession->RecvQ->MoveIn(dwTransgerred);
-            memcpy(pSession->RecvQ->GetInBufferPtr(), '\0', 1);
-            wprintf(L"socket:%d / str: %s \n", pSession->socket, pSession->RecvQ->GetOutBufferPtr());
+            char TempChar[2] = "\0";
+            memcpy(pSession->RecvQ->GetInBufferPtr(), TempChar, sizeof(TempChar));
+            printf("str: %s \n", pSession->RecvQ->GetOutBufferPtr());
 
             // SendQ에 복사
             pSession->SendQ->Enqueue(pSession->RecvQ->GetOutBufferPtr(), dwTransgerred);
 
-            wsaBuf[0].buf = pSession->SendQ->GetOutBufferPtr();
-            wsaBuf[0].len = pSession->SendQ->DirectDequeueSize();
-            wsaBuf[1].buf = pSession->SendQ->GetBeginBufferPtr();
-            wsaBuf[1].len = pSession->SendQ->GetUseSize() - pSession->SendQ->DirectDequeueSize();
+            if (dwTransgerred <= pSession->SendQ->DirectDequeueSize())
+            {
+                wsaBuf[0].buf = pSession->SendQ->GetOutBufferPtr();
+                wsaBuf[0].len = dwTransgerred;
+                wsaBufSize = 1;
+            }
+            else
+            {
+                wsaBuf[0].buf = pSession->SendQ->GetOutBufferPtr();
+                wsaBuf[0].len = pSession->SendQ->DirectDequeueSize();
+                wsaBuf[1].buf = pSession->SendQ->GetBeginBufferPtr();
+                wsaBuf[1].len = dwTransgerred - pSession->SendQ->DirectDequeueSize();
+                wsaBufSize = 2;
+            }
+            pSession->RecvQ->UnLock();
+
+
 
             // 비동기 send 걸기
+            pSession->SendQ->Lock();
             flags = 0;
-            Ret_WSASend = WSASend(pSession->socket, wsaBuf, 2, NULL, flags, &pSession->Send_Overlapped, NULL);
+            Ret_WSASend = WSASend(pSession->socket, wsaBuf, wsaBufSize, NULL, flags, &pSession->Send_Overlapped, NULL);
             if (Ret_WSASend == SOCKET_ERROR)
             {
                 Ret_WSASend_Error = WSAGetLastError();
 
+                if (Ret_WSASend_Error == ERROR_IO_PENDING)
+                {
+                    InterlockedExchange(&pSession->SendCheck, false);
+                    continue;
+                }
+                else if (Ret_WSASend_Error == 10054)
+                {
+                    bDisconnectSession = true;
+                }
+                else if (Ret_WSASend_Error == 10053)
+                {
+                   bDisconnectSession = true;
+                }
+                else
+                {
+                    _LOG(2, L"WSASend Error : %d", Ret_WSASend_Error);
+                    __debugbreak();
+                }
+            }
+            else
+            {
+                InterlockedExchange(&pSession->SendCheck, false);
+            }
+            pSession->SendQ->UnLock();
+
+
+            pSession->RecvQ->Lock();
+            wsaBuf[0].buf = pSession->RecvQ->GetInBufferPtr();
+            wsaBuf[0].len = pSession->RecvQ->DirectEnqueueSize();
+            wsaBuf[1].buf = pSession->RecvQ->GetBeginBufferPtr();
+            wsaBuf[1].len = pSession->RecvQ->GetFreeSize() - pSession->RecvQ->DirectEnqueueSize();
+            wsaBufSize = 2;
+            flags = 0;
+            Ret_WSARecv = WSARecv(pSession->socket, wsaBuf, 2, NULL, &flags, &pSession->Recv_Overlapped, NULL);
+            if (Ret_WSARecv == SOCKET_ERROR)
+            {
+                Ret_WSARecv_Error = WSAGetLastError();
+
                 if (Ret_WSARecv_Error == ERROR_IO_PENDING)
                 {
-                    InterlockedExchange(pSession->SendCheck, false);
+                    InterlockedExchange(&pSession->RecvCheck, false);
                     continue;
                 }
                 else if (Ret_WSARecv_Error == 10054)
@@ -461,7 +515,7 @@ unsigned __stdcall WorkerThread(void* pArg)
                 }
                 else if (Ret_WSARecv_Error == 10053)
                 {
-                   bDisconnectSession = true;
+                    bDisconnectSession = true;
                 }
                 else
                 {
@@ -471,7 +525,7 @@ unsigned __stdcall WorkerThread(void* pArg)
             }
             else
             {
-                InterlockedExchange(pSession->SendCheck, false);
+                InterlockedExchange(&pSession->RecvCheck, false);
             }
             pSession->RecvQ->UnLock();
         }
@@ -480,8 +534,24 @@ unsigned __stdcall WorkerThread(void* pArg)
         // 센드인지 확인
         if (&pSession->Send_Overlapped == lpOverlapped)
         {
+            //-----------------------------------------------------------------------------------------------------------------------------------
+            // 여기에 진입했다는 것은 WSARecv 요청이 완료되었다.
+            InterlockedExchange(&pSession->SendCheck, true);
+
+            //-----------------------------------------------------------------------------------------------------------------------------------
+            // 
+
+            pSession->SendQ->Lock();
+
+            // Out 위치 이동, 에코 서버라 센드 완료 메시지에서 할게 없다. 
+            pSession->SendQ->MoveOut(dwTransgerred);
+
             
+            pSession->SendQ->UnLock();
+
         }
+
+
 
 
         if (bDisconnectSession == true)
@@ -493,7 +563,7 @@ unsigned __stdcall WorkerThread(void* pArg)
             if (pSession->RecvCheck == true && pSession->SendCheck == true)
             {
                 delete pSession->SendQ;
-                delete pSessiin->RecvQ;
+                delete pSession->RecvQ;
                 delete pSession;
             }
         }
